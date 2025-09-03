@@ -7,6 +7,25 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 const DEFAULT_SITE = "58A Tarawera Terrace"; // fallback during pilot
 
 export default function Page() {
+  // Canonical systems list (cleaned labels)
+  const SYSTEM_OPTIONS = [
+    { value: "SS1", title: "Automatic systems for fire suppression" },
+    { value: "SS2", title: "Automatic or manual alarms" },
+    { value: "SS3.1", title: "Automatic doors" },
+    { value: "SS3.2", title: "Access control" },
+    { value: "SS4", title: "Emergency lighting" },
+    { value: "SS5", title: "Escape route pressurisation" },
+    { value: "SS6", title: "Riser mains for use by fire services" },
+    { value: "SS7", title: "Automatic backflow preventers" },
+    { value: "SS8.1", title: "Passenger lifts" },
+    { value: "SS9", title: "Mechanical ventilation" },
+    { value: "SS10", title: "Building maintenance units" },
+    { value: "SS11", title: "Laboratory fume cupboards" },
+    { value: "Passives", title: "Passives" },
+  ];
+
+  // Pad codes with non‑breaking spaces to align text in monospace select
+  const padNbsp = (s, len) => s + "\u00A0".repeat(Math.max(0, len - s.length));
   // Form state
   const [siteId, setSiteId] = useState("");
   const [userName, setUserName] = useState("");
@@ -135,9 +154,9 @@ export default function Page() {
           }}
         />
 
-        {/* System (text, under Company) */}
-        <input
-          placeholder="System (e.g., SS4)"
+        {/* System (dropdown) */}
+        <select
+          required
           value={systemId}
           onChange={(e) => setSystemId(e.target.value)}
           style={{
@@ -147,8 +166,20 @@ export default function Page() {
             borderRadius: 6,
             marginBottom: 12,
             background: "#fff",
+            fontFamily:
+              "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
           }}
-        />
+        >
+          <option value="">Select system…</option>
+          {SYSTEM_OPTIONS.map((opt) => {
+            const code = padNbsp(opt.value, 6); // align hyphens
+            return (
+              <option key={opt.value} value={opt.value}>
+                {`${code} - ${opt.title}`}
+              </option>
+            );
+          })}
+        </select>
 
         {/* Pass / Fail */}
         <div style={{ display: "flex", gap: 16, margin: "8px 0 12px" }}>
