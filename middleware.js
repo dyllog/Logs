@@ -13,7 +13,11 @@ export function middleware(req) {
       try {
         // atob is available in the Edge runtime
         const [user, pass] = atob(encoded).split(":");
-        if (user === "Dylan" && pass === "orange") {
+
+        const expectedUser = process.env.BASIC_USER || "Dylan";
+        const expectedPass = process.env.BASIC_PASS || "orange";
+
+        if (user === expectedUser && pass === expectedPass) {
           return NextResponse.next();
         }
       } catch (e) {
@@ -31,6 +35,6 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Include both /admin and all nested paths
+  matcher: ["/admin", "/admin/:path*"],
 };
-
