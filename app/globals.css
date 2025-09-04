@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: set a basic background/text color to verify Tailwind works */
+html, body {
+  height: 100%;
+}
+
