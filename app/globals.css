@@ -2,8 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional: set a basic background/text color to verify Tailwind works */
-html, body {
-  height: 100%;
+/* Smoothing for crisp type on the dark hero */
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+:root {
+  /* design tokens (duplicated from tailwind for non-utility use if needed) */
+  --logs-teal: #0F3B3F;
+  --logs-tealLight: #0E373B;
+  --logs-mid1: #114348;
+  --logs-mid2: #0B2D2F;
+  --logs-fore: #164C51;
+  --logs-water: #0B2F31;
+  --logs-cream: #F5EADF;
+  --logs-creamText: #0F2F32;
+  --logs-creamSub: #D6CBC0;
+  --logs-cardBorder: #E7DED3;
 }
 
+/* Optional: remove default link blue flash on dark hero */
+a { text-decoration: none; }
