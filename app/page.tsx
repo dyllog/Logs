@@ -1,189 +1,195 @@
-import { Sora, Manrope } from "next/font/google";
-import type { ReactNode } from "react";
+"use client";
 
-const display = Sora({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-display" });
-const body = Manrope({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-body" });
+// Landing page matching the attached mock: large LOGS wordmark, stacked
+// tagline, skyline, curved divider into a cream panel with intro + CTAs,
+// then three feature cards.
 
-export default function LandingPage() {
+export default function Home() {
   return (
-    <main className={`min-h-[100dvh] bg-[#0E4F52] text-[#F4EDE4] ${display.variable} ${body.variable}`}>
+    <main className="min-h-screen bg-logs-teal text-logs-cream">
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <HeroBackdrop />
+      <header className="relative overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 pt-[64px] pb-6 sm:px-8 md:pt-20 text-center">
+          {/* LOGS wordmark */}
+          <h1
+            className="font-extrabold leading-none tracking-tight"
+            style={{ fontSize: "clamp(72px,12vw,160px)", letterSpacing: "-.02em" }}
+          >
+            LOGS
+          </h1>
+
+          {/* Tagline */}
+          <p
+            className="mt-4 font-extrabold leading-tight"
+            style={{ fontSize: "clamp(24px,3.4vw,40px)", letterSpacing: "-.01em" }}
+          >
+            Building Compliance
+            <span className="block">Made Simple</span>
+          </p>
         </div>
 
-        <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-end gap-10 px-4 pt-16 pb-8 sm:pt-24 md:grid-cols-2">
-          <div className="text-center md:text-left">
-            <h1 className="leading-none font-extrabold tracking-tight drop-shadow-sm" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(64px,10vw,140px)" }}>LOGS</h1>
-            <p className="mt-3 text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-body)" }}>Building compliance</p>
-            <p className="text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-body)" }}>made simple</p>
-          </div>
+        {/* Skyline + wave divider */}
+        <HeroVisual />
+      </header>
 
-          {/* Demo QR plaque */}
-          <div className="justify-self-center md:justify-self-end">
-            <QRDemoCard />
+      {/* CREAM PANEL: intro + CTAs + Why LOGS */}
+      <section className="bg-logs-cream text-logs-creamText">
+        {/* Intro + CTAs */}
+        <div className="mx-auto max-w-3xl px-6 pt-8 text-center">
+          <p className="text-[18px] leading-[1.8] text-logs-creamText/90">
+            LOGS provides a modern, digital logbook for inspections and compliance — accessible via QR codes on-site,
+            secure cloud storage, and instant reporting.
+          </p>
+          <div className="mt-8 mb-10 flex justify-center gap-6">
+            <a
+              href="/demo"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-3.5 text-[18px] font-semibold shadow-soft bg-logs-fore text-logs-cream hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d2c6ba]"
+            >
+              Try a Demo
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-3.5 text-[18px] font-semibold ring-1 ring-inset ring-[#2b5f63] hover:bg-logs-teal/10"
+            >
+              Contact Us
+            </a>
           </div>
         </div>
 
-        {/* Value prop band with CTAs */}
-        <div className="relative z-10 bg-[#F4EDE4] text-[#083C3F]">
-          <div className="mx-auto max-w-5xl px-4 py-10 sm:py-14 text-center">
-            <p className="text-lg sm:text-xl leading-8 opacity-90" style={{ fontFamily: "var(--font-body)" }}>
-              Digital logbook for New Zealand buildings. Staff scan a QR code to log inspections on site; records store securely and export to PDF in seconds.
-            </p>
-
-            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <a href="/scan" className="inline-flex items-center justify-center rounded-xl bg-[#0E4F52] px-6 py-3 text-base font-semibold text-[#F4EDE4] shadow hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0E4F52]">Scan a demo</a>
-              <a href="/contact" className="inline-flex items-center justify-center rounded-xl border-2 border-[#0E4F52] bg-transparent px-6 py-3 text-base font-semibold text-[#0E4F52] hover:bg-[#0E4F52]/5">Contact us</a>
-            </div>
+        {/* Why LOGS */}
+        <div className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
+          <h2 className="text-center text-[34px] font-extrabold tracking-tight">Why LOGS?</h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card
+              title="Simple Logging"
+              desc="QR codes link directly to digital inspection forms. Easy to use, even for non-technical staff."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="4" y="4" width="16" height="16" rx="2" stroke="#0F2F32" strokeWidth="2" />
+                  <path d="M8 9h8M8 13h5M8 17h8" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              )}
+            />
+            <Card
+              title="Secure Records"
+              desc="All data stored securely in the cloud, ensuring compliance with record keeping requirements."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3" y="10" width="18" height="11" rx="2" stroke="#0F2F32" strokeWidth="2" />
+                  <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              )}
+            />
+            <Card
+              title="Easy Exports"
+              desc="Download PDF records instantly for audits — 24 months always available at your fingertips."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <rect x="4" y="15" width="16" height="6" rx="2" stroke="#0F2F32" strokeWidth="2" />
+                </svg>
+              )}
+            />
           </div>
+
+          <p className="mt-10 text-[13px] text-[#415457]/80">© {new Date().getFullYear()} LOGS — Building compliance made simple.</p>
         </div>
       </section>
-
-      {/* HOW IT WORKS */}
-      <section className="bg-[#F4EDE4] text-[#083C3F]">
-        <div className="mx-auto max-w-6xl px-4 pt-10">
-          <h2 className="text-center text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>How it works</h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            <FeatureCard icon={<IconQR />} title="Scan on site" copy="Place the printed QR at each asset or location. Staff scan it to open the correct digital form." />
-            <FeatureCard icon={<IconChecklist />} title="Log the inspection" copy="Complete a short form on phone or tablet. Notes and pass/fail recorded instantly." />
-            <FeatureCard icon={<IconPDF />} title="Export records" copy="Filter and export recent records to PDF for audits and reports." />
-          </div>
-        </div>
-
-        {/* NZ-focused reassurance */}
-        <div className="mx-auto max-w-6xl px-4 py-14">
-          <div className="rounded-2xl border border-[#E8DFD3] bg-white/60 p-6">
-            <h3 className="text-xl font-semibold">Built for New Zealand sites</h3>
-            <ul className="mt-3 grid gap-2 text-sm text-[#375255] sm:grid-cols-2">
-              <li>Simple QR workflow for apartments, body corporates, facilities and contractors</li>
-              <li>Keep at least 24 months of inspection history available</li>
-              <li>Fast PDF exports for audit readiness</li>
-              <li>Secure cloud storage and role-based access</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-[#0E4F52] text-[#F4EDE4]">
-        <div className="mx-auto max-w-6xl px-4 py-10 text-sm opacity-80">
-          © {new Date().getFullYear()} LOGS — Building compliance made simple.
-        </div>
-      </footer>
     </main>
   );
 }
 
-function FeatureCard({ icon, title, copy }: { icon: ReactNode; title: string; copy: string }) {
+function Card({ title, desc, icon }) {
   return (
-    <div className="rounded-2xl border border-[#E8DFD3] bg-white/50 p-6 shadow-sm">
-      <div className="flex items-start gap-4">
-        <div className="shrink-0">{icon}</div>
-        <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="mt-2 text-sm leading-6 text-[#375255]">{copy}</p>
-        </div>
+    <div className="rounded-2xl border border-logs-cardBorder bg-white p-6 shadow-soft">
+      <div className="flex items-center gap-3 text-logs-teal">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-logs-cream/60">{icon}</div>
+        <h3 className="text-[20px] font-extrabold">{title}</h3>
       </div>
+      <p className="mt-3 text-[15px] leading-relaxed text-[#415457]">{desc}</p>
     </div>
   );
 }
 
-function HeroBackdrop() {
+// Hero skyline with curved divider into the cream section.
+function HeroVisual() {
+  const far = "#0B2D2F";   // logs.mid2
+  const mid = "#114348";   // logs.mid1
+  const fore = "#164C51";  // logs.fore
+  const water = "#0B2F31"; // logs.water
   return (
-    <svg viewBox="0 0 1440 720" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
-      <rect width="1440" height="720" fill="#0E4F52" />
-      <g fill="#0C4349" opacity="0.55">
-        <rect x="300" y="410" width="70" height="140" />
-        <rect x="380" y="430" width="90" height="120" />
-        <rect x="490" y="420" width="70" height="130" />
-        <rect x="570" y="400" width="110" height="150" />
-        <rect x="700" y="430" width="80" height="120" />
-        <rect x="810" y="440" width="60" height="110" />
-      </g>
-      <g transform="translate(170,70)" fill="#0C4349">
-        <polygon points="20,0 26,110 14,110" />
-        <rect x="6" y="110" width="28" height="18" />
-        <rect x="10" y="128" width="20" height="16" />
-        <rect x="12" y="144" width="16" height="260" />
-      </g>
-      <rect x="0" y="510" width="1440" height="40" fill="#0C454A" />
-      <g fill="#0B3E44">
-        <path d="M1080 520 c40-30 80-30 120 0 h180 v18 h-420 v-18 z" />
-        <rect x="1060" y="520" width="8" height="26" />
-        <rect x="1140" y="520" width="8" height="26" />
-        <rect x="1220" y="520" width="8" height="26" />
-        <rect x="1300" y="520" width="8" height="26" />
-      </g>
-      <g fill="#0B3E44" opacity="0.5">
-        <ellipse cx="220" cy="585" rx="120" ry="8" />
-        <ellipse cx="520" cy="600" rx="160" ry="10" />
-        <ellipse cx="880" cy="590" rx="140" ry="9" />
-        <ellipse cx="1180" cy="610" rx="180" ry="11" />
-      </g>
-    </svg>
-  );
-}
+    <div className="relative" aria-hidden="true">
+      <svg viewBox="0 0 1440 520" xmlns="http://www.w3.org/2000/svg" className="block w-full">
+        {/* teal sky */}
+        <defs>
+          <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="#0F3B3F" />
+            <stop offset="1" stopColor="#0E373B" />
+          </linearGradient>
+        </defs>
+        <rect width="1440" height="420" fill="url(#sky)" />
 
-function QRDemoCard() {
-  return (
-    <a href="/scan" className="block w-64 rounded-2xl bg-white/90 p-4 text-[#0E4F52] shadow-soft ring-1 ring-[#E8DFD3] hover:opacity-95">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm">Scan to log</p>
-          <p className="text-xs opacity-70">Example asset</p>
-        </div>
-        <MiniQR />
-      </div>
-    </a>
-  );
-}
+        {/* far skyline */}
+        <g fill={far}>
+          <rect x="120" y="250" width="80" height="80" rx="2" />
+          <rect x="220" y="238" width="60" height="92" rx="2" />
+          <rect x="300" y="260" width="70" height="70" rx="2" />
+          <rect x="390" y="240" width="72" height="90" rx="2" />
+          <rect x="480" y="230" width="84" height="100" rx="2" />
+          <rect x="1260" y="230" width="64" height="100" rx="2" />
+          <rect x="1340" y="210" width="72" height="120" rx="2" />
+        </g>
 
-function MiniQR() {
-  // Simple stylised QR - not a real code, just a visual
-  const s = 6;
-  const blk = (x: number, y: number, w = 1, h = 1) => (
-    <rect key={`${x}-${y}-${w}-${h}`} x={x * s} y={y * s} width={w * s} height={h * s} fill="#0E4F52" />
-  );
-  const cells = [
-    blk(0, 0, 5, 5), blk(1, 1, 3, 3),
-    blk(13, 0, 5, 5), blk(14, 1, 3, 3),
-    blk(0, 13, 5, 5), blk(1, 14, 3, 3),
-    blk(8, 8), blk(9, 8), blk(8, 9), blk(10, 10), blk(6, 7), blk(11, 6), blk(12, 12), blk(7, 12)
-  ];
-  return (
-    <svg width={s * 18} height={s * 18} viewBox={`0 0 ${s * 18} ${s * 18}`}>
-      <rect width="100%" height="100%" fill="#EDEAE3" />
-      {cells}
-    </svg>
-  );
-}
+        {/* Sky Tower */}
+        <g fill={mid}>
+          <rect x="260" y="120" width="24" height="220" rx="10" />
+          <rect x="236" y="110" width="72" height="18" rx="8" />
+          <rect x="266" y="84" width="12" height="34" rx="3" />
+          <rect x="246" y="340" width="52" height="28" rx="3" />
+        </g>
 
-function IconQR() {
-  return (
-    <svg className="h-6 w-6 text-[#0E4F52]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM17 13h4v4M13 17h4v4" strokeLinecap="round" />
-    </svg>
-  );
-}
+        {/* mid towers */}
+        <g fill={mid}>
+          <rect x="720" y="180" width="64" height="165" rx="3" />
+          <rect x="792" y="170" width="58" height="180" rx="3" />
+          <rect x="858" y="180" width="70" height="165" rx="3" />
+          <rect x="936" y="160" width="60" height="195" rx="3" />
+        </g>
 
-function IconChecklist() {
-  return (
-    <svg className="h-6 w-6 text-[#0E4F52]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M9 6h11M9 12h11M9 18h11" strokeLinecap="round" />
-      <path d="M3 6l2 2 3-3M3 12l2 2 3-3M3 18l2 2 3-3" strokeLinecap="round" />
-    </svg>
-  );
-}
+        {/* fore buildings & pavilion */}
+        <g fill={fore}>
+          <path d="M628 347h84V205l-84 32v110z" />
+          <path d="M576 340c0-20 44-36 98-36s98 16 98 36H576z" />
+          <rect x="1034" y="210" width="40" height="132" rx="3" />
+        </g>
 
-function IconPDF() {
-  return (
-    <svg className="h-6 w-6 text-[#0E4F52]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M6 2h8l4 4v16H6z" />
-      <path d="M14 2v6h6" />
-      <path d="M8 14h2a2 2 0 1 1 0 4H8zM13 14h1.5a1.5 1.5 0 0 1 0 3H13zM17 14h2v4" />
-    </svg>
+        {/* Harbour bridge extended */}
+        <g fill="none" stroke={fore} strokeWidth="10" strokeLinecap="round">
+          <path d="M1140 330c90 0 150 0 240 0" />
+          <path d="M1140 330c70-44 168-44 240 0" />
+          <path d="M1162 330c20-18 46-28 76-28" strokeWidth="6" />
+          <path d="M1238 330c18-14 40-22 64-22" strokeWidth="6" />
+          <path d="M1306 330c16-12 36-18 58-18" strokeWidth="6" />
+        </g>
+        <g fill={fore}>
+          <rect x="1132" y="330" width="22" height="22" />
+          <rect x="1368" y="330" width="22" height="22" />
+        </g>
+
+        {/* water band */}
+        <rect y="350" width="1440" height="70" fill={water} />
+        <g stroke="#0F3B3F" strokeWidth="2" opacity=".35">
+          <path d="M160 372c44 12 88 12 132 0" />
+          <path d="M420 382c36 10 72 10 108 0" />
+          <path d="M680 374c40 12 80 12 120 0" />
+          <path d="M940 380c36 10 72 10 108 0" />
+          <path d="M1200 376c44 12 88 12 132 0" />
+        </g>
+
+        {/* wave into cream */}
+        <path d="M0,420 C220,470 420,490 720,490 C1020,490 1220,470 1440,420 L1440,520 L0,520 Z" fill="#F5EADF" />
+      </svg>
+    </div>
   );
 }
 
