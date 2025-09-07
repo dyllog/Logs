@@ -1,260 +1,203 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { db } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-logs-teal text-[color:var(--logs-cream)]">
+      {/* HERO */}
+      <header className="relative overflow-hidden">
+        <div className="mx-auto max-w-6xl px-6 pt-[56px] pb-10 sm:px-8 md:pt-16 text-center">
+          {/* LOGS wordmark */}
+          <h1
+            className="font-extrabold leading-none"
+            style={{ fontSize: 'clamp(56px, 9vw, 112px)', letterSpacing: '-.02em' }}
+          >
+            LOGS
+          </h1>
 
-const DEFAULT_SITE = "58A Tarawera Terrace"; // fallback during pilot
+          {/* Tagline (stacked) */}
+          <p
+            className="mt-5 font-extrabold leading-tight"
+            style={{ fontSize: 'clamp(24px, 3.4vw, 40px)', letterSpacing: '-.01em' }}
+          >
+            Building Compliance
+            <span className="block">Made Simple</span>
+          </p>
 
-export default function Page() {
-  // Canonical systems list (cleaned labels)
-  const SYSTEM_OPTIONS = [
-    { value: "SS1", title: "Automatic systems for fire suppression" },
-    { value: "SS2", title: "Automatic or manual alarms" },
-    { value: "SS3.1", title: "Automatic doors" },
-    { value: "SS3.2", title: "Access control" },
-    { value: "SS4", title: "Emergency lighting" },
-    { value: "SS5", title: "Escape route pressurisation" },
-    { value: "SS6", title: "Riser mains for use by fire services" },
-    { value: "SS7", title: "Automatic backflow preventers" },
-    { value: "SS8.1", title: "Passenger lifts" },
-    { value: "SS9", title: "Mechanical ventilation" },
-    { value: "SS10", title: "Building maintenance units" },
-    { value: "SS11", title: "Laboratory fume cupboards" },
-    { value: "Passives", title: "Passives" },
-  ];
+          {/* Sub copy (centered, identical line breaks via max width) */}
+          <p className="mx-auto mt-8 max-w-3xl text-logs-creamSub text-[18px] leading-[1.8]">
+            LOGS provides a modern, digital logbook for inspections and compliance — accessible
+            via QR codes on-site, secure cloud storage, and instant reporting.
+          </p>
 
-  // Pad codes with non‑breaking spaces to align text in monospace select
-  const padNbsp = (s, len) => s + "\u00A0".repeat(Math.max(0, len - s.length));
-  // Form state
-  const [siteId, setSiteId] = useState("");
-  const [userName, setUserName] = useState("");
-  const [company, setCompany] = useState("");
-  const [systemId, setSystemId] = useState("");
-  const [notes, setNotes] = useState("");
-  const [passFail, setPassFail] = useState("pass"); // "pass" | "fail"
-  const [error, setError] = useState("");
+          {/* CTAs */}
+          <div className="mt-10 flex justify-center gap-6">
+            <a
+              href="/demo"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-3.5 text-[18px] font-semibold shadow-sm
+                         bg-logs-fore hover:bg-[#1a595f] focus-visible:outline focus-visible:outline-2
+                         focus-visible:outline-offset-2 focus-visible:outline-[#d2c6ba]"
+            >
+              Try a Demo
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-3.5 text-[18px] font-semibold
+                         ring-1 ring-inset ring-[#2b5f63] hover:bg-[#113c40]/40"
+            >
+              Contact Us
+            </a>
+          </div>
+        </div>
 
-  // Read ?site= (locked) and optional ?system= (prefill but editable)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const site = params.get("site") || DEFAULT_SITE;
-    const sys = params.get("system") || "";
-    setSiteId(site);
-    setSystemId(sys);
-    // Autofocus name field on load (small UX win)
-    const el = document.getElementById("name-input");
-    if (el) el.focus();
-  }, []);
+        {/* Skyline + wave */}
+        <HeroVisual />
+      </header>
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
+      {/* LIGHT SECTION */}
+      <section className="bg-logs-cream text-logs-creamText">
+        <div className="mx-auto max-w-7xl px-6 pt-12 pb-16 sm:px-8">
+          <h2 className="text-center text-[34px] font-extrabold tracking-tight">Why LOGS?</h2>
 
-    if (!siteId?.trim()) {
-      setError("This page must be accessed via a site QR link.");
-      return;
-    }
-    if (!userName.trim() || !systemId.trim()) {
-      setError("Please enter your name and the system.");
-      return;
-    }
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card
+              title="Simple Logging"
+              desc="QR codes link directly to digital inspection forms. Easy to use, even for non-technical staff."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="4" y="4" width="16" height="16" rx="2" stroke="#0F2F32" strokeWidth="2"/>
+                  <path d="M8 9h8M8 13h5M8 17h8" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              )}
+            />
+            <Card
+              title="Secure Records"
+              desc="All data stored securely in the cloud, ensuring compliance with record keeping requirements."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3" y="10" width="18" height="11" rx="2" stroke="#0F2F32" strokeWidth="2"/>
+                  <path d="M7 10V7a5 5 0 0110 0v3" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              )}
+            />
+            <Card
+              title="Easy Exports"
+              desc="Download PDF records instantly for audits — 24 months always available at your fingertips."
+              icon={(
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <rect x="4" y="15" width="16" height="6" rx="2" stroke="#0F2F32" strokeWidth="2"/>
+                </svg>
+              )}
+            />
+          </div>
 
-    try {
-      await addDoc(collection(db, "logs"), {
-        siteId: siteId.trim(),
-        systemId: systemId.trim(),
-        userName: userName.trim(),
-        company: company.trim(),
-        notes: notes.trim(),
-        passFail,
-        createdAt: serverTimestamp(),
-      });
+          {/* Footer line (as in mock) */}
+          <p className="mt-10 text-[13px] text-[#415457]/80">
+            © {new Date().getFullYear()} Logs — Building compliance made simple.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}
 
-      alert("Inspection logged ✅");
+/** Card block for “Why LOGS?” */
+function Card({ title, desc, icon }) {
+  return (
+    <div className="rounded-2xl border border-logs-cardBorder bg-white p-6 shadow-soft">
+      <div className="flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-logs-cream/60">
+          {icon}
+        </div>
+        <h3 className="text-[20px] font-extrabold">{title}</h3>
+      </div>
+      <p className="mt-3 text-[15px] leading-relaxed text-[#415457]">{desc}</p>
+    </div>
+  );
+}
 
-      // Keep site + system to speed multiple entries; clear personal fields
-      setUserName("");
-      setCompany("");
-      setNotes("");
-      setPassFail("pass");
-      const nameEl = document.getElementById("name-input");
-      if (nameEl) nameEl.focus();
-    } catch (err) {
-      console.error(err);
-      setError("Could not save entry. Check connection and try again.");
-    }
-  }
-
-  const submitDisabled = !siteId?.trim() || !userName.trim() || !systemId.trim();
+/** Hero skyline + wave transition (no plane/birds/church; extended bridge; centered composition) */
+function HeroVisual() {
+  const far = "#0B2D2F";
+  const mid = "#114348";
+  const fore = "#164C51";
+  const water = "#0B2F31";
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        padding: 24,
-        background: "#f6f7fb",
-        fontFamily: "system-ui, Arial, sans-serif",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          width: "100%",
-          maxWidth: 480,
-          background: "#fff",
-          padding: 20,
-          borderRadius: 8,
-          boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
-        }}
-      >
-        <h1 style={{ color: "#0A1F35", fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
-          Log Inspection
-        </h1>
+    <div className="relative" aria-hidden="true">
+      <svg viewBox="0 0 1440 520" xmlns="http://www.w3.org/2000/svg" className="block w-full">
+        {/* teal sky */}
+        <defs>
+          <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="#0F3B3F"/>
+            <stop offset="1" stopColor="#0E373B"/>
+          </linearGradient>
+        </defs>
+        <rect width="1440" height="420" fill="url(#sky)" />
 
-        {/* SITE (locked — not an input) */}
-        <div style={{ fontSize: 13, color: "#4b5563", marginBottom: 10 }}>
-          <div>
-            <b>Site:</b> {siteId || "—"}
-          </div>
-        </div>
-        <input type="hidden" name="siteId" value={siteId} />
+        {/* far skyline */}
+        <g fill={far}>
+          <rect x="120" y="250" width="80" height="80" rx="2"/>
+          <rect x="220" y="238" width="60" height="92" rx="2"/>
+          <rect x="300" y="260" width="70" height="70" rx="2"/>
+          <rect x="390" y="240" width="72" height="90" rx="2"/>
+          <rect x="480" y="230" width="84" height="100" rx="2"/>
+          <rect x="1260" y="230" width="64" height="100" rx="2"/>
+          <rect x="1340" y="210" width="72" height="120" rx="2"/>
+        </g>
 
-        {/* Name */}
-        <input
-          id="name-input"
-          required
-          placeholder="Your name"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          style={{
-            width: "100%",
-            border: "1px solid #e5e7eb",
-            padding: 8,
-            borderRadius: 6,
-            marginBottom: 10,
-            background: "#fff",
-          }}
+        {/* Sky Tower */}
+        <g fill={mid}>
+          <rect x="260" y="120" width="24" height="220" rx="10"/>
+          <rect x="236" y="110" width="72" height="18" rx="8"/>
+          <rect x="266" y="84" width="12" height="34" rx="3"/>
+          <rect x="246" y="340" width="52" height="28" rx="3"/>
+        </g>
+
+        {/* mid towers */}
+        <g fill={mid}>
+          <rect x="720" y="180" width="64" height="165" rx="3"/>
+          <rect x="792" y="170" width="58" height="180" rx="3"/>
+          <rect x="858" y="180" width="70" height="165" rx="3"/>
+          <rect x="936" y="160" width="60" height="195" rx="3"/>
+        </g>
+
+        {/* fore buildings & pavilion */}
+        <g fill={fore}>
+          <path d="M628 347h84V205l-84 32v110z"/>
+          <path d="M576 340c0-20 44-36 98-36s98 16 98 36H576z"/>
+          <rect x="1034" y="210" width="40" height="132" rx="3"/>
+        </g>
+
+        {/* Harbour bridge extended */}
+        <g fill="none" stroke={fore} strokeWidth="10" strokeLinecap="round">
+          <path d="M1140 330c90 0 150 0 240 0"/>
+          <path d="M1140 330c70-44 168-44 240 0"/>
+          <path d="M1162 330c20-18 46-28 76-28" strokeWidth="6"/>
+          <path d="M1238 330c18-14 40-22 64-22" strokeWidth="6"/>
+          <path d="M1306 330c16-12 36-18 58-18" strokeWidth="6"/>
+        </g>
+        <g fill={fore}>
+          <rect x="1132" y="330" width="22" height="22"/>
+          <rect x="1368" y="330" width="22" height="22"/>
+        </g>
+
+        {/* water band */}
+        <rect y="350" width="1440" height="70" fill={water}/>
+        <g stroke="#0F3B3F" strokeWidth="2" opacity=".35">
+          <path d="M160 372c44 12 88 12 132 0"/>
+          <path d="M420 382c36 10 72 10 108 0"/>
+          <path d="M680 374c40 12 80 12 120 0"/>
+          <path d="M940 380c36 10 72 10 108 0"/>
+          <path d="M1200 376c44 12 88 12 132 0"/>
+        </g>
+
+        {/* WAVE transition into cream section */}
+        <path
+          d="M0,420 C220,470 420,490 720,490 C1020,490 1220,470 1440,420 L1440,520 L0,520 Z"
+          fill="#F5EADF"
         />
-
-        {/* Company */}
-        <input
-          placeholder="Company (optional)"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          style={{
-            width: "100%",
-            border: "1px solid #e5e7eb",
-            padding: 8,
-            borderRadius: 6,
-            marginBottom: 10,
-            background: "#fff",
-          }}
-        />
-
-        {/* System (dropdown) */}
-        <select
-          required
-          value={systemId}
-          onChange={(e) => setSystemId(e.target.value)}
-          style={{
-            width: "100%",
-            border: "1px solid #e5e7eb",
-            padding: 8,
-            borderRadius: 6,
-            marginBottom: 12,
-            background: "#fff",
-            fontFamily:
-              "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-          }}
-        >
-          <option value="">Select system…</option>
-          {SYSTEM_OPTIONS.map((opt) => {
-            const code = padNbsp(opt.value, 6); // align hyphens
-            return (
-              <option key={opt.value} value={opt.value}>
-                {`${code} - ${opt.title}`}
-              </option>
-            );
-          })}
-        </select>
-
-        {/* Pass / Fail */}
-        <div style={{ display: "flex", gap: 16, margin: "8px 0 12px" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <input
-              type="radio"
-              name="pf"
-              value="pass"
-              checked={passFail === "pass"}
-              onChange={() => setPassFail("pass")}
-            />
-            Pass
-          </label>
-          <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <input
-              type="radio"
-              name="pf"
-              value="fail"
-              checked={passFail === "fail"}
-              onChange={() => setPassFail("fail")}
-            />
-            Fail
-          </label>
-        </div>
-
-        {/* Notes */}
-        <textarea
-          rows={4}
-          placeholder="Notes / observations"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          style={{
-            width: "100%",
-            border: "1px solid #e5e7eb",
-            padding: 8,
-            borderRadius: 6,
-            marginBottom: 12,
-            background: "#fff",
-          }}
-        />
-
-        {/* Error message */}
-        {error && (
-          <div
-            style={{
-              background: "#fee2e2",
-              color: "#991b1b",
-              padding: 10,
-              borderRadius: 6,
-              marginBottom: 10,
-              fontSize: 13,
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={submitDisabled}
-          style={{
-            width: "100%",
-            background: submitDisabled ? "#9ca3af" : "#2ECC71",
-            color: "#fff",
-            padding: 10,
-            borderRadius: 6,
-            fontWeight: 700,
-            border: "none",
-            cursor: submitDisabled ? "not-allowed" : "pointer",
-          }}
-        >
-          Submit
-        </button>
-      </form>
-    </main>
+      </svg>
+    </div>
   );
 }
