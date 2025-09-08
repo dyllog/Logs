@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 
 // Landing page matching the attached mock: large LOGS wordmark, stacked
@@ -63,32 +64,32 @@ export default function Home() {
             <Card
               title="Simple Logging"
               desc="QR codes link directly to digital inspection forms. Easy to use, even for non-technical staff."
-              icon={(
+              icon={
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="4" y="4" width="16" height="16" rx="2" stroke="#0F2F32" strokeWidth="2" />
                   <path d="M8 9h8M8 13h5M8 17h8" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-              )}
+              }
             />
             <Card
               title="Secure Records"
               desc="All data stored securely in the cloud, ensuring compliance with record keeping requirements."
-              icon={(
+              icon={
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="3" y="10" width="18" height="11" rx="2" stroke="#0F2F32" strokeWidth="2" />
                   <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-              )}
+              }
             />
             <Card
               title="Easy Exports"
               desc="Download PDF records instantly for audits — 24 months always available at your fingertips."
-              icon={(
+              icon={
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#0F2F32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <rect x="4" y="15" width="16" height="6" rx="2" stroke="#0F2F32" strokeWidth="2" />
                 </svg>
-              )}
+              }
             />
           </div>
 
@@ -192,4 +193,3 @@ function HeroVisual() {
     </div>
   );
 }
-

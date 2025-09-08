@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* crisp text on dark background */
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body { height: 100%; }
+body { background: #F4E8DA; color: #0C2A2A; font-family: Inter, ui-sans-serif; }
 
 :root {
   --logs-teal:#0F3B3F;
