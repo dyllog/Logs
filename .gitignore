@@ -45,3 +45,4 @@ serviceAccount*.json
 .env
 .env.*
 *.pem
+dist/
