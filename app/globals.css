@@ -1,24 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-body { background: #F4E8DA; color: #0C2A2A; font-family: Inter, ui-sans-serif; }
+/* Design tokens copied from Lovable (HSL custom properties) */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 180 30% 15%;
 
-:root {
-  --logs-teal:#0F3B3F;
-  --logs-teal2:#0E373B;
-  --logs-mid:#114348;
-  --logs-far:#0B2D2F;
-  --logs-fore:#164C51;
-  --logs-water:#0B2F31;
-  --logs-cream:#F5EADF;
-  --logs-creamText:#0F2F32;
-  --logs-creamSub:#D6CBC0;
-  --logs-cardBorder:#E7DED3;
+    --card: 0 0% 100%;
+    --card-foreground: 180 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 180 30% 15%;
+
+    /* LOGS Brand Colors - Professional Teal */
+    --primary: 180 50% 25%;
+    --primary-foreground: 35 25% 88%;
+    --primary-light: 180 45% 35%;
+    --primary-dark: 180 55% 20%;
+
+    /* Warm Cream Secondary */
+    --secondary: 35 25% 88%;
+    --secondary-foreground: 180 50% 25%;
+
+    --muted: 35 15% 92%;
+    --muted-foreground: 180 20% 45%;
+
+    --accent: 180 30% 92%;
+    --accent-foreground: 180 50% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 180 50% 25%;
+
+    /* Gradients and shadows */
+    --gradient-hero: linear-gradient(135deg, hsl(180 50% 25%), hsl(180 45% 35%));
+    --gradient-section: linear-gradient(180deg, hsl(35 25% 96%), hsl(0 0% 100%));
+
+    --shadow-soft: 0 4px 20px hsl(180 50% 25% / 0.1);
+    --shadow-medium: 0 8px 30px hsl(180 50% 25% / 0.15);
+    --shadow-strong: 0 12px 40px hsl(180 50% 25% / 0.2);
+
+    --radius: 0.75rem;
+  }
+
+  html, body { @apply bg-background text-foreground antialiased; }
+  h1,h2,h3,h4 { @apply tracking-tight; }
 }
 
-/* remove default link underline flash on the dark hero */
-a { text-decoration: none; }
+/* If Tailwind config isn't picked up yet, this keeps the hero readable */
+.bg-gradient-hero { background: var(--gradient-hero); }

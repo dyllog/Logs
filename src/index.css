@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 50 13% 95%;
+    --foreground: 60 4% 10%;
+
+    --card: 50 13% 95%;
+    --card-foreground: 60 4% 10%;
+
+    --popover: 50 13% 95%;
+    --popover-foreground: 60 4% 10%;
+
+    --primary: 60 4% 10%;
+    --primary-foreground: 50 13% 95%;
+
+    --secondary: 50 7% 93%;
+    --secondary-foreground: 60 4% 10%;
+
+    --muted: 50 7% 91%;
+    --muted-foreground: 60 3% 41%;
+
+    --accent: 50 7% 91%;
+    --accent-foreground: 60 4% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 50 7% 76%;
+    --input: 50 7% 76%;
+    --ring: 60 4% 10%;
+
+    --radius: 0rem;
+
+    /* LOGS running palette */
+    --logs-paper: #f5f4f0;
+    --logs-ink: #1a1a18;
+    --logs-secondary: #6b6b65;
+    --logs-rule: #c8c6be;
+    --logs-hover: #eeecea;
+    --logs-dark: #1a1a18;
+
+    --sidebar-background: 50 13% 95%;
+    --sidebar-foreground: 60 4% 10%;
+    --sidebar-primary: 60 4% 10%;
+    --sidebar-primary-foreground: 50 13% 95%;
+    --sidebar-accent: 50 7% 91%;
+    --sidebar-accent-foreground: 60 4% 10%;
+    --sidebar-border: 50 7% 76%;
+    --sidebar-ring: 60 4% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'DM Mono', 'Courier New', monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--logs-paper);
+    color: var(--logs-ink);
+    font-family: 'DM Mono', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Serif Display', Georgia, serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'DM Serif Display', Georgia, serif;
+  }
+
+  .font-mono-logs {
+    font-family: 'DM Mono', 'Courier New', monospace;
+  }
+
+  .tracking-label {
+    letter-spacing: 0.12em;
+  }
+
+  .border-rule {
+    border-color: var(--logs-rule);
+  }
+
+  .text-secondary-logs {
+    color: var(--logs-secondary);
+  }
+
+  .bg-paper {
+    background-color: var(--logs-paper);
+  }
+
+  .bg-dark-logs {
+    background-color: var(--logs-dark);
+  }
+
+  .hover-row:hover {
+    background-color: var(--logs-hover);
+  }
+}
