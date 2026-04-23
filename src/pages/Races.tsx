@@ -1,6 +1,3 @@
-import Nav from "@/components/Nav";
-import SiteFooter from "@/components/SiteFooter";
-
 const races = [
   { name: "Auckland Marathon", location: "Auckland", date: "26 Oct 2025", distances: ["42.2 km", "21.1 km", "10 km"], surface: "Road", since: "1986" },
   { name: "Rotorua Marathon", location: "Rotorua", date: "3 May 2025", distances: ["42.2 km", "21.1 km"], surface: "Road", since: "1967" },
@@ -14,9 +11,8 @@ const races = [
 
 const Races = () => {
   return (
-    <div style={{ backgroundColor: "#f5f4f0", minHeight: "100vh" }}>
-      <Nav />
-      <div className="max-w-6xl mx-auto px-6 py-16">
+    <main>
+      <div className="page" style={{ paddingTop: 48, paddingBottom: 64 }}>
         <div style={{ marginBottom: "48px" }}>
           <div
             style={{
@@ -161,8 +157,7 @@ const Races = () => {
           </tbody>
         </table>
       </div>
-      <SiteFooter />
-    </div>
+    </main>
   );
 };
 

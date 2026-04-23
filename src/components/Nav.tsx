@@ -1,55 +1,43 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 
-const navItems = [
-  { label: "Races", href: "/races" },
-  { label: "Results", href: "/results" },
-  { label: "Records", href: "/records" },
-  { label: "Athletes", href: "/athletes" },
+const items = [
+  { id: 'races',    label: 'Races',    href: '/races' },
+  { id: 'results',  label: 'Results',  href: '/results' },
+  { id: 'records',  label: 'Records',  href: '/records' },
+  { id: 'athletes', label: 'Athletes', href: '/athletes' },
 ];
 
-const Nav = () => {
+interface NavProps {
+  onOpenSearch: () => void;
+}
+
+export default function Nav({ onOpenSearch }: NavProps) {
   const location = useLocation();
+  const active = (href: string) =>
+    href === '/' ? location.pathname === '/' : location.pathname.startsWith(href);
 
   return (
-    <header
-      className="sticky top-0 z-50 border-b"
-      style={{ borderColor: "#c8c6be", backgroundColor: "#f5f4f0" }}
-    >
-      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-xl text-logs-ink leading-none select-none"
-          style={{ fontFamily: '"DM Serif Display", Georgia, serif' }}
-        >
-          LOGS
-        </Link>
-
-        <nav className="flex items-center gap-8">
-          {navItems.map((item) => {
-            const active = location.pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="text-2xs uppercase tracking-label font-mono transition-colors"
-                style={{
-                  fontFamily: '"DM Mono", monospace',
-                  fontSize: "11px",
-                  letterSpacing: "0.12em",
-                  color: active ? "#1a1a18" : "#6b6b65",
-                  textDecoration: "none",
-                  borderBottom: active ? "1px solid #1a1a18" : "none",
-                  paddingBottom: active ? "1px" : "2px",
-                }}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+    <nav className="nav">
+      <Link to="/" className="wordmark">
+        LOGS<sup>NZ · est 2024</sup>
+      </Link>
+      <div className="nav-items">
+        {items.map(i => (
+          <Link
+            key={i.id}
+            to={i.href}
+            className={`nav-item ${active(i.href) ? 'active' : ''}`}
+          >
+            {i.label}
+          </Link>
+        ))}
+        <button className="search-btn" onClick={onOpenSearch} aria-label="Search">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1">
+            <circle cx="5" cy="5" r="3.5"/>
+            <line x1="7.6" y1="7.6" x2="10.5" y2="10.5"/>
+          </svg>
+        </button>
       </div>
-    </header>
+    </nav>
   );
-};
-
-export default Nav;
+}

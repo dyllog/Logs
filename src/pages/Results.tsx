@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Nav from "@/components/Nav";
-import SiteFooter from "@/components/SiteFooter";
 
 const allResults = [
   { event: "Rotorua Marathon", year: 2025, distance: "42.2 km", pos: 1, name: "James Mwangi", category: "M Open", club: "Auckland City Runners", time: "2:28:14" },
@@ -25,9 +23,8 @@ const Results = () => {
     : allResults;
 
   return (
-    <div style={{ backgroundColor: "#f5f4f0", minHeight: "100vh" }}>
-      <Nav />
-      <div className="max-w-6xl mx-auto px-6 py-16">
+    <main>
+      <div className="page" style={{ paddingTop: 48, paddingBottom: 64 }}>
         <div style={{ marginBottom: "48px" }}>
           <div
             style={{
@@ -163,8 +160,7 @@ const Results = () => {
           </div>
         )}
       </div>
-      <SiteFooter />
-    </div>
+    </main>
   );
 };
 

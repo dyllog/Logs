@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Nav from "@/components/Nav";
-import SiteFooter from "@/components/SiteFooter";
 
 const athletes = [
   { name: "Stephen Kogo", club: "Unattached", nationality: "KEN", results: 4, pb: "2:08:31", pbRace: "Auckland Marathon" },
@@ -24,9 +22,8 @@ const Athletes = () => {
     : athletes;
 
   return (
-    <div style={{ backgroundColor: "#f5f4f0", minHeight: "100vh" }}>
-      <Nav />
-      <div className="max-w-6xl mx-auto px-6 py-16">
+    <main>
+      <div className="page" style={{ paddingTop: 48, paddingBottom: 64 }}>
         <div style={{ marginBottom: "48px" }}>
           <div
             style={{
@@ -162,8 +159,7 @@ const Athletes = () => {
           </div>
         )}
       </div>
-      <SiteFooter />
-    </div>
+    </main>
   );
 };
 

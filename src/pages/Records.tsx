@@ -1,6 +1,3 @@
-import Nav from "@/components/Nav";
-import SiteFooter from "@/components/SiteFooter";
-
 const records = [
   { race: "Auckland Marathon", distance: "42.2 km", gender: "M", holder: "Stephen Kogo", time: "2:08:31", year: 2023, nationality: "KEN" },
   { race: "Auckland Marathon", distance: "42.2 km", gender: "F", holder: "Contestina Mwangi", time: "2:33:34", year: 2019, nationality: "KEN" },
@@ -18,9 +15,8 @@ const records = [
 
 const Records = () => {
   return (
-    <div style={{ backgroundColor: "#f5f4f0", minHeight: "100vh" }}>
-      <Nav />
-      <div className="max-w-6xl mx-auto px-6 py-16">
+    <main>
+      <div className="page" style={{ paddingTop: 48, paddingBottom: 64 }}>
         <div style={{ marginBottom: "48px" }}>
           <div
             style={{
@@ -128,8 +124,7 @@ const Records = () => {
           </tbody>
         </table>
       </div>
-      <SiteFooter />
-    </div>
+    </main>
   );
 };
 
