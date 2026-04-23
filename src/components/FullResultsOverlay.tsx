@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { getResults, YEARS, yearStats } from '@/data/logsDataExt';
+import { loadResults, YEARS, yearStats, type ResultRow } from '@/data/logsDataExt';
 
 interface FullResultsOverlayProps {
   open: boolean;
@@ -10,10 +10,10 @@ interface FullResultsOverlayProps {
 }
 
 const AGS: [string, string][] = [
-  ['all','All AG'],['U20','U20'],['20–24','20–24'],['25–29','25–29'],['30–34','30–34'],
-  ['35–39','35–39'],['40–44','40–44'],['45–49','45–49'],['50–54','50–54'],['55+','55+'],
+  ['all','All AG'],['Elite','Elite'],['U20','U20'],['20-24','20–24'],['25-29','25–29'],['30-34','30–34'],
+  ['35-39','35–39'],['40-44','40–44'],['45-49','45–49'],['50-54','50–54'],['55-59','55–59'],['60+','60+'],
 ];
-type SortKey = 'pos' | 'bib' | 'time' | 'name' | 'cat' | 'club';
+type SortKey = 'pos' | 'bib' | 'time' | 'name' | 'cat';
 
 export default function FullResultsOverlay({ open, year: yearProp, initialQ, onClose, onOpenAthlete }: FullResultsOverlayProps) {
   const years = [...YEARS].reverse();
@@ -23,42 +23,57 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
   const [ag, setAg] = useState('all');
   const [sortK, setSortK] = useState<SortKey>('pos');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [all, setAll] = useState<ResultRow[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => { setYear(yearProp); setQ(initialQ ?? ''); }, [yearProp, initialQ, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    setLoading(true);
+    setAll([]);
+    loadResults(year).then(rows => {
+      setAll(rows);
+      setLoading(false);
+    });
+  }, [year, open]);
+
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const all = getResults(year);
   const ql = q.trim().toLowerCase();
   const filtered = useMemo(() => {
     let rs = all;
     if (gender !== 'all') rs = rs.filter(r => r.cat.startsWith(gender));
-    if (ag !== 'all') rs = rs.filter(r => r.cat.includes(ag));
+    if (ag !== 'all') rs = rs.filter(r => r.cat.toLowerCase().includes(ag.toLowerCase()));
     if (ql) {
       if (/^\d+$/.test(ql)) {
         rs = rs.filter(r => String(r.bib).includes(ql) || String(r.pos) === ql);
       } else {
-        rs = rs.filter(r => r.name.toLowerCase().includes(ql) || r.club.toLowerCase().includes(ql) || r.nat.toLowerCase().includes(ql));
+        rs = rs.filter(r =>
+          r.name.toLowerCase().includes(ql) ||
+          r.nat.toLowerCase().includes(ql)
+        );
       }
     }
     const dir = sortDir === 'asc' ? 1 : -1;
     return rs.slice().sort((a, b) => {
-      if (sortK === 'pos') return (a.pos - b.pos) * dir;
-      if (sortK === 'bib') return (a.bib - b.bib) * dir;
+      if (sortK === 'pos')  return (a.pos - b.pos) * dir;
+      if (sortK === 'bib')  return (a.bib - b.bib) * dir;
       if (sortK === 'time') return (a.sec - b.sec) * dir;
       if (sortK === 'name') return a.name.localeCompare(b.name) * dir;
-      if (sortK === 'cat') return a.cat.localeCompare(b.cat) * dir;
-      if (sortK === 'club') return a.club.localeCompare(b.club) * dir;
+      if (sortK === 'cat')  return a.cat.localeCompare(b.cat) * dir;
       return 0;
     });
-  }, [year, ql, gender, ag, sortK, sortDir]);
+  }, [all, ql, gender, ag, sortK, sortDir]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -93,20 +108,24 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
   };
 
   const stat = yearStats.find(s => s.year === year)!;
-  const grid = '60px 70px 1.6fr 1fr 1.3fr 100px 40px';
+  const grid = '60px 70px 1.6fr 1fr 100px';
 
   if (!open) return null;
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,16,0.45)', zIndex: 150, display: 'flex', alignItems: 'stretch', justifyContent: 'center' }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ width: 'min(1240px, 96vw)', margin: '32px 0', background: 'var(--bg)', border: '0.5px solid var(--ink)', display: 'flex', flexDirection: 'column' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 'min(1100px, 96vw)', margin: '32px 0', background: 'var(--bg)', border: '0.5px solid var(--ink)', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
           <div className="flex between ai-baseline">
             <div>
               <div className="eyebrow mb-8">Auckland Marathon · full results</div>
               <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
-                {year} <span style={{ color: 'var(--meta)', fontStyle: 'italic', fontSize: 18 }}>· {filtered.length.toLocaleString()} of {all.length.toLocaleString()} finishers</span>
+                {year}
+                {loading
+                  ? <span style={{ color: 'var(--meta)', fontStyle: 'italic', fontSize: 18 }}> · loading…</span>
+                  : <span style={{ color: 'var(--meta)', fontStyle: 'italic', fontSize: 18 }}> · {filtered.length.toLocaleString()} of {all.length.toLocaleString()} finishers</span>
+                }
               </div>
             </div>
             <button className="btn-ghost" onClick={onClose}>Close ESC ✕</button>
@@ -119,7 +138,7 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
                   <circle cx="5" cy="5" r="3.5"/><line x1="7.6" y1="7.6" x2="10.5" y2="10.5"/>
                 </svg>
                 <input className="input" style={{ paddingLeft: 20 }} autoFocus
-                       placeholder="Name · bib · club · nat"
+                       placeholder="Name · bib · nationality"
                        value={q} onChange={e => setQ(e.target.value)} />
               </div>
             </div>
@@ -152,44 +171,46 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
           {colHeader('bib', 'Bib')}
           {colHeader('name', 'Name')}
           {colHeader('cat', 'Category')}
-          {colHeader('club', 'Club')}
           {colHeader('time', 'Time', 'right')}
-          <div />
         </div>
 
-        {/* Virtualised rows */}
+        {/* Rows */}
         <div ref={scrollRef} style={{ overflow: 'auto', flex: '1 1 auto', minHeight: 300 }}>
-          <div style={{ height: topPad }} />
-          {slice.map(r => (
-            <div key={r.pos}
-                 onClick={() => r.name === 'Daniel Whareaitu' && onOpenAthlete?.(r.name)}
-                 style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums', cursor: r.name === 'Daniel Whareaitu' ? 'pointer' : 'default' }}
-                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
-                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
-              <div className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</div>
-              <div className="dimmed">{r.bib}</div>
-              <div>
-                <span className="serif" style={{ fontSize: 15 }}>{r.name}</span>
-                <span className="dimmed" style={{ marginLeft: 8, fontSize: 10.5 }}>{r.nat}</span>
-              </div>
-              <div className="dimmed">{r.cat}</div>
-              <div className="dimmed" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.club}</div>
-              <div className="num time">{r.time}</div>
-              <div style={{ textAlign: 'right', color: 'var(--meta)' }}>{r.name === 'Daniel Whareaitu' ? '→' : ''}</div>
-            </div>
-          ))}
-          <div style={{ height: botPad }} />
-          {filtered.length === 0 && (
-            <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>No finishers match these filters.</div>
+          {loading ? (
+            <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>Loading {year} results…</div>
+          ) : (
+            <>
+              <div style={{ height: topPad }} />
+              {slice.map(r => (
+                <div key={r.pos}
+                     style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
+                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
+                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                  <div className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</div>
+                  <div className="dimmed">{r.bib || '—'}</div>
+                  <div>
+                    <span className="serif" style={{ fontSize: 15 }}>{r.name}</span>
+                    <span className="dimmed" style={{ marginLeft: 8, fontSize: 10.5 }}>{r.nat}</span>
+                  </div>
+                  <div className="dimmed">{r.cat}</div>
+                  <div className="num time">{r.time}</div>
+                </div>
+              ))}
+              <div style={{ height: botPad }} />
+              {filtered.length === 0 && (
+                <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>No finishers match these filters.</div>
+              )}
+            </>
           )}
         </div>
 
         {/* Footer */}
         <div style={{ padding: '14px 28px', borderTop: '0.5px solid var(--rule)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-alt)' }}>
-          <div className="label">Click column headers to sort · ESC to close</div>
+          <div className="label">
+            {loading ? `Loading…` : `${stat.finishers.toLocaleString()} finishers · ${stat.finishers - (yearStats.find(s=>s.year===year)?.finishers??0) + filtered.length} shown · click headers to sort`}
+          </div>
           <div className="flex gap-8">
-            <button className="btn-ghost">Download CSV ↓</button>
-            <button className="btn-ghost">Print view ↗</button>
+            <div className="label">Click column headers to sort · ESC to close</div>
           </div>
         </div>
       </div>

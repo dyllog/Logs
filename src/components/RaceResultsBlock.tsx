@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { getResults, yearStats, YEARS } from '@/data/logsDataExt';
+import { loadResults, yearStats, YEARS, type ResultRow } from '@/data/logsDataExt';
 import FullResultsOverlay from './FullResultsOverlay';
 
 interface RaceResultsBlockProps {
@@ -13,22 +13,30 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
   const [page, setPage] = useState(1);
   const [fullOpen, setFullOpen] = useState(false);
   const [fullQ, setFullQ] = useState('');
+  const [all, setAll] = useState<ResultRow[]>([]);
+  const [loading, setLoading] = useState(false);
   const perPage = 10;
 
-  const all = getResults(year);
+  useEffect(() => {
+    setLoading(true);
+    setAll([]);
+    loadResults(year).then(rows => {
+      setAll(rows);
+      setLoading(false);
+    });
+  }, [year]);
+
   const ql = q.trim().toLowerCase();
   const filtered = useMemo(() => {
     if (!ql) return all;
     if (/^\d+$/.test(ql)) {
-      const bib = parseInt(ql, 10);
-      return all.filter(r => String(r.bib).includes(String(bib)) || r.pos === bib);
+      return all.filter(r => String(r.bib).includes(ql) || String(r.pos) === ql);
     }
     return all.filter(r =>
       r.name.toLowerCase().includes(ql) ||
-      r.club.toLowerCase().includes(ql) ||
       r.nat.toLowerCase().includes(ql)
     );
-  }, [year, ql]);
+  }, [all, ql]);
 
   useEffect(() => { setPage(1); }, [year, ql]);
 
@@ -54,17 +62,17 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
 
       <div className="flex gap-16 mb-16 ai-end" style={{ flexWrap: 'wrap' }}>
         <div style={{ flex: '1 1 360px', maxWidth: 520, position: 'relative' }}>
-          <div className="label mb-8">Search · name, bib, club</div>
+          <div className="label mb-8">Search · name, bib, nationality</div>
           <div style={{ position: 'relative' }}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1"
                  style={{ position: 'absolute', left: 0, top: 14, opacity: 0.5 }}>
               <circle cx="5" cy="5" r="3.5"/><line x1="7.6" y1="7.6" x2="10.5" y2="10.5"/>
             </svg>
             <input className="input" style={{ paddingLeft: 20 }}
-                   placeholder="e.g. Whareaitu · 412 · Harriers"
+                   placeholder="e.g. Balchin · 11036 · IRL"
                    value={q} onChange={e => setQ(e.target.value)} />
           </div>
-          {ql && (
+          {ql && !loading && (
             <div className="label mt-8">
               {filtered.length.toLocaleString()} match{filtered.length === 1 ? '' : 'es'} in {year}
             </div>
@@ -82,45 +90,47 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
             <th style={{ width: 70 }}>Bib</th>
             <th>Name</th>
             <th>Category</th>
-            <th>Club</th>
             <th className="num">Time</th>
-            <th style={{ width: 40 }}></th>
           </tr>
         </thead>
         <tbody>
-          {pageRows.map(r => (
-            <tr key={r.pos} className="row"
-                onClick={() => r.name === 'Daniel Whareaitu' && onOpenAthlete?.(r.name)}>
+          {loading ? (
+            <tr><td colSpan={5} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>
+              Loading {year} results…
+            </td></tr>
+          ) : pageRows.length === 0 ? (
+            <tr><td colSpan={5} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>
+              {ql ? `No results match "${q}" in ${year}.` : `No results for ${year}.`}
+            </td></tr>
+          ) : pageRows.map(r => (
+            <tr key={r.pos} className="row">
               <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
-              <td className="dimmed time">{r.bib}</td>
+              <td className="dimmed time">{r.bib || '—'}</td>
               <td>
                 <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
                 <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
               </td>
               <td className="dimmed">{r.cat}</td>
-              <td className="dimmed">{r.club}</td>
               <td className="num time">{r.time}</td>
-              <td style={{ textAlign: 'right', color: 'var(--meta)' }}>→</td>
             </tr>
           ))}
-          {pageRows.length === 0 && (
-            <tr><td colSpan={7} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>
-              No results match "{q}" in {year}.
-            </td></tr>
-          )}
         </tbody>
       </table>
 
-      <div className="flex between ai-center mt-24" style={{ flexWrap: 'wrap', gap: 12 }}>
-        <div className="label">
-          Showing {filtered.length === 0 ? 0 : (page - 1) * perPage + 1}–{Math.min(page * perPage, filtered.length)} of {filtered.length.toLocaleString()}
+      {!loading && (
+        <div className="flex between ai-center mt-24" style={{ flexWrap: 'wrap', gap: 12 }}>
+          <div className="label">
+            {filtered.length === 0
+              ? 'No results'
+              : `Showing ${(page - 1) * perPage + 1}–${Math.min(page * perPage, filtered.length)} of ${filtered.length.toLocaleString()}`}
+          </div>
+          <div className="flex gap-8 ai-center">
+            <button className="btn-ghost" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}>← Prev</button>
+            <span className="label" style={{ padding: '0 8px' }}>Page {page} / {pages}</span>
+            <button className="btn-ghost" disabled={page >= pages} onClick={() => setPage(p => Math.min(pages, p + 1))}>Next →</button>
+          </div>
         </div>
-        <div className="flex gap-8 ai-center">
-          <button className="btn-ghost" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}>← Prev</button>
-          <span className="label" style={{ padding: '0 8px' }}>Page {page} / {pages}</span>
-          <button className="btn-ghost" disabled={page >= pages} onClick={() => setPage(p => Math.min(pages, p + 1))}>Next →</button>
-        </div>
-      </div>
+      )}
 
       <FullResultsOverlay
         open={fullOpen}
