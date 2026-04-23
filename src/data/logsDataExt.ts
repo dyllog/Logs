@@ -47,14 +47,14 @@ export function getResults(year: number): ResultRow[] {
 }
 
 export const courseStats = {
-  climb: 412,
-  descent: 404,
-  net: 8,
-  maxElev: 112,
-  minElev: 12,
-  longestClimb: "km 5.5 → 7.0 · Harbour Bridge (+54 m)",
-  longestDescent: "km 7 → 9 · Curran St descent (-48 m)",
-  surface: "Sealed road · 2 bridges · 1 harbour crossing",
+  climb: 118,
+  descent: 105,
+  net: 13,
+  maxElev: 43,
+  minElev: 4,
+  longestClimb: "km 13.5 → 16.0 · Harbour Bridge (+37 m)",
+  longestDescent: "km 16.0 → 18.5 · Bridge descent (−33 m)",
+  surface: "Sealed road · Harbour Bridge · 1 harbour crossing",
   certified: "AIMS/World Athletics · cert. NZ/2019/04",
 };
 

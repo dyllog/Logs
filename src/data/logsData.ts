@@ -8,7 +8,7 @@ export const race = {
   name: "Auckland Marathon",
   location: "Auckland, New Zealand",
   surface: "Road",
-  distances: ["42.2 km", "21.1 km", "10 km"],
+  distances: ["42.2 km", "21.1 km", "11 km", "5 km"],
   nextDate: "01 Nov 2026",
   established: 1992,
   editions: 33,
@@ -73,20 +73,21 @@ export const recordsWomen: CourseRecord = {
   ],
 };
 
+// Elevation profile derived from official Auckland Marathon course map.
+// Bridge deck peaks at ~43 m; Tamaki Drive is sea-level flat; finish at Victoria Park ~18 m.
 export const elevation: [number, number][] = [
-  [0,18],[1,22],[2,28],[3,34],[4,40],[5,58],[6,72],
-  [7,54],[8,42],[9,38],[10,46],[11,62],[12,80],[13,96],
-  [14,84],[15,70],[16,58],[17,68],[18,112],[19,104],
-  [20,88],[21,72],[22,58],[23,48],[24,40],[25,46],
-  [26,58],[27,72],[28,82],[29,68],[30,54],[31,62],
-  [32,74],[33,88],[34,96],[35,82],[36,64],[37,48],
-  [38,36],[39,28],[40,22],[41,18],[42.2,14],
+  [0,5],[1,8],[2,11],[3,10],[4,8],[5,7],[6,6],[7,7],[8,8],[9,7],
+  [10,8],[11,9],[12,7],[13,6],[14,15],[15,36],[16,43],[17,22],
+  [18,9],[19,6],[20,7],[21,5],[22,4],[23,4],[24,4],[25,4],
+  [26,4],[27,4],[28,4],[29,4],[30,4],[31,4],[32,4],[33,4],
+  [34,4],[35,4],[36,4],[37,4],[38,4],[39,8],[40,11],[41,15],[42.2,18],
 ];
 
 export const elevationAnnotations = [
-  { km: 6,    label: "Harbour Bridge crest" },
-  { km: 18,   label: "Curran St climb" },
-  { km: 34,   label: "Tāmaki Dr rise" },
+  { km: 4,    label: "Winscombe St" },
+  { km: 16,   label: "Harbour Bridge (43 m)" },
+  { km: 23,   label: "Tamaki Drive" },
+  { km: 38,   label: "Turn · Tamaki Dr" },
   { km: 42.2, label: "Finish — Victoria Park" },
 ];
 
