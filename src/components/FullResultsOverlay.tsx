@@ -39,8 +39,20 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
   }, [year, open]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (open) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
   }, [open]);
 
   useEffect(() => {
@@ -113,7 +125,7 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
   if (!open) return null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,16,0.45)', zIndex: 150, display: 'flex', alignItems: 'stretch', justifyContent: 'center' }} onClick={onClose}>
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,16,0.45)', zIndex: 150, display: 'flex', alignItems: 'stretch', justifyContent: 'center', touchAction: 'none' }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ width: 'min(1100px, 96vw)', margin: '32px 0', background: 'var(--bg)', border: '0.5px solid var(--ink)', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
@@ -175,7 +187,7 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
         </div>
 
         {/* Rows */}
-        <div ref={scrollRef} style={{ overflow: 'auto', flex: '1 1 auto', minHeight: 300 }}>
+        <div ref={scrollRef} style={{ overflow: 'auto', flex: '1 1 auto', minHeight: 300, WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
           {loading ? (
             <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>Loading {year} results…</div>
           ) : (
