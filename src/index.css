@@ -326,28 +326,11 @@ body {
   bottom: 20px;
   background: var(--bg);
   border: 0.5px solid var(--ink);
-  padding: 14px 16px;
+  padding: 8px;
   z-index: 200;
-  min-width: 220px;
-  font-family: 'DM Mono', monospace;
-}
-.tweaks h4 {
-  margin: 0 0 12px 0;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--meta);
-  font-weight: 400;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-.tweaks .tw-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  font-size: 12px;
+  border-radius: 999px;
 }
 .sw {
   position: relative;

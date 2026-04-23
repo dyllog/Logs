@@ -18,7 +18,7 @@ export default function AveragesChart({ stats }: AveragesChartProps) {
     const i = years.indexOf(yr);
     return padX + (i / (years.length - 1)) * (W - padX * 2);
   };
-  const y = (v: number) => padTop + ((v - sMin) / (sMax - sMin)) * (H - padTop - padBot);
+  const y = (v: number) => padTop + (1 - (v - sMin) / (sMax - sMin)) * (H - padTop - padBot);
 
   const buildPath = (key: keyof YearStat) =>
     stats.map((s, i) => `${i === 0 ? 'M' : 'L'}${x(s.year).toFixed(1)},${y(s[key] as number).toFixed(1)}`).join(' ');

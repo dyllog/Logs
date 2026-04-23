@@ -17,15 +17,8 @@ export default function TweaksPanel() {
   }, [dark]);
 
   return (
-    <div className="tweaks">
-      <h4><span>Tweaks</span></h4>
-      <div className="tw-row">
-        <span>Dark mode</span>
-        <div className={`sw ${dark ? 'on' : ''}`} onClick={() => setDark(d => !d)} />
-      </div>
-      <div className="label mt-8" style={{ fontSize: 9, lineHeight: 1.5 }}>
-        Archival registers — same ruleset, inverted.
-      </div>
+    <div className="tweaks" title={dark ? 'Switch to light mode' : 'Switch to dark mode'}>
+      <div className={`sw ${dark ? 'on' : ''}`} onClick={() => setDark(d => !d)} />
     </div>
   );
 }
