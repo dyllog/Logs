@@ -193,8 +193,8 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
           ) : (
             <>
               <div style={{ height: topPad }} />
-              {slice.map(r => (
-                <div key={r.pos}
+              {slice.map((r, i) => (
+                <div key={startIdx + i}
                      style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>

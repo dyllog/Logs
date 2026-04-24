@@ -53,7 +53,16 @@ const statsOut = [];
 for (const year of years) {
   const file = path.join(csvDir, `Auckland Marathon - Marathon Results - ${year}.csv`);
   const text = fs.readFileSync(file, 'utf8');
-  const rows = parseCSV(text);
+  const rawRows = parseCSV(text);
+  // Deduplicate — CSVs sometimes repeat top N rows
+  // Use name+sec as key: bibs like "M2"/"F2" both parse to 2, causing false deduplication
+  const seen = new Set();
+  const rows = rawRows.filter(r => {
+    const key = `${r.name}|${r.sec}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   // Compute stats
   const males   = rows.filter(r => r.cat.startsWith('M'));

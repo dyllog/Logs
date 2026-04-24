@@ -20,10 +20,10 @@ export const YEARS = [2021, 2022, 2023, 2024, 2025] as const;
 // Real values computed from full CSV fields
 export const yearStats: YearStat[] = [
   { year: 2021, finishers:  870, avg: 15813, avgMen: 15908, avgWomen: 17756, winnerM:  8400, winnerW: 10244 },
-  { year: 2022, finishers: 1300, avg: 14980, avgMen: 15021, avgWomen: 16880, winnerM:  8512, winnerW: 10170 },
+  { year: 2022, finishers: 1299, avg: 14978, avgMen: 15018, avgWomen: 16880, winnerM:  8512, winnerW: 10170 },
   { year: 2023, finishers: 1765, avg: 14820, avgMen: 14930, avgWomen: 16573, winnerM:  8589, winnerW:  9860 },
   { year: 2024, finishers: 2439, avg: 14839, avgMen: 14810, avgWomen: 16309, winnerM:  8509, winnerW:  9691 },
-  { year: 2025, finishers: 2825, avg: 15033, avgMen: 14988, avgWomen: 16416, winnerM:  8395, winnerW:  9490 },
+  { year: 2025, finishers: 2775, avg: 15082, avgMen: 15110, avgWomen: 16436, winnerM:  8395, winnerW:  9490 },
 ];
 
 const cache: Record<number, ResultRow[]> = {};
