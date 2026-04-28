@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { loadResults, yearStats, YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, yearStats, halfStats, YEARS, type ResultRow } from '@/data/logsDataExt';
 import { race } from '@/data/logsData';
 import FullResultsOverlay from './FullResultsOverlay';
 
@@ -20,17 +20,17 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
   const [loading, setLoading] = useState(false);
   const perPage = 10;
 
-  const hasData = dist === '42.2 km';
+  const hasData = dist === '42.2 km' || dist === '21.1 km';
 
   useEffect(() => {
     if (!hasData) return;
     setLoading(true);
     setAll([]);
-    loadResults(year).then(rows => {
+    loadResults(year, dist as '42.2 km' | '21.1 km').then(rows => {
       setAll(rows);
       setLoading(false);
     });
-  }, [year, hasData]);
+  }, [year, dist, hasData]);
 
   const ql = q.trim().toLowerCase();
   const filtered = useMemo(() => {
@@ -48,7 +48,8 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const stat = yearStats.find(s => s.year === year)!;
+  const activeStats = dist === '21.1 km' ? halfStats : yearStats;
+  const stat = activeStats.find(s => s.year === year)!;
 
   return (
     <div>
@@ -163,6 +164,7 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
       <FullResultsOverlay
         open={fullOpen}
         year={year}
+        dist={dist as '42.2 km' | '21.1 km'}
         initialQ={fullQ}
         onClose={() => setFullOpen(false)}
         onOpenAthlete={name => { setFullOpen(false); onOpenAthlete?.(name); }}

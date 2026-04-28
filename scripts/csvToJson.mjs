@@ -101,15 +101,17 @@ function parseCSV(text) {
 }
 
 const years = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
-const statsOut = [];
 
-for (const year of years) {
-  const file = path.join(csvDir, `Auckland Marathon - Marathon Results - ${year}.csv`);
+function fmt(s) {
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
+  return `${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+}
+
+function processYear(year, csvName, outName) {
+  const file = path.join(csvDir, csvName);
   const text = fs.readFileSync(file, 'utf8');
   const rawRows = parseCSV(text);
 
-  // Deduplicate — CSVs sometimes repeat top N rows
-  // Use name+sec as key: bibs like "M2"/"F2" both parse to 2, causing false deduplication
   const seen = new Set();
   const rows = rawRows.filter(r => {
     const key = `${r.name}|${r.sec}`;
@@ -127,21 +129,39 @@ for (const year of years) {
   const avgM    = Math.round(males.reduce((s, r) => s + r.sec, 0) / males.length);
   const avgW    = Math.round(females.reduce((s, r) => s + r.sec, 0) / females.length);
 
-  statsOut.push({ year, finishers: rows.length, avg: median, avgMen: avgM, avgWomen: avgW, winnerM, winnerW });
-
-  const outFile = path.join(outDir, `results-${year}.json`);
+  const outFile = path.join(outDir, outName);
   fs.writeFileSync(outFile, JSON.stringify(rows));
-
   const kb = Math.round(fs.statSync(outFile).size / 1024);
-  console.log(`${year}: ${rows.length} finishers (${males.length}M / ${females.length}W) · median ${fmt(median)} · winner ${fmt(winnerM)} / ${fmt(winnerW)} · ${kb}KB`);
+  console.log(`  ${year}: ${rows.length} finishers (${males.length}M / ${females.length}W) · median ${fmt(median)} · winner ${fmt(winnerM)} / ${fmt(winnerW)} · ${kb}KB`);
+
+  return { year, finishers: rows.length, avg: median, avgMen: avgM, avgWomen: avgW, winnerM, winnerW };
 }
 
-function fmt(s) {
-  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
-  return `${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+// ── Marathon ──────────────────────────────────────────────────────────────────
+console.log('\n── Marathon (42.2 km) ──');
+const marathonStats = [];
+for (const year of years) {
+  marathonStats.push(processYear(year,
+    `Auckland Marathon - Marathon Results - ${year}.csv`,
+    `results-${year}.json`
+  ));
 }
 
-console.log('\nyearStats to paste into logsDataExt.ts:');
-console.log(statsOut.map(s =>
-  `  { year: ${s.year}, finishers: ${String(s.finishers).padStart(4)}, avg: ${String(s.avg).padStart(5)}, avgMen: ${String(s.avgMen).padStart(5)}, avgWomen: ${String(s.avgWomen).padStart(5)}, winnerM: ${String(s.winnerM).padStart(5)}, winnerW: ${String(s.winnerW).padStart(5)} },`
-).join('\n'));
+// ── Half marathon ─────────────────────────────────────────────────────────────
+console.log('\n── Half Marathon (21.1 km) ──');
+const halfStats = [];
+for (const year of years) {
+  halfStats.push(processYear(year,
+    `Auckland Marathon - Half Results - ${year}.csv`,
+    `results-half-${year}.json`
+  ));
+}
+
+// ── Stats output ──────────────────────────────────────────────────────────────
+const fmtRow = s =>
+  `  { year: ${s.year}, finishers: ${String(s.finishers).padStart(4)}, avg: ${String(s.avg).padStart(5)}, avgMen: ${String(s.avgMen).padStart(5)}, avgWomen: ${String(s.avgWomen).padStart(5)}, winnerM: ${String(s.winnerM).padStart(5)}, winnerW: ${String(s.winnerW).padStart(5)} },`;
+
+console.log('\nyearStats (marathon) to paste into logsDataExt.ts:');
+console.log(marathonStats.map(fmtRow).join('\n'));
+console.log('\nhalfStats to paste into logsDataExt.ts:');
+console.log(halfStats.map(fmtRow).join('\n'));

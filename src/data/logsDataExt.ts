@@ -32,13 +32,35 @@ export const yearStats: YearStat[] = [
   { year: 2025, finishers: 2775, avg: 15082, avgMen: 15110, avgWomen: 16436, winnerM:  8395, winnerW:  9490 },
 ];
 
-const cache: Record<number, ResultRow[]> = {};
-const inflight: Record<number, Promise<ResultRow[]>> = {};
+export const halfStats: YearStat[] = [
+  { year: 2014, finishers: 7125, avg:  8259, avgMen:  7880, avgWomen:  9202, winnerM:  4107, winnerW:  4550 },
+  { year: 2015, finishers: 5009, avg:  8117, avgMen:  7816, avgWomen:  8974, winnerM:  4110, winnerW:  4567 },
+  { year: 2016, finishers: 5673, avg:  8025, avgMen:  7782, avgWomen:  9078, winnerM:  4088, winnerW:  4602 },
+  { year: 2017, finishers: 5706, avg:  8116, avgMen:  7839, avgWomen:  9208, winnerM:  4038, winnerW:  4548 },
+  { year: 2018, finishers: 5572, avg:  8151, avgMen:  7977, avgWomen:  9201, winnerM:  4033, winnerW:  4587 },
+  { year: 2019, finishers: 5204, avg:  7840, avgMen:  7703, avgWomen:  8837, winnerM:  3949, winnerW:  4701 },
+  { year: 2020, finishers: 4628, avg:  7842, avgMen:  7715, avgWomen:  8905, winnerM:  3923, winnerW:  4425 },
+  { year: 2021, finishers: 2492, avg:  7951, avgMen:  7851, avgWomen:  9091, winnerM:  4043, winnerW:  4617 },
+  { year: 2022, finishers: 3988, avg:  7731, avgMen:  7614, avgWomen:  8813, winnerM:  3987, winnerW:  4615 },
+  { year: 2023, finishers: 4293, avg:  7726, avgMen:  7575, avgWomen:  8696, winnerM:  3877, winnerW:  4592 },
+  { year: 2024, finishers: 6161, avg:  7758, avgMen:  7655, avgWomen:  8720, winnerM:  3994, winnerW:  4645 },
+  { year: 2025, finishers: 6614, avg:  7872, avgMen:  7721, avgWomen:  8785, winnerM:  3924, winnerW:  4528 },
+];
 
-export async function loadResults(year: number): Promise<ResultRow[]> {
+const marathonCache: Record<number, ResultRow[]> = {};
+const marathonInflight: Record<number, Promise<ResultRow[]>> = {};
+const halfCache: Record<number, ResultRow[]> = {};
+const halfInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadResults(year: number, dist: '42.2 km' | '21.1 km' = '42.2 km'): Promise<ResultRow[]> {
+  const isHalf = dist === '21.1 km';
+  const cache = isHalf ? halfCache : marathonCache;
+  const inflight = isHalf ? halfInflight : marathonInflight;
+  const url = isHalf ? `/data/results-half-${year}.json` : `/data/results-${year}.json`;
+
   if (cache[year]) return cache[year];
   if (!inflight[year]) {
-    inflight[year] = fetch(`/data/results-${year}.json`)
+    inflight[year] = fetch(url)
       .then(r => r.json())
       .then((rows: ResultRow[]) => {
         cache[year] = rows;
@@ -49,7 +71,7 @@ export async function loadResults(year: number): Promise<ResultRow[]> {
 }
 
 export function getResults(year: number): ResultRow[] {
-  return cache[year] ?? [];
+  return marathonCache[year] ?? [];
 }
 
 export const courseStats = {

@@ -1,9 +1,10 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { loadResults, YEARS, yearStats, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, YEARS, yearStats, halfStats, type ResultRow } from '@/data/logsDataExt';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
+  dist?: '42.2 km' | '21.1 km';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
@@ -15,7 +16,7 @@ const AGS: [string, string][] = [
 ];
 type SortKey = 'pos' | 'bib' | 'time' | 'name' | 'cat';
 
-export default function FullResultsOverlay({ open, year: yearProp, initialQ, onClose, onOpenAthlete }: FullResultsOverlayProps) {
+export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 km', initialQ, onClose, onOpenAthlete }: FullResultsOverlayProps) {
   const years = [...YEARS].reverse();
   const [year, setYear] = useState(yearProp);
   const [q, setQ] = useState(initialQ ?? '');
@@ -32,11 +33,11 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
     if (!open) return;
     setLoading(true);
     setAll([]);
-    loadResults(year).then(rows => {
+    loadResults(year, dist).then(rows => {
       setAll(rows);
       setLoading(false);
     });
-  }, [year, open]);
+  }, [year, dist, open]);
 
   useEffect(() => {
     if (open) {
@@ -119,7 +120,8 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
     );
   };
 
-  const stat = yearStats.find(s => s.year === year)!;
+  const activeStats = dist === '21.1 km' ? halfStats : yearStats;
+  const stat = activeStats.find(s => s.year === year)!;
   const grid = '60px 70px 1.6fr 1fr 100px';
 
   if (!open) return null;
@@ -219,7 +221,7 @@ export default function FullResultsOverlay({ open, year: yearProp, initialQ, onC
         {/* Footer */}
         <div style={{ padding: '14px 28px', borderTop: '0.5px solid var(--rule)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-alt)' }}>
           <div className="label">
-            {loading ? `Loading…` : `${stat.finishers.toLocaleString()} finishers · ${stat.finishers - (yearStats.find(s=>s.year===year)?.finishers??0) + filtered.length} shown · click headers to sort`}
+            {loading ? `Loading…` : `${stat.finishers.toLocaleString()} finishers · ${filtered.length.toLocaleString()} shown · click headers to sort`}
           </div>
           <div className="flex gap-8">
             <div className="label">Click column headers to sort · ESC to close</div>
