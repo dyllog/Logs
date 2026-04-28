@@ -94,12 +94,12 @@ export default function CRWinnerChart({ stats, gender, seedCR }: CRWinnerChartPr
             <g pointerEvents="none">
               <line x1={xx} x2={xx} y1={padTop} y2={H - padBot} stroke="currentColor" strokeOpacity="0.25" strokeWidth="0.5" />
               <g transform={`translate(${Math.min(xx + 10, W - 148)},${padTop + 4})`}>
-                <rect width="138" height={crBroken ? 66 : 54} fill="var(--bg)" stroke="currentColor" strokeWidth="0.5" />
-                <text x="10" y="14" fontSize="10" fontFamily="DM Mono, monospace" fill="currentColor" letterSpacing="0.1em">{p.year}</text>
+                <rect width="138" height={crBroken ? 66 : 54} fill="var(--on-dark)" stroke="var(--on-dark)" strokeWidth="0.5" />
+                <text x="10" y="14" fontSize="10" fontFamily="DM Mono, monospace" fill="var(--ink)" letterSpacing="0.1em">{p.year}</text>
                 {lines.map((l, li) => (
                   <g key={li}>
-                    <text x="10" y={28 + li * 12} fontSize="9" fontFamily="DM Mono, monospace" fill="currentColor" fillOpacity="0.55">{l[0]}</text>
-                    <text x="128" y={28 + li * 12} textAnchor="end" fontSize="9" fontFamily="DM Mono, monospace" fill="currentColor">{l[1]}</text>
+                    <text x="10" y={28 + li * 12} fontSize="9" fontFamily="DM Mono, monospace" fill="var(--ink)" fillOpacity="0.55">{l[0]}</text>
+                    <text x="128" y={28 + li * 12} textAnchor="end" fontSize="9" fontFamily="DM Mono, monospace" fill="var(--ink)">{l[1]}</text>
                   </g>
                 ))}
               </g>
