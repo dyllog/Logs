@@ -11,7 +11,7 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
   const years = [...YEARS].reverse();
   const distances = race.distances;
   const [dist, setDist] = useState(distances[0]);
-  const [year, setYear] = useState(2025);
+  const [year, setYear] = useState<typeof YEARS[number]>(2025);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
   const [fullOpen, setFullOpen] = useState(false);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProgressionChart from '@/components/ProgressionChart';
+import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
 import AveragesChart from '@/components/AveragesChart';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
@@ -134,7 +134,7 @@ export default function Race() {
                 </span>
               )}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 48, marginTop: 24, alignItems: 'start' }} className="record-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 48, marginTop: 24, alignItems: 'start' }} className="record-grid">
               <div>
                 <div className="serif" style={{ fontSize: 72, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{records.time}</div>
                 <div className="mt-24">
@@ -148,8 +148,12 @@ export default function Race() {
                 </div>
               </div>
               <div style={{ color: 'var(--on-dark)' }}>
-                <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Progression · {records.progression[0].y}–{records.progression[records.progression.length - 1].y}</div>
-                <ProgressionChart data={records.progression} height={160} accent={tab === 'women'} />
+                <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Winner vs CR · 2014–2025</div>
+                <CRWinnerChart
+                  stats={yearStats}
+                  gender={tab}
+                  seedCR={tab === 'men' ? 8263 : yearStats[0].winnerW}
+                />
               </div>
             </div>
           </div>
