@@ -31,7 +31,7 @@ export default function CRWinnerChart({ stats, gender, seedCR }: CRWinnerChartPr
     const i = years.indexOf(yr);
     return padX + (i / (years.length - 1)) * (W - padX * 2);
   };
-  const y = (v: number) => padTop + (1 - (v - vMin) / (vMax - vMin)) * (H - padTop - padBot);
+  const y = (v: number) => padTop + ((v - vMin) / (vMax - vMin)) * (H - padTop - padBot);
 
   const winPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(p.year).toFixed(1)},${y(p.winner).toFixed(1)}`).join(' ');
   const crPath  = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(p.year).toFixed(1)},${y(p.cr).toFixed(1)}`).join(' ');
@@ -42,7 +42,7 @@ export default function CRWinnerChart({ stats, gender, seedCR }: CRWinnerChartPr
         {/* Gridlines */}
         {[0, 0.33, 0.67, 1].map((f, i) => {
           const yy = padTop + f * (H - padTop - padBot);
-          const v = vMin + (1 - f) * (vMax - vMin);
+          const v = vMin + f * (vMax - vMin);
           return (
             <g key={i}>
               <line x1={padX} x2={W - padX} y1={yy} y2={yy} stroke="currentColor" strokeOpacity="0.07" strokeWidth="0.5" />
