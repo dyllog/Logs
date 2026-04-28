@@ -1,16 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { loadResults, yearStats, halfStats, YEARS, type ResultRow } from '@/data/logsDataExt';
-import { race } from '@/data/logsData';
 import FullResultsOverlay from './FullResultsOverlay';
 
 interface RaceResultsBlockProps {
+  dist: string;
   onOpenAthlete?: (name: string) => void;
 }
 
-export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProps) {
+export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlockProps) {
   const years = [...YEARS].reverse();
-  const distances = race.distances;
-  const [dist, setDist] = useState(distances[0]);
   const [year, setYear] = useState<typeof YEARS[number]>(2025);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
@@ -44,7 +42,9 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
     );
   }, [all, ql]);
 
-  useEffect(() => { setPage(1); }, [year, ql, dist]);
+  // Reset to latest year when distance changes
+  useEffect(() => { setYear(2025); setPage(1); setQ(''); }, [dist]);
+  useEffect(() => { setPage(1); }, [year, ql]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
@@ -63,20 +63,13 @@ export default function RaceResultsBlock({ onOpenAthlete }: RaceResultsBlockProp
             }
           </h2>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-end', flexShrink: 0 }}>
-          <div className="flex gap-8" style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-            {distances.map(d => (
-              <button key={d} className={`pill ${dist === d ? 'active' : ''}`} onClick={() => setDist(d)}>{d}</button>
+        {hasData && (
+          <div className="flex gap-8" style={{ flexWrap: 'wrap', justifyContent: 'flex-end', alignSelf: 'flex-end' }}>
+            {years.map(y => (
+              <button key={y} className={`pill ${year === y ? 'active' : ''}`} onClick={() => setYear(y)}>{y}</button>
             ))}
           </div>
-          {hasData && (
-            <div className="flex gap-8" style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-              {years.map(y => (
-                <button key={y} className={`pill ${year === y ? 'active' : ''}`} onClick={() => setYear(y)}>{y}</button>
-              ))}
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       {!hasData ? (

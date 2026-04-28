@@ -4,6 +4,72 @@ export function toSec(t: string): number {
   return parts[0] * 60 + parts[1];
 }
 
+export interface DistanceRecord {
+  time: string;
+  holder: string;
+  nationality: string;
+  club: string;
+  year: number;
+  previous: string;
+  broken?: boolean;
+}
+
+export interface DistanceOption {
+  id: string;
+  km: number;
+  label: string;
+  long: string;
+  climb: number;
+  descent: number;
+  net: number;
+  courseNote: string;
+  recordM: DistanceRecord;
+  recordW: DistanceRecord;
+}
+
+export const DISTANCE_OPTIONS: DistanceOption[] = [
+  {
+    id: '42', km: 42.195, label: '42.2 km', long: 'Marathon',
+    climb: 118, descent: 105, net: 13,
+    courseNote: 'Devonport → Harbour Bridge → Victoria Park · point-to-point',
+    recordM: {
+      time: '2:19:32', holder: 'Isaias Beyn', nationality: '—', club: '—', year: 2019,
+      previous: '2:20:36 — Oska Baynes (NZL) 2016',
+    },
+    recordW: {
+      time: '2:38:10', holder: 'Brigid Dennehy', nationality: 'IRL', club: '—', year: 2025,
+      previous: '2:41:31 — Brigid Dennehy (IRL) 2024', broken: true,
+    },
+  },
+  {
+    id: '21', km: 21.0975, label: '21.1 km', long: 'Half marathon',
+    climb: 54, descent: 48, net: 6,
+    courseNote: 'Takapuna → Harbour Bridge → Victoria Park',
+    recordM: {
+      time: '1:04:37', holder: 'Tim Vincent', nationality: 'AUS', club: '—', year: 2023,
+      previous: '1:05:23 — Cameron Graves (NZL) 2020',
+    },
+    recordW: {
+      time: '1:13:45', holder: 'Camille Buscomb', nationality: 'NZL', club: '—', year: 2020,
+      previous: '1:15:48 — Olivia Burne (NZL) 2017',
+    },
+  },
+  {
+    id: '11', km: 11, label: '11 km', long: '11 km',
+    climb: 34, descent: 29, net: 5,
+    courseNote: 'Akoranga → Harbour Bridge → Victoria Park',
+    recordM: { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' },
+    recordW: { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' },
+  },
+  {
+    id: '5', km: 5, label: '5 km', long: '5 km',
+    climb: 12, descent: 8, net: 4,
+    courseNote: 'Wynyard Quarter loop · flat',
+    recordM: { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' },
+    recordW: { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' },
+  },
+];
+
 export const race = {
   name: "Auckland Marathon",
   location: "Auckland, New Zealand",

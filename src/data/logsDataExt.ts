@@ -74,6 +74,11 @@ export function getResults(year: number): ResultRow[] {
   return marathonCache[year] ?? [];
 }
 
+export function yearStatsForDist(distId: string): YearStat[] {
+  if (distId === '21') return halfStats;
+  return yearStats;
+}
+
 export const courseStats = {
   climb: 118,
   descent: 105,
