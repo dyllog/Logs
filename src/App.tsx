@@ -11,6 +11,7 @@ import Results from "./pages/Results";
 import Records from "./pages/Records";
 import Athletes from "./pages/Athletes";
 import Athlete from "./pages/Athlete";
+import Calculator from "./pages/Calculator";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -28,6 +29,7 @@ function Layout() {
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
         <Route path="/athletes/daniel-whareaitu" element={<Athlete />} />
+        <Route path="/calculator" element={<Calculator />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <SiteFooter />

@@ -1,10 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 
 const items = [
-  { id: 'races',    label: 'Races',    href: '/races' },
-  { id: 'results',  label: 'Results',  href: '/results' },
-  { id: 'records',  label: 'Records',  href: '/records' },
-  { id: 'athletes', label: 'Athletes', href: '/athletes' },
+  { id: 'races',      label: 'Races',      href: '/races' },
+  { id: 'results',    label: 'Results',    href: '/results' },
+  { id: 'records',    label: 'Records',    href: '/records' },
+  { id: 'athletes',   label: 'Athletes',   href: '/athletes' },
+  { id: 'calculator', label: 'Calculator', href: '/calculator' },
 ];
 
 interface NavProps {
