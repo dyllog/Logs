@@ -64,11 +64,15 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
           </h2>
         </div>
         {hasData && (
-          <div className="flex gap-8" style={{ flexWrap: 'wrap', justifyContent: 'flex-end', alignSelf: 'flex-end' }}>
+          <select
+            className="pill-select"
+            value={year}
+            onChange={e => setYear(Number(e.target.value) as typeof YEARS[number])}
+          >
             {years.map(y => (
-              <button key={y} className={`pill ${year === y ? 'active' : ''}`} onClick={() => setYear(y)}>{y}</button>
+              <option key={y} value={y}>{y}</option>
             ))}
-          </div>
+          </select>
         )}
       </div>
 
