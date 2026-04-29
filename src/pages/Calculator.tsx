@@ -36,15 +36,6 @@ const RIEGEL = 1.06;
 const equivTime = (t: number, fromKm: number, toKm: number) =>
   t * Math.pow(toKm / fromKm, RIEGEL);
 
-function ageFactor(age: number, _gender: string): number {
-  if (!age || age < 16) return 1;
-  let f = 1;
-  if (age <= 25) f = 1;
-  else if (age <= 40) f = 1 - (age - 25) * 0.005;
-  else if (age <= 60) f = 1 - 15 * 0.005 - (age - 40) * 0.01;
-  else f = 1 - 15 * 0.005 - 20 * 0.01 - (age - 60) * 0.015;
-  return Math.max(0.4, f);
-}
 
 const PRESET_DISTANCES = [
   { id: '5k',   label: '5 km',           km: 5 },
@@ -90,8 +81,6 @@ export default function Calculator() {
   const [pace, setPace] = useState('');
   const [unit, setUnit] = useState<'km' | 'mi'>('km');
   const [advanced, setAdvanced] = useState(false);
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState<'M' | 'W'>('M');
   const [lastEdited, setLastEdited] = useState<'time' | 'pace'>('time');
   const [segMode, setSegMode] = useState(false);
   const [segments, setSegments] = useState<Segment[]>([
@@ -195,14 +184,11 @@ export default function Calculator() {
     return allDistances.map(d => {
       const t = equivTime(solved.time!, dist.km, d.km);
       const isCurrent = d.id === distId || (d.id === 'custom' && distId === 'custom');
-      const crSec = gender === 'M' ? AKL_CR.men : AKL_CR.women;
-      const broken = d.id === 'mar' && t < crSec;
+      const broken = d.id === 'mar' && t < AKL_CR.men;
       return { ...d, time: t, current: isCurrent, broken };
     });
-  }, [solved.time, distId, dist.km, allDistances, gender]);
+  }, [solved.time, distId, dist.km, allDistances]);
 
-  const ageF = ageFactor(parseInt(age, 10), gender);
-  const ageAdjusted = solved.time != null && age ? solved.time * ageF : null;
   const place = solved.time != null && distId === 'mar' ? aklPlace(solved.time) : null;
   const segAvgPace = segmentPlan.totalKm > 0 ? segmentPlan.totalTime / segmentPlan.totalKm : null;
 
@@ -212,7 +198,7 @@ export default function Calculator() {
 
   const reset = () => {
     setDistId('mar'); setGoalTime('3:30:00'); setPace(''); setUnit('km');
-    setAdvanced(false); setAge(''); setGender('M'); setLastEdited('time'); setSegMode(false);
+    setAdvanced(false); setLastEdited('time'); setSegMode(false);
     setSegments([{ id: 1, km: '10', mode: 'pace', value: '4:15' }, { id: 2, km: '11', mode: 'pace', value: '4:10' }]);
   };
 
@@ -302,76 +288,55 @@ export default function Calculator() {
 
                 <div className="cmp-divider" />
 
-                {/* Advanced */}
+                {/* Advanced — Race Strategy */}
                 <div className="cmp-field">
-                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.18em', display: 'flex', alignItems: 'center', gap: 6 }}
-                          onClick={() => setAdvanced(a => !a)}>
-                    {advanced ? '▾' : '▸'} Advanced
-                  </button>
-                  {advanced && (
-                    <div className="fade-up" style={{ marginTop: 16, display: 'grid', gap: 16 }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        <div>
-                          <div className="cmp-sublabel">Age</div>
-                          <input className="cmp-input" placeholder="e.g. 38" value={age}
-                                 onChange={e => setAge(e.target.value.replace(/\D/g, ''))} />
-                        </div>
-                        <div>
-                          <div className="cmp-sublabel">Gender</div>
-                          <div className="cmp-pill-row">
-                            <button className={`cmp-pill ${gender === 'M' ? 'active' : ''}`} onClick={() => setGender('M')}>M</button>
-                            <button className={`cmp-pill ${gender === 'W' ? 'active' : ''}`} onClick={() => setGender('W')}>W</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Segment strategy */}
-                      <div style={{ borderTop: '0.5px solid var(--on-dark-rule)', paddingTop: 16 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                          <div className="cmp-sublabel" style={{ marginBottom: 0 }}>Race strategy</div>
-                          <button className={`cmp-pill ${segMode ? 'active' : ''}`} onClick={() => setSegMode(s => !s)}>
-                            {segMode ? '● ON' : '○ OFF'}
-                          </button>
-                        </div>
-                        {segMode && (
-                          <div className="fade-up">
-                            <div className="seg-list">
-                              {segmentPlan.rows.map((s, i) => (
-                                <div key={s.id} className="seg-row">
-                                  <div className="seg-idx serif">{String(i + 1).padStart(2, '0')}</div>
-                                  <div className="seg-fields">
-                                    <div>
-                                      <div className="cmp-sublabel">km</div>
-                                      <input className="cmp-input" inputMode="decimal" placeholder="km" value={s.km}
-                                             onChange={e => updateSegment(s.id, { km: e.target.value.replace(/[^0-9.]/g, '') })} />
-                                    </div>
-                                    <div>
-                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-                                        <div className="cmp-sublabel" style={{ marginBottom: 0 }}>{s.mode === 'pace' ? '/km' : 'time'}</div>
-                                        <button className="seg-mode-toggle" style={{ color: 'var(--on-dark-meta)' }}
-                                                onClick={() => updateSegment(s.id, { mode: s.mode === 'pace' ? 'time' : 'pace', value: '' })}>
-                                          ⇄
-                                        </button>
-                                      </div>
-                                      <input className="cmp-input" placeholder={s.mode === 'pace' ? 'mm:ss' : 'h:mm:ss'} value={s.value}
-                                             onChange={e => updateSegment(s.id, { value: e.target.value })} />
-                                    </div>
-                                  </div>
-                                  <div className="seg-meta">
-                                    <div style={{ fontSize: 10, color: 'var(--on-dark-meta)' }}>
-                                      {s.valid ? `${formatHMS(s.segTime)}` : '—'}
-                                    </div>
-                                    <button className="seg-remove" disabled={segments.length <= 1}
-                                            onClick={() => removeSegment(s.id)} title="Remove">×</button>
-                                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: advanced ? 14 : 0 }}>
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.18em', display: 'flex', alignItems: 'center', gap: 6 }}
+                            onClick={() => setAdvanced(a => !a)}>
+                      {advanced ? '▾' : '▸'} Race strategy
+                    </button>
+                    {advanced && (
+                      <button className={`cmp-pill ${segMode ? 'active' : ''}`} onClick={() => setSegMode(s => !s)}>
+                        {segMode ? '● ON' : '○ OFF'}
+                      </button>
+                    )}
+                  </div>
+                  {advanced && segMode && (
+                    <div className="fade-up">
+                      <div className="seg-list">
+                        {segmentPlan.rows.map((s, i) => (
+                          <div key={s.id} className="seg-row">
+                            <div className="seg-idx serif">{String(i + 1).padStart(2, '0')}</div>
+                            <div className="seg-fields">
+                              <div>
+                                <div className="cmp-sublabel">km</div>
+                                <input className="cmp-input" inputMode="decimal" placeholder="km" value={s.km}
+                                       onChange={e => updateSegment(s.id, { km: e.target.value.replace(/[^0-9.]/g, '') })} />
+                              </div>
+                              <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                                  <div className="cmp-sublabel" style={{ marginBottom: 0 }}>{s.mode === 'pace' ? '/km' : 'time'}</div>
+                                  <button className="seg-mode-toggle" style={{ color: 'var(--on-dark-meta)' }}
+                                          onClick={() => updateSegment(s.id, { mode: s.mode === 'pace' ? 'time' : 'pace', value: '' })}>
+                                    ⇄
+                                  </button>
                                 </div>
-                              ))}
+                                <input className="cmp-input" placeholder={s.mode === 'pace' ? 'mm:ss' : 'h:mm:ss'} value={s.value}
+                                       onChange={e => updateSegment(s.id, { value: e.target.value })} />
+                              </div>
                             </div>
-                            <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: 11, marginTop: 8, padding: 0, letterSpacing: '0.06em' }}
-                                    onClick={addSegment}>+ Add segment</button>
+                            <div className="seg-meta">
+                              <div style={{ fontSize: 10, color: 'var(--on-dark-meta)' }}>
+                                {s.valid ? `${formatHMS(s.segTime)}` : '—'}
+                              </div>
+                              <button className="seg-remove" disabled={segments.length <= 1}
+                                      onClick={() => removeSegment(s.id)} title="Remove">×</button>
+                            </div>
                           </div>
-                        )}
+                        ))}
                       </div>
+                      <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: 11, marginTop: 8, padding: 0, letterSpacing: '0.06em' }}
+                              onClick={addSegment}>+ Add segment</button>
                     </div>
                   )}
                 </div>
@@ -432,12 +397,6 @@ export default function Calculator() {
                       <div className="serif mt-8" style={{ fontSize: 32, lineHeight: 1, letterSpacing: '-0.01em' }}>{formatMS(paceMi)}</div>
                     </div>
                   </div>
-                  {ageAdjusted != null && (
-                    <div style={{ marginTop: 24, borderTop: '0.5px solid var(--on-dark-rule)', paddingTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                      <span className="label">Age-graded ({age}, {gender}) · open-equivalent</span>
-                      <span className="serif" style={{ fontSize: 22 }}>{formatHMS(ageAdjusted)}</span>
-                    </div>
-                  )}
                   {place != null && (
                     <div style={{ marginTop: 20, fontSize: 12, lineHeight: 1.55 }}>
                       On the <span style={{ color: 'var(--on-dark)' }}>2025 Auckland Marathon</span> field this finish would have placed approximately
