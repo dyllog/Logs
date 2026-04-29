@@ -46,15 +46,15 @@ export default function Christchurch() {
 
   const seedCR = useMemo(() => {
     if (activeStats.length === 0) return 0;
-    return tab === 'men'
-      ? activeStats[0].winnerM + 1
-      : activeStats[0].winnerW + 1;
+    const crM = Math.min(...activeStats.map(s => s.winnerM));
+    const crW = Math.min(...activeStats.map(s => s.winnerW));
+    return (tab === 'men' ? crM : crW) + 1;
   }, [tab, activeStats]);
 
-  const marRecordM = { time: '2:19:52', holder: 'Hamish Carson',   nationality: 'NZL', club: '—', year: 2022, previous: '—' };
-  const marRecordW = { time: '2:43:17', holder: 'Alana Sherburn',   nationality: 'NZL', club: '—', year: 2022, previous: '—' };
-  const halfRecordM = { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' };
-  const halfRecordW = { time: '—', holder: '—', nationality: '—', club: '—', year: 0, previous: '—' };
+  const marRecordM = { time: '2:16:28', holder: 'Samuel Wreford',   nationality: 'NZL', club: '—', year: 2014, previous: '2:17:30 — Samuel Wreford (NZL) 2012' };
+  const marRecordW = { time: '2:38:14', holder: 'Becky Aitkenhead', nationality: 'NZL', club: '—', year: 2026, previous: '2:39:17 — Alice Mason (NZL) 2019' };
+  const halfRecordM = { time: '1:03:15', holder: 'Toby Gualter',    nationality: 'NZL', club: '—', year: 2026, previous: '1:03:30 — Toby Gualter (NZL) 2025' };
+  const halfRecordW = { time: '1:12:28', holder: 'Lisa Weightman',  nationality: 'AUS', club: '—', year: 2009, previous: '1:13:08 — Kate Smyth (AUS) 2007' };
 
   const record = isHalf
     ? (tab === 'men' ? halfRecordM : halfRecordW)
@@ -80,7 +80,7 @@ export default function Christchurch() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, fontSize: 12 }}>
               <div><div className="label mb-8">Location</div><div>Christchurch, Canterbury</div></div>
               <div><div className="label mb-8">Course</div><div>Hagley Park river loop</div></div>
-              <div><div className="label mb-8">Next edition</div><div>TBC 2026</div></div>
+              <div><div className="label mb-8">Next edition</div><div>TBC 2027</div></div>
               <div>
                 <div className="label mb-8">Entry</div>
                 <div><span style={{ color: 'var(--meta)' }}>christchurchmarathon.co.nz</span></div>
@@ -93,20 +93,11 @@ export default function Christchurch() {
       {/* 1. Results */}
       <section id="results" className="section">
         <div className="page">
-          {chcStats.length === 0 ? (
-            <div style={{ padding: '64px 0', textAlign: 'center' }}>
-              <div className="eyebrow mb-16">Results</div>
-              <div className="dimmed" style={{ fontSize: 14, fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                Results are being archived — check back soon.
-              </div>
-            </div>
-          ) : (
-            <RaceResultsBlock
-              dist={isHalf ? '21.1 km' : '42.2 km'}
-              raceId={isHalf ? 'chc-half' : 'chc'}
-              onOpenAthlete={() => navigate('/athletes')}
-            />
-          )}
+          <RaceResultsBlock
+            dist={isHalf ? '21.1 km' : '42.2 km'}
+            raceId={isHalf ? 'chc-half' : 'chc'}
+            onOpenAthlete={() => navigate('/athletes')}
+          />
         </div>
       </section>
 
@@ -156,22 +147,20 @@ export default function Christchurch() {
         </div>
       </section>
 
-      {/* 3. Averages — only show if we have data */}
-      {activeStats.length > 0 && (
-        <section className="section">
-          <div className="page">
-            <div className="section-header">
-              <div>
-                <div className="eyebrow mb-8">Averages · {isHalf ? '21.1 km' : '42.2 km'}</div>
-                <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                  Median finish · winning times · by year
-                </h2>
-              </div>
+      {/* 3. Averages */}
+      <section className="section">
+        <div className="page">
+          <div className="section-header">
+            <div>
+              <div className="eyebrow mb-8">Averages · {isHalf ? '21.1 km' : '42.2 km'}</div>
+              <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
+                Median finish · winning times · by year
+              </h2>
             </div>
-            <AveragesChart stats={activeStats} />
           </div>
-        </section>
-      )}
+          <AveragesChart stats={activeStats} />
+        </div>
+      </section>
 
       {/* 4. Course records */}
       <section className="section">

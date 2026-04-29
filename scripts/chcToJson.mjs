@@ -1,16 +1,14 @@
 /**
  * chcToJson.mjs — Christchurch Marathon CSV → public/data JSON
  *
- * Usage:
- *   node scripts/chcToJson.mjs "Christchurch Marathon/2024.csv" 2024
- *   node scripts/chcToJson.mjs "Christchurch Marathon/2024-half.csv" 2024 half
+ * Usage (single file):
+ *   node scripts/chcToJson.mjs "Christchurch Marathon/2024.csv" 2024 half
  *
- * Expects CSV with columns (case-insensitive, order flexible):
- *   pos, bib, name, gender, category, time, nationality
+ * Usage (batch — processes all files in folder):
+ *   node scripts/chcToJson.mjs --batch
  *
- * Outputs:
- *   public/data/results-chc-{year}.json       (marathon)
- *   public/data/results-chc-half-{year}.json  (half marathon)
+ * CSV columns: Position, Name, Bib, Time, Net Time, Category, Category Position, Gender, Gender Position, col10
+ * Category format: M20-39, W20-39, VM40-49, VW40-49, VM70+, etc.
  */
 
 import fs from 'fs';
@@ -26,46 +24,88 @@ function toSec(t) {
   return parts[0] * 60 + parts[1];
 }
 
-function normalizeCat(cat, gender) {
-  if (!cat) return gender === 'F' ? 'W' : 'M';
-  const c = cat.trim();
-  // Pass through Elite, Wheelchair etc.
-  if (/elite/i.test(c)) return gender === 'F' ? 'W Elite' : 'M Elite';
-  // Age group: "M40", "M 40-44", "40-44M", "W45–49" etc.
-  const m = c.match(/(\d{2})[–\-](\d{2})/);
-  if (m) {
-    const prefix = gender === 'F' ? 'W' : 'M';
-    return `${prefix} ${m[1]}–${m[2]}`;
+// Parse a CSV line respecting quoted fields
+function parseCSVLine(line) {
+  const fields = [];
+  let cur = '';
+  let inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      inQuote = !inQuote;
+    } else if (ch === ',' && !inQuote) {
+      fields.push(cur.trim());
+      cur = '';
+    } else {
+      cur += ch;
+    }
   }
+  fields.push(cur.trim());
+  return fields;
+}
+
+function normalizeCat(raw) {
+  const c = raw.trim();
+  // VM/VW prefix (Veteran) → strip V, map gender
+  // Gender prefix: M→M, W→W, VM→M, VW→W, F→W
+  const genderMap = (prefix) => {
+    if (prefix === 'W' || prefix === 'VW' || prefix === 'F') return 'W';
+    return 'M';
+  };
+
+  // VM40-49, VW40-49, VM70+, VM70-99
+  let m = c.match(/^(V?[MWF])(\d+)[–\-](\d+)$/);
+  if (m) {
+    const g = genderMap(m[1]);
+    return `${g} ${m[2]}–${m[3]}`;
+  }
+
+  // VM70+, VW70+
+  m = c.match(/^(V?[MWF])(\d+)\+$/);
+  if (m) {
+    const g = genderMap(m[1]);
+    return `${g} ${m[2]}+`;
+  }
+
+  // M20-39 etc (already matched above but catches M20, W20)
+  m = c.match(/^(V?[MWF])(\d+)$/);
+  if (m) {
+    const g = genderMap(m[1]);
+    // M20 / W20 are the open age categories
+    return `${g} 20–39`;
+  }
+
   return c;
 }
 
 function parseCSV(text) {
   const lines = text.replace(/\r/g, '').split('\n').filter(Boolean);
-  const header = lines[0].split(',').map(h => h.trim().toLowerCase());
-  const col = name => header.indexOf(name);
+  const header = parseCSVLine(lines[0]).map(h => h.toLowerCase());
 
-  const iPos  = col('pos');
-  const iBib  = col('bib');
+  const col = name => header.indexOf(name);
+  const iPos  = col('position');
   const iName = col('name');
-  const iGend = col('gender');
-  const iCat  = col('category') >= 0 ? col('category') : col('cat');
+  const iBib  = col('bib');
   const iTime = col('time');
-  const iNat  = col('nationality') >= 0 ? col('nationality') : col('nat');
+  const iCat  = col('category');
+  const iGend = col('gender');
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = parseCSVLine(lines[i]);
     const get = idx => (idx >= 0 && cols[idx] !== undefined) ? cols[idx].trim() : '';
-    const gender = get(iGend).toUpperCase().startsWith('F') ? 'F' : 'M';
     const time = get(iTime);
     if (!time || !time.includes(':')) continue;
+    const catRaw = get(iCat);
+    // Skip if category looks like a time (malformed row)
+    if (/^\d{2}:\d{2}/.test(catRaw)) continue;
+
     rows.push({
       pos:  parseInt(get(iPos), 10) || i,
       bib:  parseInt(get(iBib), 10) || 0,
-      name: get(iName),
-      nat:  get(iNat) || '—',
-      cat:  normalizeCat(get(iCat), gender),
+      name: get(iName).replace(/\s+/g, ' '),
+      nat:  '—',
+      cat:  normalizeCat(catRaw),
       time,
       sec:  toSec(time),
     });
@@ -73,26 +113,79 @@ function parseCSV(text) {
   return rows;
 }
 
-const [,, csvPath, yearStr, distFlag] = process.argv;
-if (!csvPath || !yearStr) {
-  console.error('Usage: node scripts/chcToJson.mjs <csv-path> <year> [half]');
-  process.exit(1);
+function computeStats(rows, year) {
+  if (rows.length === 0) return null;
+  const finishers = rows.length;
+  const men = rows.filter(r => r.cat.startsWith('M'));
+  const women = rows.filter(r => r.cat.startsWith('W'));
+  const avg = s => Math.round(s.reduce((a, r) => a + r.sec, 0) / s.length);
+  const sorted = [...rows].sort((a, b) => a.sec - b.sec);
+  const median = sorted[Math.floor(sorted.length / 2)]?.sec ?? 0;
+  const winnerM = men.sort((a, b) => a.sec - b.sec)[0]?.sec ?? 0;
+  const winnerW = women.sort((a, b) => a.sec - b.sec)[0]?.sec ?? 0;
+  const top10M = men.slice(0, 10).reduce((a, r) => a + r.sec, 0) / Math.min(10, men.length);
+  const top10W = women.slice(0, 10).reduce((a, r) => a + r.sec, 0) / Math.min(10, women.length);
+  return {
+    year,
+    finishers,
+    avg: median,
+    avgMen: avg(men),
+    avgWomen: avg(women),
+    winnerM,
+    winnerW,
+    top10M: Math.round(top10M),
+    top10W: Math.round(top10W),
+  };
 }
 
-const year = parseInt(yearStr, 10);
-const isHalf = distFlag === 'half';
-const outFile = isHalf
-  ? `results-chc-half-${year}.json`
-  : `results-chc-${year}.json`;
+function processFile(csvPath, year, isHalf) {
+  const text = fs.readFileSync(csvPath, 'utf8');
+  const rows = parseCSV(text);
+  const outFile = isHalf
+    ? `results-chc-half-${year}.json`
+    : `results-chc-${year}.json`;
+  const outDir = path.join(root, 'public', 'data');
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(path.join(outDir, outFile), JSON.stringify(rows));
+  const stats = computeStats(rows, year);
+  const winM = rows.find(r => r.cat.startsWith('M'))?.time ?? '—';
+  const winW = rows.find(r => r.cat.startsWith('W'))?.time ?? '—';
+  console.log(`✓ ${year} ${isHalf ? 'half' : 'marathon'}: ${rows.length} finishers  M: ${winM}  W: ${winW}`);
+  return stats;
+}
 
-const fullCsvPath = path.resolve(root, csvPath);
-const text = fs.readFileSync(fullCsvPath, 'utf8');
-const rows = parseCSV(text);
+const batchMode = process.argv[2] === '--batch';
 
-const outDir = path.join(root, 'public', 'data');
-fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(path.join(outDir, outFile), JSON.stringify(rows, null, 2));
+if (batchMode) {
+  const folder = path.join(root, 'Christchurch Marathon');
+  const files = fs.readdirSync(folder).filter(f => f.endsWith('.csv'));
 
-console.log(`✓ ${rows.length} rows → public/data/${outFile}`);
-console.log(`  Winner M: ${rows.find(r => r.cat.startsWith('M') && r.pos === 1)?.time ?? '—'}`);
-console.log(`  Winner W: ${rows.find(r => r.cat.startsWith('W') && r.pos === 1)?.time ?? '—'}`);
+  const marStats = [];
+  const halfStats = [];
+
+  for (const file of files.sort()) {
+    const yearMatch = file.match(/(\d{4})\.csv$/);
+    if (!yearMatch) continue;
+    const year = parseInt(yearMatch[1], 10);
+    const isHalf = file.includes('Half');
+    const stats = processFile(path.join(folder, file), year, isHalf);
+    if (stats) (isHalf ? halfStats : marStats).push(stats);
+  }
+
+  // Print chcData.ts content
+  const fmt = arr => arr
+    .sort((a, b) => a.year - b.year)
+    .map(s => `  { year: ${s.year}, finishers: ${s.finishers}, avg: ${s.avg}, avgMen: ${s.avgMen}, avgWomen: ${s.avgWomen}, winnerM: ${s.winnerM}, winnerW: ${s.winnerW}, top10M: ${s.top10M}, top10W: ${s.top10W} },`)
+    .join('\n');
+
+  console.log('\n--- chcData.ts ---');
+  console.log(`export const chcStats: YearStat[] = [\n${fmt(marStats)}\n];`);
+  console.log(`\nexport const chcHalfStats: YearStat[] = [\n${fmt(halfStats)}\n];`);
+} else {
+  const [,, csvPath, yearStr, distFlag] = process.argv;
+  if (!csvPath || !yearStr) {
+    console.error('Usage: node scripts/chcToJson.mjs <csv-path> <year> [half]');
+    process.exit(1);
+  }
+  processFile(path.resolve(root, csvPath), parseInt(yearStr, 10), distFlag === 'half');
+}

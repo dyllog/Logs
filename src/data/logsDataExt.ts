@@ -116,6 +116,32 @@ export function getCachedRotoruaHalf(year: number): ResultRow[] {
   return rotoruaHalfCache[year] ?? [];
 }
 
+const chcCache: Record<number, ResultRow[]> = {};
+const chcInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadChc(year: number): Promise<ResultRow[]> {
+  if (chcCache[year]) return chcCache[year];
+  if (!chcInflight[year]) {
+    chcInflight[year] = fetch(`/data/results-chc-${year}.json`)
+      .then(r => r.json())
+      .then((rows: ResultRow[]) => { chcCache[year] = rows; return rows; });
+  }
+  return chcInflight[year];
+}
+
+const chcHalfCache: Record<number, ResultRow[]> = {};
+const chcHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadChcHalf(year: number): Promise<ResultRow[]> {
+  if (chcHalfCache[year]) return chcHalfCache[year];
+  if (!chcHalfInflight[year]) {
+    chcHalfInflight[year] = fetch(`/data/results-chc-half-${year}.json`)
+      .then(r => r.json())
+      .then((rows: ResultRow[]) => { chcHalfCache[year] = rows; return rows; });
+  }
+  return chcHalfInflight[year];
+}
+
 export const rotoruaStats: YearStat[] = [
   { year: 2014, finishers: 2144, avg: 14630, avgMen: 14388, avgWomen: 15150, winnerM: 8865, winnerW: 9958, top10M: 9280, top10W: 10570 },
   { year: 2015, finishers: 1172, avg: 16834, avgMen: 15927, avgWomen: 18233, winnerM: 8943, winnerW: 10402, top10M: 9380, top10W: 11083 },
