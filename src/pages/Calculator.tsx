@@ -383,7 +383,7 @@ export default function Calculator() {
               ) : (
                 <div className="cmp-card cmp-card-dark">
                   <div className="eyebrow mb-16">Projection · {(dist as any).short || dist.label} · Even-effort</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 24, alignItems: 'baseline' }}>
+                  <div className="calc-proj-grid" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 24, alignItems: 'baseline' }}>
                     <div>
                       <div className="label">Finish time</div>
                       <div className="serif mt-8" style={{ fontSize: 64, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{formatHMS(solved.time)}</div>
@@ -442,6 +442,7 @@ export default function Calculator() {
                     <div className="eyebrow">Even-effort splits</div>
                     <div className="dimmed" style={{ fontSize: 11 }}>cumulative · {unit}</div>
                   </div>
+                  <div className="tbl-wrap">
                   <table className="tbl">
                     <thead><tr><th>Mark</th><th className="num">Cumulative</th><th className="num">Pace</th></tr></thead>
                     <tbody>
@@ -454,6 +455,7 @@ export default function Calculator() {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               )}
 
@@ -464,8 +466,9 @@ export default function Calculator() {
                     <div className="eyebrow">Race-distance equivalents</div>
                     <div className="dimmed" style={{ fontSize: 11 }}>Riegel · same fitness, different distance</div>
                   </div>
+                  <div className="tbl-wrap">
                   <table className="tbl">
-                    <thead><tr><th>Distance</th><th className="num">Equivalent time</th><th className="num">Pace / km</th><th></th></tr></thead>
+                    <thead><tr><th>Distance</th><th className="num">Equivalent time</th><th className="num equiv-pace-col">Pace / km</th><th></th></tr></thead>
                     <tbody>
                       {equiv.map(e => (
                         <tr key={e.id} className="row" style={{ background: e.current ? 'var(--bg-alt)' : 'transparent' }}>
@@ -474,7 +477,7 @@ export default function Calculator() {
                             {e.current && <span className="label" style={{ marginLeft: 8 }}>· given</span>}
                           </td>
                           <td className="num time">{formatHMS(e.time)}</td>
-                          <td className="num time dimmed">{formatMS(e.time / e.km)}</td>
+                          <td className="num time dimmed equiv-pace-col">{formatMS(e.time / e.km)}</td>
                           <td style={{ textAlign: 'right' }}>
                             {e.broken && (
                               <span style={{ color: 'var(--accent)', border: '0.5px solid var(--accent)', padding: '2px 8px', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', borderRadius: 999, fontFamily: "'DM Mono', monospace" }}>
@@ -486,6 +489,7 @@ export default function Calculator() {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                   <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
                     Equivalencies assume comparable terrain, weather, and training. Treat as a target window, not a forecast.
                   </div>

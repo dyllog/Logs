@@ -63,6 +63,7 @@ html, body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
@@ -135,6 +136,27 @@ body {
   background: var(--bg);
   z-index: 50;
 }
+.nav-mobile-right { display: none; }
+.hamburger {
+  width: 32px; height: 32px;
+  display: none; align-items: center; justify-content: center;
+  border: 0.5px solid var(--rule);
+  background: transparent; cursor: pointer; color: var(--ink);
+}
+.nav-mobile-menu {
+  display: flex; flex-direction: column;
+  position: sticky; top: 57px; z-index: 49;
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--rule);
+  padding: 4px 20px 12px;
+}
+.nav-mobile-item {
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--rule-soft);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+.nav-mobile-item:last-child { border-bottom: 0; }
 .wordmark {
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: 22px;
@@ -643,6 +665,41 @@ body {
   .calc-grid { grid-template-columns: 1fr !important; }
   .seg-fields { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── Hamburger nav (mobile) ── */
+@media (max-width: 700px) {
+  .nav { padding: 14px 16px; }
+  .nav-items { display: none; }
+  .nav-mobile-right { display: flex; gap: 8px; align-items: center; }
+  .hamburger { display: flex; }
+}
+
+/* ── Mobile card + layout tightening ── */
+@media (max-width: 600px) {
+  .page { padding: 0 16px; }
+  .cmp-card { padding: 20px 16px; }
+  .cmp-rail-inner { padding: 20px 16px; }
+  .card-dark { padding: 20px 16px; }
+  .section { padding: 32px 0; }
+  .footer { grid-template-columns: 1fr; padding: 28px 16px; }
+
+  /* Calculator projection card — stack vertically */
+  .calc-proj-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .calc-proj-grid > div:not(:last-child) {
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--on-dark-rule);
+  }
+  /* Shrink big serif time so it doesn't overflow */
+  .calc-proj-grid .serif[style*="font-size: 64"] { font-size: 48px !important; }
+
+  /* Tables — allow horizontal scroll within container rather than breaking layout */
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* Tighten table cell padding on narrow screens */
+  .tbl td, .tbl th { padding: 10px 8px; }
+  /* Equivalency table: hide pace/km col on very small */
+  .equiv-pace-col { display: none; }
+}
+
 @media (max-width: 520px) {
   .upcoming-grid { grid-template-columns: 1fr !important; }
   .pb-grid { grid-template-columns: 1fr 1fr !important; }
