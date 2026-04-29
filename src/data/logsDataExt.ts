@@ -76,6 +76,11 @@ export function getResults(year: number): ResultRow[] {
   return marathonCache[year] ?? [];
 }
 
+export function getCachedResults(year: number, dist: '42.2 km' | '21.1 km' = '42.2 km'): ResultRow[] {
+  if (dist === '21.1 km') return halfCache[year] ?? [];
+  return marathonCache[year] ?? [];
+}
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

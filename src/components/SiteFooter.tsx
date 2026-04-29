@@ -20,6 +20,9 @@ export default function SiteFooter() {
         <div style={{ marginBottom: 6 }}>
           <Link to="/calculator" style={{ color: 'inherit', textDecoration: 'none' }}>Pace Calculator</Link>
         </div>
+        <div style={{ marginBottom: 6 }}>
+          <Link to="/compare" style={{ color: 'inherit', textDecoration: 'none' }}>Compare</Link>
+        </div>
       </div>
       <div>
         <div className="label mb-8">About</div>

@@ -6,6 +6,7 @@ const items = [
   { id: 'records',    label: 'Records',    href: '/records' },
   { id: 'athletes',   label: 'Athletes',   href: '/athletes' },
   { id: 'calculator', label: 'Calculator', href: '/calculator' },
+  { id: 'compare',    label: 'Compare',    href: '/compare' },
 ];
 
 interface NavProps {
