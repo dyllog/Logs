@@ -4,22 +4,45 @@ import { useNavigate } from 'react-router-dom';
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const RESULTS = [
-  // Half marathon results
-  { dateNum: 2014 + 10/12, year: 2014, race: 'Auckland Half Marathon', short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:47', sec: 4127, pos: 2, total: 7125, cat: 'M 18–34', isPB: false },
-  { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Half Marathon', short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:04', sec: 4144, pos: 2, total: 5673, cat: 'M 18–34', isPB: false },
-  { dateNum: 2017 + 10/12, year: 2017, race: 'Auckland Half Marathon', short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:08', sec: 4148, pos: 2, total: 5706, cat: 'M 18–34', isPB: false },
-  { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon', short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:58', sec: 4018, pos: 3, total: 5204, cat: 'M 18–34', isPB: true },
-  // Marathon results
-  { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Marathon',      short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:25', sec: 8545, pos: 2, total: 1299, cat: 'M 18–34', isPB: false },
-  { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',      short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:09', sec: 8589, pos: 1, total: 1765, cat: 'M 30–34', isPB: false },
-  { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',      short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:00', sec: 8520, pos: 2, total: 2439, cat: 'M 30–34', isPB: false },
-  { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',       short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:24:41', sec: 8681, pos: 1, total:  897, cat: 'M 20–39', isPB: false },
-  { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',      short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:19:55', sec: 8395, pos: 1, total: 2775, cat: 'M Elite',  isPB: true  },
+  // CHC Half 2014 (June)
+  { dateNum: 2014 + 5/12,  year: 2014, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:55', sec: 4075, pos: 8, total: 1589, cat: 'M 20–39', isPB: false },
+  // AKL Half 2014 (Oct)
+  { dateNum: 2014 + 10/12, year: 2014, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:47', sec: 4127, pos: 2, total: 7125, cat: 'M 18–34', isPB: false },
+  // CHC Half 2015
+  { dateNum: 2015 + 5/12,  year: 2015, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:05:53', sec: 3953, pos: 4, total: 2038, cat: 'M 20–39', isPB: false },
+  // CHC Half 2016
+  { dateNum: 2016 + 5/12,  year: 2016, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:54', sec: 4074, pos: 4, total: 1786, cat: 'M 20–39', isPB: false },
+  // AKL Half 2016 (Oct)
+  { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:04', sec: 4144, pos: 2, total: 5673, cat: 'M 18–34', isPB: false },
+  // CHC Half 2017
+  { dateNum: 2017 + 5/12,  year: 2017, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:26', sec: 4046, pos: 1, total: 1579, cat: 'M 20–39', isPB: false },
+  // AKL Half 2017 (Oct)
+  { dateNum: 2017 + 10/12, year: 2017, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:08', sec: 4148, pos: 2, total: 5706, cat: 'M 18–34', isPB: false },
+  // CHC Half 2019
+  { dateNum: 2019 + 5/12,  year: 2019, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:41', sec: 4001, pos: 1, total: 1504, cat: 'M 20–39', isPB: false },
+  // AKL Half 2019 (Oct)
+  { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:58', sec: 4018, pos: 3, total: 5204, cat: 'M 18–34', isPB: false },
+  // CHC Half 2021
+  { dateNum: 2021 + 5/12,  year: 2021, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:05:23', sec: 3923, pos: 3, total: 1332, cat: 'M 20–39', isPB: false },
+  // AKL Marathon 2022 (Oct)
+  { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:25', sec: 8545, pos: 2, total: 1299, cat: 'M 30–34', isPB: false },
+  // CHC Marathon 2023 (June)
+  { dateNum: 2023 + 5/12,  year: 2023, race: 'Christchurch Marathon',      short: 'CHC',      dist: '42.2 km', distId: 'mar'  as const, time: '2:20:31', sec: 8431, pos: 1, total:  521, cat: 'M 20–39', isPB: false },
+  // AKL Marathon 2023 (Oct)
+  { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:09', sec: 8589, pos: 1, total: 1765, cat: 'M 30–34', isPB: false },
+  // CHC Half 2024 (June) — half PB
+  { dateNum: 2024 + 5/12,  year: 2024, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:05:16', sec: 3916, pos: 3, total: 2172, cat: 'M 20–39', isPB: true  },
+  // AKL Marathon 2024 (Oct)
+  { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:00', sec: 8520, pos: 2, total: 2439, cat: 'M 30–34', isPB: false },
+  // ROT Marathon 2025 (May)
+  { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',           short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:24:41', sec: 8681, pos: 1, total:  897, cat: 'M 20–39', isPB: false },
+  // AKL Marathon 2025 (Oct) — marathon PB
+  { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:19:55', sec: 8395, pos: 1, total: 2775, cat: 'M Elite',  isPB: true  },
 ];
 
 const PBs = {
-  mar:  { time: '2:19:55', sec: 8395, race: 'Auckland Marathon',      year: 2025 },
-  half: { time: '1:06:58', sec: 4018, race: 'Auckland Half Marathon', year: 2019 },
+  mar:  { time: '2:19:55', sec: 8395, race: 'Auckland Marathon',          year: 2025 },
+  half: { time: '1:05:16', sec: 3916, race: 'Christchurch Half Marathon', year: 2024 },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -173,7 +196,7 @@ export default function AthleteBalchin() {
                   { l: 'Nationality', v: 'NZL' },
                   { l: 'Gender',      v: 'M' },
                   { l: 'Category',    v: 'Elite' },
-                  { l: 'Races logged', v: '9' },
+                  { l: 'Races logged', v: '17' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -188,7 +211,7 @@ export default function AthleteBalchin() {
                  className="pb-grid">
               {[
                 { dist: '42.2 km', pb: PBs.mar.time,  race: 'Auckland Marathon',      year: PBs.mar.year,  highlight: true },
-                { dist: '21.1 km', pb: PBs.half.time, race: 'Auckland Half Marathon', year: PBs.half.year, highlight: false },
+                { dist: '21.1 km', pb: PBs.half.time, race: 'Christchurch Half Marathon', year: PBs.half.year, highlight: false },
                 { dist: '10 km',   pb: '—',           race: 'not on record',          year: null,          highlight: false },
               ].map((d, i) => (
                 <div key={i} style={{ background: 'var(--surface-dark)', padding: '20px 20px 18px' }}>
@@ -244,8 +267,8 @@ export default function AthleteBalchin() {
                 <ProgressionChart distId={chartDist} />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
                   {chartDist === 'mar'
-                    ? 'Rotorua (May) and Auckland (Oct) 2025 shown at separate dates'
-                    : 'Auckland Half Marathon only'}
+                    ? 'Christchurch (June), Rotorua (May) and Auckland (Oct) shown at separate dates'
+                    : 'Christchurch (June) and Auckland (Oct) shown at separate dates'}
                 </div>
               </div>
 
@@ -267,10 +290,10 @@ export default function AthleteBalchin() {
               <div className="eyebrow mb-16">At a glance</div>
 
               {[
-                { label: 'Races logged',     val: '9',          sub: '5 marathons · 4 halves' },
+                { label: 'Races logged',     val: '17',         sub: '6 marathons · 11 halves' },
                 { label: 'Marathon PB',      val: '2:19:55',    sub: 'Auckland 2025 · 1st overall' },
-                { label: 'Half marathon PB', val: '1:06:58',    sub: 'Auckland 2019 · 3rd overall' },
-                { label: 'Best overall pos', val: '1st',        sub: 'AKL 2023 · AKL 2025 · ROT 2025' },
+                { label: 'Half marathon PB', val: '1:05:16',    sub: 'Christchurch 2024 · 3rd overall' },
+                { label: 'Best overall pos', val: '1st',        sub: '6 career wins · CHC · AKL · ROT' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -314,7 +337,7 @@ export default function AthleteBalchin() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · AKL · CHC · ROT</div>
           </div>
           <div className="tbl-wrap">
           <table className="tbl">
@@ -336,6 +359,7 @@ export default function AthleteBalchin() {
                     onClick={() => {
                       if (r.race === 'Auckland Marathon' || r.race === 'Auckland Half Marathon') navigate('/races/auckland-marathon');
                       else if (r.race === 'Rotorua Marathon') navigate('/races/rotorua-marathon');
+                      else if (r.race === 'Christchurch Marathon' || r.race === 'Christchurch Half Marathon') navigate('/races/christchurch-marathon');
                     }}>
                   <td className="dimmed">{r.year}</td>
                   <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
@@ -366,7 +390,7 @@ export default function AthleteBalchin() {
           </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. Results sourced from Auckland Marathon and Rotorua Marathon certified timings.
+            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Rotorua, and Christchurch Marathon certified timings.
           </div>
         </div>
       </section>
