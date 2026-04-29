@@ -218,239 +218,228 @@ export default function Calculator() {
 
   return (
     <main>
-      <section style={{ padding: '48px 0 24px', borderBottom: '0.5px solid var(--rule)' }}>
+      <section style={{ padding: '48px 0 32px', borderBottom: '0.5px solid var(--rule)' }}>
         <div className="page">
-          <div className="eyebrow mb-24">Tools · pace + projection</div>
-          <h1 className="serif" style={{ fontSize: 'clamp(40px,5vw,64px)', lineHeight: 0.98, margin: 0, letterSpacing: '-0.025em' }}>
-            Pace Calculator
-          </h1>
-          <p style={{ maxWidth: 620, marginTop: 20, fontSize: 14, lineHeight: 1.65, color: 'var(--ink-soft)' }}>
-            Enter any two of distance, time, or pace. Splits are computed even-effort. Equivalencies
-            use Riegel's formula <span className="dimmed">(t₂ = t₁ × (d₂/d₁)¹·⁰⁶)</span> — a useful estimate, not a guarantee.
-          </p>
+          <div className="eyebrow mb-8">— Tools · pace + projection</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 32, flexWrap: 'wrap' }}>
+            <h1 className="serif" style={{ fontSize: 48, lineHeight: 1, margin: 0, letterSpacing: '-0.025em' }}>
+              Pace Calculator
+            </h1>
+            <div className="dimmed" style={{ fontSize: 13, maxWidth: 460, lineHeight: 1.6, fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic' }}>
+              Enter any two of distance, time, or pace. Equivalencies use Riegel's formula (t₂ = t₁ × (d₂/d₁)¹·⁰⁶).
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 48 }}>
+      <section style={{ padding: '32px 0 80px' }}>
         <div className="page">
-          <div style={{ display: 'grid', gridTemplateColumns: '0.95fr 1.15fr', gap: 64, alignItems: 'start' }} className="calc-grid">
+          <div className="cmp-shell">
 
-            {/* INPUT PANEL */}
-            <div>
-              <div className="label-strong mb-24">Inputs</div>
+            {/* LEFT — sticky dark inputs rail */}
+            <aside className="cmp-rail">
+              <div className="cmp-rail-inner">
+                <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>— Inputs</div>
 
-              {/* Distance */}
-              <div className="mb-24">
-                <div className="label mb-8">Distance</div>
-                <div className="flex gap-8" style={{ flexWrap: 'wrap' }}>
-                  {PRESET_DISTANCES.map(d => (
-                    <button key={d.id} className={`pill ${distId === d.id ? 'active' : ''}`}
-                            onClick={() => setDistId(d.id)}>{(d as any).short || d.label}</button>
-                  ))}
-                  <button className={`pill ${distId === 'custom' ? 'active' : ''}`}
-                          onClick={() => setDistId('custom')}>Custom</button>
-                </div>
-                {distId === 'custom' && (
-                  <div className="fade-up mt-12 flex gap-8 ai-center">
-                    <input className="input" style={{ width: 120 }} inputMode="decimal" placeholder="e.g. 25"
-                           value={customKm} onChange={e => setCustomKm(e.target.value.replace(/[^0-9.]/g, ''))} />
-                    <span className="label">km</span>
+                {/* Distance */}
+                <div className="cmp-field">
+                  <div className="cmp-field-label">Distance</div>
+                  <div className="cmp-pill-row">
+                    {PRESET_DISTANCES.map(d => (
+                      <button key={d.id} className={`cmp-pill ${distId === d.id ? 'active' : ''}`}
+                              onClick={() => setDistId(d.id)}>{(d as any).short || d.label}</button>
+                    ))}
+                    <button className={`cmp-pill ${distId === 'custom' ? 'active' : ''}`}
+                            onClick={() => setDistId('custom')}>Custom</button>
                   </div>
-                )}
-              </div>
-
-              {/* Goal time */}
-              <div className="mb-24" style={{ opacity: segMode ? 0.4 : 1, pointerEvents: segMode ? 'none' : 'auto' }}>
-                <div className="flex between ai-baseline mb-8">
-                  <div className="label">Goal time</div>
-                  <div className="label" style={{ opacity: lastEdited === 'time' ? 1 : 0.3 }}>
-                    {lastEdited === 'time' ? '◉ driving' : '○'}
-                  </div>
-                </div>
-                <input className="input" placeholder="h:mm:ss" value={goalTime}
-                       onChange={e => { setGoalTime(e.target.value); setLastEdited('time'); }} />
-                <div className="dimmed mt-8" style={{ fontSize: 11 }}>e.g. 3:30:00 · 1:42:30 · 22:00</div>
-              </div>
-
-              {/* Pace */}
-              <div className="mb-24" style={{ opacity: segMode ? 0.4 : 1, pointerEvents: segMode ? 'none' : 'auto' }}>
-                <div className="flex between ai-baseline mb-8">
-                  <div className="label">Pace per {unit === 'km' ? 'km' : 'mile'}</div>
-                  <div className="flex gap-8 ai-center">
-                    <div className="flex gap-8">
-                      <button className={`pill ${unit === 'km' ? 'active' : ''}`} onClick={() => setUnit('km')}>km</button>
-                      <button className={`pill ${unit === 'mi' ? 'active' : ''}`} onClick={() => setUnit('mi')}>mi</button>
+                  {distId === 'custom' && (
+                    <div className="fade-up" style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
+                      <input className="cmp-input" style={{ width: 100 }} inputMode="decimal" placeholder="e.g. 25"
+                             value={customKm} onChange={e => setCustomKm(e.target.value.replace(/[^0-9.]/g, ''))} />
+                      <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.06em' }}>km</span>
                     </div>
-                    <div className="label" style={{ opacity: lastEdited === 'pace' ? 1 : 0.3, marginLeft: 8 }}>
+                  )}
+                </div>
+
+                {/* Goal time */}
+                <div className="cmp-field" style={{ opacity: segMode ? 0.4 : 1, pointerEvents: segMode ? 'none' : 'auto' }}>
+                  <div className="cmp-field-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    Goal time
+                    <span style={{ opacity: lastEdited === 'time' ? 1 : 0.35 }}>
+                      {lastEdited === 'time' ? '◉ driving' : '○'}
+                    </span>
+                  </div>
+                  <input className="cmp-input" placeholder="h:mm:ss" value={goalTime}
+                         onChange={e => { setGoalTime(e.target.value); setLastEdited('time'); }} />
+                  <div style={{ fontSize: 10, color: 'var(--on-dark-meta)', marginTop: 6 }}>e.g. 3:30:00 · 1:42:30 · 22:00</div>
+                </div>
+
+                {/* Pace */}
+                <div className="cmp-field" style={{ opacity: segMode ? 0.4 : 1, pointerEvents: segMode ? 'none' : 'auto' }}>
+                  <div className="cmp-field-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Pace · /{unit === 'km' ? 'km' : 'mi'}</span>
+                    <span style={{ opacity: lastEdited === 'pace' ? 1 : 0.35 }}>
                       {lastEdited === 'pace' ? '◉ driving' : '○'}
+                    </span>
+                  </div>
+                  <input className="cmp-input" placeholder="mm:ss"
+                         value={unit === 'km' ? (lastEdited === 'pace' ? pace : formatMS(paceKm)) : formatMS(paceMi)}
+                         onChange={e => {
+                           const v = e.target.value;
+                           if (unit === 'km') { setPace(v); setLastEdited('pace'); }
+                           else {
+                             const sec = parseTimeStr(v);
+                             if (sec != null) { setPace(formatMS(sec / 1.609344)); setLastEdited('pace'); }
+                           }
+                         }} />
+                  <div style={{ marginTop: 8 }}>
+                    <div className="cmp-pill-row">
+                      <button className={`cmp-pill ${unit === 'km' ? 'active' : ''}`} onClick={() => setUnit('km')}>km</button>
+                      <button className={`cmp-pill ${unit === 'mi' ? 'active' : ''}`} onClick={() => setUnit('mi')}>mi</button>
                     </div>
                   </div>
                 </div>
-                <input className="input" placeholder="mm:ss"
-                       value={unit === 'km' ? (lastEdited === 'pace' ? pace : formatMS(paceKm)) : formatMS(paceMi)}
-                       onChange={e => {
-                         const v = e.target.value;
-                         if (unit === 'km') { setPace(v); setLastEdited('pace'); }
-                         else {
-                           const sec = parseTimeStr(v);
-                           if (sec != null) { setPace(formatMS(sec / 1.609344)); setLastEdited('pace'); }
-                         }
-                       }} />
-                <div className="dimmed mt-8" style={{ fontSize: 11 }}>Even-effort · chart updates automatically</div>
-              </div>
 
-              {/* Advanced */}
-              <div className="mt-32" style={{ borderTop: '0.5px solid var(--rule)', paddingTop: 16 }}>
-                <button className="btn-ghost" onClick={() => setAdvanced(a => !a)}
-                        style={{ border: 'none', padding: '4px 0', color: 'var(--ink)' }}>
-                  {advanced ? '▾' : '▸'} Advanced features
-                </button>
-                {advanced && (
-                  <div className="mt-16 fade-up" style={{ display: 'grid', gap: 24 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                      <div>
-                        <div className="label mb-8">Age</div>
-                        <input className="input" placeholder="e.g. 38" value={age}
-                               onChange={e => setAge(e.target.value.replace(/\D/g, ''))} />
-                      </div>
-                      <div>
-                        <div className="label mb-8">Gender</div>
-                        <div className="flex gap-8">
-                          <button className={`pill ${gender === 'M' ? 'active' : ''}`} onClick={() => setGender('M')}>Men</button>
-                          <button className={`pill ${gender === 'W' ? 'active' : ''}`} onClick={() => setGender('W')}>Women</button>
-                        </div>
-                      </div>
-                    </div>
+                <div className="cmp-divider" />
 
-                    {/* Segment strategy */}
-                    <div style={{ borderTop: '0.5px solid var(--rule)', paddingTop: 20 }}>
-                      <div className="flex between ai-center mb-12">
+                {/* Advanced */}
+                <div className="cmp-field">
+                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.18em', display: 'flex', alignItems: 'center', gap: 6 }}
+                          onClick={() => setAdvanced(a => !a)}>
+                    {advanced ? '▾' : '▸'} Advanced
+                  </button>
+                  {advanced && (
+                    <div className="fade-up" style={{ marginTop: 16, display: 'grid', gap: 16 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                         <div>
-                          <div className="label-strong">Race strategy · multi-leg</div>
-                          <div className="dimmed mt-4" style={{ fontSize: 11, lineHeight: 1.5, maxWidth: 360 }}>
-                            Build a paced plan in segments. Overrides goal/pace above.
+                          <div className="cmp-sublabel">Age</div>
+                          <input className="cmp-input" placeholder="e.g. 38" value={age}
+                                 onChange={e => setAge(e.target.value.replace(/\D/g, ''))} />
+                        </div>
+                        <div>
+                          <div className="cmp-sublabel">Gender</div>
+                          <div className="cmp-pill-row">
+                            <button className={`cmp-pill ${gender === 'M' ? 'active' : ''}`} onClick={() => setGender('M')}>M</button>
+                            <button className={`cmp-pill ${gender === 'W' ? 'active' : ''}`} onClick={() => setGender('W')}>W</button>
                           </div>
                         </div>
-                        <button className={`pill ${segMode ? 'active' : ''}`} onClick={() => setSegMode(s => !s)}>
-                          {segMode ? '● ON' : '○ OFF'}
-                        </button>
                       </div>
-                      {segMode && (
-                        <div className="fade-up">
-                          <div className="seg-list">
-                            {segmentPlan.rows.map((s, i) => (
-                              <div key={s.id} className="seg-row">
-                                <div className="seg-idx serif">{String(i + 1).padStart(2, '0')}</div>
-                                <div className="seg-fields">
-                                  <div>
-                                    <div className="label mb-4">Distance · km</div>
-                                    <input className="input" inputMode="decimal" placeholder="km" value={s.km}
-                                           onChange={e => updateSegment(s.id, { km: e.target.value.replace(/[^0-9.]/g, '') })} />
-                                  </div>
-                                  <div>
-                                    <div className="flex between ai-baseline mb-4">
-                                      <div className="label">{s.mode === 'pace' ? 'Pace · /km' : 'Time'}</div>
-                                      <button className="seg-mode-toggle"
-                                              onClick={() => updateSegment(s.id, { mode: s.mode === 'pace' ? 'time' : 'pace', value: '' })}>
-                                        ⇄ {s.mode === 'pace' ? 'time' : 'pace'}
-                                      </button>
-                                    </div>
-                                    <input className="input" placeholder={s.mode === 'pace' ? 'mm:ss' : 'h:mm:ss'} value={s.value}
-                                           onChange={e => updateSegment(s.id, { value: e.target.value })} />
-                                  </div>
-                                </div>
-                                <div className="seg-meta">
-                                  <div className="dimmed" style={{ fontSize: 10 }}>
-                                    {s.valid ? `${formatHMS(s.segTime)} · ${formatMS(s.segPace)}/km` : 'incomplete'}
-                                  </div>
-                                  <button className="seg-remove" disabled={segments.length <= 1}
-                                          onClick={() => removeSegment(s.id)} title="Remove">×</button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <button className="btn-ghost mt-12" onClick={addSegment}>+ Add segment</button>
+
+                      {/* Segment strategy */}
+                      <div style={{ borderTop: '0.5px solid var(--on-dark-rule)', paddingTop: 16 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                          <div className="cmp-sublabel" style={{ marginBottom: 0 }}>Race strategy</div>
+                          <button className={`cmp-pill ${segMode ? 'active' : ''}`} onClick={() => setSegMode(s => !s)}>
+                            {segMode ? '● ON' : '○ OFF'}
+                          </button>
                         </div>
-                      )}
+                        {segMode && (
+                          <div className="fade-up">
+                            <div className="seg-list">
+                              {segmentPlan.rows.map((s, i) => (
+                                <div key={s.id} className="seg-row">
+                                  <div className="seg-idx serif">{String(i + 1).padStart(2, '0')}</div>
+                                  <div className="seg-fields">
+                                    <div>
+                                      <div className="cmp-sublabel">km</div>
+                                      <input className="cmp-input" inputMode="decimal" placeholder="km" value={s.km}
+                                             onChange={e => updateSegment(s.id, { km: e.target.value.replace(/[^0-9.]/g, '') })} />
+                                    </div>
+                                    <div>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                                        <div className="cmp-sublabel" style={{ marginBottom: 0 }}>{s.mode === 'pace' ? '/km' : 'time'}</div>
+                                        <button className="seg-mode-toggle" style={{ color: 'var(--on-dark-meta)' }}
+                                                onClick={() => updateSegment(s.id, { mode: s.mode === 'pace' ? 'time' : 'pace', value: '' })}>
+                                          ⇄
+                                        </button>
+                                      </div>
+                                      <input className="cmp-input" placeholder={s.mode === 'pace' ? 'mm:ss' : 'h:mm:ss'} value={s.value}
+                                             onChange={e => updateSegment(s.id, { value: e.target.value })} />
+                                    </div>
+                                  </div>
+                                  <div className="seg-meta">
+                                    <div style={{ fontSize: 10, color: 'var(--on-dark-meta)' }}>
+                                      {s.valid ? `${formatHMS(s.segTime)}` : '—'}
+                                    </div>
+                                    <button className="seg-remove" disabled={segments.length <= 1}
+                                            onClick={() => removeSegment(s.id)} title="Remove">×</button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--on-dark-meta)', fontFamily: "'DM Mono', monospace", fontSize: 11, marginTop: 8, padding: 0, letterSpacing: '0.06em' }}
+                                    onClick={addSegment}>+ Add segment</button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              <div className="mt-32 flex gap-12">
-                <button className="btn" onClick={reset}>Reset</button>
-                <button className="btn-ghost" onClick={() => {
-                  const txt = segMode && segmentPlan.totalKm > 0
-                    ? `Strategy · ${segmentPlan.totalKm.toFixed(1)} km · ${formatHMS(segmentPlan.totalTime)}`
-                    : `${dist.label} · ${formatHMS(solved.time)} · ${formatMS(paceKm)}/km`;
-                  navigator.clipboard?.writeText(txt);
-                }}>Copy summary</button>
-              </div>
-            </div>
+                <div className="cmp-divider" />
 
-            {/* OUTPUT PANEL */}
-            <div>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button className="btn" onClick={reset} style={{ flex: 1 }}>Reset</button>
+                  <button className="btn-ghost" onClick={() => {
+                    const txt = segMode && segmentPlan.totalKm > 0
+                      ? `Strategy · ${segmentPlan.totalKm.toFixed(1)} km · ${formatHMS(segmentPlan.totalTime)}`
+                      : `${dist.label} · ${formatHMS(solved.time)} · ${formatMS(paceKm)}/km`;
+                    navigator.clipboard?.writeText(txt);
+                  }}>Copy</button>
+                </div>
+              </div>
+            </aside>
+
+            {/* RIGHT — stacked result cards */}
+            <div className="cmp-results">
+
+              {/* Projection / Strategy card */}
               {segMode && segmentPlan.totalKm > 0 ? (
-                <div className="card-dark">
-                  <div className="flex between ai-baseline">
-                    <span className="label">Strategy · {segmentPlan.rows.filter(r => r.valid).length} legs</span>
-                    <span className="label">Multi-leg plan</span>
-                  </div>
-                  <div style={{ marginTop: 24 }}>
-                    <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Total time</div>
-                    <div className="serif mt-8" style={{ fontSize: 72, lineHeight: 0.95, letterSpacing: '-0.025em' }}>
-                      {formatHMS(segmentPlan.totalTime)}
-                    </div>
+                <div className="cmp-card cmp-card-dark">
+                  <div className="eyebrow mb-16">Strategy · {segmentPlan.rows.filter(r => r.valid).length} legs</div>
+                  <div className="serif" style={{ fontSize: 72, lineHeight: 0.95, letterSpacing: '-0.025em' }}>
+                    {formatHMS(segmentPlan.totalTime)}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 28, paddingTop: 20, borderTop: '0.5px solid var(--on-dark-rule)' }}>
                     <div>
-                      <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Total distance</div>
+                      <div className="label">Total distance</div>
                       <div className="serif mt-8" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
-                        {segmentPlan.totalKm.toFixed(2)}<span style={{ fontSize: 13, color: 'var(--on-dark-meta)', marginLeft: 6 }}>km</span>
+                        {segmentPlan.totalKm.toFixed(2)}<span style={{ fontSize: 13, marginLeft: 6 }}>km</span>
                       </div>
                     </div>
                     <div>
-                      <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Avg pace</div>
+                      <div className="label">Avg pace</div>
                       <div className="serif mt-8" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
-                        {formatMS(segAvgPace)}<span style={{ fontSize: 13, color: 'var(--on-dark-meta)', marginLeft: 6 }}>/km</span>
+                        {formatMS(segAvgPace)}<span style={{ fontSize: 13, marginLeft: 6 }}>/km</span>
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="card-dark">
-                  <div className="flex between ai-baseline">
-                    <span className="label">Projection · {(dist as any).short || dist.label}</span>
-                    <span className="label">Even-effort</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 24, marginTop: 24, alignItems: 'baseline' }}>
+                <div className="cmp-card cmp-card-dark">
+                  <div className="eyebrow mb-16">Projection · {(dist as any).short || dist.label} · Even-effort</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 24, alignItems: 'baseline' }}>
                     <div>
-                      <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Finish time</div>
+                      <div className="label">Finish time</div>
                       <div className="serif mt-8" style={{ fontSize: 64, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{formatHMS(solved.time)}</div>
                     </div>
                     <div>
-                      <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Pace · /km</div>
+                      <div className="label">Pace · /km</div>
                       <div className="serif mt-8" style={{ fontSize: 32, lineHeight: 1, letterSpacing: '-0.01em' }}>{formatMS(paceKm)}</div>
                     </div>
                     <div>
-                      <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Pace · /mi</div>
+                      <div className="label">Pace · /mi</div>
                       <div className="serif mt-8" style={{ fontSize: 32, lineHeight: 1, letterSpacing: '-0.01em' }}>{formatMS(paceMi)}</div>
                     </div>
                   </div>
-
                   {ageAdjusted != null && (
-                    <div className="mt-24" style={{ borderTop: '0.5px solid var(--on-dark-rule)', paddingTop: 16 }}>
-                      <div className="flex between ai-baseline">
-                        <span className="label" style={{ color: 'var(--on-dark-meta)' }}>
-                          Age-graded ({age}, {gender === 'M' ? 'M' : 'W'}) · open-equivalent
-                        </span>
-                        <span className="serif" style={{ fontSize: 22 }}>{formatHMS(ageAdjusted)}</span>
-                      </div>
+                    <div style={{ marginTop: 24, borderTop: '0.5px solid var(--on-dark-rule)', paddingTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                      <span className="label">Age-graded ({age}, {gender}) · open-equivalent</span>
+                      <span className="serif" style={{ fontSize: 22 }}>{formatHMS(ageAdjusted)}</span>
                     </div>
                   )}
-
                   {place != null && (
-                    <div className="mt-24" style={{ fontSize: 12, color: 'var(--on-dark-meta)', lineHeight: 1.55 }}>
+                    <div style={{ marginTop: 20, fontSize: 12, lineHeight: 1.55 }}>
                       On the <span style={{ color: 'var(--on-dark)' }}>2025 Auckland Marathon</span> field this finish would have placed approximately
                       <span className="serif" style={{ fontSize: 18, color: 'var(--on-dark)', margin: '0 6px' }}>{place.toLocaleString()}</span>
                       of {AKL_FIELD.toLocaleString()}.
@@ -461,11 +450,8 @@ export default function Calculator() {
 
               {/* Segment breakdown */}
               {segMode && (
-                <div className="mt-48">
-                  <div className="flex between ai-baseline mb-16">
-                    <div className="label-strong">Leg breakdown</div>
-                    <div className="dimmed" style={{ fontSize: 11 }}>cumulative time at end of leg</div>
-                  </div>
+                <div className="cmp-card">
+                  <div className="eyebrow mb-16">Leg breakdown · cumulative time at end of leg</div>
                   <table className="tbl">
                     <thead><tr><th>Leg</th><th>Distance</th><th className="num">Pace</th><th className="num">Leg time</th><th className="num">Cumulative</th></tr></thead>
                     <tbody>
@@ -492,9 +478,9 @@ export default function Calculator() {
 
               {/* Splits */}
               {!segMode && (
-                <div className="mt-48">
-                  <div className="flex between ai-baseline mb-16">
-                    <div className="label-strong">Even-effort splits</div>
+                <div className="cmp-card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
+                    <div className="eyebrow">Even-effort splits</div>
                     <div className="dimmed" style={{ fontSize: 11 }}>cumulative · {unit}</div>
                   </div>
                   <table className="tbl">
@@ -514,9 +500,9 @@ export default function Calculator() {
 
               {/* Equivalencies */}
               {!segMode && (
-                <div className="mt-48">
-                  <div className="flex between ai-baseline mb-16">
-                    <div className="label-strong">Race-distance equivalents</div>
+                <div className="cmp-card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
+                    <div className="eyebrow">Race-distance equivalents</div>
                     <div className="dimmed" style={{ fontSize: 11 }}>Riegel · same fitness, different distance</div>
                   </div>
                   <table className="tbl">
