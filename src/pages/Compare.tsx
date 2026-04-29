@@ -224,96 +224,28 @@ function YearStripCard({ data, sec, hoveredYear, setHoveredYear, distId, current
 
 interface BestRace { year: number; raceName: string; equivSec: number; pos: number; total: number; pct: number; }
 
-function CourseMapSVG({ raceName }: { raceName: string }) {
-  const isMarathon = raceName === 'Auckland Marathon';
-
-  if (isMarathon) {
-    return (
-      <svg viewBox="0 0 160 210" style={{ width: '100%', height: 'auto', display: 'block' }}>
-        {/* Waitemata Harbour fill */}
-        <path d="M 0,108 C 35,102 75,106 120,103 L 160,103 L 160,148 L 0,148 Z"
-              fill="rgba(255,255,255,0.035)" />
-        {/* North shore route: Devonport → Takapuna → Northcote Point */}
-        <path d="M 122,72 C 135,58 142,38 132,22 C 122,8 102,6 85,12 C 68,18 55,34 48,52 C 40,70 42,90 48,104"
-              fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Harbour bridge — towers */}
-        <line x1="40" y1="96" x2="40" y2="128" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" />
-        <line x1="56" y1="96" x2="56" y2="128" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" />
-        {/* Bridge arch */}
-        <path d="M 32,122 Q 48,86 64,122"
-              fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1.8" strokeLinecap="round" />
-        {/* Bridge deck / road */}
-        <line x1="32" y1="122" x2="64" y2="122" stroke="rgba(255,255,255,0.3)" strokeWidth="2.5" />
-        {/* Connecting route to bridge north side */}
-        <path d="M 48,104 L 40,122" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2.5" strokeLinecap="round" />
-        {/* City route: bridge south → through CBD → Victoria Park finish */}
-        <path d="M 64,122 C 72,134 78,148 76,162 C 74,174 64,182 58,190"
-              fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Start marker */}
-        <circle cx="122" cy="72" r="4.5" fill="var(--accent-good)" />
-        {/* Finish marker */}
-        <circle cx="58" cy="190" r="4.5" fill="rgba(255,255,255,0.85)" />
-        {/* Labels */}
-        <text x="110" y="68" fill="rgba(255,255,255,0.32)" fontSize="7" fontFamily="'DM Mono', monospace" textAnchor="end">Devonport</text>
-        <text x="10" y="114" fill="rgba(255,255,255,0.32)" fontSize="7" fontFamily="'DM Mono', monospace">Hbr Bridge</text>
-        <text x="62" y="205" fill="rgba(255,255,255,0.32)" fontSize="7" fontFamily="'DM Mono', monospace">Vic Park</text>
-        {/* Distance label */}
-        <text x="1" y="210" fill="rgba(255,255,255,0.18)" fontSize="6.5" fontFamily="'DM Mono', monospace" letterSpacing="0.12em">42.2 KM · POINT TO POINT</text>
-      </svg>
-    );
-  }
-
-  // Auckland Half Marathon — harbour waterfront loop
-  return (
-    <svg viewBox="0 0 160 180" style={{ width: '100%', height: 'auto', display: 'block' }}>
-      {/* Waitemata Harbour fill */}
-      <path d="M 0,100 C 40,95 110,98 160,95 L 160,145 L 0,145 Z"
-            fill="rgba(255,255,255,0.035)" />
-      {/* Main loop: CBD waterfront circuit */}
-      <path d="M 80,22 C 108,24 132,40 140,62 C 148,84 138,108 118,116 C 98,124 76,118 62,105 C 48,92 46,72 55,56 C 63,42 70,28 80,22 Z"
-            fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      {/* Lower extension toward waterfront */}
-      <path d="M 62,105 C 52,118 50,134 60,148 C 68,158 82,162 92,156 C 102,150 104,136 98,124"
-            fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      {/* Start / finish */}
-      <circle cx="80" cy="22" r="4.5" fill="var(--accent-good)" />
-      <circle cx="80" cy="22" r="8" fill="none" stroke="rgba(74,156,94,0.35)" strokeWidth="1" />
-      {/* Labels */}
-      <text x="88" y="25" fill="rgba(255,255,255,0.4)" fontSize="7" fontFamily="'DM Mono', monospace" letterSpacing="0.06em">START / FINISH</text>
-      <text x="1" y="178" fill="rgba(255,255,255,0.18)" fontSize="6.5" fontFamily="'DM Mono', monospace" letterSpacing="0.12em">21.1 KM · CITY CIRCUIT</text>
-    </svg>
-  );
-}
-
 function BestRaceCard({ best, sec }: { best: BestRace; sec: number }) {
   return (
     <div className="cmp-card cmp-card-dark">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start' }}>
+      <CardHeader kicker="Best race for your time · all events" />
+      <div className="serif" style={{ fontSize: 36, lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: -8 }}>
+        {best.raceName} {best.year}
+      </div>
+      <div style={{ fontSize: 13, lineHeight: 1.6, marginTop: 12, color: 'var(--on-dark-meta)', fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic' }}>
+        Your time of{' '}
+        <span style={{ color: 'var(--on-dark)', fontStyle: 'normal', fontFamily: "'DM Mono', monospace" }}>{fmtSec(sec)}</span>
+        {' '}({fmtSec(best.equivSec)} equivalent) would have placed highest here.
+      </div>
+      <div style={{ marginTop: 28, paddingTop: 24, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
         <div>
-          <CardHeader kicker="Best race for your time · all events" />
-          <div className="serif" style={{ fontSize: 32, lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: -8 }}>
-            {best.raceName} {best.year}
-          </div>
-          <div style={{ fontSize: 13, lineHeight: 1.6, marginTop: 12, color: 'var(--on-dark-meta)', fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic' }}>
-            Your time of{' '}
-            <span style={{ color: 'var(--on-dark)', fontStyle: 'normal', fontFamily: "'DM Mono', monospace" }}>{fmtSec(sec)}</span>
-            {' '}({fmtSec(best.equivSec)} equivalent) would have placed highest here.
-          </div>
-          <div style={{ marginTop: 28, paddingTop: 24, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            <div>
-              <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Overall</div>
-              <div className="serif" style={{ fontSize: 40, lineHeight: 1, marginTop: 8, letterSpacing: '-0.02em' }}>{ordSuffix(best.pos)}</div>
-            </div>
-            <div>
-              <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Percentile</div>
-              <div className="serif" style={{ fontSize: 40, lineHeight: 1, marginTop: 8, letterSpacing: '-0.02em', color: 'var(--accent-good)' }}>
-                {best.pct < 1 ? '<1' : best.pct.toFixed(1)}%
-              </div>
-            </div>
-          </div>
+          <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Overall</div>
+          <div className="serif" style={{ fontSize: 40, lineHeight: 1, marginTop: 8, letterSpacing: '-0.02em' }}>{ordSuffix(best.pos)}</div>
         </div>
-        <div style={{ border: '0.5px solid var(--on-dark-rule)', padding: '24px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CourseMapSVG raceName={best.raceName} />
+        <div>
+          <div className="label" style={{ color: 'var(--on-dark-meta)' }}>Percentile</div>
+          <div className="serif" style={{ fontSize: 40, lineHeight: 1, marginTop: 8, letterSpacing: '-0.02em', color: 'var(--accent-good)' }}>
+            {best.pct < 1 ? '<1' : best.pct.toFixed(1)}%
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,19 @@
-import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      // Let the browser handle anchor scrolling naturally
+      const el = document.querySelector(hash);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+  return null;
+}
 import Nav from "./components/Nav";
 import SiteFooter from "./components/SiteFooter";
 import SearchOverlay from "./components/SearchOverlay";
@@ -21,6 +35,7 @@ function Layout() {
 
   return (
     <>
+      <ScrollToTop />
       <Nav onOpenSearch={() => setSearchOpen(true)} />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Routes>
