@@ -1,15 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
-import { loadResults, yearStats, halfStats, YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, yearStats, halfStats, rotoruaStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import FullResultsOverlay from './FullResultsOverlay';
 
 interface RaceResultsBlockProps {
   dist: string;
+  raceId?: 'auckland' | 'rotorua';
   onOpenAthlete?: (name: string) => void;
 }
 
-export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlockProps) {
-  const years = [...YEARS].reverse();
-  const [year, setYear] = useState<typeof YEARS[number]>(2025);
+export default function RaceResultsBlock({ dist, raceId = 'auckland', onOpenAthlete }: RaceResultsBlockProps) {
+  const isRotorua = raceId === 'rotorua';
+  const availableYears = isRotorua ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+  const years = availableYears as number[];
+  const [year, setYear] = useState<number>(2025);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
   const [fullOpen, setFullOpen] = useState(false);
@@ -18,17 +21,17 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
   const [loading, setLoading] = useState(false);
   const perPage = 10;
 
-  const hasData = dist === '42.2 km' || dist === '21.1 km';
+  const hasData = isRotorua ? true : (dist === '42.2 km' || dist === '21.1 km');
 
   useEffect(() => {
     if (!hasData) return;
     setLoading(true);
     setAll([]);
-    loadResults(year, dist as '42.2 km' | '21.1 km').then(rows => {
-      setAll(rows);
-      setLoading(false);
-    });
-  }, [year, dist, hasData]);
+    const loader = isRotorua
+      ? loadRotorua(year)
+      : loadResults(year, dist as '42.2 km' | '21.1 km');
+    loader.then(rows => { setAll(rows); setLoading(false); });
+  }, [year, dist, hasData, isRotorua]);
 
   const ql = q.trim().toLowerCase();
   const filtered = useMemo(() => {
@@ -48,7 +51,7 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const activeStats = dist === '21.1 km' ? halfStats : yearStats;
+  const activeStats = isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
 
   return (
@@ -66,7 +69,7 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
             <select
               className="pill-select"
               value={year}
-              onChange={e => setYear(Number(e.target.value) as typeof YEARS[number])}
+              onChange={e => setYear(Number(e.target.value))}
             >
               {years.map(y => (
                 <option key={y} value={y}>{y}</option>
@@ -161,7 +164,8 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
       <FullResultsOverlay
         open={fullOpen}
         year={year}
-        dist={dist as '42.2 km' | '21.1 km'}
+        dist={isRotorua ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
+        raceId={raceId}
         initialQ={fullQ}
         onClose={() => setFullOpen(false)}
         onOpenAthlete={name => { setFullOpen(false); onOpenAthlete?.(name); }}

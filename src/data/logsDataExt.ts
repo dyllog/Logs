@@ -18,6 +18,7 @@ export interface YearStat {
 }
 
 export const YEARS = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
+export const ROTORUA_YEARS = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
 
 export const yearStats: YearStat[] = [
   { year: 2014, finishers: 2306, avg: 15720, avgMen: 15467, avgWomen: 17176, winnerM:  8858, winnerW: 10062, top10M:  9202, top10W: 11092 },
@@ -80,6 +81,38 @@ export function getCachedResults(year: number, dist: '42.2 km' | '21.1 km' = '42
   if (dist === '21.1 km') return halfCache[year] ?? [];
   return marathonCache[year] ?? [];
 }
+
+const rotoruaCache: Record<number, ResultRow[]> = {};
+const rotoruaInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadRotorua(year: number): Promise<ResultRow[]> {
+  if (rotoruaCache[year]) return rotoruaCache[year];
+  if (!rotoruaInflight[year]) {
+    rotoruaInflight[year] = fetch(`/data/results-rot-${year}.json`)
+      .then(r => r.json())
+      .then((rows: ResultRow[]) => { rotoruaCache[year] = rows; return rows; });
+  }
+  return rotoruaInflight[year];
+}
+
+export function getCachedRotorua(year: number): ResultRow[] {
+  return rotoruaCache[year] ?? [];
+}
+
+export const rotoruaStats: YearStat[] = [
+  { year: 2014, finishers: 2144, avg: 14630, avgMen: 14388, avgWomen: 15150, winnerM: 8865, winnerW: 9958, top10M: 9280, top10W: 10570 },
+  { year: 2015, finishers: 1172, avg: 16834, avgMen: 15927, avgWomen: 18233, winnerM: 8943, winnerW: 10402, top10M: 9380, top10W: 11083 },
+  { year: 2016, finishers: 1018, avg: 17352, avgMen: 16476, avgWomen: 18867, winnerM: 8859, winnerW: 10525, top10M: 9254, top10W: 11059 },
+  { year: 2017, finishers:  833, avg: 17433, avgMen: 16590, avgWomen: 18797, winnerM: 8518, winnerW: 10454, top10M: 9569, top10W: 11548 },
+  { year: 2018, finishers:  940, avg: 17239, avgMen: 16279, avgWomen: 18725, winnerM: 8939, winnerW: 10004, top10M: 9756, top10W: 11124 },
+  { year: 2019, finishers:  720, avg: 16225, avgMen: 15625, avgWomen: 17388, winnerM: 8738, winnerW: 10277, top10M: 9412, top10W: 11995 },
+  { year: 2020, finishers:  446, avg: 17290, avgMen: 16359, avgWomen: 18680, winnerM: 9073, winnerW: 10245, top10M: 9675, top10W: 11703 },
+  { year: 2021, finishers:  746, avg: 16909, avgMen: 15884, avgWomen: 18955, winnerM: 8969, winnerW: 10451, top10M: 9498, top10W: 11765 },
+  { year: 2022, finishers:  476, avg: 17795, avgMen: 16749, avgWomen: 19860, winnerM: 8961, winnerW: 10808, top10M: 10272, top10W: 12482 },
+  { year: 2023, finishers:  796, avg: 16534, avgMen: 15706, avgWomen: 18193, winnerM: 8509, winnerW: 10468, top10M: 9533, top10W: 11823 },
+  { year: 2024, finishers: 1151, avg: 16866, avgMen: 15821, avgWomen: 18658, winnerM: 8628, winnerW:  9990, top10M: 9391, top10W: 11364 },
+  { year: 2025, finishers:  897, avg: 16717, avgMen: 15899, avgWomen: 18149, winnerM: 8681, winnerW: 11029, top10M: 9224, top10W: 11564 },
+];
 
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
