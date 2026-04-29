@@ -103,19 +103,18 @@ export interface CourseRecord {
 }
 
 export const recordsMen: CourseRecord = {
-  holder: "Dale Warrander",
-  nationality: "NZL",
-  club: "Auckland Harriers",
-  time: "2:17:43",
-  year: 2006,
-  age: 32,
-  previous: "2:20:55 — M. Kosgei (KEN) 2004",
+  holder: "Isaias Beyn",
+  nationality: "—",
+  club: "—",
+  time: "2:19:32",
+  year: 2019,
+  age: 0,
+  previous: "2:20:36 — Oska Baynes (NZL) 2016",
   progression: [
-    { y: 1993, t: "2:34:12", name: "R. Hughes" },
-    { y: 1997, t: "2:29:44", name: "P. Morrison" },
-    { y: 2001, t: "2:24:18", name: "S. Kibet" },
-    { y: 2004, t: "2:20:55", name: "M. Kosgei" },
-    { y: 2006, t: "2:17:43", name: "D. Warrander", current: true },
+    { y: 2014, t: "2:27:38", name: "S. Lett" },
+    { y: 2015, t: "2:27:01", name: "A. Pulford" },
+    { y: 2016, t: "2:20:36", name: "O. Baynes" },
+    { y: 2019, t: "2:19:32", name: "I. Beyn", current: true },
   ],
 };
 

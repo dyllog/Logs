@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function SiteFooter() {
   return (
     <footer className="footer">
@@ -12,6 +14,12 @@ export default function SiteFooter() {
         {['Races', 'Results', 'Records', 'Athletes'].map(l => (
           <div key={l} style={{ marginBottom: 6 }}>{l}</div>
         ))}
+      </div>
+      <div>
+        <div className="label mb-8">Tools</div>
+        <div style={{ marginBottom: 6 }}>
+          <Link to="/calculator" style={{ color: 'inherit', textDecoration: 'none' }}>Pace Calculator</Link>
+        </div>
       </div>
       <div>
         <div className="label mb-8">About</div>

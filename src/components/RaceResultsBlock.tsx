@@ -53,27 +53,27 @@ export default function RaceResultsBlock({ dist, onOpenAthlete }: RaceResultsBlo
 
   return (
     <div>
-      <div className="flex between ai-baseline mb-24" style={{ flexWrap: 'wrap', gap: 20, rowGap: 16 }}>
-        <div style={{ flex: '1 1 420px', minWidth: 0 }}>
-          <div className="eyebrow mb-8">Results</div>
+      <div className="mb-24">
+        <div className="eyebrow mb-8">Results</div>
+        <div className="flex ai-baseline gap-16" style={{ flexWrap: 'wrap' }}>
           <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em', lineHeight: 1.1 }}>
             {hasData
               ? <>{year} edition <span style={{ color: 'var(--meta)', fontStyle: 'italic' }}>— {stat.finishers.toLocaleString()} finishers</span></>
               : <>{dist} results</>
             }
           </h2>
+          {hasData && (
+            <select
+              className="pill-select"
+              value={year}
+              onChange={e => setYear(Number(e.target.value) as typeof YEARS[number])}
+            >
+              {years.map(y => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          )}
         </div>
-        {hasData && (
-          <select
-            className="pill-select"
-            value={year}
-            onChange={e => setYear(Number(e.target.value) as typeof YEARS[number])}
-          >
-            {years.map(y => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-        )}
       </div>
 
       {!hasData ? (

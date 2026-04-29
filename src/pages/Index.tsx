@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ProgressionChart from '@/components/ProgressionChart';
 import { recordsMen, results2025, upcoming } from '@/data/logsData';
 
-const distTags = ['all', '42.2', '21.1', 'trail', 'ultra'];
+const distTags = ['all', '42.2', '21.1'];
 
 export default function Index() {
   const [distFilter, setDistFilter] = useState('all');
@@ -33,11 +33,11 @@ export default function Index() {
               </div>
               <div className="mt-48 flex gap-32" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>34</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>1</div>
                   <div className="label mt-8">Tracked events</div>
                 </div>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>184,302</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>83,543</div>
                   <div className="label mt-8">Finisher records</div>
                 </div>
                 <div>
@@ -69,7 +69,7 @@ export default function Index() {
                 </div>
               </div>
               <hr style={{ border: 0, borderTop: '0.5px solid var(--on-dark-rule)', margin: '28px 0 24px' }} />
-              <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Progression · 1992–2023</div>
+              <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Progression · 2014–2019</div>
               <div style={{ color: 'var(--on-dark)' }}>
                 <ProgressionChart data={recordsMen.progression} height={140} />
               </div>
@@ -125,7 +125,7 @@ export default function Index() {
                 Auckland Marathon <span style={{ color: 'var(--meta)', fontStyle: 'italic' }}>— 2025</span>
               </h2>
             </div>
-            <Link to="/races/auckland-marathon" className="btn-ghost">Full results →</Link>
+            <Link to="/races/auckland-marathon#results" className="btn-ghost">Full results →</Link>
           </div>
           <table className="tbl">
             <thead>

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 const races = [
   { name: "Auckland Marathon", slug: "auckland-marathon", location: "Auckland", date: "26 Oct 2025", distances: ["42.2 km", "21.1 km", "11 km", "5 km"], surface: "Road", since: "1986" },
-  { name: "Rotorua Marathon", slug: null, location: "Rotorua", date: "3 May 2025", distances: ["42.2 km", "21.1 km"], surface: "Road", since: "1967" },
+  { name: "Rotorua Marathon", slug: "rotorua-marathon", location: "Rotorua", date: "3 May 2025", distances: ["42.2 km", "21.1 km"], surface: "Road", since: "1967" },
   { name: "Queenstown International Marathon", slug: null, location: "Queenstown", date: "22 Nov 2025", distances: ["42.2 km", "21.1 km", "10 km"], surface: "Road", since: "2014" },
   { name: "Wellington Marathon", slug: null, location: "Wellington", date: "8 Jun 2025", distances: ["42.2 km", "21.1 km", "10 km"], surface: "Road", since: "2011" },
   { name: "Tarawera Ultramarathon", slug: null, location: "Rotorua", date: "8 Feb 2026", distances: ["102 km", "50 km", "21 km"], surface: "Trail", since: "2008" },

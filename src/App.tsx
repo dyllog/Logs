@@ -12,6 +12,7 @@ import Records from "./pages/Records";
 import Athletes from "./pages/Athletes";
 import Athlete from "./pages/Athlete";
 import Calculator from "./pages/Calculator";
+import Rotorua from "./pages/Rotorua";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -25,6 +26,7 @@ function Layout() {
         <Route path="/" element={<Index />} />
         <Route path="/races" element={<Races />} />
         <Route path="/races/auckland-marathon" element={<Race />} />
+        <Route path="/races/rotorua-marathon" element={<Rotorua />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />

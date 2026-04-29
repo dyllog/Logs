@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
 import AveragesChart from '@/components/AveragesChart';
@@ -13,6 +13,14 @@ export default function Race() {
   const [distId, setDistId] = useState<DistId>('42');
   const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash === '#results') {
+      const el = document.getElementById('results');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [hash]);
 
   const dopt = DISTANCE_OPTIONS.find(d => d.id === distId)!;
   const dist = dopt.label;
@@ -77,7 +85,7 @@ export default function Race() {
       </section>
 
       {/* 1. Results */}
-      <section className="section">
+      <section id="results" className="section">
         <div className="page">
           <RaceResultsBlock
             dist={dist}
