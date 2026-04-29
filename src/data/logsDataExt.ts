@@ -99,6 +99,23 @@ export function getCachedRotorua(year: number): ResultRow[] {
   return rotoruaCache[year] ?? [];
 }
 
+const rotoruaHalfCache: Record<number, ResultRow[]> = {};
+const rotoruaHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadRotoruaHalf(year: number): Promise<ResultRow[]> {
+  if (rotoruaHalfCache[year]) return rotoruaHalfCache[year];
+  if (!rotoruaHalfInflight[year]) {
+    rotoruaHalfInflight[year] = fetch(`/data/results-rot-half-${year}.json`)
+      .then(r => r.json())
+      .then((rows: ResultRow[]) => { rotoruaHalfCache[year] = rows; return rows; });
+  }
+  return rotoruaHalfInflight[year];
+}
+
+export function getCachedRotoruaHalf(year: number): ResultRow[] {
+  return rotoruaHalfCache[year] ?? [];
+}
+
 export const rotoruaStats: YearStat[] = [
   { year: 2014, finishers: 2144, avg: 14630, avgMen: 14388, avgWomen: 15150, winnerM: 8865, winnerW: 9958, top10M: 9280, top10W: 10570 },
   { year: 2015, finishers: 1172, avg: 16834, avgMen: 15927, avgWomen: 18233, winnerM: 8943, winnerW: 10402, top10M: 9380, top10W: 11083 },
@@ -112,6 +129,21 @@ export const rotoruaStats: YearStat[] = [
   { year: 2023, finishers:  796, avg: 16534, avgMen: 15706, avgWomen: 18193, winnerM: 8509, winnerW: 10468, top10M: 9533, top10W: 11823 },
   { year: 2024, finishers: 1151, avg: 16866, avgMen: 15821, avgWomen: 18658, winnerM: 8628, winnerW:  9990, top10M: 9391, top10W: 11364 },
   { year: 2025, finishers:  897, avg: 16717, avgMen: 15899, avgWomen: 18149, winnerM: 8681, winnerW: 11029, top10M: 9224, top10W: 11564 },
+];
+
+export const rotoruaHalfStats: YearStat[] = [
+  { year: 2014, finishers: 1817, avg: 8339, avgMen: 7727, avgWomen: 8710, winnerM: 4068, winnerW: 5171, top10M: 4489, top10W: 5325 },
+  { year: 2015, finishers: 1042, avg: 8134, avgMen: 7354, avgWomen: 8722, winnerM: 4108, winnerW: 4534, top10M: 4385, top10W: 5129 },
+  { year: 2016, finishers:  873, avg: 7970, avgMen: 7356, avgWomen: 8484, winnerM: 3967, winnerW: 4783, top10M: 4469, top10W: 5295 },
+  { year: 2017, finishers:  716, avg: 7934, avgMen: 7230, avgWomen: 8568, winnerM: 4169, winnerW: 4587, top10M: 4640, top10W: 5513 },
+  { year: 2018, finishers:  825, avg: 8934, avgMen: 8107, avgWomen: 9671, winnerM: 4398, winnerW: 4901, top10M: 4883, top10W: 5970 },
+  { year: 2019, finishers:  720, avg: 8900, avgMen: 8000, avgWomen: 9510, winnerM: 4424, winnerW: 4950, top10M: 5103, top10W: 5867 },
+  { year: 2020, finishers:  360, avg: 8653, avgMen: 7856, avgWomen: 9305, winnerM: 4522, winnerW: 5725, top10M: 5081, top10W: 6162 },
+  { year: 2021, finishers:  958, avg: 8957, avgMen: 7951, avgWomen: 9838, winnerM: 4348, winnerW: 5520, top10M: 4773, top10W: 5940 },
+  { year: 2022, finishers:  568, avg: 9003, avgMen: 8311, avgWomen: 9657, winnerM: 4753, winnerW: 5863, top10M: 5473, top10W: 6143 },
+  { year: 2023, finishers: 1132, avg: 8725, avgMen: 8075, avgWomen: 9356, winnerM: 4738, winnerW: 5153, top10M: 5195, top10W: 5655 },
+  { year: 2024, finishers: 1111, avg: 8318, avgMen: 7717, avgWomen: 8869, winnerM: 4478, winnerW: 5077, top10M: 4644, top10W: 5569 },
+  { year: 2025, finishers: 1100, avg: 8806, avgMen: 7914, avgWomen: 9597, winnerM: 4298, winnerW: 4918, top10M: 4798, top10W: 5609 },
 ];
 
 export function yearStatsForDist(distId: string): YearStat[] {

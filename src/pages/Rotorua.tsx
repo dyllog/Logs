@@ -4,7 +4,7 @@ import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
-import { rotoruaStats } from '@/data/logsDataExt';
+import { rotoruaStats, rotoruaHalfStats } from '@/data/logsDataExt';
 
 // Rotorua Marathon — Lake Rotorua loop, ~280m asl, very flat
 // Elevation based on known course characteristics
@@ -26,34 +26,27 @@ const rotoruaAnnotations = [
 ];
 
 export default function Rotorua() {
+  const [distId, setDistId] = useState<'42' | '21'>('42');
   const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
+  const isHalf = distId === '21';
+
+  const activeStats = isHalf ? rotoruaHalfStats : rotoruaStats;
 
   const seedCR = useMemo(() => {
     return tab === 'men'
-      ? rotoruaStats[0].winnerM + 1
-      : rotoruaStats[0].winnerW + 1;
-  }, [tab]);
+      ? activeStats[0].winnerM + 1
+      : activeStats[0].winnerW + 1;
+  }, [tab, activeStats]);
 
-  const recordM = {
-    time: '2:21:49',
-    holder: 'Malcolm Hicks',
-    nationality: 'NZL',
-    club: '—',
-    year: 2023,
-    previous: '2:21:58 — Saeki Makino (JPN) 2017',
-  };
+  const marRecordM = { time: '2:21:49', holder: 'Malcolm Hicks',   nationality: 'NZL', club: '—', year: 2023, previous: '2:21:58 — Saeki Makino (JPN) 2017' };
+  const marRecordW = { time: '2:45:58', holder: 'Sally Gibbs',     nationality: 'NZL', club: '—', year: 2014, previous: '—' };
+  const halfRecordM = { time: '1:06:07', holder: 'Michael Voss',   nationality: 'NZL', club: '—', year: 2016, previous: '—' };
+  const halfRecordW = { time: '1:15:34', holder: 'Lisa Robertson', nationality: 'NZL', club: '—', year: 2015, previous: '—' };
 
-  const recordW = {
-    time: '2:45:58',
-    holder: 'Sally Gibbs',
-    nationality: 'NZL',
-    club: '—',
-    year: 2014,
-    previous: '—',
-  };
-
-  const record = tab === 'men' ? recordM : recordW;
+  const record = isHalf
+    ? (tab === 'men' ? halfRecordM : halfRecordW)
+    : (tab === 'men' ? marRecordM  : marRecordW);
 
   return (
     <main>
@@ -67,9 +60,10 @@ export default function Rotorua() {
                 Rotorua Marathon
               </h1>
               <div className="flex gap-8 mt-20" style={{ flexWrap: 'wrap' }}>
-                {['42.2 km', '21.1 km', '10 km'].map(d => (
-                  <span key={d} className="pill">{d}</span>
+                {([['42', '42.2 km'], ['21', '21.1 km']] as ['42'|'21', string][]).map(([id, label]) => (
+                  <button key={id} className={`pill ${distId === id ? 'active' : ''}`} onClick={() => setDistId(id)}>{label}</button>
                 ))}
+                <span className="pill">10 km</span>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, fontSize: 12 }}>
@@ -89,8 +83,8 @@ export default function Rotorua() {
       <section id="results" className="section">
         <div className="page">
           <RaceResultsBlock
-            dist="42.2 km"
-            raceId="rotorua"
+            dist={isHalf ? '21.1 km' : '42.2 km'}
+            raceId={isHalf ? 'rotorua-half' : 'rotorua'}
             onOpenAthlete={() => navigate('/athletes/daniel-whareaitu')}
           />
         </div>
@@ -101,9 +95,9 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Race overview · 42.2 km</div>
+              <div className="eyebrow mb-8">Race overview · {isHalf ? '21.1 km' : '42.2 km'}</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                Marathon course profile
+                {isHalf ? 'Half marathon' : 'Marathon'} course profile
               </h2>
             </div>
             <div className="dimmed" style={{ fontSize: 12, maxWidth: 280, textAlign: 'right' }}>
@@ -144,7 +138,7 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Averages · 42.2 km</div>
+              <div className="eyebrow mb-8">Averages · {isHalf ? '21.1 km' : '42.2 km'}</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
                 Median finish · winning times · by year
               </h2>
@@ -153,7 +147,7 @@ export default function Rotorua() {
               Computed from every certified finish on record. 2014 includes walkers category.
             </div>
           </div>
-          <AveragesChart stats={rotoruaStats} />
+          <AveragesChart stats={activeStats} />
         </div>
       </section>
 
@@ -162,9 +156,9 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Course records · 42.2 km</div>
+              <div className="eyebrow mb-8">Course records · {isHalf ? '21.1 km' : '42.2 km'}</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                42.2 km · current marks
+                {isHalf ? '21.1 km' : '42.2 km'} · current marks
               </h2>
             </div>
             <div className="flex gap-8">
@@ -174,7 +168,7 @@ export default function Rotorua() {
           </div>
           <div className="card-dark">
             <div className="flex between ai-baseline">
-              <span className="label">{tab === 'men' ? 'Men · Open' : 'Women · Open'} · 42.2 km</span>
+              <span className="label">{tab === 'men' ? 'Men · Open' : 'Women · Open'} · {isHalf ? '21.1 km' : '42.2 km'}</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 48, marginTop: 24, alignItems: 'start' }} className="record-grid">
               <div>
@@ -192,7 +186,7 @@ export default function Rotorua() {
               <div style={{ color: 'var(--on-dark)' }}>
                 <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Winner vs CR · 2014–2025</div>
                 <CRWinnerChart
-                  stats={rotoruaStats}
+                  stats={activeStats}
                   gender={tab}
                   seedCR={seedCR}
                 />

@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { loadResults, loadRotorua, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
@@ -21,7 +21,8 @@ type SortKey = 'pos' | 'bib' | 'time' | 'name' | 'cat';
 
 export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 km', raceId = 'auckland', initialQ, onClose, onOpenAthlete }: FullResultsOverlayProps) {
   const isRotorua = raceId === 'rotorua';
-  const years = isRotorua ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+  const isRotoruaHalf = raceId === 'rotorua-half';
+  const years = (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
   const [year, setYear] = useState(yearProp);
   const [q, setQ] = useState(initialQ ?? '');
   const [gender, setGender] = useState('all');
@@ -37,9 +38,9 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     if (!open) return;
     setLoading(true);
     setAll([]);
-    const loader = isRotorua ? loadRotorua(year) : loadResults(year, dist);
+    const loader = isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : loadResults(year, dist);
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, open, isRotorua]);
+  }, [year, dist, open, isRotorua, isRotoruaHalf]);
 
   useEffect(() => {
     if (open) {
@@ -122,7 +123,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     );
   };
 
-  const activeStats = isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
   const grid = '60px 70px 1.6fr 1fr 100px';
 
@@ -135,7 +136,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         <div style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
           <div className="flex between ai-baseline">
             <div>
-              <div className="eyebrow mb-8">{isRotorua ? 'Rotorua Marathon' : 'Auckland Marathon'} · full results</div>
+              <div className="eyebrow mb-8">{isRotoruaHalf ? 'Rotorua Half Marathon' : isRotorua ? 'Rotorua Marathon' : 'Auckland Marathon'} · full results</div>
               <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
                 {year}
                 {loading

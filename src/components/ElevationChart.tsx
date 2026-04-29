@@ -30,7 +30,7 @@ export default function ElevationChart({ data, annotations }: ElevationChartProp
           </text>
         </g>
       ))}
-      {[0, 5, 10, 15, 20, 25, 30, 35, 40, 42.2].map(k => (
+      {[0, 5, 10, 15, 20, 25, 30, 35, 40, 42.2].filter(k => k <= xMax).map(k => (
         <text key={k} x={x(k)} y={H - padBot + 16} textAnchor="middle" fontSize="9" fontFamily="DM Mono, monospace" fill="currentColor" fillOpacity="0.55" letterSpacing="0.08em">
           {k}
         </text>

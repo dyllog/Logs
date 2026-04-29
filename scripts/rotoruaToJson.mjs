@@ -167,3 +167,81 @@ console.log('\n=== rotoruaStats for logsDataExt.ts ===');
 stats.forEach(s => {
   console.log(`  { year: ${s.year}, finishers: ${s.finishers}, avg: ${s.avg}, avgMen: ${s.avgMen}, avgWomen: ${s.avgWomen}, winnerM: ${s.winnerM}, winnerW: ${s.winnerW}, top10M: ${s.top10M}, top10W: ${s.top10W} },`);
 });
+
+// ── Half marathon ─────────────────────────────────────────────────────────────────
+console.log('\n=== Processing Rotorua Half Marathon ===');
+const halfStats = [];
+
+for (const year of years) {
+  const file = path.join(csvDir, `Rotorua Marathon - Half Results - ${year}.csv`);
+  const text = fs.readFileSync(file, 'utf8');
+  const rows = parseCsv(text);
+  const header = rows[0].map(h => h.trim().toLowerCase());
+
+  const hasGenderCol = header.includes('gender');
+  const hasBibCol = header.includes('bib');
+  const bibIdx = hasBibCol ? header.indexOf('bib') : -1;
+  const timeIdx = hasBibCol ? 3 : 2;
+  const catIdx = hasBibCol ? 4 : 3;
+  const genderIdx = hasGenderCol ? header.indexOf('gender') : -1;
+
+  const results = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r[0] || !r[0].trim()) continue;
+
+    const posRaw = r[0]?.trim() || '';
+    const nameRaw = r[1]?.trim() || '';
+    const timeRaw = r[timeIdx]?.trim() || '';
+    const catRaw  = r[catIdx]?.trim()  || '';
+    const genderRaw = genderIdx >= 0 ? (r[genderIdx]?.trim() || '') : '';
+
+    if (posRaw === 'Position' || posRaw === '' || posRaw === 'Started') continue;
+    if (catRaw.toLowerCase().includes('walker')) continue;
+    if (catRaw === '' && genderRaw === '') continue;
+
+    const pos = parseOrdinalPos(posRaw);
+    if (!pos || pos < 1) continue;
+
+    const sec = toSec(timeRaw);
+    // Half marathon: 40 min to 6 hours
+    if (sec < 2400 || sec > 21600) continue;
+
+    const name = hasBibCol ? toTitle(nameRaw) : nameRaw;
+    const bib = bibIdx >= 0 ? (parseInt(r[bibIdx]?.trim() || '0', 10) || 0) : 0;
+    const cat = normCat(catRaw, hasGenderCol ? genderRaw : '');
+    const time = normTime(timeRaw);
+
+    results.push({ pos, name, bib, time, cat: normalizeCat(cat), nat: '—', sec });
+  }
+
+  results.sort((a, b) => a.sec - b.sec);
+  results.forEach((r, i) => { r.pos = i + 1; });
+
+  const outFile = path.join(outDir, `results-rot-half-${year}.json`);
+  fs.writeFileSync(outFile, JSON.stringify(results));
+
+  const mResults = results.filter(r => r.cat.startsWith('M '));
+  const wResults = results.filter(r => r.cat.startsWith('W '));
+  const sorted = [...results].sort((a, b) => a.sec - b.sec);
+  const avg = results.length ? Math.round(results.reduce((s, r) => s + r.sec, 0) / results.length) : 0;
+  const winnerM = mResults.length ? Math.min(...mResults.map(r => r.sec)) : 0;
+  const winnerW = wResults.length ? Math.min(...wResults.map(r => r.sec)) : 0;
+  const top10M = mResults.length >= 10
+    ? Math.round([...mResults].sort((a,b) => a.sec-b.sec).slice(0,10).reduce((s,r) => s+r.sec,0) / 10)
+    : (mResults.length ? Math.round(mResults.reduce((s,r) => s+r.sec,0) / mResults.length) : 0);
+  const top10W = wResults.length >= 10
+    ? Math.round([...wResults].sort((a,b) => a.sec-b.sec).slice(0,10).reduce((s,r) => s+r.sec,0) / 10)
+    : (wResults.length ? Math.round(wResults.reduce((s,r) => s+r.sec,0) / wResults.length) : 0);
+  const avgMen = mResults.length ? Math.round(mResults.reduce((s,r) => s+r.sec,0) / mResults.length) : 0;
+  const avgWomen = wResults.length ? Math.round(wResults.reduce((s,r) => s+r.sec,0) / wResults.length) : 0;
+
+  halfStats.push({ year, finishers: results.length, avg, avgMen, avgWomen, winnerM, winnerW, top10M, top10W });
+  console.log(`${year}: ${results.length} finishers  M winner: ${mResults.length ? sorted.find(r=>r.cat.startsWith('M'))?.time : '—'}  W winner: ${wResults.length ? sorted.find(r=>r.cat.startsWith('W'))?.time : '—'}`);
+}
+
+console.log('\n=== rotoruaHalfStats for logsDataExt.ts ===');
+halfStats.forEach(s => {
+  console.log(`  { year: ${s.year}, finishers: ${s.finishers}, avg: ${s.avg}, avgMen: ${s.avgMen}, avgWomen: ${s.avgWomen}, winnerM: ${s.winnerM}, winnerW: ${s.winnerW}, top10M: ${s.top10M}, top10W: ${s.top10W} },`);
+});

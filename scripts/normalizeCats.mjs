@@ -37,8 +37,8 @@ export function normalizeCat(cat) {
   // 15–19, 16–19 → 18–19
   if (/^1[456]–19$/.test(rest)) return `${g} 18–19`;
 
-  // 15–34, 16–34 → 18–34 (historical broad band, retain)
-  if (/^1[456]–34$/.test(rest)) return `${g} 18–34`;
+  // Any sub-18 start to 34 → 18–34 (historical broad band, retain)
+  if (/^\d{1,2}–34$/.test(rest) && parseInt(rest, 10) < 18) return `${g} 18–34`;
 
   // 75–xx, 76–xx → 75+
   if (/^7[56]–\d+$/.test(rest)) return `${g} 75+`;
