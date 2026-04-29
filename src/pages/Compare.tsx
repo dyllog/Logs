@@ -232,7 +232,7 @@ function BestRaceCard({ best, sec }: { best: BestRace; sec: number }) {
   return (
     <div className="cmp-card cmp-card-dark">
       <CardHeader kicker="Best race for your time · all events" />
-      <div className="serif" style={{ fontSize: 36, lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: -8 }}>
+      <div className="serif best-race-title" style={{ fontSize: 36, lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: -8 }}>
         {best.raceName} {best.year}
       </div>
       <div style={{ fontSize: 13, lineHeight: 1.6, marginTop: 12, color: 'var(--on-dark-meta)', fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic' }}>
@@ -595,7 +595,7 @@ export default function Compare() {
 
                 <div className="cmp-field">
                   <div className="cmp-field-label">Year</div>
-                  <div className="cmp-pill-row">
+                  <div className="cmp-pill-row-scroll">
                     {yearsArr.map(y => (
                       <button key={y} className={`cmp-pill ${year === y ? 'active' : ''}`}
                               onClick={() => setYear(y)}>{y}</button>
