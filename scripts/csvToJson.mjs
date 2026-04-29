@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { normalizeCat } from './normalizeCats.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const csvDir  = path.join(__dirname, '../Auckland Marathon');
@@ -94,7 +95,7 @@ function parseCSV(text) {
       else if (genderRaw === 'M') genderPfx = 'M';
     }
 
-    const cat = `${genderPfx} ${ageCat}`;
+    const cat = normalizeCat(`${genderPfx} ${ageCat}`);
     rows.push({ pos, name, bib, nat, cat, club: '—', time, sec });
   }
   return rows;

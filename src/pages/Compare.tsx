@@ -32,10 +32,14 @@ function ordSuffix(n: number): string {
   return n + (sfx[(v - 20) % 10] || sfx[v] || sfx[0]);
 }
 
-function parseAg(cat: string): [string, number, number] | null {
-  const m = cat.match(/^([MW])\s*(\d+)[–\-](\d+)/);
+function parseAgBand(cat: string): string | null {
+  const m = cat.match(/^[MW]\s+(.+)$/);
   if (!m) return null;
-  return [m[1], parseInt(m[2], 10), parseInt(m[3], 10)];
+  const rest = m[1];
+  if (rest === 'Elite' || rest === 'Open') return null;
+  // Only return bands that start with a digit (skip broad narrative labels)
+  if (!/^\d/.test(rest)) return null;
+  return rest;
 }
 
 type DistId = '42' | '21';
@@ -442,11 +446,8 @@ export default function Compare() {
   // Cohort filtered by gender/ag
   const cohortRows = useMemo(() => {
     return currentRows.filter(r => {
-      const parsed = parseAg(r.cat);
-      if (gender !== 'all' && parsed && parsed[0] !== gender) return false;
-      if (ag !== 'all' && parsed) {
-        if (`${parsed[1]}-${parsed[2]}` !== ag) return false;
-      }
+      if (gender !== 'all' && !r.cat.startsWith(gender)) return false;
+      if (ag !== 'all' && !r.cat.includes(ag)) return false;
       return true;
     });
   }, [currentRows, gender, ag]);
@@ -514,8 +515,8 @@ export default function Compare() {
   const agOptions = useMemo(() => {
     const set = new Set<string>();
     currentRows.forEach(r => {
-      const p = parseAg(r.cat);
-      if (p) set.add(`${p[1]}-${p[2]}`);
+      const band = parseAgBand(r.cat);
+      if (band) set.add(band);
     });
     return Array.from(set).sort((a, b) => parseInt(a) - parseInt(b));
   }, [currentRows]);

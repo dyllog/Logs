@@ -12,8 +12,10 @@ interface FullResultsOverlayProps {
 }
 
 const AGS: [string, string][] = [
-  ['all','All AG'],['Elite','Elite'],['U20','U20'],['20-24','20–24'],['25-29','25–29'],['30-34','30–34'],
-  ['35-39','35–39'],['40-44','40–44'],['45-49','45–49'],['50-54','50–54'],['55-59','55–59'],['60+','60+'],
+  ['all','All'],['Elite','Elite'],
+  ['18–19','18–19'],['20–24','20–24'],['25–29','25–29'],['30–34','30–34'],['35–39','35–39'],
+  ['40–44','40–44'],['45–49','45–49'],['50–54','50–54'],['55–59','55–59'],
+  ['60–64','60–64'],['65–69','65–69'],['70–74','70–74'],['75+','75+'],
 ];
 type SortKey = 'pos' | 'bib' | 'time' | 'name' | 'cat';
 
@@ -66,7 +68,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   const filtered = useMemo(() => {
     let rs = all;
     if (gender !== 'all') rs = rs.filter(r => r.cat.startsWith(gender));
-    if (ag !== 'all') rs = rs.filter(r => r.cat.toLowerCase().includes(ag.toLowerCase()));
+    if (ag !== 'all') rs = rs.filter(r => r.cat.includes(ag));
     if (ql) {
       if (/^\d+$/.test(ql)) {
         rs = rs.filter(r => String(r.bib).includes(ql) || String(r.pos) === ql);

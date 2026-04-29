@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { normalizeCat } from './normalizeCats.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const csvDir = path.join(__dirname, '..', 'Rotorua Marathon');
@@ -132,7 +133,7 @@ for (const year of years) {
     const cat = normCat(catRaw, hasGenderCol ? genderRaw : '');
     const time = normTime(timeRaw);
 
-    results.push({ pos, name, bib, time, cat, nat: '—', sec });
+    results.push({ pos, name, bib, time, cat: normalizeCat(cat), nat: '—', sec });
   }
 
   // Re-sequence positions (in case of filtering gaps)
