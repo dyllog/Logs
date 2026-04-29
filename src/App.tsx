@@ -25,6 +25,7 @@ import Results from "./pages/Results";
 import Records from "./pages/Records";
 import Athletes from "./pages/Athletes";
 import Athlete from "./pages/Athlete";
+import AthleteBalchin from "./pages/AthleteBalchin";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -47,6 +48,7 @@ function Layout() {
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
         <Route path="/athletes/daniel-whareaitu" element={<Athlete />} />
+        <Route path="/athletes/daniel-balchin" element={<AthleteBalchin />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

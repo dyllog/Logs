@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { DISTANCE_OPTIONS } from '@/data/logsData';
 import { YEARS, loadResults, getCachedResults, type ResultRow } from '@/data/logsDataExt';
 
@@ -381,9 +382,12 @@ function HeadToHeadCard({ a, b, sharedRaces, sec, currentYear, distId }: {
 // ── Main page ─────────────────────────────────────────────
 
 export default function Compare() {
-  const [input, setInput] = useState('3:15:10');
-  const [committed, setCommitted] = useState('3:15:10');
-  const [distId, setDistId] = useState<DistId>('42');
+  const [searchParams] = useSearchParams();
+  const initialTime = searchParams.get('time') || '3:15:10';
+  const initialDist = (searchParams.get('dist') as DistId) || '42';
+  const [input, setInput] = useState(initialTime);
+  const [committed, setCommitted] = useState(initialTime);
+  const [distId, setDistId] = useState<DistId>(initialDist);
   const [year, setYear] = useState<typeof YEARS[number]>(2025);
   const [gender, setGender] = useState('M');
   const [ag, setAg] = useState('all');
