@@ -4,13 +4,14 @@ import FullResultsOverlay from './FullResultsOverlay';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
   onOpenAthlete?: (name: string) => void;
 }
 
 export default function RaceResultsBlock({ dist, raceId = 'auckland', onOpenAthlete }: RaceResultsBlockProps) {
   const isRotorua = raceId === 'rotorua';
   const isRotoruaHalf = raceId === 'rotorua-half';
+  const isChc = raceId === 'chc' || raceId === 'chc-half';
   const availableYears = (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
   const years = availableYears as number[];
   const [year, setYear] = useState<number>(2025);
@@ -22,7 +23,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', onOpenAthl
   const [loading, setLoading] = useState(false);
   const perPage = 10;
 
-  const hasData = (isRotorua || isRotoruaHalf) ? true : (dist === '42.2 km' || dist === '21.1 km');
+  const hasData = isChc ? false : (isRotorua || isRotoruaHalf) ? true : (dist === '42.2 km' || dist === '21.1 km');
 
   useEffect(() => {
     if (!hasData) return;

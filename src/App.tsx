@@ -29,6 +29,7 @@ import AthleteBalchin from "./pages/AthleteBalchin";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
+import Christchurch from "./pages/Christchurch";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -44,6 +45,7 @@ function Layout() {
         <Route path="/races" element={<Races />} />
         <Route path="/races/auckland-marathon" element={<Race />} />
         <Route path="/races/rotorua-marathon" element={<Rotorua />} />
+        <Route path="/races/christchurch-marathon" element={<Christchurch />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />

@@ -5,7 +5,7 @@ interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;

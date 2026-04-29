@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProgressionChart from '@/components/ProgressionChart';
 import { recordsMen, results2025, upcoming } from '@/data/logsData';
 
@@ -7,6 +7,7 @@ const distTags = ['all', '42.2', '21.1'];
 
 export default function Index() {
   const [distFilter, setDistFilter] = useState('all');
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -33,11 +34,11 @@ export default function Index() {
               </div>
               <div className="mt-48 flex gap-32" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>1</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>2</div>
                   <div className="label mt-8">Tracked events</div>
                 </div>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>83,543</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>106,104</div>
                   <div className="label mt-8">Finisher records</div>
                 </div>
                 <div>
@@ -99,16 +100,18 @@ export default function Index() {
                   padding: '24px 24px 28px',
                   borderRight: (i % 3 !== 2) ? '0.5px solid var(--rule-soft)' : 'none',
                   borderBottom: i < 3 ? '0.5px solid var(--rule-soft)' : 'none',
-                  cursor: 'pointer',
+                  cursor: r.href ? 'pointer' : 'default',
                   transition: 'background 100ms',
                 }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
+                onClick={() => r.href && navigate(r.href)}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = r.href ? 'var(--hover)' : 'transparent'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
               >
                 <div className="label">{r.date}</div>
                 <div className="serif mt-8" style={{ fontSize: 22, lineHeight: 1.15 }}>{r.name}</div>
                 <div className="dimmed mt-8" style={{ fontSize: 12 }}>{r.loc}</div>
                 <div className="mt-16 label" style={{ color: 'var(--ink)' }}>{r.dists} km</div>
+                {r.href && <div className="mt-8 dimmed" style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>Race page →</div>}
               </div>
             ))}
           </div>

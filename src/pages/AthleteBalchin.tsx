@@ -150,7 +150,7 @@ export default function AthleteBalchin() {
       <section style={{ background: 'var(--surface-dark)', color: 'var(--on-dark)', padding: '48px 0 40px', borderBottom: '0.5px solid var(--on-dark-rule)' }}>
         <div className="page">
           <div className="eyebrow mb-24" style={{ color: 'var(--on-dark-meta)' }}>
-            Athlete · NZL · Active 2014–2025
+            Athlete · NZL
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 48, alignItems: 'start' }} className="athlete-head-grid">
@@ -231,7 +231,7 @@ export default function AthleteBalchin() {
                 <div>
                   <div className="eyebrow mb-8">Progression · {chartDist === 'mar' ? '42.2 km' : '21.1 km'}</div>
                   <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>
-                    {chartDist === 'mar' ? 'Marathon results over time' : 'Half marathon results over time'}
+                    {chartDist === 'mar' ? 'Tracked marathon times' : 'Tracked half marathon times'}
                   </h2>
                 </div>
                 <div className="flex gap-8">
@@ -283,7 +283,7 @@ export default function AthleteBalchin() {
 
               <div style={{ marginTop: 20 }}>
                 <div className="label mb-12">Marathon improvement</div>
-                {marResults.sort((a,b) => a.dateNum - b.dateNum).map((r, i, arr) => {
+                {marResults.sort((a,b) => b.dateNum - a.dateNum).map((r, i, arr) => {
                   const pbSec = Math.min(...arr.map(x => x.sec));
                   const width = 100 - ((r.sec - pbSec) / (Math.max(...arr.map(x=>x.sec)) - pbSec + 1)) * 80;
                   return (

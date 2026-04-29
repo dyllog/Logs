@@ -241,10 +241,10 @@ export const athleteProfile = {
 };
 
 export const upcoming = [
-  { name: "Queenstown Marathon",   date: "15 Nov 2026", loc: "Queenstown",   dists: "42.2 / 21.1 / 10" },
-  { name: "Taupō Ultramarathon",   date: "06 Dec 2026", loc: "Taupō",        dists: "50 / 100" },
-  { name: "Kepler Challenge",      date: "13 Dec 2026", loc: "Te Anau",      dists: "60 km trail" },
-  { name: "Buller Gorge Marathon", date: "07 Feb 2027", loc: "Westport",     dists: "42.2 / 21.1" },
-  { name: "Round the Bays",        date: "08 Mar 2027", loc: "Auckland",     dists: "8.4" },
-  { name: "Rotorua Marathon",      date: "02 May 2027", loc: "Rotorua",      dists: "42.2 / 21.1 / 10" },
+  { name: "Queenstown Marathon",   date: "15 Nov 2026", loc: "Queenstown",   dists: "42.2 / 21.1 / 10", href: null },
+  { name: "Taupō Ultramarathon",   date: "06 Dec 2026", loc: "Taupō",        dists: "50 / 100",          href: null },
+  { name: "Kepler Challenge",      date: "13 Dec 2026", loc: "Te Anau",      dists: "60 km trail",       href: null },
+  { name: "Buller Gorge Marathon", date: "07 Feb 2027", loc: "Westport",     dists: "42.2 / 21.1",       href: null },
+  { name: "Round the Bays",        date: "08 Mar 2027", loc: "Auckland",     dists: "8.4",               href: null },
+  { name: "Rotorua Marathon",      date: "02 May 2027", loc: "Rotorua",      dists: "42.2 / 21.1 / 10", href: '/races/rotorua-marathon' },
 ];
