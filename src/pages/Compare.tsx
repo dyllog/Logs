@@ -1,7 +1,15 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { DISTANCE_OPTIONS } from '@/data/logsData';
-import { YEARS, loadResults, getCachedResults, type ResultRow } from '@/data/logsDataExt';
+import {
+  YEARS, ROTORUA_YEARS,
+  loadResults, getCachedResults,
+  loadRotorua, getCachedRotorua,
+  loadRotoruaHalf, getCachedRotoruaHalf,
+  loadChc, getCachedChc,
+  loadChcHalf, getCachedChcHalf,
+  type ResultRow,
+} from '@/data/logsDataExt';
+import { CHC_YEARS } from '@/data/chcData';
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -38,15 +46,55 @@ function parseAgBand(cat: string): string | null {
   if (!m) return null;
   const rest = m[1];
   if (rest === 'Elite' || rest === 'Open') return null;
-  // Only return bands that start with a digit (skip broad narrative labels)
   if (!/^\d/.test(rest)) return null;
   return rest;
 }
 
+// ── Race config ──────────────────────────────────────────
+
+type Venue = 'akl' | 'chc' | 'rot';
 type DistId = '42' | '21';
 
-// Data distances that have results
-const DATA_DISTS = DISTANCE_OPTIONS.filter(d => d.id === '42' || d.id === '21');
+const VENUE_LABELS: [Venue, string][] = [
+  ['akl', 'Auckland'],
+  ['chc', 'Christchurch'],
+  ['rot', 'Rotorua'],
+];
+
+function getRaceConfig(venue: Venue, distId: DistId) {
+  const isHalf = distId === '21';
+  const km = isHalf ? '21.1 km' : '42.2 km';
+  if (venue === 'akl') return {
+    name: isHalf ? 'Auckland Half Marathon' : 'Auckland Marathon',
+    km,
+    years: [...YEARS] as number[],
+    loadYear: (y: number) => loadResults(y, km as '42.2 km' | '21.1 km'),
+    getYear: (y: number) => getCachedResults(y, km as '42.2 km' | '21.1 km'),
+  };
+  if (venue === 'chc') return {
+    name: isHalf ? 'Christchurch Half Marathon' : 'Christchurch Marathon',
+    km,
+    years: [...CHC_YEARS] as number[],
+    loadYear: (y: number) => isHalf ? loadChcHalf(y) : loadChc(y),
+    getYear: (y: number) => isHalf ? getCachedChcHalf(y) : getCachedChc(y),
+  };
+  return {
+    name: isHalf ? 'Rotorua Half Marathon' : 'Rotorua Marathon',
+    km,
+    years: [...ROTORUA_YEARS] as number[],
+    loadYear: (y: number) => isHalf ? loadRotoruaHalf(y) : loadRotorua(y),
+    getYear: (y: number) => isHalf ? getCachedRotoruaHalf(y) : getCachedRotorua(y),
+  };
+}
+
+const ALL_RACES = [
+  { name: 'Auckland Marathon',          km: 42.195,  years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '42.2 km') },
+  { name: 'Auckland Half Marathon',     km: 21.0975, years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '21.1 km') },
+  { name: 'Christchurch Marathon',      km: 42.195,  years: [...CHC_YEARS],     getYear: getCachedChc },
+  { name: 'Christchurch Half Marathon', km: 21.0975, years: [...CHC_YEARS],     getYear: getCachedChcHalf },
+  { name: 'Rotorua Marathon',           km: 42.195,  years: [...ROTORUA_YEARS], getYear: getCachedRotorua },
+  { name: 'Rotorua Half Marathon',      km: 21.0975, years: [...ROTORUA_YEARS], getYear: getCachedRotoruaHalf },
+];
 
 // ── Sub-components ───────────────────────────────────────
 
@@ -95,16 +143,15 @@ function FieldDistribution({ rows, sec, winner, last }: { rows: ResultRow[]; sec
   );
 }
 
-function PlacementCard({ sec, distId, year, gender, ag, placement, fieldStats }: {
-  sec: number; distId: DistId; year: number; gender: string; ag: string;
+function PlacementCard({ sec, raceName, dist, year, gender, placement, fieldStats }: {
+  sec: number; raceName: string; dist: string; year: number; gender: string;
   placement: Placement | null; fieldStats: FieldStats | null;
 }) {
-  const dopt = DISTANCE_OPTIONS.find(d => d.id === distId)!;
   if (!placement) return null;
   return (
     <div className="cmp-card">
-      <CardHeader kicker={`Placement · Auckland Marathon ${year}`}
-                  title={`${fmtSec(sec)} · ${gender === 'M' ? 'Men' : gender === 'W' ? 'Women' : 'Open'} · ${dopt.label}`} />
+      <CardHeader kicker={`Placement · ${raceName} ${year}`}
+                  title={`${fmtSec(sec)} · ${gender === 'M' ? 'Men' : gender === 'W' ? 'Women' : 'Open'} · ${dist}`} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)' }}
            className="cmp-stat-row">
         <div style={{ padding: '20px 20px 20px 0', borderRight: '0.5px solid var(--rule-soft)' }}>
@@ -155,9 +202,9 @@ interface YearStripItem {
   loading?: boolean;
 }
 
-function YearStripCard({ data, sec, hoveredYear, setHoveredYear, distId, currentYear }: {
+function YearStripCard({ data, sec, hoveredYear, setHoveredYear, raceName, currentYear }: {
   data: YearStripItem[]; sec: number; hoveredYear: number | null;
-  setHoveredYear: (y: number | null) => void; distId: DistId; currentYear: number;
+  setHoveredYear: (y: number | null) => void; raceName: string; currentYear: number;
 }) {
   const valid = data.filter(d => !d.cancelled && d.behind !== undefined) as Required<YearStripItem>[];
   const best = valid.length > 0 ? valid.reduce((a, b) => (a.percentile! < b.percentile! ? a : b), valid[0]) : null;
@@ -175,7 +222,7 @@ function YearStripCard({ data, sec, hoveredYear, setHoveredYear, distId, current
 
   return (
     <div className="cmp-card">
-      <CardHeader kicker="Year on year · Auckland Marathon"
+      <CardHeader kicker={`Year on year · ${raceName}`}
                   title={sec != null ? `How ${fmtSec(sec)} would have placed each year` : ''} />
       <div className="year-strip-scroll">
         <div className="year-strip">
@@ -230,6 +277,7 @@ function YearStripCard({ data, sec, hoveredYear, setHoveredYear, distId, current
 interface BestRace { year: number; raceName: string; equivSec: number; pos: number; total: number; pct: number; }
 
 function BestRaceCard({ best, sec }: { best: BestRace; sec: number }) {
+  const showEquiv = Math.abs(best.equivSec - sec) > 2;
   return (
     <div className="cmp-card cmp-card-dark">
       <CardHeader kicker="Best race for your time · all events" />
@@ -239,7 +287,8 @@ function BestRaceCard({ best, sec }: { best: BestRace; sec: number }) {
       <div style={{ fontSize: 13, lineHeight: 1.6, marginTop: 12, color: 'var(--on-dark-meta)', fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic' }}>
         Your time of{' '}
         <span style={{ color: 'var(--on-dark)', fontStyle: 'normal', fontFamily: "'DM Mono', monospace" }}>{fmtSec(sec)}</span>
-        {' '}({fmtSec(best.equivSec)} equivalent) would have placed highest here.
+        {showEquiv && <>{' '}(<span style={{ color: 'var(--on-dark)', fontStyle: 'normal', fontFamily: "'DM Mono', monospace" }}>{fmtSec(best.equivSec)}</span> equivalent)</>}
+        {' '}would have placed highest here.
       </div>
       <div style={{ marginTop: 28, paddingTop: 24, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
         <div>
@@ -260,18 +309,17 @@ function BestRaceCard({ best, sec }: { best: BestRace; sec: number }) {
 interface H2HRow { name: string; time: string; pos: number; cat: string; sec: number; }
 interface SharedRace { year: number; label: string; aSec: number; bSec: number; aWon: boolean; }
 
-function HeadToHeadCard({ a, b, sharedRaces, sec, currentYear, distId }: {
+function HeadToHeadCard({ a, b, sharedRaces, sec, raceName, currentYear, dist }: {
   a: H2HRow | null; b: H2HRow | null;
   sharedRaces: SharedRace[]; sec: number | null;
-  currentYear: number; distId: DistId;
+  raceName: string; currentYear: number; dist: string;
 }) {
-  const dopt = DISTANCE_OPTIONS.find(d => d.id === distId)!;
   if (!a && !b) return null;
 
   if (a && !b && sec != null) {
     return (
       <div className="cmp-card">
-        <CardHeader kicker={`Head to head · Auckland Marathon ${currentYear}`} />
+        <CardHeader kicker={`Head to head · ${raceName} ${currentYear}`} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 32, alignItems: 'baseline' }} className="h2h-grid">
           <div>
             <div className="serif" style={{ fontSize: 22, color: 'var(--ink)', borderBottom: '0.5px solid var(--rule)', paddingBottom: 2, lineHeight: 1.2, display: 'inline-block' }}>
@@ -300,7 +348,7 @@ function HeadToHeadCard({ a, b, sharedRaces, sec, currentYear, distId }: {
     const bFirst = b.name.split(' ')[0];
     return (
       <div className="cmp-card">
-        <CardHeader kicker={`Head to head · ${dopt.label} · ${currentYear}`} />
+        <CardHeader kicker={`Head to head · ${dist} · ${currentYear}`} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 32, alignItems: 'baseline' }} className="h2h-grid">
           <div>
             <div className="serif" style={{ fontSize: 22, color: 'var(--ink)', borderBottom: '0.5px solid var(--rule)', paddingBottom: 2, lineHeight: 1.2, display: 'inline-block' }}>
@@ -385,49 +433,48 @@ export default function Compare() {
   const [searchParams] = useSearchParams();
   const initialTime = searchParams.get('time') || '3:15:10';
   const initialDist = (searchParams.get('dist') as DistId) || '42';
+
   const [input, setInput] = useState(initialTime);
   const [committed, setCommitted] = useState(initialTime);
+  const [venue, setVenue] = useState<Venue>('akl');
   const [distId, setDistId] = useState<DistId>(initialDist);
-  const [year, setYear] = useState<typeof YEARS[number]>(2025);
   const [gender, setGender] = useState('M');
   const [ag, setAg] = useState('all');
   const [h2hA, setH2hA] = useState('');
   const [h2hB, setH2hB] = useState('');
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
-  // Track which year/dist combos are loaded to trigger re-renders
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
 
-  const distLabel = distId === '42' ? '42.2 km' : '21.1 km';
-  const dopt = DISTANCE_OPTIONS.find(d => d.id === distId)!;
-  const yearsArr = [...YEARS].reverse();
+  const race = useMemo(() => getRaceConfig(venue, distId), [venue, distId]);
+  const currentYear = race.years[race.years.length - 1];
+  const currentKm = distId === '42' ? 42.195 : 21.0975;
 
-  // Mark a key as loaded (triggers re-render so computed data refreshes)
   const markLoaded = useCallback((key: string) => {
     setLoadedKeys(prev => { const n = new Set(prev); n.add(key); return n; });
   }, []);
 
-  // Load selected year eagerly
+  // Load all data for all races in background (enables bestRace + full year strip)
   useEffect(() => {
-    const key = `${distId}-${year}`;
-    loadResults(year, distLabel as '42.2 km' | '21.1 km').then(() => markLoaded(key));
-  }, [distId, year, distLabel, markLoaded]);
-
-  // Load all years in background for year strip
-  useEffect(() => {
-    const dist = distLabel as '42.2 km' | '21.1 km';
     YEARS.forEach(y => {
-      const key = `${distId}-${y}`;
-      loadResults(y, dist).then(() => markLoaded(key));
+      loadResults(y, '42.2 km').then(() => markLoaded(`akl-42-${y}`));
+      loadResults(y, '21.1 km').then(() => markLoaded(`akl-21-${y}`));
     });
-  }, [distId, distLabel, markLoaded]);
+    CHC_YEARS.forEach(y => {
+      loadChc(y).then(() => markLoaded(`chc-42-${y}`));
+      loadChcHalf(y).then(() => markLoaded(`chc-21-${y}`));
+    });
+    ROTORUA_YEARS.forEach(y => {
+      loadRotorua(y).then(() => markLoaded(`rot-42-${y}`));
+      loadRotoruaHalf(y).then(() => markLoaded(`rot-21-${y}`));
+    });
+  }, [markLoaded]);
 
   const currentRows = useMemo(
-    () => getCachedResults(year, distLabel as '42.2 km' | '21.1 km'),
+    () => race.getYear(currentYear),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [year, distId, loadedKeys]
+    [venue, distId, currentYear, loadedKeys]
   );
 
-  // Parse committed input
   const interpretation = useMemo(() => {
     const t = committed.trim();
     if (!t) return { kind: 'empty' as const };
@@ -447,7 +494,6 @@ export default function Compare() {
   const sec = interpretation.kind === 'time' || interpretation.kind === 'athlete'
     ? interpretation.sec : null;
 
-  // Cohort filtered by gender/ag
   const cohortRows = useMemo(() => {
     return currentRows.filter(r => {
       if (gender !== 'all' && !r.cat.startsWith(gender)) return false;
@@ -473,11 +519,11 @@ export default function Compare() {
     return { rows: currentRows, winner: sorted[0].sec, median: sorted[Math.floor(sorted.length / 2)].sec, last: sorted[sorted.length - 1].sec };
   }, [currentRows]);
 
-  // Year strip
   const yearStrip = useMemo((): YearStripItem[] => {
-    return YEARS.map(y => {
-      const key = `${distId}-${y}`;
-      const rows = getCachedResults(y, distLabel as '42.2 km' | '21.1 km');
+    const prefix = `${venue}-${distId}`;
+    return race.years.map(y => {
+      const key = `${prefix}-${y}`;
+      const rows = race.getYear(y);
       if (!loadedKeys.has(key)) return { year: y, loading: true };
       if (rows.length === 0) return { year: y, cancelled: true };
       if (sec == null) return { year: y, loading: true };
@@ -491,31 +537,27 @@ export default function Compare() {
       };
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sec, distId, distLabel, loadedKeys]);
+  }, [sec, venue, distId, race, loadedKeys]);
 
-  // Best race across all distances/years
   const bestRace = useMemo((): BestRace | null => {
     if (sec == null) return null;
     let best: BestRace | null = null;
-    for (const d of DATA_DISTS) {
-      const equivSec = sec * Math.pow(d.km / dopt.km, 1.06);
-      const dist = d.id === '21' ? '21.1 km' : '42.2 km';
-      for (const y of YEARS) {
-        const rows = getCachedResults(y, dist as '42.2 km' | '21.1 km');
+    for (const rc of ALL_RACES) {
+      const equivSec = sec * Math.pow(rc.km / currentKm, 1.06);
+      for (const y of rc.years) {
+        const rows = rc.getYear(y);
         if (rows.length === 0) continue;
         let behind = 0;
         for (const r of rows) if (r.sec < equivSec) behind++;
         const pct = (behind / rows.length) * 100;
-        const raceName = d.id === '42' ? 'Auckland Marathon' : 'Auckland Half Marathon';
-        const candidate: BestRace = { year: y, raceName, equivSec, pos: behind + 1, total: rows.length, pct };
+        const candidate: BestRace = { year: y, raceName: rc.name, equivSec, pos: behind + 1, total: rows.length, pct };
         if (!best || candidate.pct < best.pct) best = candidate;
       }
     }
     return best;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sec, distId, dopt.km, loadedKeys]);
+  }, [sec, currentKm, loadedKeys]);
 
-  // Age-group options
   const agOptions = useMemo(() => {
     const set = new Set<string>();
     currentRows.forEach(r => {
@@ -525,7 +567,6 @@ export default function Compare() {
     return Array.from(set).sort((a, b) => parseInt(a) - parseInt(b));
   }, [currentRows]);
 
-  // Head-to-head
   const findAthlete = useCallback((name: string): H2HRow | null => {
     if (!name.trim()) return null;
     const lower = name.trim().toLowerCase();
@@ -537,24 +578,22 @@ export default function Compare() {
   const aRow = useMemo(() => findAthlete(h2hA), [h2hA, findAthlete]);
   const bRow = useMemo(() => findAthlete(h2hB), [h2hB, findAthlete]);
 
-  // Synthetic shared race history
   const sharedRaces = useMemo((): SharedRace[] => {
     if (!aRow || !bRow) return [];
     let x = (aRow.sec + bRow.sec) % 1000;
     const rng = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
-    const candidates = YEARS.filter(y => y !== year).slice(-4);
+    const candidates = race.years.filter(y => y !== currentYear).slice(-4);
     return candidates.slice(0, 3).map(y => {
       const aSec = Math.round(aRow.sec * (0.94 + rng() * 0.10));
       const bSec = Math.round(bRow.sec * (0.94 + rng() * 0.10));
-      return { year: y, label: `Auckland Marathon ${y}`, aSec, bSec, aWon: aSec < bSec };
+      return { year: y, label: `${race.name} ${y}`, aSec, bSec, aWon: aSec < bSec };
     });
-  }, [aRow, bRow, year]);
+  }, [aRow, bRow, race, currentYear]);
 
   const commit = () => setCommitted(input);
   const onKey = (e: React.KeyboardEvent) => { if (e.key === 'Enter') commit(); };
 
-  // Reset ag when year/dist changes
-  useEffect(() => { setAg('all'); }, [year, distId]);
+  useEffect(() => { setAg('all'); }, [venue, distId]);
 
   return (
     <main>
@@ -588,21 +627,21 @@ export default function Compare() {
                 </div>
 
                 <div className="cmp-field">
-                  <div className="cmp-field-label">Distance</div>
+                  <div className="cmp-field-label">Race</div>
                   <div className="cmp-pill-row">
-                    {DATA_DISTS.map(d => (
-                      <button key={d.id} className={`cmp-pill ${distId === d.id ? 'active' : ''}`}
-                              onClick={() => setDistId(d.id as DistId)}>{d.label}</button>
+                    {VENUE_LABELS.map(([v, label]) => (
+                      <button key={v} className={`cmp-pill ${venue === v ? 'active' : ''}`}
+                              onClick={() => setVenue(v)}>{label}</button>
                     ))}
                   </div>
                 </div>
 
                 <div className="cmp-field">
-                  <div className="cmp-field-label">Year</div>
-                  <div className="cmp-pill-row-scroll">
-                    {yearsArr.map(y => (
-                      <button key={y} className={`cmp-pill ${year === y ? 'active' : ''}`}
-                              onClick={() => setYear(y)}>{y}</button>
+                  <div className="cmp-field-label">Distance</div>
+                  <div className="cmp-pill-row">
+                    {([['42', '42.2 km'], ['21', '21.1 km']] as [DistId, string][]).map(([id, label]) => (
+                      <button key={id} className={`cmp-pill ${distId === id ? 'active' : ''}`}
+                              onClick={() => setDistId(id)}>{label}</button>
                     ))}
                   </div>
                 </div>
@@ -640,12 +679,12 @@ export default function Compare() {
                          value={h2hB} onChange={e => setH2hB(e.target.value)} />
                   {h2hA.trim() && !aRow && (
                     <div className="dimmed" style={{ fontSize: 11, marginTop: 8, color: 'var(--on-dark-meta)', fontStyle: 'italic' }}>
-                      "{h2hA}" not found in {year} field
+                      "{h2hA}" not found in {currentYear} {race.name}
                     </div>
                   )}
                   {h2hB.trim() && !bRow && (
                     <div className="dimmed" style={{ fontSize: 11, marginTop: 4, color: 'var(--on-dark-meta)', fontStyle: 'italic' }}>
-                      "{h2hB}" not found in {year} field
+                      "{h2hB}" not found in {currentYear} {race.name}
                     </div>
                   )}
                 </div>
@@ -671,14 +710,15 @@ export default function Compare() {
               )}
 
               {sec != null && (
-                <PlacementCard sec={sec} distId={distId} year={year} gender={gender} ag={ag}
+                <PlacementCard sec={sec} raceName={race.name} dist={race.km}
+                               year={currentYear} gender={gender}
                                placement={placement} fieldStats={fieldStats} />
               )}
 
               {sec != null && yearStrip.length > 0 && (
                 <YearStripCard data={yearStrip} sec={sec}
                                hoveredYear={hoveredYear} setHoveredYear={setHoveredYear}
-                               distId={distId} currentYear={year} />
+                               raceName={race.name} currentYear={currentYear} />
               )}
 
               {sec != null && bestRace && (
@@ -687,7 +727,8 @@ export default function Compare() {
 
               {(h2hA || h2hB) && (aRow || bRow) && (
                 <HeadToHeadCard a={aRow} b={bRow} sharedRaces={sharedRaces}
-                                sec={sec} currentYear={year} distId={distId} />
+                                sec={sec} raceName={race.name}
+                                currentYear={currentYear} dist={race.km} />
               )}
             </div>
           </div>

@@ -142,6 +142,14 @@ export async function loadChcHalf(year: number): Promise<ResultRow[]> {
   return chcHalfInflight[year];
 }
 
+export function getCachedChc(year: number): ResultRow[] {
+  return chcCache[year] ?? [];
+}
+
+export function getCachedChcHalf(year: number): ResultRow[] {
+  return chcHalfCache[year] ?? [];
+}
+
 export const rotoruaStats: YearStat[] = [
   { year: 2014, finishers: 2144, avg: 14630, avgMen: 14388, avgWomen: 15150, winnerM: 8865, winnerW: 9958, top10M: 9280, top10W: 10570 },
   { year: 2015, finishers: 1172, avg: 16834, avgMen: 15927, avgWomen: 18233, winnerM: 8943, winnerW: 10402, top10M: 9380, top10W: 11083 },
