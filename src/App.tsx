@@ -26,6 +26,11 @@ import Records from "./pages/Records";
 import Athletes from "./pages/Athletes";
 import Athlete from "./pages/Athlete";
 import AthleteBalchin from "./pages/AthleteBalchin";
+import AthleteVoss from "./pages/AthleteVoss";
+import AthleteJackson from "./pages/AthleteJackson";
+import AthleteInksterBaynes from "./pages/AthleteInksterBaynes";
+import AthleteDryden from "./pages/AthleteDryden";
+import AthletePulford from "./pages/AthletePulford";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -51,6 +56,11 @@ function Layout() {
         <Route path="/athletes" element={<Athletes />} />
         <Route path="/athletes/daniel-whareaitu" element={<Athlete />} />
         <Route path="/athletes/daniel-balchin" element={<AthleteBalchin />} />
+        <Route path="/athletes/michael-voss" element={<AthleteVoss />} />
+        <Route path="/athletes/jonathan-jackson" element={<AthleteJackson />} />
+        <Route path="/athletes/oska-inkster-baynes" element={<AthleteInksterBaynes />} />
+        <Route path="/athletes/christopher-dryden" element={<AthleteDryden />} />
+        <Route path="/athletes/aaron-pulford" element={<AthletePulford />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />
