@@ -16,6 +16,7 @@ const RESULTS = [
   { dateNum: 2019 + 4/12,  year: 2019, race: 'Rotorua Half Marathon',       short: 'ROT Half', dist: '21.1 km', distId: 'half' as const, time: '1:13:44', sec: 4424, pos: 1,  total:  720, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 5/12,  year: 2019, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:47', sec: 4187, pos: 5,  total: 1504, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:11:10', sec: 4270, pos: 8,  total: 5204, cat: 'M 20–39', isPB: false },
+  { dateNum: 2019 + 11/12, year: 2019, race: 'Queenstown Marathon',         short: 'QT',       dist: '42.2 km', distId: 'mar'  as const, time: '2:38:04', sec: 9484, pos: 3,  total: 2262, cat: 'M 20–29', isPB: false },
   { dateNum: 2021 + 4/12,  year: 2021, race: 'Rotorua Half Marathon',       short: 'ROT Half', dist: '21.1 km', distId: 'half' as const, time: '1:16:12', sec: 4572, pos: 3,  total:  958, cat: 'M 20–39', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:36:16', sec: 9376, pos: 5,  total:  870, cat: 'M 20–39', isPB: false },
   { dateNum: 2023 + 4/12,  year: 2023, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:36:26', sec: 9386, pos: 4,  total:  796, cat: 'M 20–39', isPB: false },
@@ -125,7 +126,7 @@ export default function AthleteJackson() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '18' },
+                  { l: 'Races logged', v: '19' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -202,7 +203,7 @@ export default function AthleteJackson() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '18',      sub: '9 marathons · 9 halves' },
+                { label: 'Races logged',     val: '19',      sub: '10 marathons · 9 halves' },
                 { label: 'Marathon PB',      val: '2:26:38', sub: 'Auckland 2016 · 2nd overall' },
                 { label: 'Half marathon PB', val: '1:07:22', sub: 'Christchurch 2015 · 7th overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '2 career wins · Rotorua Half 2018–19' },
@@ -245,7 +246,7 @@ export default function AthleteJackson() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2023 · AKL · CHC · ROT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2023 · AKL · CHC · ROT · QT</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -265,6 +266,7 @@ export default function AthleteJackson() {
                         if (r.race.includes('Auckland')) navigate('/races/auckland-marathon');
                         else if (r.race.includes('Rotorua')) navigate('/races/rotorua-marathon');
                         else if (r.race.includes('Christchurch')) navigate('/races/christchurch-marathon');
+                        else if (r.race.includes('Queenstown')) navigate('/races/queenstown-marathon');
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

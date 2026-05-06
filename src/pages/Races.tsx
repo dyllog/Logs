@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
 const races = [
-  { name: "Auckland Marathon", slug: "auckland-marathon", location: "Auckland", date: "26 Oct 2025", distances: ["42.2 km", "21.1 km", "11 km", "5 km"], surface: "Road", since: "1986" },
-  { name: "Rotorua Marathon", slug: "rotorua-marathon", location: "Rotorua", date: "3 May 2025", distances: ["42.2 km", "21.1 km"], surface: "Road", since: "1967" },
-  { name: "Queenstown International Marathon", slug: null, location: "Queenstown", date: "22 Nov 2025", distances: ["42.2 km", "21.1 km", "10 km"], surface: "Road", since: "2014" },
-  { name: "Wellington Marathon", slug: null, location: "Wellington", date: "8 Jun 2025", distances: ["42.2 km", "21.1 km", "10 km"], surface: "Road", since: "2011" },
-  { name: "Tarawera Ultramarathon", slug: null, location: "Rotorua", date: "8 Feb 2026", distances: ["102 km", "50 km", "21 km"], surface: "Trail", since: "2008" },
-  { name: "Round the Bays", slug: null, location: "Auckland", date: "2 Aug 2025", distances: ["8.4 km", "5 km"], surface: "Road", since: "1972" },
-  { name: "Christchurch Marathon", slug: null, location: "Christchurch", date: "13 Jul 2025", distances: ["42.2 km", "21.1 km"], surface: "Road", since: "2008" },
-  { name: "Mountain to Surf", slug: null, location: "Egmont National Park", date: "21 Sep 2025", distances: ["37 km"], surface: "Trail", since: "1977" },
+  { name: "Auckland Marathon",       slug: "auckland-marathon",    location: "Auckland",          date: "26 Oct 2025", distances: ["42.2 km", "21.1 km", "11 km", "5 km"], surface: "Road",  since: "1986" },
+  { name: "Rotorua Marathon",        slug: "rotorua-marathon",     location: "Rotorua",           date: "3 May 2025",  distances: ["42.2 km", "21.1 km"],                   surface: "Road",  since: "1967" },
+  { name: "Queenstown Marathon",     slug: "queenstown-marathon",  location: "Queenstown",        date: "22 Nov 2025", distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Mixed", since: "2014" },
+  { name: "Hawke's Bay Marathon",    slug: "hawkes-bay-marathon",  location: "Napier",            date: "1 Jun 2025",  distances: ["42.2 km", "21.1 km"],                   surface: "Road",  since: "2016" },
+  { name: "Christchurch Marathon",   slug: "christchurch-marathon",location: "Christchurch",      date: "13 Jul 2025", distances: ["42.2 km", "21.1 km"],                   surface: "Road",  since: "2007" },
+  { name: "Wellington Marathon",     slug: null,                   location: "Wellington",        date: "8 Jun 2025",  distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Road",  since: "2011" },
+  { name: "Tarawera Ultramarathon", slug: null,                   location: "Rotorua",           date: "8 Feb 2026",  distances: ["102 km", "50 km", "21 km"],              surface: "Trail", since: "2008" },
+  { name: "Round the Bays",         slug: null,                   location: "Auckland",          date: "2 Aug 2025",  distances: ["8.4 km", "5 km"],                        surface: "Road",  since: "1972" },
+  { name: "Mountain to Surf",       slug: null,                   location: "Egmont National Park", date: "21 Sep 2025", distances: ["37 km"],                             surface: "Trail", since: "1977" },
 ];
 
 const Races = () => {

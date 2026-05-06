@@ -31,10 +31,14 @@ import AthleteJackson from "./pages/AthleteJackson";
 import AthleteInksterBaynes from "./pages/AthleteInksterBaynes";
 import AthleteDryden from "./pages/AthleteDryden";
 import AthletePulford from "./pages/AthletePulford";
+import AthleteJones from "./pages/AthleteJones";
+import AthleteTanimoto from "./pages/AthleteTanimoto";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
 import Christchurch from "./pages/Christchurch";
+import Queenstown from "./pages/Queenstown";
+import HawkesBay from "./pages/HawkesBay";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -51,6 +55,8 @@ function Layout() {
         <Route path="/races/auckland-marathon" element={<Race />} />
         <Route path="/races/rotorua-marathon" element={<Rotorua />} />
         <Route path="/races/christchurch-marathon" element={<Christchurch />} />
+        <Route path="/races/queenstown-marathon" element={<Queenstown />} />
+        <Route path="/races/hawkes-bay-marathon" element={<HawkesBay />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
@@ -61,6 +67,8 @@ function Layout() {
         <Route path="/athletes/oska-inkster-baynes" element={<AthleteInksterBaynes />} />
         <Route path="/athletes/christopher-dryden" element={<AthleteDryden />} />
         <Route path="/athletes/aaron-pulford" element={<AthletePulford />} />
+        <Route path="/athletes/daniel-jones" element={<AthleteJones />} />
+        <Route path="/athletes/hiro-tanimoto" element={<AthleteTanimoto />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />
