@@ -19,10 +19,12 @@ const RESULTS = [
   { dateNum: 2021 + 5/12,  year: 2021, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:05:09', sec: 3909, pos: 2,  total: 1332, cat: 'M 20–39', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:23', sec: 4043, pos: 1,  total: 2492, cat: 'M 20–39', isPB: false },
   { dateNum: 2022 + 4/12,  year: 2022, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:29:21', sec: 8961, pos: 1,  total:  476, cat: 'M 20–39', isPB: false },
+  { dateNum: 2022 + 4.5/12,year: 2022, race: "Hawke's Bay Marathon",        short: 'HB',       dist: '42.2 km', distId: 'mar'  as const, time: '2:24:02', sec: 8642, pos: 1,  total:  415, cat: 'M 20–29', isPB: false },
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:35', sec: 3995, pos: 2,  total: 3988, cat: 'M 20–39', isPB: false },
   { dateNum: 2023 + 4/12,  year: 2023, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:24:03', sec: 8643, pos: 2,  total:  796, cat: 'M 20–39', isPB: false },
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:07', sec: 4027, pos: 3,  total: 4293, cat: 'M 20–39', isPB: false },
   { dateNum: 2024 + 4/12,  year: 2024, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:48', sec: 8628, pos: 1,  total: 1151, cat: 'M 20–39', isPB: false },
+  { dateNum: 2024 + 4.5/12,year: 2024, race: "Hawke's Bay Marathon",        short: 'HB',       dist: '42.2 km', distId: 'mar'  as const, time: '2:25:25', sec: 8725, pos: 1,  total:  789, cat: 'M 25–29', isPB: false },
   { dateNum: 2024 + 5/12,  year: 2024, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:30', sec: 3870, pos: 1,  total: 2172, cat: 'M 20–39', isPB: true  },
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:55', sec: 8575, pos: 3,  total: 2439, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:52', sec: 8812, pos: 3,  total:  897, cat: 'M 20–39', isPB: false },
@@ -140,7 +142,7 @@ export default function AthleteVoss() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '26' },
+                  { l: 'Races logged', v: '28' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -200,7 +202,7 @@ export default function AthleteVoss() {
                 <ProgressionChart distId={chartDist} />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
                   {chartDist === 'mar'
-                    ? 'Rotorua (May) and Auckland (Oct) shown at separate dates'
+                    ? 'Rotorua (May), Hawke\'s Bay (Jun) and Auckland (Oct) shown at separate dates'
                     : 'Rotorua (May), Christchurch (June) and Auckland (Oct) shown at separate dates'}
                 </div>
               </div>
@@ -219,10 +221,10 @@ export default function AthleteVoss() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '26',      sub: '12 marathons · 14 halves' },
+                { label: 'Races logged',     val: '28',      sub: '14 marathons · 14 halves' },
                 { label: 'Marathon PB',      val: '2:21:01', sub: 'Auckland 2025 · 2nd overall' },
                 { label: 'Half marathon PB', val: '1:04:30', sub: 'Christchurch 2024 · 1st overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '7 career wins · AKL · CHC · ROT' },
+                { label: 'Best overall pos', val: '1st',     sub: '9 career wins · AKL · CHC · ROT · HB' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -264,7 +266,7 @@ export default function AthleteVoss() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · AKL · CHC · ROT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · AKL · CHC · ROT · HB</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -287,6 +289,7 @@ export default function AthleteVoss() {
                         if (r.race.includes('Auckland')) navigate('/races/auckland-marathon');
                         else if (r.race.includes('Rotorua')) navigate('/races/rotorua-marathon');
                         else if (r.race.includes('Christchurch')) navigate('/races/christchurch-marathon');
+                        else if (r.race.includes("Hawke")) navigate('/races/hawkes-bay-marathon');
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
@@ -309,7 +312,7 @@ export default function AthleteVoss() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Rotorua, and Christchurch Marathon certified timings.
+            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Rotorua, Christchurch, and Hawke's Bay Marathon certified timings.
           </div>
         </div>
       </section>
