@@ -85,7 +85,7 @@ export default function Rotorua() {
           <RaceResultsBlock
             dist={isHalf ? '21.1 km' : '42.2 km'}
             raceId={isHalf ? 'rotorua-half' : 'rotorua'}
-            onOpenAthlete={() => navigate('/athletes/daniel-whareaitu')}
+            onOpenAthlete={() => navigate('/athletes')}
           />
         </div>
       </section>

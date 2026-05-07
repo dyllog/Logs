@@ -24,7 +24,6 @@ import Races from "./pages/Races";
 import Results from "./pages/Results";
 import Records from "./pages/Records";
 import Athletes from "./pages/Athletes";
-import Athlete from "./pages/Athlete";
 import AthleteBalchin from "./pages/AthleteBalchin";
 import AthleteVoss from "./pages/AthleteVoss";
 import AthleteJackson from "./pages/AthleteJackson";
@@ -33,6 +32,10 @@ import AthleteDryden from "./pages/AthleteDryden";
 import AthletePulford from "./pages/AthletePulford";
 import AthleteJones from "./pages/AthleteJones";
 import AthleteTanimoto from "./pages/AthleteTanimoto";
+import AthleteFaherty from "./pages/AthleteFaherty";
+import AthleteGraves from "./pages/AthleteGraves";
+import AthleteMcWhirter from "./pages/AthleteMcWhirter";
+import AthleteDowns from "./pages/AthleteDowns";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -60,7 +63,6 @@ function Layout() {
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
-        <Route path="/athletes/daniel-whareaitu" element={<Athlete />} />
         <Route path="/athletes/daniel-balchin" element={<AthleteBalchin />} />
         <Route path="/athletes/michael-voss" element={<AthleteVoss />} />
         <Route path="/athletes/jonathan-jackson" element={<AthleteJackson />} />
@@ -69,6 +71,10 @@ function Layout() {
         <Route path="/athletes/aaron-pulford" element={<AthletePulford />} />
         <Route path="/athletes/daniel-jones" element={<AthleteJones />} />
         <Route path="/athletes/hiro-tanimoto" element={<AthleteTanimoto />} />
+        <Route path="/athletes/ciaran-faherty" element={<AthleteFaherty />} />
+        <Route path="/athletes/cameron-graves" element={<AthleteGraves />} />
+        <Route path="/athletes/blair-mcwhirter" element={<AthleteMcWhirter />} />
+        <Route path="/athletes/fabe-downs" element={<AthleteDowns />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

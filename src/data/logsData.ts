@@ -196,55 +196,11 @@ export const results2025: Result[] = [
   pos: r[0], name: r[1], cat: r[2], club: r[3], time: r[4], nat: r[5], sec: toSec(r[4]),
 }));
 
-export interface AthleteResult {
-  year: number;
-  event: string;
-  dist: string;
-  time: string;
-  pos: number;
-  agPos: number;
-  note: string;
-}
-
-export const athleteProfile = {
-  name: "Daniel Whareaitu",
-  club: "Wellington Scottish",
-  born: 1995,
-  nationality: "NZL",
-  pbs: {
-    "42.2 km": "2:09:54",
-    "21.1 km": "1:02:14",
-    "10 km":   "28:22",
-    "5 km":    "13:48",
-  },
-  results: [
-    { year: 2025, event: "Auckland Marathon",    dist: "42.2 km", time: "2:10:22", pos: 1, agPos: 1, note: "" },
-    { year: 2024, event: "Queenstown Marathon",  dist: "42.2 km", time: "2:11:10", pos: 2, agPos: 1, note: "" },
-    { year: 2024, event: "Rotorua Marathon",     dist: "42.2 km", time: "2:12:08", pos: 1, agPos: 1, note: "" },
-    { year: 2023, event: "Auckland Marathon",    dist: "42.2 km", time: "2:09:54", pos: 1, agPos: 1, note: "CR" },
-    { year: 2023, event: "Wellington Half",      dist: "21.1 km", time: "1:02:14", pos: 1, agPos: 1, note: "PB" },
-    { year: 2022, event: "Auckland Marathon",    dist: "42.2 km", time: "2:12:44", pos: 3, agPos: 2, note: "" },
-    { year: 2022, event: "Christchurch Marathon",dist: "42.2 km", time: "2:13:18", pos: 2, agPos: 2, note: "" },
-    { year: 2021, event: "Rotorua Marathon",     dist: "42.2 km", time: "2:14:02", pos: 4, agPos: 3, note: "" },
-    { year: 2020, event: "Wellington Marathon",  dist: "42.2 km", time: "2:16:20", pos: 6, agPos: 4, note: "" },
-    { year: 2019, event: "Auckland Half",        dist: "21.1 km", time: "1:04:38", pos: 8, agPos: 5, note: "Debut" },
-  ] as AthleteResult[],
-  progression: [
-    { y: 2019, s: toSec("2:22:40") },
-    { y: 2020, s: toSec("2:16:20") },
-    { y: 2021, s: toSec("2:14:02") },
-    { y: 2022, s: toSec("2:12:44") },
-    { y: 2023, s: toSec("2:09:54") },
-    { y: 2024, s: toSec("2:11:10") },
-    { y: 2025, s: toSec("2:10:22") },
-  ],
-};
-
 export const upcoming = [
-  { name: "Queenstown Marathon",   date: "15 Nov 2026", loc: "Queenstown",   dists: "42.2 / 21.1 / 10", href: null },
-  { name: "Taupō Ultramarathon",   date: "06 Dec 2026", loc: "Taupō",        dists: "50 / 100",          href: null },
-  { name: "Kepler Challenge",      date: "13 Dec 2026", loc: "Te Anau",      dists: "60 km trail",       href: null },
-  { name: "Buller Gorge Marathon", date: "07 Feb 2027", loc: "Westport",     dists: "42.2 / 21.1",       href: null },
-  { name: "Round the Bays",        date: "08 Mar 2027", loc: "Auckland",     dists: "8.4",               href: null },
-  { name: "Rotorua Marathon",      date: "02 May 2027", loc: "Rotorua",      dists: "42.2 / 21.1 / 10", href: '/races/rotorua-marathon' },
+  { name: "Hawke's Bay Marathon",  date: "7 Jun 2026",  loc: "Napier",        dists: "42.2 / 21.1",         href: '/races/hawkes-bay-marathon' },
+  { name: "Christchurch Marathon", date: "12 Jul 2026", loc: "Christchurch",  dists: "42.2 / 21.1",         href: '/races/christchurch-marathon' },
+  { name: "Auckland Marathon",     date: "1 Nov 2026",  loc: "Auckland",      dists: "42.2 / 21.1 / 11 / 5", href: '/races/auckland-marathon' },
+  { name: "Queenstown Marathon",   date: "21 Nov 2026", loc: "Queenstown",    dists: "42.2 / 21.1 / 10",    href: '/races/queenstown-marathon' },
+  { name: "Taupō Ultramarathon",   date: "6 Dec 2026",  loc: "Taupō",         dists: "50 / 100",             href: null },
+  { name: "Rotorua Marathon",      date: "2 May 2027",  loc: "Rotorua",       dists: "42.2 / 21.1 / 10",    href: '/races/rotorua-marathon' },
 ];

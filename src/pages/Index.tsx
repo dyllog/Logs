@@ -34,11 +34,11 @@ export default function Index() {
               </div>
               <div className="mt-48 flex gap-32" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>3</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>5</div>
                   <div className="label mt-8">Tracked events</div>
                 </div>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>149,988</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>239,741</div>
                   <div className="label mt-8">Finisher records</div>
                 </div>
                 <div>

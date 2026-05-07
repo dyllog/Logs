@@ -7,11 +7,19 @@ interface SearchOverlayProps {
 }
 
 const suggestions = [
-  { kind: 'athlete', name: 'Daniel Whareaitu',  meta: 'Wellington Scottish · Marathon CR 2023', href: '/athletes/daniel-whareaitu' },
-  { kind: 'athlete', name: 'Camille Buchanan',  meta: 'Auckland Harriers · Marathon CR 2024',  href: '/athletes/daniel-whareaitu' },
-  { kind: 'race',    name: 'Auckland Marathon',  meta: 'Road · est 1992 · 33 editions',          href: '/races/auckland-marathon' },
-  { kind: 'race',    name: 'Rotorua Marathon',   meta: 'Road · est 1967',                        href: '/races' },
-  { kind: 'race',    name: 'Tarawera Ultra',     meta: 'Trail · Rotorua',                        href: '/races' },
+  { kind: 'athlete', name: 'Daniel Jones',       meta: 'NZL · Auckland 2020 2021 2022 winner',   href: '/athletes/daniel-jones' },
+  { kind: 'athlete', name: 'Daniel Balchin',     meta: 'NZL · Auckland 2023 2024 2025 winner',   href: '/athletes/daniel-balchin' },
+  { kind: 'athlete', name: 'Michael Voss',       meta: 'NZL · Rotorua 5× winner',                href: '/athletes/michael-voss' },
+  { kind: 'athlete', name: 'Ciaran Faherty',     meta: 'NZL · CHC 2017 · ROT 2019 · QT 2024',   href: '/athletes/ciaran-faherty' },
+  { kind: 'athlete', name: 'Cameron Graves',     meta: 'NZL · Auckland Half CR 2020',            href: '/athletes/cameron-graves' },
+  { kind: 'athlete', name: 'Blair McWhirter',    meta: 'NZL · Rotorua 2018 winner',              href: '/athletes/blair-mcwhirter' },
+  { kind: 'athlete', name: 'Jonathan Jackson',   meta: 'NZL · Auckland 2016 2nd',                href: '/athletes/jonathan-jackson' },
+  { kind: 'athlete', name: 'Oska Inkster-Baynes',meta: 'NZL · Auckland 2016 winner',             href: '/athletes/oska-inkster-baynes' },
+  { kind: 'race',    name: 'Auckland Marathon',  meta: 'Road · est 1992',                         href: '/races/auckland-marathon' },
+  { kind: 'race',    name: 'Rotorua Marathon',   meta: 'Road · est 1967',                         href: '/races/rotorua-marathon' },
+  { kind: 'race',    name: 'Christchurch Marathon', meta: 'Road · est 2007',                      href: '/races/christchurch-marathon' },
+  { kind: 'race',    name: 'Queenstown Marathon', meta: 'Mixed · est 2014',                       href: '/races/queenstown-marathon' },
+  { kind: 'race',    name: "Hawke's Bay Marathon", meta: 'Road · est 2016',                       href: '/races/hawkes-bay-marathon' },
 ];
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {

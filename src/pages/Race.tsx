@@ -89,7 +89,7 @@ export default function Race() {
         <div className="page">
           <RaceResultsBlock
             dist={dist}
-            onOpenAthlete={() => navigate('/athletes/daniel-whareaitu')}
+            onOpenAthlete={() => navigate('/athletes')}
           />
         </div>
       </section>
