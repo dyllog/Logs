@@ -93,13 +93,13 @@ export default function ProgressionChart({ data, height = 180, accent = false }:
         const p = points[hover];
         const cx = x(p.y), cy = y(p.s);
         const label = `${p.y} · ${p.t} · ${p.name}`;
-        const w = label.length * 5.5 + 12;
+        const w = label.length * 6.5 + 16;
         const tx = Math.max(padX, Math.min(W - padX - w, cx - w / 2));
         return (
           <g pointerEvents="none">
             <line x1={cx} x2={cx} y1={padTop} y2={H - padBot} stroke="currentColor" strokeOpacity="0.25" strokeWidth="0.5" strokeDasharray="2 2" />
-            <rect x={tx} y={cy - 34} width={w} height="20" fill="var(--bg)" stroke="currentColor" strokeWidth="0.5" />
-            <text x={tx + 6} y={cy - 20} fontSize="9.5" fontFamily="DM Mono, monospace" fill="currentColor" letterSpacing="0.04em">
+            <rect x={tx} y={cy - 34} width={w} height="20" fill="var(--on-dark)" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
+            <text x={tx + 8} y={cy - 20} fontSize="9.5" fontFamily="DM Mono, monospace" fill="var(--surface-dark)" letterSpacing="0.04em">
               {label}
             </text>
           </g>
