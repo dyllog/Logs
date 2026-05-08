@@ -712,9 +712,18 @@ body {
   .tbl td, .tbl th { padding: 10px 8px; }
   /* Equivalency table: hide pace/km col on very small */
   .equiv-pace-col { display: none; }
+
+  /* Full results overlay — use full viewport on mobile */
+  .fro-modal { width: 100vw !important; margin: 0 !important; border-left: none !important; border-right: none !important; }
+  .fro-section { padding-left: 16px !important; padding-right: 16px !important; }
+  .fro-col-hd { padding-left: 16px !important; padding-right: 16px !important; }
+  .fro-row { padding-left: 16px !important; padding-right: 16px !important; }
 }
 
 @media (max-width: 520px) {
   .upcoming-grid { grid-template-columns: 1fr !important; }
   .pb-grid { grid-template-columns: 1fr 1fr !important; }
 }
+
+/* Tables always scrollable horizontally inside tbl-wrap (needed at all widths when content is wide) */
+.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
