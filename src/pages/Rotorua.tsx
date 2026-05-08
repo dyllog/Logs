@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
@@ -26,7 +26,11 @@ const rotoruaAnnotations = [
 ];
 
 export default function Rotorua() {
-  const [distId, setDistId] = useState<'42' | '21'>('42');
+  const [searchParams] = useSearchParams();
+  const initDist = searchParams.get('dist') === '21' ? '21' : '42' as '42' | '21';
+  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
+
+  const [distId, setDistId] = useState<'42' | '21'>(initDist);
   const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
   const isHalf = distId === '21';
@@ -85,6 +89,7 @@ export default function Rotorua() {
           <RaceResultsBlock
             dist={isHalf ? '21.1 km' : '42.2 km'}
             raceId={isHalf ? 'rotorua-half' : 'rotorua'}
+            initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>

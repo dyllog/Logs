@@ -1,19 +1,22 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const allResults = [
-  { event: 'Auckland Marathon',     year: 2025, distance: '42.2 km', pos: 1,  name: 'Daniel Balchin',    category: 'M Elite',  club: '—',                       time: '2:19:55' },
-  { event: 'Auckland Marathon',     year: 2025, distance: '42.2 km', pos: 2,  name: 'Michael Voss',      category: 'M Elite',  club: '—',                       time: '2:21:01' },
-  { event: 'Auckland Marathon',     year: 2025, distance: '42.2 km', pos: 3,  name: 'Cam Graves',        category: 'M Elite',  club: '—',                       time: '2:21:04' },
-  { event: 'Auckland Marathon',     year: 2025, distance: '42.2 km', pos: 13, name: 'Brigid Dennehy',    category: 'W Elite',  club: '—',                       time: '2:38:10' },
-  { event: 'Christchurch Marathon', year: 2026, distance: '42.2 km', pos: 1,  name: 'Oska Inkster-Baynes', category: 'M 20–39', club: '—',                     time: '2:20:20' },
-  { event: 'Christchurch Marathon', year: 2026, distance: '42.2 km', pos: 15, name: 'Becky Aitkenhead',  category: 'W 20–39', club: '—',                       time: '2:38:14' },
-  { event: 'Christchurch Half',     year: 2026, distance: '21.1 km', pos: 1,  name: 'Toby Gualter',      category: 'M 20–39', club: '—',                       time: '1:03:15' },
-  { event: 'Rotorua Marathon',      year: 2025, distance: '42.2 km', pos: 1,  name: 'Daniel Balchin',    category: 'M 20–39', club: '—',                       time: '2:24:41' },
-  { event: 'Auckland Half',         year: 2025, distance: '21.1 km', pos: 1,  name: 'Toby Gualter',      category: 'M 20–39', club: '—',                       time: '1:03:30' },
+  { event: 'Auckland Marathon',     slug: '/races/auckland-marathon',    dist: '42', year: 2025, distance: '42.2 km', pos: 1,  name: 'Daniel Balchin',      category: 'M Elite',  club: '—', time: '2:19:55' },
+  { event: 'Auckland Marathon',     slug: '/races/auckland-marathon',    dist: '42', year: 2025, distance: '42.2 km', pos: 2,  name: 'Michael Voss',        category: 'M Elite',  club: '—', time: '2:21:01' },
+  { event: 'Auckland Marathon',     slug: '/races/auckland-marathon',    dist: '42', year: 2025, distance: '42.2 km', pos: 3,  name: 'Cameron Graves',      category: 'M Elite',  club: '—', time: '2:21:04' },
+  { event: 'Auckland Marathon',     slug: '/races/auckland-marathon',    dist: '42', year: 2025, distance: '42.2 km', pos: 1,  name: 'Brianna Thistoriann', category: 'W Elite',  club: '—', time: '2:38:10' },
+  { event: 'Auckland Half',         slug: '/races/auckland-marathon',    dist: '21', year: 2025, distance: '21.1 km', pos: 1,  name: 'Christopher Dryden', category: 'M 25–29', club: '—', time: '1:05:24' },
+  { event: 'Auckland Half',         slug: '/races/auckland-marathon',    dist: '21', year: 2025, distance: '21.1 km', pos: 2,  name: 'Shotaro Maruyama',   category: 'M 25–29', club: '—', time: '1:07:31' },
+  { event: 'Christchurch Marathon', slug: '/races/christchurch-marathon', dist: '42', year: 2026, distance: '42.2 km', pos: 1,  name: 'Oska Inkster-Baynes', category: 'M 20–39', club: '—', time: '2:20:20' },
+  { event: 'Christchurch Marathon', slug: '/races/christchurch-marathon', dist: '42', year: 2026, distance: '42.2 km', pos: 15, name: 'Becky Aitkenhead',   category: 'W 20–39', club: '—', time: '2:38:14' },
+  { event: 'Christchurch Half',     slug: '/races/christchurch-marathon', dist: '21', year: 2026, distance: '21.1 km', pos: 1,  name: 'Toby Gualter',       category: 'M 20–39', club: '—', time: '1:03:15' },
+  { event: 'Rotorua Marathon',      slug: '/races/rotorua-marathon',     dist: '42', year: 2025, distance: '42.2 km', pos: 1,  name: 'Daniel Balchin',     category: 'M 20–39', club: '—', time: '2:24:41' },
 ];
 
 export default function Results() {
   const [search, setSearch] = useState('');
+  const navigate = useNavigate();
 
   const filtered = search.trim()
     ? allResults.filter(r =>
@@ -55,7 +58,8 @@ export default function Results() {
               </thead>
               <tbody>
                 {filtered.map((row, i) => (
-                  <tr key={i} className="row">
+                  <tr key={i} className="row" style={{ cursor: 'pointer' }}
+                      onClick={() => navigate(`${row.slug}?year=${row.year}&dist=${row.dist}`)}>
                     <td><span className="serif" style={{ fontSize: 15 }}>{row.event}</span></td>
                     <td className="dimmed">{row.year}</td>
                     <td className="dimmed">{row.distance}</td>

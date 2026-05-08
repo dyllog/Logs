@@ -233,7 +233,7 @@ export default function AthleteInksterBaynes() {
               </thead>
               <tbody>
                 {sortedResults.map((r, i) => (
-                  <tr key={i} className="row" onClick={() => navigate('/races/christchurch-marathon')}>
+                  <tr key={i} className="row" onClick={() => navigate(`/races/christchurch-marathon?year=${r.year}&dist=${r.dist === '42.2 km' ? '42' : '21'}`)}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
                     <td className="dimmed">{r.dist}</td>

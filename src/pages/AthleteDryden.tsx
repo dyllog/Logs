@@ -235,9 +235,10 @@ export default function AthleteDryden() {
                 {sortedResults.map((r, i) => (
                   <tr key={i} className="row"
                       onClick={() => {
-                        if (r.race.includes('Auckland')) navigate('/races/auckland-marathon');
-                        else if (r.race.includes('Queenstown')) navigate('/races/queenstown-marathon');
-                        else navigate('/races/christchurch-marathon');
+                        const d = r.dist === '42.2 km' ? '42' : '21';
+                        if (r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
+                        else navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

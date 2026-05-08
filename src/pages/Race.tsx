@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
 import AveragesChart from '@/components/AveragesChart';
@@ -10,7 +10,11 @@ import { courseStats, halfStats, yearStatsForDist } from '@/data/logsDataExt';
 type DistId = '42' | '21' | '11' | '5';
 
 export default function Race() {
-  const [distId, setDistId] = useState<DistId>('42');
+  const [searchParams] = useSearchParams();
+  const initDist = (['42','21','11','5'].includes(searchParams.get('dist') ?? '')) ? searchParams.get('dist') as DistId : '42';
+  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
+
+  const [distId, setDistId] = useState<DistId>(initDist);
   const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
   const { hash } = useLocation();
@@ -89,6 +93,7 @@ export default function Race() {
         <div className="page">
           <RaceResultsBlock
             dist={dist}
+            initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>

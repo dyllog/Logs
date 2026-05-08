@@ -6,10 +6,11 @@ import FullResultsOverlay from './FullResultsOverlay';
 interface RaceResultsBlockProps {
   dist: string;
   raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
+  initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
 
-export default function RaceResultsBlock({ dist, raceId = 'auckland', onOpenAthlete }: RaceResultsBlockProps) {
+export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYear, onOpenAthlete }: RaceResultsBlockProps) {
   const isRotorua = raceId === 'rotorua';
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
@@ -18,7 +19,8 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', onOpenAthl
     ? [...CHC_YEARS].reverse()
     : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
   const years = availableYears as number[];
-  const [year, setYear] = useState<number>(availableYears[0]);
+  const resolvedInitial = initialYear && (availableYears as number[]).includes(initialYear) ? initialYear : availableYears[0];
+  const [year, setYear] = useState<number>(resolvedInitial);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
   const [fullOpen, setFullOpen] = useState(false);

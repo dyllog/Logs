@@ -54,7 +54,7 @@ function ProgressionChart() {
   const yLo = sMin - sPad, yHi = sMax + sPad;
 
   const cx = (v: number) => padL + ((v - xMin) / (xMax - xMin)) * cW;
-  const cy = (v: number) => padT + ((yHi - v) / (yHi - yLo)) * cH;
+  const cy = (v: number) => padT + ((v - yLo) / (yHi - yLo)) * cH;
   const color = 'var(--on-dark)';
 
   const yTicks: number[] = [];
@@ -247,10 +247,11 @@ export default function AthleteMcWhirter() {
                 {sortedResults.map((r, i) => (
                   <tr key={i} className="row"
                       onClick={() => {
-                        if (r.race === 'Auckland Marathon') navigate('/races/auckland-marathon');
-                        else if (r.race === 'Christchurch Marathon' || r.race === 'Christchurch Half') navigate('/races/christchurch-marathon');
-                        else if (r.race === 'Rotorua Marathon') navigate('/races/rotorua-marathon');
-                        else if (r.race.includes('Queenstown')) navigate('/races/queenstown-marathon');
+                        const d = r.dist === '42.2 km' ? '42' : '21';
+                        if (r.race === 'Auckland Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race === 'Christchurch Marathon' || r.race === 'Christchurch Half') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race === 'Rotorua Marathon') navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
