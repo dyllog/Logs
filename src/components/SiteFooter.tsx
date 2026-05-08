@@ -11,8 +11,10 @@ export default function SiteFooter() {
       </div>
       <div>
         <div className="label mb-8">Archive</div>
-        {['Races', 'Results', 'Records', 'Athletes'].map(l => (
-          <div key={l} style={{ marginBottom: 6 }}>{l}</div>
+        {([['Races', '/races'], ['Results', '/results'], ['Records', '/records'], ['Athletes', '/athletes']] as [string, string][]).map(([l, to]) => (
+          <div key={l} style={{ marginBottom: 6 }}>
+            <Link to={to} style={{ color: 'inherit', textDecoration: 'none' }}>{l}</Link>
+          </div>
         ))}
       </div>
       <div>
@@ -25,14 +27,8 @@ export default function SiteFooter() {
         </div>
       </div>
       <div>
-        <div className="label mb-8">About</div>
-        {['Methodology', 'Corrections', 'Contributors'].map(l => (
-          <div key={l} style={{ marginBottom: 6 }}>{l}</div>
-        ))}
-      </div>
-      <div>
         <div className="label mb-8">Contact</div>
-        <div>hello@logs.run.nz</div>
+        <div>dyl.logannz@gmail.com</div>
         <div className="mt-16 dimmed" style={{ fontSize: 11 }}>© 2026 LOGS</div>
       </div>
     </footer>
