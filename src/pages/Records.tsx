@@ -43,12 +43,12 @@ export default function Records() {
               <thead>
                 <tr>
                   <th>Race</th>
-                  <th>Distance</th>
+                  <th className="hide-mobile">Distance</th>
                   <th style={{ width: 40 }}>Cat.</th>
                   <th>Holder</th>
-                  <th>Nationality</th>
+                  <th className="hide-mobile">Nationality</th>
                   <th className="num">Time</th>
-                  <th style={{ width: 60 }}>Year</th>
+                  <th className="hide-mobile" style={{ width: 60 }}>Year</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,12 +59,12 @@ export default function Records() {
                     <td>
                       <span className="serif" style={{ fontSize: 15 }}>{rec.race}</span>
                     </td>
-                    <td className="dimmed">{rec.distance}</td>
+                    <td className="dimmed hide-mobile">{rec.distance}</td>
                     <td className="dimmed">{rec.gender}</td>
                     <td style={{ fontSize: 13 }}>{rec.holder}</td>
-                    <td className="dimmed">{rec.nationality}</td>
+                    <td className="dimmed hide-mobile">{rec.nationality}</td>
                     <td className="num time serif" style={{ fontSize: 15 }}>{rec.time}</td>
-                    <td className="dimmed">{rec.year}</td>
+                    <td className="dimmed hide-mobile">{rec.year}</td>
                   </tr>
                 ))}
               </tbody>

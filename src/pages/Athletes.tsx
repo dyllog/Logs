@@ -51,12 +51,12 @@ export default function Athletes() {
               <thead>
                 <tr>
                   <th>Athlete</th>
-                  <th>Nat.</th>
-                  <th style={{ width: 40 }}>M/W</th>
-                  <th style={{ width: 80 }}>Races</th>
+                  <th className="hide-mobile">Nat.</th>
+                  <th className="hide-mobile" style={{ width: 40 }}>M/W</th>
+                  <th className="hide-mobile" style={{ width: 80 }}>Races</th>
                   <th className="num">PB</th>
                   <th>PB race</th>
-                  <th style={{ width: 80 }}></th>
+                  <th className="hide-mobile" style={{ width: 80 }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -67,12 +67,12 @@ export default function Athletes() {
                     <td>
                       <span className="serif" style={{ fontSize: 16 }}>{a.name}</span>
                     </td>
-                    <td className="dimmed">{a.nationality}</td>
-                    <td className="dimmed">{a.gender}</td>
-                    <td className="dimmed">{a.races}</td>
+                    <td className="dimmed hide-mobile">{a.nationality}</td>
+                    <td className="dimmed hide-mobile">{a.gender}</td>
+                    <td className="dimmed hide-mobile">{a.races}</td>
                     <td className="num time serif" style={{ fontSize: 15 }}>{a.pb}</td>
                     <td className="dimmed" style={{ fontSize: 12 }}>{a.pbRace}</td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="hide-mobile" style={{ textAlign: 'right' }}>
                       {a.href ? (
                         <span style={{ color: 'var(--meta)', fontSize: 10.5, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
                           View →

@@ -712,6 +712,8 @@ body {
   .tbl td, .tbl th { padding: 10px 8px; }
   /* Equivalency table: hide pace/km col on very small */
   .equiv-pace-col { display: none; }
+  /* Hide non-essential table columns on mobile */
+  .hide-mobile { display: none; }
 
   /* Full results overlay — use full viewport on mobile */
   .fro-modal { width: 100vw !important; margin: 0 !important; border-left: none !important; border-right: none !important; }
