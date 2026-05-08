@@ -23,53 +23,46 @@ const Races = () => {
           <h1 className="serif" style={{ fontSize: 36 }}>Races</h1>
         </div>
 
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ borderBottom: '0.5px solid var(--rule)' }}>
-              {['Race', 'Location', 'Next date', 'Distances', 'Surface', 'Est.'].map(col => (
-                <th key={col} className="label" style={{ textAlign: 'left', paddingBottom: 10, paddingRight: 24, fontWeight: 400 }}>
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {races.map((race, i) => (
-              <tr
-                key={i}
-                style={{ cursor: race.slug ? 'pointer' : 'default' }}
-                onClick={() => race.slug && navigate(`/races/${race.slug}`)}
-                onMouseEnter={e => { if (race.slug) (e.currentTarget as HTMLElement).style.background = 'var(--hover)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-              >
-                <td style={{ padding: '14px 24px 14px 0', borderBottom: '0.5px solid var(--rule)', fontSize: 14 }}
-                    className={race.slug ? 'serif' : 'serif dimmed'}>
-                  {race.name}
-                  {race.slug && <span style={{ marginLeft: 8, fontSize: 10, opacity: 0.4 }}>→</span>}
-                </td>
-                <td className="dimmed" style={{ padding: '14px 24px 14px 0', borderBottom: '0.5px solid var(--rule)', fontSize: 13 }}>
-                  {race.location}
-                </td>
-                <td className="dimmed" style={{ padding: '14px 24px 14px 0', borderBottom: '0.5px solid var(--rule)', fontSize: 13, whiteSpace: 'nowrap' }}>
-                  {race.date}
-                </td>
-                <td style={{ padding: '14px 24px 14px 0', borderBottom: '0.5px solid var(--rule)' }}>
-                  <div className="flex gap-8" style={{ flexWrap: 'wrap' }}>
-                    {race.distances.map(d => (
-                      <span key={d} className="pill" style={{ fontSize: 10 }}>{d}</span>
-                    ))}
-                  </div>
-                </td>
-                <td className="dimmed" style={{ padding: '14px 24px 14px 0', borderBottom: '0.5px solid var(--rule)', fontSize: 13 }}>
-                  {race.surface}
-                </td>
-                <td className="dimmed" style={{ padding: '14px 0', borderBottom: '0.5px solid var(--rule)', fontSize: 13 }}>
-                  {race.since}
-                </td>
+        <div className="tbl-wrap">
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th>Race</th>
+                <th>Location</th>
+                <th>Next date</th>
+                <th>Distances</th>
+                <th className="hide-mobile">Surface</th>
+                <th className="hide-mobile">Est.</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {races.map((race, i) => (
+                <tr
+                  key={i}
+                  className="row"
+                  style={{ cursor: race.slug ? 'pointer' : 'default' }}
+                  onClick={() => race.slug && navigate(`/races/${race.slug}`)}
+                >
+                  <td className={race.slug ? 'serif' : 'serif dimmed'} style={{ fontSize: 14 }}>
+                    {race.name}
+                    {race.slug && <span style={{ marginLeft: 8, fontSize: 10, opacity: 0.4 }}>→</span>}
+                  </td>
+                  <td className="dimmed" style={{ fontSize: 13 }}>{race.location}</td>
+                  <td className="dimmed" style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{race.date}</td>
+                  <td>
+                    <div className="flex gap-8" style={{ flexWrap: 'wrap' }}>
+                      {race.distances.map(d => (
+                        <span key={d} className="pill" style={{ fontSize: 10 }}>{d}</span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="dimmed hide-mobile" style={{ fontSize: 13 }}>{race.surface}</td>
+                  <td className="dimmed hide-mobile" style={{ fontSize: 13 }}>{race.since}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   );
