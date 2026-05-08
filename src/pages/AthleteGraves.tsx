@@ -56,9 +56,8 @@ function ProgressionChart({ distId }: { distId: 'mar' | 'half' }) {
   const color = 'var(--on-dark)';
 
   const yTicks: number[] = [];
-  for (let s = Math.floor(yLo / 60) * 60; s <= Math.ceil(yHi / 60) * 60; s += (distId === 'half' ? 120 : 300); ) {
+  for (let s = Math.floor(yLo / 60) * 60; s <= Math.ceil(yHi / 60) * 60; s += (distId === 'half' ? 120 : 300)) {
     if (s >= yLo && s <= yHi) yTicks.push(s);
-    s += distId === 'half' ? 120 : 300;
   }
   const xYears: number[] = [];
   for (let y = Math.ceil(xMin); y <= Math.floor(xMax); y++) xYears.push(y);
