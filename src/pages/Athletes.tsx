@@ -46,46 +46,48 @@ export default function Athletes() {
                    value={search} onChange={e => setSearch(e.target.value)} />
           </div>
 
-          <table className="tbl">
-            <thead>
-              <tr>
-                <th>Athlete</th>
-                <th>Nat.</th>
-                <th style={{ width: 40 }}>M/W</th>
-                <th style={{ width: 80 }}>Races</th>
-                <th className="num">PB</th>
-                <th>PB race</th>
-                <th style={{ width: 80 }}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((a, i) => (
-                <tr key={i} className="row"
-                    style={{ cursor: a.href ? 'pointer' : 'default', opacity: a.active ? 1 : 0.65 }}
-                    onClick={() => a.href && navigate(a.href)}>
-                  <td>
-                    <span className="serif" style={{ fontSize: 16 }}>{a.name}</span>
-                  </td>
-                  <td className="dimmed">{a.nationality}</td>
-                  <td className="dimmed">{a.gender}</td>
-                  <td className="dimmed">{a.races}</td>
-                  <td className="num time serif" style={{ fontSize: 15 }}>{a.pb}</td>
-                  <td className="dimmed" style={{ fontSize: 12 }}>{a.pbRace}</td>
-                  <td style={{ textAlign: 'right' }}>
-                    {a.href ? (
-                      <span style={{ color: 'var(--meta)', fontSize: 10.5, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
-                        View →
-                      </span>
-                    ) : (
-                      <span className="dimmed" style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
-                        Profile pending
-                      </span>
-                    )}
-                  </td>
+          <div className="tbl-wrap">
+            <table className="tbl">
+              <thead>
+                <tr>
+                  <th>Athlete</th>
+                  <th>Nat.</th>
+                  <th style={{ width: 40 }}>M/W</th>
+                  <th style={{ width: 80 }}>Races</th>
+                  <th className="num">PB</th>
+                  <th>PB race</th>
+                  <th style={{ width: 80 }}></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((a, i) => (
+                  <tr key={i} className="row"
+                      style={{ cursor: a.href ? 'pointer' : 'default', opacity: a.active ? 1 : 0.65 }}
+                      onClick={() => a.href && navigate(a.href)}>
+                    <td>
+                      <span className="serif" style={{ fontSize: 16 }}>{a.name}</span>
+                    </td>
+                    <td className="dimmed">{a.nationality}</td>
+                    <td className="dimmed">{a.gender}</td>
+                    <td className="dimmed">{a.races}</td>
+                    <td className="num time serif" style={{ fontSize: 15 }}>{a.pb}</td>
+                    <td className="dimmed" style={{ fontSize: 12 }}>{a.pbRace}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      {a.href ? (
+                        <span style={{ color: 'var(--meta)', fontSize: 10.5, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
+                          View →
+                        </span>
+                      ) : (
+                        <span className="dimmed" style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
+                          Profile pending
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           {filtered.length === 0 && (
             <div className="dimmed" style={{ padding: '48px 0', fontSize: 13, fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>

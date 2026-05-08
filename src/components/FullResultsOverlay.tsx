@@ -135,10 +135,10 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   if (!open) return null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,16,0.45)', zIndex: 150, display: 'flex', alignItems: 'stretch', justifyContent: 'center', touchAction: 'none' }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ width: 'min(1100px, 96vw)', margin: '32px 0', background: 'var(--bg)', border: '0.5px solid var(--ink)', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,20,16,0.45)', zIndex: 150, display: 'flex', alignItems: 'stretch', justifyContent: 'center' }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} className="fro-modal" style={{ width: 'min(1100px, 96vw)', margin: '32px 0', background: 'var(--bg)', border: '0.5px solid var(--ink)', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
-        <div style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
+        <div className="fro-section" style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
           <div className="flex between ai-baseline">
             <div>
               <div className="eyebrow mb-8">{isRotoruaHalf ? 'Rotorua Half Marathon' : isRotorua ? 'Rotorua Marathon' : 'Auckland Marathon'} · full results</div>
@@ -188,7 +188,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         </div>
 
         {/* Column headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: grid, padding: '10px 28px', borderBottom: '0.5px solid var(--rule)', background: 'var(--bg-alt)', fontVariantNumeric: 'tabular-nums' }}>
+        <div className="fro-col-hd" style={{ display: 'grid', gridTemplateColumns: grid, padding: '10px 28px', borderBottom: '0.5px solid var(--rule)', background: 'var(--bg-alt)', fontVariantNumeric: 'tabular-nums' }}>
           {colHeader('pos', 'Pos')}
           {colHeader('bib', 'Bib')}
           {colHeader('name', 'Name')}
@@ -197,14 +197,14 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         </div>
 
         {/* Rows */}
-        <div ref={scrollRef} style={{ overflow: 'auto', flex: '1 1 auto', minHeight: 300, WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+        <div ref={scrollRef} style={{ overflow: 'auto', flex: '1 1 auto', minHeight: 300, WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', touchAction: 'pan-y' }}>
           {loading ? (
             <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>Loading {year} results…</div>
           ) : (
             <>
               <div style={{ height: topPad }} />
               {slice.map((r, i) => (
-                <div key={startIdx + i}
+                <div key={startIdx + i} className="fro-row"
                      style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
@@ -227,7 +227,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         </div>
 
         {/* Footer */}
-        <div style={{ padding: '14px 28px', borderTop: '0.5px solid var(--rule)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-alt)' }}>
+        <div className="fro-section" style={{ padding: '14px 28px', borderTop: '0.5px solid var(--rule)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-alt)' }}>
           <div className="label">
             {loading ? `Loading…` : `${stat.finishers.toLocaleString()} finishers · ${filtered.length.toLocaleString()} shown · click headers to sort`}
           </div>
