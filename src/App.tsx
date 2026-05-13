@@ -42,6 +42,11 @@ import Rotorua from "./pages/Rotorua";
 import Christchurch from "./pages/Christchurch";
 import Queenstown from "./pages/Queenstown";
 import HawkesBay from "./pages/HawkesBay";
+import DevonportHalf from "./pages/DevonportHalf";
+import OmahaHalf from "./pages/OmahaHalf";
+import CoatesvilleHalf from "./pages/CoatesvilleHalf";
+import MarateiHalf from "./pages/MarateiHalf";
+import WaterfrontHalf from "./pages/WaterfrontHalf";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -60,6 +65,11 @@ function Layout() {
         <Route path="/races/christchurch-marathon" element={<Christchurch />} />
         <Route path="/races/queenstown-marathon" element={<Queenstown />} />
         <Route path="/races/hawkes-bay-marathon" element={<HawkesBay />} />
+        <Route path="/races/devonport-half-marathon" element={<DevonportHalf />} />
+        <Route path="/races/omaha-half-marathon" element={<OmahaHalf />} />
+        <Route path="/races/coatesville-half-marathon" element={<CoatesvilleHalf />} />
+        <Route path="/races/maratei-half-marathon" element={<MarateiHalf />} />
+        <Route path="/races/waterfront-half-marathon" element={<WaterfrontHalf />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
