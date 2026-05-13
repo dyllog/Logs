@@ -19,6 +19,7 @@ export interface YearStat {
 
 export const YEARS = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
 export const ROTORUA_YEARS = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
+export const WATERFRONT_HALF_YEARS = [2018, 2019, 2021, 2022, 2023, 2024, 2025, 2026] as const;
 
 export const yearStats: YearStat[] = [
   { year: 2014, finishers: 2306, avg: 15720, avgMen: 15467, avgWomen: 17176, winnerM:  8858, winnerW: 10062, top10M:  9202, top10W: 11092 },
@@ -202,6 +203,23 @@ export function formatTime(s: number): string {
   const m = Math.floor((s % 3600) / 60);
   const ss = Math.floor(s % 60);
   return `${h}:${String(m).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+}
+
+const wfHalfCache: Record<number, ResultRow[]> = {};
+const wfHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+
+export async function loadWaterfrontHalf(year: number): Promise<ResultRow[]> {
+  if (wfHalfCache[year]) return wfHalfCache[year];
+  if (!wfHalfInflight[year]) {
+    wfHalfInflight[year] = fetch(`/data/results-wf-half-${year}.json`)
+      .then(r => r.json())
+      .then((rows: ResultRow[]) => { wfHalfCache[year] = rows; return rows; });
+  }
+  return wfHalfInflight[year];
+}
+
+export function getCachedWaterfrontHalf(year: number): ResultRow[] {
+  return wfHalfCache[year] ?? [];
 }
 
 export { toSec };

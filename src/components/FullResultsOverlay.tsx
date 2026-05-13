@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadWaterfrontHalf, YEARS, ROTORUA_YEARS, WATERFRONT_HALF_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
+import { waterfrontStats } from '@/data/aklSeriesData';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'waterfront-half';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
@@ -25,9 +26,12 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
   const isChcHalf = raceId === 'chc-half';
+  const isWaterfrontHalf = raceId === 'waterfront-half';
   const years = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
-    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
+    : isWaterfrontHalf ? [...WATERFRONT_HALF_YEARS].reverse()
+    : [...YEARS].reverse();
   const [year, setYear] = useState(yearProp);
   const [q, setQ] = useState(initialQ ?? '');
   const [gender, setGender] = useState('all');
@@ -43,9 +47,9 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     if (!open) return;
     setLoading(true);
     setAll([]);
-    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : loadResults(year, dist);
+    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : isWaterfrontHalf ? loadWaterfrontHalf(year) : loadResults(year, dist);
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf]);
+  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf, isWaterfrontHalf]);
 
   useEffect(() => {
     if (open) {
@@ -128,8 +132,8 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     );
   };
 
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
-  const stat = activeStats.find(s => s.year === year)!;
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isWaterfrontHalf ? waterfrontStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const stat = activeStats.find(s => s.year === year) ?? activeStats[activeStats.length - 1];
   const grid = '60px 70px 1.6fr 1fr 100px';
 
   if (!open) return null;
@@ -141,7 +145,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         <div className="fro-section" style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
           <div className="flex between ai-baseline">
             <div>
-              <div className="eyebrow mb-8">{isRotoruaHalf ? 'Rotorua Half Marathon' : isRotorua ? 'Rotorua Marathon' : 'Auckland Marathon'} · full results</div>
+              <div className="eyebrow mb-8">{isRotoruaHalf ? 'Rotorua Half Marathon' : isRotorua ? 'Rotorua Marathon' : isWaterfrontHalf ? 'Waterfront Half Marathon' : 'Auckland Marathon'} · full results</div>
               <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
                 {year}
                 {loading

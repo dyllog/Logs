@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
@@ -23,6 +25,7 @@ const recordW = { time: '1:15:54', holder: 'Sophie Watts',    nationality: 'NZL'
 
 export default function WaterfrontHalf() {
   const [tab, setTab] = useState<'men' | 'women'>('men');
+  const navigate = useNavigate();
 
   const record = tab === 'men' ? recordM : recordW;
 
@@ -57,7 +60,18 @@ export default function WaterfrontHalf() {
         </div>
       </section>
 
-      {/* 1. Course profile */}
+      {/* 1. Results */}
+      <section id="results" className="section">
+        <div className="page">
+          <RaceResultsBlock
+            dist="21.1 km"
+            raceId="waterfront-half"
+            onOpenAthlete={() => navigate('/athletes')}
+          />
+        </div>
+      </section>
+
+      {/* 2. Course profile */}
       <section className="section">
         <div className="page">
           <div className="section-header">
@@ -100,7 +114,7 @@ export default function WaterfrontHalf() {
         </div>
       </section>
 
-      {/* 2. Averages */}
+      {/* 3. Averages */}
       <section className="section">
         <div className="page">
           <div className="section-header">
@@ -115,7 +129,7 @@ export default function WaterfrontHalf() {
         </div>
       </section>
 
-      {/* 3. Course records */}
+      {/* 4. Course records */}
       <section className="section">
         <div className="page">
           <div className="section-header">

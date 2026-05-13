@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadWaterfrontHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, WATERFRONT_HALF_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
+import { waterfrontStats } from '@/data/aklSeriesData';
 import FullResultsOverlay from './FullResultsOverlay';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'waterfront-half';
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
@@ -15,9 +16,12 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
   const isChcHalf = raceId === 'chc-half';
+  const isWaterfrontHalf = raceId === 'waterfront-half';
   const availableYears = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
-    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
+    : isWaterfrontHalf ? [...WATERFRONT_HALF_YEARS].reverse()
+    : [...YEARS].reverse();
   const years = availableYears as number[];
   const resolvedInitial = initialYear && (availableYears as number[]).includes(initialYear) ? initialYear : availableYears[0];
   const [year, setYear] = useState<number>(resolvedInitial);
@@ -43,9 +47,11 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
           ? loadRotoruaHalf(year)
           : isRotorua
             ? loadRotorua(year)
-            : loadResults(year, dist as '42.2 km' | '21.1 km');
+            : isWaterfrontHalf
+              ? loadWaterfrontHalf(year)
+              : loadResults(year, dist as '42.2 km' | '21.1 km');
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf]);
+  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isWaterfrontHalf]);
 
   const ql = q.trim().toLowerCase();
   const filtered = useMemo(() => {
@@ -60,13 +66,13 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   }, [all, ql]);
 
   // Reset to latest year when distance changes
-  useEffect(() => { setYear(2025); setPage(1); setQ(''); }, [dist]);
+  useEffect(() => { setYear(availableYears[0]); setPage(1); setQ(''); }, [dist]);
   useEffect(() => { setPage(1); }, [year, ql]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
-  const stat = activeStats.find(s => s.year === year)!;
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isWaterfrontHalf ? waterfrontStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const stat = activeStats.find(s => s.year === year) ?? activeStats[activeStats.length - 1];
 
   return (
     <div>
