@@ -180,6 +180,61 @@ export const rotoruaHalfStats: YearStat[] = [
   { year: 2025, finishers: 1100, avg: 8806, avgMen: 7914, avgWomen: 9597, winnerM: 4298, winnerW: 4918, top10M: 4798, top10W: 5609 },
 ];
 
+const hbCache: Record<number, ResultRow[]> = {};
+const hbInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadHb(year: number): Promise<ResultRow[]> {
+  if (hbCache[year]) return hbCache[year];
+  if (!hbInflight[year]) {
+    hbInflight[year] = fetch(`/data/results-hb-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { hbCache[year] = rows; return rows; });
+  }
+  return hbInflight[year];
+}
+export function getCachedHb(year: number): ResultRow[] { return hbCache[year] ?? []; }
+
+const hbHalfCache: Record<number, ResultRow[]> = {};
+const hbHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadHbHalf(year: number): Promise<ResultRow[]> {
+  if (hbHalfCache[year]) return hbHalfCache[year];
+  if (!hbHalfInflight[year]) {
+    hbHalfInflight[year] = fetch(`/data/results-hb-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { hbHalfCache[year] = rows; return rows; });
+  }
+  return hbHalfInflight[year];
+}
+export function getCachedHbHalf(year: number): ResultRow[] { return hbHalfCache[year] ?? []; }
+
+const qtCache: Record<number, ResultRow[]> = {};
+const qtInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadQt(year: number): Promise<ResultRow[]> {
+  if (qtCache[year]) return qtCache[year];
+  if (!qtInflight[year]) {
+    qtInflight[year] = fetch(`/data/results-qt-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { qtCache[year] = rows; return rows; });
+  }
+  return qtInflight[year];
+}
+export function getCachedQt(year: number): ResultRow[] { return qtCache[year] ?? []; }
+
+const qtHalfCache: Record<number, ResultRow[]> = {};
+const qtHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadQtHalf(year: number): Promise<ResultRow[]> {
+  if (qtHalfCache[year]) return qtHalfCache[year];
+  if (!qtHalfInflight[year]) {
+    qtHalfInflight[year] = fetch(`/data/results-qt-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { qtHalfCache[year] = rows; return rows; });
+  }
+  return qtHalfInflight[year];
+}
+export function getCachedQtHalf(year: number): ResultRow[] { return qtHalfCache[year] ?? []; }
+
+const wfHalfCache: Record<number, ResultRow[]> = {};
+const wfHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWaterfrontHalf(year: number): Promise<ResultRow[]> {
+  if (wfHalfCache[year]) return wfHalfCache[year];
+  if (!wfHalfInflight[year]) {
+    wfHalfInflight[year] = fetch(`/data/results-wf-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wfHalfCache[year] = rows; return rows; });
+  }
+  return wfHalfInflight[year];
+}
+export function getCachedWaterfrontHalf(year: number): ResultRow[] { return wfHalfCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

@@ -11,6 +11,7 @@ const RESULTS = [
   { dateNum: 2018 + 4/12,  year: 2018, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:46:25', sec: 9985, pos: 7,  total:  940, cat: 'M 20–39', isPB: false },
   { dateNum: 2018 + 5/12,  year: 2018, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:20', sec: 4100, pos: 4,  total: 1574, cat: 'M 20–39', isPB: false },
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:42', sec: 4062, pos: 2,  total: 5572, cat: 'M 20–39', isPB: false },
+  { dateNum: 2019 + 3/12,  year: 2019, race: 'Waterfront Half Marathon',    short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:07:34', sec: 4054, pos: 1,  total: 2015, cat: 'M 20–29', isPB: false },
   { dateNum: 2019 + 4/12,  year: 2019, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:27:35', sec: 8855, pos: 3,  total:  720, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:34', sec: 8554, pos: 2,  total: 1650, cat: 'M 20–39', isPB: false },
   { dateNum: 2020 + 4/12,  year: 2020, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:31:13', sec: 9073, pos: 1,  total:  446, cat: 'M 20–39', isPB: false },
@@ -30,6 +31,7 @@ const RESULTS = [
   { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:52', sec: 8812, pos: 3,  total:  897, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 5/12,  year: 2025, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:39', sec: 3879, pos: 6,  total: 2858, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:21:01', sec: 8461, pos: 2,  total: 2775, cat: 'M Elite',  isPB: true  },
+  { dateNum: 2026 + 3/12,  year: 2026, race: 'Waterfront Half Marathon',    short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:08:16', sec: 4096, pos: 1,  total: 3006, cat: 'M 20–29', isPB: false },
 ];
 
 const PBs = {
@@ -142,7 +144,7 @@ export default function AthleteVoss() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '28' },
+                  { l: 'Races logged', v: '30' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -221,10 +223,10 @@ export default function AthleteVoss() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '28',      sub: '14 marathons · 14 halves' },
+                { label: 'Races logged',     val: '30',      sub: '14 marathons · 16 halves' },
                 { label: 'Marathon PB',      val: '2:21:01', sub: 'Auckland 2025 · 2nd overall' },
                 { label: 'Half marathon PB', val: '1:04:30', sub: 'Christchurch 2024 · 1st overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '9 career wins · AKL · CHC · ROT · HB' },
+                { label: 'Best overall pos', val: '1st',     sub: '11 career wins · AKL · CHC · ROT · HB · WF' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -266,7 +268,7 @@ export default function AthleteVoss() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · AKL · CHC · ROT · HB</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2026 · AKL · CHC · ROT · HB · WF</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -291,6 +293,7 @@ export default function AthleteVoss() {
                         else if (r.race.includes('Rotorua')) navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Christchurch')) navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes("Hawke")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

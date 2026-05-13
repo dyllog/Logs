@@ -520,6 +520,11 @@ body {
   color: var(--on-dark);
   padding: 28px;
   min-height: 520px;
+  color-scheme: dark;
+}
+.cmp-select option {
+  background: #1a1a18;
+  color: #f5f4f0;
 }
 .cmp-field { margin-bottom: 24px; }
 .cmp-field:last-child { margin-bottom: 0; }

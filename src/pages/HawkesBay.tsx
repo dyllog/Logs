@@ -38,27 +38,21 @@ const hbAnnotationsHalf = [
 
 export default function HawkesBay() {
   const [distId, setDistId] = useState<'42' | '21'>('42');
-  const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
   const isHalf = distId === '21';
 
   const activeStats = isHalf ? hbHalfStats : hbStats;
 
-  const seedCR = useMemo(() => {
-    if (activeStats.length === 0) return 0;
-    const crM = Math.min(...activeStats.map(s => s.winnerM));
-    const crW = Math.min(...activeStats.map(s => s.winnerW));
-    return (tab === 'men' ? crM : crW) + 1;
-  }, [tab, activeStats]);
+  const seedCRM = useMemo(() => activeStats.length === 0 ? 0 : Math.min(...activeStats.map(s => s.winnerM)) + 1, [activeStats]);
+  const seedCRW = useMemo(() => activeStats.length === 0 ? 0 : Math.min(...activeStats.map(s => s.winnerW)) + 1, [activeStats]);
 
-  const marRecordM = { time: '2:24:02', holder: 'Michael Voss',     nationality: 'NZL', club: '—', year: 2022, previous: '2:25:33 — Daniel Jones (NZL) 2021' };
-  const marRecordW = { time: '2:46:47', holder: 'Ingrid Cree',      nationality: 'NZL', club: '—', year: 2024, previous: '2:47:42 — unknown (NZL) 2023' };
+  const marRecordM  = { time: '2:24:02', holder: 'Michael Voss',    nationality: 'NZL', club: '—', year: 2022, previous: '2:25:33 — Daniel Jones (NZL) 2021' };
+  const marRecordW  = { time: '2:46:47', holder: 'Ingrid Cree',     nationality: 'NZL', club: '—', year: 2024, previous: '2:47:42 — unknown (NZL) 2023' };
   const halfRecordM = { time: '1:05:34', holder: 'Cameron Graves',  nationality: 'NZL', club: '—', year: 2025, previous: '1:06:23 — Cameron Graves (NZL) 2024' };
   const halfRecordW = { time: '1:14:43', holder: 'Camille French',  nationality: 'NZL', club: '—', year: 2023, previous: '1:17:27 — Anneke Arlidge (NZL) 2025' };
 
-  const record = isHalf
-    ? (tab === 'men' ? halfRecordM : halfRecordW)
-    : (tab === 'men' ? marRecordM  : marRecordW);
+  const recordM = isHalf ? halfRecordM : marRecordM;
+  const recordW = isHalf ? halfRecordW : marRecordW;
 
   return (
     <main>
@@ -83,7 +77,7 @@ export default function HawkesBay() {
               <div><div className="label mb-8">Next edition</div><div>Jun 2026</div></div>
               <div>
                 <div className="label mb-8">Entry</div>
-                <div><span style={{ color: 'var(--meta)' }}>hawkesbaymarathon.co.nz</span></div>
+                <div><a href="https://www.hawkesbaymarathon.co.nz" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>hawkesbaymarathon.co.nz ↗</a></div>
               </div>
             </div>
           </div>
@@ -172,39 +166,39 @@ export default function HawkesBay() {
                 {isHalf ? '21.1 km' : '42.2 km'} · current marks
               </h2>
             </div>
-            <div className="flex gap-8">
-              <button className={`pill ${tab === 'men' ? 'active' : ''}`} onClick={() => setTab('men')}>Men</button>
-              <button className={`pill ${tab === 'women' ? 'active' : ''}`} onClick={() => setTab('women')}>Women</button>
-            </div>
           </div>
           <div className="card-dark">
-            <div className="flex between ai-baseline">
-              <span className="label">{tab === 'men' ? 'Men · Open' : 'Women · Open'} · {isHalf ? '21.1 km' : '42.2 km'}</span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 48, marginTop: 24, alignItems: 'start' }} className="record-grid">
-              <div>
-                <div className="serif" style={{ fontSize: record.time === '—' ? 36 : 72, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{record.time}</div>
-                {record.holder !== '—' && (
-                  <div className="mt-24">
-                    <div className="serif" style={{ fontSize: 26, lineHeight: 1.15 }}>{record.holder}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, marginTop: 8 }}>
+              {([['Men · Open', recordM], ['Women · Open', recordW]] as [string, typeof recordM][]).map(([label, rec], col) => (
+                <div key={label} style={{ paddingRight: col === 0 ? 40 : 0, paddingLeft: col === 1 ? 40 : 0, borderRight: col === 0 ? '0.5px solid var(--on-dark-rule)' : 'none' }}>
+                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>{label}</div>
+                  <div className="serif" style={{ fontSize: 56, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{rec.time}</div>
+                  <div className="mt-20">
+                    <div className="serif" style={{ fontSize: 22, lineHeight: 1.15 }}>{rec.holder}</div>
                     <div className="label mt-8" style={{ color: 'var(--on-dark-meta)' }}>
-                      {record.club} · {record.nationality} · set {record.year}
+                      {rec.club} · {rec.nationality} · set {rec.year}
                     </div>
                   </div>
-                )}
-                {record.previous !== '—' && (
-                  <div className="mt-24" style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.04em' }}>
-                    Previous: <span style={{ color: 'var(--on-dark)' }}>{record.previous}</span>
-                  </div>
-                )}
-              </div>
-              {activeStats.length > 0 && (
-                <div style={{ color: 'var(--on-dark)' }}>
-                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Winner vs CR · historical</div>
-                  <CRWinnerChart stats={activeStats} gender={tab} seedCR={seedCR} />
+                  {rec.previous !== '—' && (
+                    <div className="mt-20" style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.04em' }}>
+                      Previous: <span style={{ color: 'var(--on-dark)' }}>{rec.previous}</span>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
+            {activeStats.length > 0 && (
+              <div style={{ color: 'var(--on-dark)', marginTop: 40, paddingTop: 32, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+                <div>
+                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Men · winner vs CR</div>
+                  <CRWinnerChart stats={activeStats} gender="men" seedCR={seedCRM} />
+                </div>
+                <div>
+                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Women · winner vs CR</div>
+                  <CRWinnerChart stats={activeStats} gender="women" seedCR={seedCRW} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

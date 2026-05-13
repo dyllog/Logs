@@ -1,11 +1,16 @@
 import { useState, useMemo, useEffect } from 'react';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
+import { Link } from 'react-router-dom';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
+import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
+import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
+import { wfHalfStats, WF_YEARS } from '@/data/waterfrontData';
 import FullResultsOverlay from './FullResultsOverlay';
+import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half';
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
@@ -15,9 +20,18 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
   const isChcHalf = raceId === 'chc-half';
+  const isHb = raceId === 'hb';
+  const isHbHalf = raceId === 'hb-half';
+  const isQt = raceId === 'qt';
+  const isQtHalf = raceId === 'qt-half';
+  const isWfHalf = raceId === 'wf-half';
   const availableYears = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
-    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
+    : (isHb || isHbHalf) ? [...HB_YEARS].reverse()
+    : (isQt || isQtHalf) ? [...QT_YEARS].reverse()
+    : isWfHalf ? [...WF_YEARS].reverse()
+    : [...YEARS].reverse();
   const years = availableYears as number[];
   const resolvedInitial = initialYear && (availableYears as number[]).includes(initialYear) ? initialYear : availableYears[0];
   const [year, setYear] = useState<number>(resolvedInitial);
@@ -35,26 +49,27 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     if (!hasData) return;
     setLoading(true);
     setAll([]);
-    const loader = isChcHalf
-      ? loadChcHalf(year)
-      : isChc
-        ? loadChc(year)
-        : isRotoruaHalf
-          ? loadRotoruaHalf(year)
-          : isRotorua
-            ? loadRotorua(year)
-            : loadResults(year, dist as '42.2 km' | '21.1 km');
+    const loader = isChcHalf ? loadChcHalf(year)
+      : isChc ? loadChc(year)
+      : isRotoruaHalf ? loadRotoruaHalf(year)
+      : isRotorua ? loadRotorua(year)
+      : isHbHalf ? loadHbHalf(year)
+      : isHb ? loadHb(year)
+      : isQtHalf ? loadQtHalf(year)
+      : isQt ? loadQt(year)
+      : isWfHalf ? loadWaterfrontHalf(year)
+      : loadResults(year, dist as '42.2 km' | '21.1 km');
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf]);
+  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf]);
 
-  const ql = q.trim().toLowerCase();
+  const ql = normalise(q.trim());
   const filtered = useMemo(() => {
     if (!ql) return all;
     if (/^\d+$/.test(ql)) {
       return all.filter(r => String(r.bib).includes(ql) || String(r.pos) === ql);
     }
     return all.filter(r =>
-      r.name.toLowerCase().includes(ql) ||
+      normalise(r.name).includes(ql) ||
       r.nat.toLowerCase().includes(ql)
     );
   }, [all, ql]);
@@ -65,7 +80,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWfHalf ? wfHalfStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
 
   return (
@@ -143,18 +158,24 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
                 <tr><td colSpan={5} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>
                   {ql ? `No results match "${q}" in ${year}.` : `No results for ${year}.`}
                 </td></tr>
-              ) : pageRows.map(r => (
-                <tr key={r.pos} className="row">
-                  <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
-                  <td className="dimmed time">{r.bib || '—'}</td>
-                  <td>
-                    <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
-                    <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
-                  </td>
-                  <td className="dimmed">{r.cat}</td>
-                  <td className="num time">{r.time}</td>
-                </tr>
-              ))}
+              ) : pageRows.map(r => {
+                const slug = getAthleteSlug(r.name);
+                return (
+                  <tr key={r.pos} className="row">
+                    <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
+                    <td className="dimmed time">{r.bib || '—'}</td>
+                    <td>
+                      {slug
+                        ? <Link to={`/athletes/${slug}`} className="serif" style={{ fontSize: 16, color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'var(--rule)' }}>{r.name}</Link>
+                        : <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
+                      }
+                      <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
+                    </td>
+                    <td className="dimmed">{r.cat}</td>
+                    <td className="num time">{r.time}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 
@@ -178,7 +199,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       <FullResultsOverlay
         open={fullOpen}
         year={year}
-        dist={isRotoruaHalf ? '21.1 km' : isRotorua ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
+        dist={(isRotoruaHalf || isHbHalf || isQtHalf) ? '21.1 km' : (isRotorua || isHb || isQt) ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
         raceId={raceId}
         initialQ={fullQ}
         onClose={() => setFullOpen(false)}

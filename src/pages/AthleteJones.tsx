@@ -32,7 +32,7 @@ function ordSuffix(n: number): string {
 }
 
 function ProgressionChart() {
-  const pts = [...RESULTS].sort((a, b) => a.dateNum - b.dateNum);
+  const pts = RESULTS.filter(r => r.distId === 'mar').sort((a, b) => a.dateNum - b.dateNum);
   if (pts.length === 0) return null;
 
   const W = 640, H = 180;

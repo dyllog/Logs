@@ -1,77 +1,55 @@
-import { useState, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
-import { rotoruaStats, rotoruaHalfStats } from '@/data/logsDataExt';
+import { wfHalfStats } from '@/data/waterfrontData';
 
-// Rotorua Marathon — Lake Rotorua loop, ~280m asl, very flat
-// Elevation based on known course characteristics
-const rotoruaElevation: [number, number][] = [
-  [0,280],[1,281],[2,282],[3,282],[4,282],[5,283],[6,283],[7,282],
-  [8,281],[9,280],[10,279],[11,279],[12,278],[13,279],[14,280],[15,281],
-  [16,282],[17,282],[18,281],[19,280],[20,280],[21,279],[22,278],[23,278],
-  [24,278],[25,279],[26,280],[27,281],[28,281],[29,280],[30,279],[31,279],
-  [32,280],[33,281],[34,282],[35,282],[36,281],[37,281],[38,280],[39,280],
-  [40,280],[41,280],[42.2,280],
+// Waterfront Half — Wellington harbour loop, essentially flat at sea level
+const wfElevation: [number, number][] = [
+  [0,3],[1,3],[2,4],[3,4],[4,3],[5,3],[6,4],[7,4],
+  [8,3],[9,3],[10,4],[10.55,4],
+  [11,4],[12,3],[13,3],[14,4],[15,4],[16,3],[17,3],[18,4],[19,4],[20,3],[21,3],[21.1,3],
 ];
 
-const rotoruaAnnotations = [
-  { km: 0,    label: 'Rotorua CBD' },
-  { km: 10,   label: 'Sulphur Point' },
-  { km: 21.1, label: 'Halfway' },
-  { km: 35,   label: 'Ohinemutu' },
-  { km: 42.2, label: 'Finish · Memorial Park' },
+const wfAnnotations = [
+  { km: 0,    label: 'Start' },
+  { km: 10.55, label: 'Turnaround' },
+  { km: 21.1, label: 'Finish' },
 ];
 
-export default function Rotorua() {
-  const [searchParams] = useSearchParams();
-  const initDist = searchParams.get('dist') === '21' ? '21' : '42' as '42' | '21';
-  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
-
-  const [distId, setDistId] = useState<'42' | '21'>(initDist);
+export default function WaterfrontHalf() {
   const navigate = useNavigate();
-  const isHalf = distId === '21';
 
-  const activeStats = isHalf ? rotoruaHalfStats : rotoruaStats;
+  const seedCRM = useMemo(() => Math.min(...wfHalfStats.map(s => s.winnerM)) + 1, []);
+  const seedCRW = useMemo(() => Math.min(...wfHalfStats.map(s => s.winnerW)) + 1, []);
 
-  const seedCRM = useMemo(() => Math.min(...activeStats.map(s => s.winnerM)) + 1, [activeStats]);
-  const seedCRW = useMemo(() => Math.min(...activeStats.map(s => s.winnerW)) + 1, [activeStats]);
-
-  const marRecordM  = { time: '2:21:49', holder: 'Malcolm Hicks',   nationality: 'NZL', club: '—', year: 2023, previous: '2:21:58 — Saeki Makino (JPN) 2017' };
-  const marRecordW  = { time: '2:45:58', holder: 'Sally Gibbs',     nationality: 'NZL', club: '—', year: 2014, previous: '—' };
-  const halfRecordM = { time: '1:06:07', holder: 'Michael Voss',    nationality: 'NZL', club: '—', year: 2016, previous: '—' };
-  const halfRecordW = { time: '1:15:34', holder: 'Lisa Robertson',  nationality: 'NZL', club: '—', year: 2015, previous: '—' };
-
-  const recordM = isHalf ? halfRecordM : marRecordM;
-  const recordW = isHalf ? halfRecordW : marRecordW;
+  const recordM = { time: '1:06:56', holder: 'Malcolm Hicks',    nationality: 'NZL', club: '—', year: 2023, previous: '1:07:34 — Michael Voss (NZL) 2019' };
+  const recordW = { time: '1:14:37', holder: "Lydia O'Donnell",  nationality: 'NZL', club: '—', year: 2019, previous: '—' };
 
   return (
     <main>
       {/* Race header */}
       <section style={{ padding: '48px 0 32px', borderBottom: '0.5px solid var(--rule)' }}>
         <div className="page">
-          <div className="eyebrow mb-24">Road · Established 1967 · Lake Rotorua loop</div>
+          <div className="eyebrow mb-24">Road · Wellington · Waterfront</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 48, alignItems: 'end' }} className="race-head-grid">
             <div>
               <h1 className="serif" style={{ fontSize: 'clamp(36px,5vw,64px)', lineHeight: 0.98, margin: 0, letterSpacing: '-0.025em' }}>
-                Rotorua Marathon
+                Waterfront Half Marathon
               </h1>
               <div className="flex gap-8 mt-20" style={{ flexWrap: 'wrap' }}>
-                {([['42', '42.2 km'], ['21', '21.1 km']] as ['42'|'21', string][]).map(([id, label]) => (
-                  <button key={id} className={`pill ${distId === id ? 'active' : ''}`} onClick={() => setDistId(id)}>{label}</button>
-                ))}
-                <span className="pill">10 km</span>
+                <button className="pill active">21.1 km</button>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, fontSize: 12 }}>
-              <div><div className="label mb-8">Location</div><div>Rotorua, Bay of Plenty</div></div>
-              <div><div className="label mb-8">Course</div><div>Lake Rotorua loop</div></div>
-              <div><div className="label mb-8">Next edition</div><div>2 May 2027</div></div>
+              <div><div className="label mb-8">Location</div><div>Wellington</div></div>
+              <div><div className="label mb-8">Course</div><div>Waterfront out-and-back</div></div>
+              <div><div className="label mb-8">Next edition</div><div>2027</div></div>
               <div>
                 <div className="label mb-8">Entry</div>
-                <div><a href="https://www.rotoruamarathon.co.nz" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>rotoruamarathon.co.nz ↗</a></div>
+                <div>waterfronthalfmarathon.co.nz</div>
               </div>
             </div>
           </div>
@@ -82,9 +60,8 @@ export default function Rotorua() {
       <section id="results" className="section">
         <div className="page">
           <RaceResultsBlock
-            dist={isHalf ? '21.1 km' : '42.2 km'}
-            raceId={isHalf ? 'rotorua-half' : 'rotorua'}
-            initialYear={initYear}
+            dist="21.1 km"
+            raceId="wf-half"
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>
@@ -95,25 +72,25 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Race overview · {isHalf ? '21.1 km' : '42.2 km'}</div>
+              <div className="eyebrow mb-8">Race overview · 21.1 km</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                {isHalf ? 'Half marathon' : 'Marathon'} course profile
+                Half marathon course profile
               </h2>
             </div>
             <div className="dimmed" style={{ fontSize: 12, maxWidth: 280, textAlign: 'right' }}>
-              Full loop of Lake Rotorua · sealed road · geothermal terrain
+              Sealed road · Wellington waterfront & harbour
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 48, alignItems: 'start' }} className="overview-grid">
             <div>
-              <ElevationChart data={rotoruaElevation} annotations={rotoruaAnnotations} />
+              <ElevationChart data={wfElevation} annotations={wfAnnotations} />
             </div>
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)' }}>
                 {[
-                  { label: 'Climb',   val: '~55 m',  sub: '↑ cumulative' },
-                  { label: 'Descent', val: '~55 m',  sub: '↓ cumulative' },
-                  { label: 'Net',     val: '0 m',    sub: 'loop course' },
+                  { label: 'Climb',   val: '~30 m',  sub: '↑ cumulative' },
+                  { label: 'Descent', val: '~30 m',  sub: '↓ cumulative' },
+                  { label: 'Net',     val: '0 m',    sub: 'out-and-back' },
                 ].map((item, i) => (
                   <div key={i} style={{ padding: '20px 16px', borderRight: i < 2 ? '0.5px solid var(--rule-soft)' : 'none' }}>
                     <div className="label">{item.label}</div>
@@ -124,9 +101,9 @@ export default function Rotorua() {
               </div>
               <div className="mt-24" style={{ fontSize: 12, lineHeight: 1.6 }}>
                 <div className="label mb-8">Surface</div>
-                <div>Sealed road · flat to gently rolling</div>
+                <div>Sealed road · flat waterfront promenade</div>
                 <div className="label mt-16 mb-8">Character</div>
-                <div>One of NZ's oldest road marathons. The lake loop is renowned for its consistently flat profile, geothermal scenery, and reliable fast times. Altitude ~280 m asl.</div>
+                <div>A fast, flat out-and-back course along Wellington's iconic harbour waterfront. One of New Zealand's fastest half marathon courses, run at sea level with the capital city skyline as a backdrop. Wellington's notorious winds can be a factor.</div>
               </div>
             </div>
           </div>
@@ -138,16 +115,13 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Averages · {isHalf ? '21.1 km' : '42.2 km'}</div>
+              <div className="eyebrow mb-8">Averages · 21.1 km</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
                 Median finish · winning times · by year
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12, maxWidth: 280, textAlign: 'right' }}>
-              Computed from every certified finish on record. 2014 includes walkers category.
-            </div>
           </div>
-          <AveragesChart stats={activeStats} />
+          <AveragesChart stats={wfHalfStats} />
         </div>
       </section>
 
@@ -156,9 +130,9 @@ export default function Rotorua() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Course records · {isHalf ? '21.1 km' : '42.2 km'}</div>
+              <div className="eyebrow mb-8">Course records · 21.1 km</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                {isHalf ? '21.1 km' : '42.2 km'} · current marks
+                21.1 km · current marks
               </h2>
             </div>
           </div>
@@ -185,11 +159,11 @@ export default function Rotorua() {
             <div style={{ color: 'var(--on-dark)', marginTop: 40, paddingTop: 32, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
               <div>
                 <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Men · winner vs CR</div>
-                <CRWinnerChart stats={activeStats} gender="men" seedCR={seedCRM} />
+                <CRWinnerChart stats={wfHalfStats} gender="men" seedCR={seedCRM} />
               </div>
               <div>
                 <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Women · winner vs CR</div>
-                <CRWinnerChart stats={activeStats} gender="women" seedCR={seedCRW} />
+                <CRWinnerChart stats={wfHalfStats} gender="women" seedCR={seedCRW} />
               </div>
             </div>
           </div>

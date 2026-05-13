@@ -6,6 +6,7 @@ const races = [
   { name: "Queenstown Marathon",     slug: "queenstown-marathon",  location: "Queenstown",           date: "21 Nov 2026", distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Mixed", since: "2014" },
   { name: "Hawke's Bay Marathon",    slug: "hawkes-bay-marathon",  location: "Napier",               date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km"],                    surface: "Road",  since: "2016" },
   { name: "Christchurch Marathon",   slug: "christchurch-marathon",location: "Christchurch",         date: "12 Jul 2026", distances: ["42.2 km", "21.1 km"],                    surface: "Road",  since: "2007" },
+  { name: "Waterfront Half Marathon", slug: "waterfront-half-marathon", location: "Wellington",          date: "2027",        distances: ["21.1 km"],                               surface: "Road",  since: "2018" },
   { name: "Wellington Marathon",     slug: null,                   location: "Wellington",           date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Road",  since: "2011" },
   { name: "Tarawera Ultramarathon",  slug: null,                   location: "Rotorua",              date: "8 Feb 2027",  distances: ["102 km", "50 km", "21 km"],               surface: "Trail", since: "2008" },
   { name: "Round the Bays",          slug: null,                   location: "Auckland",             date: "2 Aug 2026",  distances: ["8.4 km", "5 km"],                         surface: "Road",  since: "1972" },

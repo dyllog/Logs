@@ -13,6 +13,7 @@ const RESULTS = [
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:28', sec: 4168, pos: 6,  total: 5572, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:47', sec: 4187, pos: 5,  total: 5204, cat: 'M 20–39', isPB: false },
   { dateNum: 2020 + 4/12,  year: 2020, race: 'Rotorua Half Marathon',      short: 'ROT Half', dist: '21.1 km', distId: 'half' as const, time: '1:15:22', sec: 4522, pos: 1,  total:  360, cat: 'M 20–39', isPB: false },
+  { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon',   short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:09:47', sec: 4187, pos: 1,  total: 1611, cat: 'M 20–29', isPB: false },
 ];
 
 const PBs = {
@@ -118,7 +119,7 @@ export default function AthletePulford() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '11' },
+                  { l: 'Races logged', v: '12' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -195,7 +196,7 @@ export default function AthletePulford() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '11',      sub: '1 marathon · 10 halves' },
+                { label: 'Races logged',     val: '12',      sub: '1 marathon · 11 halves' },
                 { label: 'Marathon PB',      val: '2:27:01', sub: 'Auckland 2015 · 1st overall' },
                 { label: 'Half marathon PB', val: '1:06:11', sub: 'Christchurch 2013 · 3rd overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '3 career wins · AKL Mar · AKL Half · ROT Half' },
@@ -258,6 +259,7 @@ export default function AthletePulford() {
                         const d = r.dist === '42.2 km' ? '42' : '21';
                         if (r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Rotorua')) navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                         else navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>

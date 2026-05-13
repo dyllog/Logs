@@ -5,7 +5,7 @@ import ElevationChart from '@/components/ElevationChart';
 import AveragesChart from '@/components/AveragesChart';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import { race, DISTANCE_OPTIONS, elevation, elevationAnnotations } from '@/data/logsData';
-import { courseStats, halfStats, yearStatsForDist } from '@/data/logsDataExt';
+import { courseStats, yearStatsForDist } from '@/data/logsDataExt';
 
 type DistId = '42' | '21' | '11' | '5';
 
@@ -15,7 +15,6 @@ export default function Race() {
   const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
 
   const [distId, setDistId] = useState<DistId>(initDist);
-  const [tab, setTab] = useState<'men' | 'women'>('men');
   const navigate = useNavigate();
   const { hash } = useLocation();
 
@@ -32,9 +31,8 @@ export default function Race() {
 
   const activeYearStats = yearStatsForDist(distId);
 
-  const records = distId === '42' || distId === '21'
-    ? (tab === 'men' ? dopt.recordM : dopt.recordW)
-    : null;
+  const recordM = hasData ? dopt.recordM : null;
+  const recordW = hasData ? dopt.recordW : null;
 
   const elevData = useMemo(() => {
     if (distId === '42') return elevation;
@@ -45,12 +43,15 @@ export default function Race() {
     return elevationAnnotations.filter(a => a.km <= dopt.km);
   }, [distId, dopt.km]);
 
-  const seedCR = useMemo(() => {
-    if (distId === '21') {
-      return tab === 'men' ? halfStats[0].winnerM + 1 : halfStats[0].winnerW + 1;
-    }
-    return tab === 'men' ? activeYearStats[0].winnerM + 1 : activeYearStats[0].winnerW + 1;
-  }, [distId, tab, activeYearStats]);
+  const seedCRM = useMemo(() => {
+    if (activeYearStats.length === 0) return 0;
+    return Math.min(...activeYearStats.map(s => s.winnerM)) + 1;
+  }, [activeYearStats]);
+
+  const seedCRW = useMemo(() => {
+    if (activeYearStats.length === 0) return 0;
+    return Math.min(...activeYearStats.map(s => s.winnerW)) + 1;
+  }, [activeYearStats]);
 
   return (
     <main>
@@ -69,7 +70,7 @@ export default function Race() {
                 {DISTANCE_OPTIONS.map(d => (
                   <button key={d.id}
                           className={`pill ${distId === d.id ? 'active' : ''}`}
-                          onClick={() => { setDistId(d.id as DistId); setTab('men'); }}>
+                          onClick={() => setDistId(d.id as DistId)}>
                     {d.label}
                   </button>
                 ))}
@@ -81,7 +82,7 @@ export default function Race() {
               <div><div className="label mb-8">Next edition</div><div>{race.nextDate}</div></div>
               <div>
                 <div className="label mb-8">Entry</div>
-                <div><a style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4, cursor: 'pointer' }}>aucklandmarathon.co.nz ↗</a></div>
+                <div><a href="https://www.aucklandmarathon.co.nz" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>aucklandmarathon.co.nz ↗</a></div>
               </div>
             </div>
           </div>
@@ -177,12 +178,6 @@ export default function Race() {
                 {dopt.label} · current marks
               </h2>
             </div>
-            {hasData && (
-              <div className="flex gap-8">
-                <button className={`pill ${tab === 'men' ? 'active' : ''}`} onClick={() => setTab('men')}>Men</button>
-                <button className={`pill ${tab === 'women' ? 'active' : ''}`} onClick={() => setTab('women')}>Women</button>
-              </div>
-            )}
           </div>
 
           {!hasData ? (
@@ -191,38 +186,39 @@ export default function Race() {
                 {dopt.label} records not yet archived.
               </div>
             </div>
-          ) : records && (
+          ) : recordM && recordW && (
             <div className="card-dark">
-              <div className="flex between ai-baseline">
-                <span className="label">{tab === 'men' ? 'Men · Open' : 'Women · Open'} · {dopt.label}</span>
-                {records.broken && (
-                  <span style={{ color: 'var(--accent)', border: '0.5px solid var(--accent)', padding: '3px 10px', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', borderRadius: 999, fontFamily: '"DM Mono", monospace' }}>
-                    ● Record broken {records.year}
-                  </span>
-                )}
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 48, marginTop: 24, alignItems: 'start' }} className="record-grid">
-                <div>
-                  <div className="serif" style={{ fontSize: 72, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{records.time}</div>
-                  <div className="mt-24">
-                    <div className="serif" style={{ fontSize: 26, lineHeight: 1.15 }}>{records.holder}</div>
-                    <div className="label mt-8" style={{ color: 'var(--on-dark-meta)' }}>
-                      {records.club} · {records.nationality} · set {records.year}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, marginTop: 8 }}>
+                {([['Men · Open', recordM], ['Women · Open', recordW]] as [string, typeof recordM][]).map(([label, rec], col) => (
+                  <div key={label} style={{ paddingRight: col === 0 ? 40 : 0, paddingLeft: col === 1 ? 40 : 0, borderRight: col === 0 ? '0.5px solid var(--on-dark-rule)' : 'none' }}>
+                    <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>{label}</div>
+                    <div className="serif" style={{ fontSize: 56, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{rec.time}</div>
+                    <div className="mt-20">
+                      <div className="serif" style={{ fontSize: 22, lineHeight: 1.15 }}>{rec.holder}</div>
+                      <div className="label mt-8" style={{ color: 'var(--on-dark-meta)' }}>
+                        {rec.club} · {rec.nationality} · set {rec.year}
+                      </div>
                     </div>
+                    {rec.previous !== '—' && (
+                      <div className="mt-20" style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.04em' }}>
+                        Previous: <span style={{ color: 'var(--on-dark)' }}>{rec.previous}</span>
+                      </div>
+                    )}
                   </div>
-                  <div className="mt-24" style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.04em' }}>
-                    Previous: <span style={{ color: 'var(--on-dark)' }}>{records.previous}</span>
-                  </div>
-                </div>
-                <div style={{ color: 'var(--on-dark)' }}>
-                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Winner vs CR · 2014–2025</div>
-                  <CRWinnerChart
-                    stats={activeYearStats}
-                    gender={tab}
-                    seedCR={seedCR}
-                  />
-                </div>
+                ))}
               </div>
+              {activeYearStats.length > 0 && (
+                <div style={{ color: 'var(--on-dark)', marginTop: 40, paddingTop: 32, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+                  <div>
+                    <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Men · winner vs CR</div>
+                    <CRWinnerChart stats={activeYearStats} gender="men" seedCR={seedCRM} />
+                  </div>
+                  <div>
+                    <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Women · winner vs CR</div>
+                    <CRWinnerChart stats={activeYearStats} gender="women" seedCR={seedCRW} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

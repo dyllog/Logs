@@ -1,12 +1,17 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
+import { Link } from 'react-router-dom';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
+import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
+import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
+import { wfHalfStats, WF_YEARS } from '@/data/waterfrontData';
+import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
@@ -25,9 +30,18 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
   const isChcHalf = raceId === 'chc-half';
+  const isHb = raceId === 'hb';
+  const isHbHalf = raceId === 'hb-half';
+  const isQt = raceId === 'qt';
+  const isQtHalf = raceId === 'qt-half';
+  const isWfHalf = raceId === 'wf-half';
   const years = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
-    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse() : [...YEARS].reverse();
+    : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
+    : (isHb || isHbHalf) ? [...HB_YEARS].reverse()
+    : (isQt || isQtHalf) ? [...QT_YEARS].reverse()
+    : isWfHalf ? [...WF_YEARS].reverse()
+    : [...YEARS].reverse();
   const [year, setYear] = useState(yearProp);
   const [q, setQ] = useState(initialQ ?? '');
   const [gender, setGender] = useState('all');
@@ -43,9 +57,9 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     if (!open) return;
     setLoading(true);
     setAll([]);
-    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : loadResults(year, dist);
+    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : isHbHalf ? loadHbHalf(year) : isHb ? loadHb(year) : isQtHalf ? loadQtHalf(year) : isQt ? loadQt(year) : isWfHalf ? loadWaterfrontHalf(year) : loadResults(year, dist);
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf]);
+  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf]);
 
   useEffect(() => {
     if (open) {
@@ -70,7 +84,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const ql = q.trim().toLowerCase();
+  const ql = normalise(q.trim());
   const filtered = useMemo(() => {
     let rs = all;
     if (gender !== 'all') rs = rs.filter(r => r.cat.startsWith(gender));
@@ -80,7 +94,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         rs = rs.filter(r => String(r.bib).includes(ql) || String(r.pos) === ql);
       } else {
         rs = rs.filter(r =>
-          r.name.toLowerCase().includes(ql) ||
+          normalise(r.name).includes(ql) ||
           r.nat.toLowerCase().includes(ql)
         );
       }
@@ -128,7 +142,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     );
   };
 
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWfHalf ? wfHalfStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
   const grid = '60px 70px 1.6fr 1fr 100px';
 
@@ -141,7 +155,20 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
         <div className="fro-section" style={{ padding: '20px 28px', borderBottom: '0.5px solid var(--rule)' }}>
           <div className="flex between ai-baseline">
             <div>
-              <div className="eyebrow mb-8">{isRotoruaHalf ? 'Rotorua Half Marathon' : isRotorua ? 'Rotorua Marathon' : 'Auckland Marathon'} · full results</div>
+              <div className="eyebrow mb-8">
+                {isChcHalf ? 'Christchurch Half Marathon'
+                  : isChc ? 'Christchurch Marathon'
+                  : isRotoruaHalf ? 'Rotorua Half Marathon'
+                  : isRotorua ? 'Rotorua Marathon'
+                  : isHbHalf ? "Hawke's Bay Half Marathon"
+                  : isHb ? "Hawke's Bay Marathon"
+                  : isQtHalf ? 'Queenstown Half Marathon'
+                  : isQt ? 'Queenstown Marathon'
+                  : isWfHalf ? 'Waterfront Half Marathon'
+                  : dist === '21.1 km' ? 'Auckland Half Marathon'
+                  : 'Auckland Marathon'
+                } · full results
+              </div>
               <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.01em' }}>
                 {year}
                 {loading
@@ -203,21 +230,27 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
           ) : (
             <>
               <div style={{ height: topPad }} />
-              {slice.map((r, i) => (
-                <div key={startIdx + i} className="fro-row"
-                     style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
-                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
-                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
-                  <div className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</div>
-                  <div className="dimmed">{r.bib || '—'}</div>
-                  <div>
-                    <span className="serif" style={{ fontSize: 15 }}>{r.name}</span>
-                    <span className="dimmed" style={{ marginLeft: 8, fontSize: 10.5 }}>{r.nat}</span>
+              {slice.map((r, i) => {
+                const slug = getAthleteSlug(r.name);
+                return (
+                  <div key={startIdx + i}
+                       style={{ display: 'grid', gridTemplateColumns: grid, padding: '0 28px', alignItems: 'center', height: rowH, borderBottom: '0.5px solid var(--rule-soft)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
+                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--hover)'}
+                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                    <div className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</div>
+                    <div className="dimmed">{r.bib || '—'}</div>
+                    <div>
+                      {slug
+                        ? <Link to={`/athletes/${slug}`} onClick={onClose} className="serif" style={{ fontSize: 15, color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'var(--rule)' }}>{r.name}</Link>
+                        : <span className="serif" style={{ fontSize: 15 }}>{r.name}</span>
+                      }
+                      <span className="dimmed" style={{ marginLeft: 8, fontSize: 10.5 }}>{r.nat}</span>
+                    </div>
+                    <div className="dimmed">{r.cat}</div>
+                    <div className="num time">{r.time}</div>
                   </div>
-                  <div className="dimmed">{r.cat}</div>
-                  <div className="num time">{r.time}</div>
-                </div>
-              ))}
+                );
+              })}
               <div style={{ height: botPad }} />
               {filtered.length === 0 && (
                 <div className="dimmed" style={{ padding: 60, textAlign: 'center' }}>No finishers match these filters.</div>

@@ -10,6 +10,7 @@ const RESULTS = [
   { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:29:38', sec: 8978,  pos: 4,  total: 1630, cat: 'M 18–34', isPB: false },
   { dateNum: 2017 + 6/12,  year: 2017, race: 'Christchurch Marathon',short: 'CHC', dist: '42.2 km', distId: 'mar' as const, time: '2:24:11', sec: 8651,  pos: 1,  total: 420,  cat: 'M 20–39', isPB: true  },
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:27:19', sec: 8839,  pos: 4,  total: 1653, cat: 'M 18–34', isPB: false },
+  { dateNum: 2019 + 3/12,  year: 2019, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:47', sec: 4187, pos: 4,  total: 2015, cat: 'M 30–39', isPB: true  },
   { dateNum: 2019 + 4/12,  year: 2019, race: 'Rotorua Marathon',     short: 'ROT', dist: '42.2 km', distId: 'mar' as const, time: '2:25:38', sec: 8738,  pos: 1,  total: 720,  cat: 'M 18–34', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:31:07', sec: 9067,  pos: 3,  total: 870,  cat: 'M 18–34', isPB: false },
   { dateNum: 2023 + 11/12, year: 2023, race: 'Queenstown Marathon',  short: 'QT',  dist: '42.2 km', distId: 'mar' as const, time: '2:40:38', sec: 9638,  pos: 4,  total: 1841, cat: 'M 30–39', isPB: false },
@@ -17,7 +18,8 @@ const RESULTS = [
 ];
 
 const PBs = {
-  mar: { time: '2:24:11', sec: 8651, race: 'Christchurch Marathon', year: 2017 },
+  mar:  { time: '2:24:11', sec: 8651, race: 'Christchurch Marathon',    year: 2017 },
+  half: { time: '1:09:47', sec: 4187, race: 'Waterfront Half Marathon', year: 2019 },
 };
 
 function fmtSec(s: number): string {
@@ -36,7 +38,7 @@ function ordSuffix(n: number): string {
 }
 
 function ProgressionChart() {
-  const pts = [...RESULTS].sort((a, b) => a.dateNum - b.dateNum);
+  const pts = RESULTS.filter(r => r.distId === 'mar').sort((a, b) => a.dateNum - b.dateNum);
   if (pts.length === 0) return null;
 
   const W = 640, H = 180;
@@ -114,7 +116,7 @@ export default function AthleteFaherty() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '12' },
+                  { l: 'Races logged', v: '13' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -181,7 +183,7 @@ export default function AthleteFaherty() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '12',      sub: '12 marathons' },
+                { label: 'Races logged',     val: '13',      sub: '12 marathons · 1 half' },
                 { label: 'Marathon PB',      val: '2:24:11', sub: 'Christchurch 2017 · 1st overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '3 career wins · CHC · ROT · QT' },
                 { label: 'Active years',     val: '11',      sub: '2014–2024 · AUC · CHC · ROT · QT' },
@@ -248,6 +250,7 @@ export default function AthleteFaherty() {
                         else if (r.race === 'Christchurch Marathon') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race === 'Rotorua Marathon') navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

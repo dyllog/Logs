@@ -7,9 +7,15 @@ import {
   loadRotoruaHalf, getCachedRotoruaHalf,
   loadChc, getCachedChc,
   loadChcHalf, getCachedChcHalf,
+  loadHb, getCachedHb,
+  loadHbHalf, getCachedHbHalf,
+  loadQt, getCachedQt,
+  loadQtHalf, getCachedQtHalf,
   type ResultRow,
 } from '@/data/logsDataExt';
 import { CHC_YEARS } from '@/data/chcData';
+import { HB_YEARS } from '@/data/hbData';
+import { QT_YEARS } from '@/data/qtData';
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -52,13 +58,15 @@ function parseAgBand(cat: string): string | null {
 
 // ── Race config ──────────────────────────────────────────
 
-type Venue = 'akl' | 'chc' | 'rot';
+type Venue = 'akl' | 'chc' | 'rot' | 'hb' | 'qt';
 type DistId = '42' | '21';
 
 const VENUE_LABELS: [Venue, string][] = [
   ['akl', 'Auckland'],
   ['chc', 'Christchurch'],
   ['rot', 'Rotorua'],
+  ['hb', "Hawke's Bay"],
+  ['qt', 'Queenstown'],
 ];
 
 function getRaceConfig(venue: Venue, distId: DistId) {
@@ -78,6 +86,20 @@ function getRaceConfig(venue: Venue, distId: DistId) {
     loadYear: (y: number) => isHalf ? loadChcHalf(y) : loadChc(y),
     getYear: (y: number) => isHalf ? getCachedChcHalf(y) : getCachedChc(y),
   };
+  if (venue === 'hb') return {
+    name: isHalf ? "Hawke's Bay Half Marathon" : "Hawke's Bay Marathon",
+    km,
+    years: [...HB_YEARS] as number[],
+    loadYear: (y: number) => isHalf ? loadHbHalf(y) : loadHb(y),
+    getYear: (y: number) => isHalf ? getCachedHbHalf(y) : getCachedHb(y),
+  };
+  if (venue === 'qt') return {
+    name: isHalf ? 'Queenstown Half Marathon' : 'Queenstown Marathon',
+    km,
+    years: [...QT_YEARS] as number[],
+    loadYear: (y: number) => isHalf ? loadQtHalf(y) : loadQt(y),
+    getYear: (y: number) => isHalf ? getCachedQtHalf(y) : getCachedQt(y),
+  };
   return {
     name: isHalf ? 'Rotorua Half Marathon' : 'Rotorua Marathon',
     km,
@@ -88,12 +110,16 @@ function getRaceConfig(venue: Venue, distId: DistId) {
 }
 
 const ALL_RACES = [
-  { name: 'Auckland Marathon',          km: 42.195,  years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '42.2 km') },
-  { name: 'Auckland Half Marathon',     km: 21.0975, years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '21.1 km') },
-  { name: 'Christchurch Marathon',      km: 42.195,  years: [...CHC_YEARS],     getYear: getCachedChc },
-  { name: 'Christchurch Half Marathon', km: 21.0975, years: [...CHC_YEARS],     getYear: getCachedChcHalf },
-  { name: 'Rotorua Marathon',           km: 42.195,  years: [...ROTORUA_YEARS], getYear: getCachedRotorua },
-  { name: 'Rotorua Half Marathon',      km: 21.0975, years: [...ROTORUA_YEARS], getYear: getCachedRotoruaHalf },
+  { name: 'Auckland Marathon',           km: 42.195,  years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '42.2 km') },
+  { name: 'Auckland Half Marathon',      km: 21.0975, years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '21.1 km') },
+  { name: 'Christchurch Marathon',       km: 42.195,  years: [...CHC_YEARS],     getYear: getCachedChc },
+  { name: 'Christchurch Half Marathon',  km: 21.0975, years: [...CHC_YEARS],     getYear: getCachedChcHalf },
+  { name: 'Rotorua Marathon',            km: 42.195,  years: [...ROTORUA_YEARS], getYear: getCachedRotorua },
+  { name: 'Rotorua Half Marathon',       km: 21.0975, years: [...ROTORUA_YEARS], getYear: getCachedRotoruaHalf },
+  { name: "Hawke's Bay Marathon",        km: 42.195,  years: [...HB_YEARS],      getYear: getCachedHb },
+  { name: "Hawke's Bay Half Marathon",   km: 21.0975, years: [...HB_YEARS],      getYear: getCachedHbHalf },
+  { name: 'Queenstown Marathon',         km: 42.195,  years: [...QT_YEARS],      getYear: getCachedQt },
+  { name: 'Queenstown Half Marathon',    km: 21.0975, years: [...QT_YEARS],      getYear: getCachedQtHalf },
 ];
 
 // ── Sub-components ───────────────────────────────────────
@@ -466,6 +492,14 @@ export default function Compare() {
     ROTORUA_YEARS.forEach(y => {
       loadRotorua(y).then(() => markLoaded(`rot-42-${y}`));
       loadRotoruaHalf(y).then(() => markLoaded(`rot-21-${y}`));
+    });
+    HB_YEARS.forEach(y => {
+      loadHb(y).then(() => markLoaded(`hb-42-${y}`));
+      loadHbHalf(y).then(() => markLoaded(`hb-21-${y}`));
+    });
+    QT_YEARS.forEach(y => {
+      loadQt(y).then(() => markLoaded(`qt-42-${y}`));
+      loadQtHalf(y).then(() => markLoaded(`qt-21-${y}`));
     });
   }, [markLoaded]);
 

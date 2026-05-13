@@ -1,13 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ProgressionChart from '@/components/ProgressionChart';
-import { recordsMen, results2025, upcoming } from '@/data/logsData';
+import { recordsMen, upcoming } from '@/data/logsData';
+import {
+  loadResults, loadChc, loadChcHalf,
+  loadHb, loadHbHalf,
+  loadRotorua, loadRotoruaHalf,
+  loadQt, loadQtHalf,
+  type ResultRow,
+} from '@/data/logsDataExt';
+import { getAthleteSlug } from '@/data/athleteProfiles';
+import { LATEST_RACE } from '@/data/latestRace';
+
+function getLoader(raceId: typeof LATEST_RACE['raceId'], year: number, dist: typeof LATEST_RACE['dist']) {
+  if (raceId === 'chc')      return loadChc(year);
+  if (raceId === 'chc-half') return loadChcHalf(year);
+  if (raceId === 'hb')       return loadHb(year);
+  if (raceId === 'hb-half')  return loadHbHalf(year);
+  if (raceId === 'rot')      return loadRotorua(year);
+  if (raceId === 'rot-half') return loadRotoruaHalf(year);
+  if (raceId === 'qt')       return loadQt(year);
+  if (raceId === 'qt-half')  return loadQtHalf(year);
+  return loadResults(year, dist);
+}
 
 const distTags = ['all', '42.2', '21.1'];
 
 export default function Index() {
   const [distFilter, setDistFilter] = useState('all');
+  const [recentResults, setRecentResults] = useState<ResultRow[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getLoader(LATEST_RACE.raceId, LATEST_RACE.year, LATEST_RACE.dist)
+      .then(rows => setRecentResults(rows));
+  }, []);
 
   return (
     <main>
@@ -125,10 +152,10 @@ export default function Index() {
             <div>
               <div className="eyebrow mb-8">Most recent edition</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                Auckland Marathon <span style={{ color: 'var(--meta)', fontStyle: 'italic' }}>— 2025</span>
+                {LATEST_RACE.name} <span style={{ color: 'var(--meta)', fontStyle: 'italic' }}>— {LATEST_RACE.year}</span>
               </h2>
             </div>
-            <Link to="/races/auckland-marathon#results" className="btn-ghost">Full results →</Link>
+            <Link to={`${LATEST_RACE.href}#results`} className="btn-ghost">Full results →</Link>
           </div>
           <table className="tbl">
             <thead>
@@ -141,18 +168,26 @@ export default function Index() {
               </tr>
             </thead>
             <tbody>
-              {results2025.slice(0, 8).map(r => (
-                <tr key={r.pos} className="row">
-                  <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
-                  <td>
-                    <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
-                    <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
-                  </td>
-                  <td className="dimmed">{r.cat}</td>
-                  <td className="dimmed">{r.club}</td>
-                  <td className="num time">{r.time}</td>
-                </tr>
-              ))}
+              {recentResults.length === 0 ? (
+                <tr><td colSpan={5} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>Loading…</td></tr>
+              ) : recentResults.slice(0, 8).map(r => {
+                const slug = getAthleteSlug(r.name);
+                return (
+                  <tr key={r.pos} className="row">
+                    <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
+                    <td>
+                      {slug
+                        ? <Link to={`/athletes/${slug}`} className="serif" style={{ fontSize: 16, color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'var(--rule)' }}>{r.name}</Link>
+                        : <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
+                      }
+                      <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
+                    </td>
+                    <td className="dimmed">{r.cat}</td>
+                    <td className="dimmed">{r.club}</td>
+                    <td className="num time">{r.time}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
