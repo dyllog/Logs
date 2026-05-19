@@ -11,6 +11,7 @@ import {
 } from '@/data/logsDataExt';
 import { getAthleteSlug } from '@/data/athleteProfiles';
 import { LATEST_RACE } from '@/data/latestRace';
+import { SITE_STATS } from '@/data/siteStats';
 
 function getLoader(raceId: typeof LATEST_RACE['raceId'], year: number, dist: typeof LATEST_RACE['dist']) {
   if (raceId === 'chc')      return loadChc(year);
@@ -61,15 +62,15 @@ export default function Index() {
               </div>
               <div className="mt-48 flex gap-32" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>5</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>{SITE_STATS.trackedEvents}</div>
                   <div className="label mt-8">Tracked events</div>
                 </div>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>239,741</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>{SITE_STATS.finisherRecords.toLocaleString()}</div>
                   <div className="label mt-8">Finisher records</div>
                 </div>
                 <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>1992</div>
+                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>{SITE_STATS.earliestEdition}</div>
                   <div className="label mt-8">Earliest edition</div>
                 </div>
               </div>

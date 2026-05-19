@@ -1,0 +1,23 @@
+{
+  "slug": "cullern-thorby",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Cullern Thorby is one of New Zealand's most consistent sub-2:25 marathon talents, building a record defined by podium finishes across Auckland and Rotorua. His 2:22:59 PB at Auckland 2024 placed him 4th in a field of 2,439, and his Christchurch half PB of 1:06:22 in 2025 demonstrated he has genuine speed over the shorter distance. Three consecutive second-place finishes at Rotorua (2023–2025) tell the story of a runner who shows up and competes at the highest domestic level year after year.",
+    "trajectory": "Thorby's marathon trajectory is one of steady improvement from 2:26:28 (Rotorua 2023) to 2:22:59 (Auckland 2024), before a slight regression to 2:24:43 at Rotorua 2025 and 2:26:50 at Auckland 2025. The half marathon arc is more striking: from 1:12:59 (Auckland 2022) to 1:06:22 (Christchurch 2025), a five-minute improvement in under three years. He is currently in his competitive prime.",
+    "best_result": "His standout performance is 4th overall at the 2024 Auckland Marathon (2:22:59), a race with over 2,400 finishers. Running in the M 20–24 category, he placed among the country's fastest that year. His half marathon highlight is 11th overall at Christchurch 2025 (1:06:22), a race won by Christopher Dryden — placing him in elite company.",
+    "distance_profile": "Thorby is a genuine dual-distance athlete. His marathon PB of 2:22:59 projects to a half of approximately 1:07:30 via standard conversion — his actual half PB of 1:06:22 is faster, suggesting he may have more marathon ceiling to unlock. He competes comfortably across both distances and performs at or near the podium at major NZ events.",
+    "where_to_race": "Auckland Marathon is his most successful race to date (marathon PB set there). Rotorua suits his consistent racing style — three consecutive podium finishes. Christchurch half produced his half PB. If targeting a fast time, Christchurch's flat course is ideal for the half; Auckland or Rotorua for the full.",
+    "qualifying_note": "His marathon PB of 2:22:59 qualifies for Boston under the M 18–34 standard of 3:00:00 with significant margin. At his current trajectory, a sub-2:20 is within reach, which would make him competitive for international age-group consideration."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.84,
+    "best_result_race": "Auckland Marathon 2024",
+    "age_grading_marathon": 84.0,
+    "age_grading_half": 86.4,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Rotorua Marathon", "Auckland Marathon", "Christchurch Half Marathon"],
+    "challenging_races": []
+  }
+}

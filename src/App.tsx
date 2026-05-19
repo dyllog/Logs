@@ -38,6 +38,15 @@ import AthleteMcWhirter from "./pages/AthleteMcWhirter";
 import AthleteDowns from "./pages/AthleteDowns";
 import AthleteKnowles from "./pages/AthleteKnowles";
 import AthleteLogan from "./pages/AthleteLogan";
+import AthleteCullernThorby from "./pages/AthleteCullernThorby";
+import AthleteCaseyThorby from "./pages/AthleteCaseyThorby";
+import AthleteBrentGodfrey from "./pages/AthleteBrentGodfrey";
+import AthleteJackMoody from "./pages/AthleteJackMoody";
+import AthleteBenTwyman from "./pages/AthleteBenTwyman";
+import AthleteDougalThorburn from "./pages/AthleteDougalThorburn";
+import AthleteOrestasRimkus from "./pages/AthleteOrestasRimkus";
+import AthleteBrettTingay from "./pages/AthleteBrettTingay";
+import AthleteMikePhillips from "./pages/AthleteMikePhillips";
 import AthleteReport from "./pages/AthleteReport";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
@@ -84,6 +93,15 @@ function Layout() {
         <Route path="/athletes/fabe-downs" element={<AthleteDowns />} />
         <Route path="/athletes/scott-knowles" element={<AthleteKnowles />} />
         <Route path="/athletes/dylan-logan" element={<AthleteLogan />} />
+        <Route path="/athletes/cullern-thorby" element={<AthleteCullernThorby />} />
+        <Route path="/athletes/casey-thorby" element={<AthleteCaseyThorby />} />
+        <Route path="/athletes/brent-godfrey" element={<AthleteBrentGodfrey />} />
+        <Route path="/athletes/jack-moody" element={<AthleteJackMoody />} />
+        <Route path="/athletes/ben-twyman" element={<AthleteBenTwyman />} />
+        <Route path="/athletes/dougal-thorburn" element={<AthleteDougalThorburn />} />
+        <Route path="/athletes/orestas-rimkus" element={<AthleteOrestasRimkus />} />
+        <Route path="/athletes/brett-tingay" element={<AthleteBrettTingay />} />
+        <Route path="/athletes/mike-phillips" element={<AthleteMikePhillips />} />
         <Route path="/athletes/:slug/report" element={<AthleteReport />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />

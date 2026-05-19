@@ -1,0 +1,23 @@
+{
+  "slug": "jack-moody",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Jack Moody is one of New Zealand's most versatile competitive road runners, with four race wins across half marathon and marathon distances. He won the Hawke's Bay Half in 2021, the Queenstown Half in 2020 and 2022, and the Queenstown Marathon outright in 2025 (2:25:02) — his PB and the highlight of a 12-race career that spans Christchurch, Auckland, Hawke's Bay, and Queenstown. His half marathon PB of 1:06:26 (Hawke's Bay 2024) places him in the national elite tier.",
+    "trajectory": "Moody's trajectory shows continuous improvement in his half marathon performances: 1:16:00 (CHC Half 2013, age ~13–15) → 1:10:17 (QT Half 2018) → 1:08:05 (QT Half 2022) → 1:06:26 (HB Half 2024, PB). His marathon debut at Queenstown 2025 (2:25:02, 1st overall) represents a rapid entry into the distance at the highest domestic level.",
+    "best_result": "1st overall at the 2025 Queenstown Marathon (2:25:02) in a field of 2,929 — a dominant debut performance over the full distance. His half marathon wins at Hawke's Bay 2021 (1st/3499) and Queenstown 2020 (1st/4418) and 2022 (1st/4142) demonstrate he competes at the front end of major NZ fields consistently.",
+    "distance_profile": "Moody's 1:06:26 half PB projects to approximately 2:21 for the marathon via standard conversion — his actual marathon debut of 2:25:02 was conservative by comparison, suggesting substantial room for marathon improvement. He is transitioning from half to full marathon and is likely to run significantly faster over the coming seasons.",
+    "where_to_race": "Queenstown is his most successful venue: three half marathon wins and his marathon win. Hawke's Bay Half is where he set his half PB (1:06:26 in 2024). For a fast half marathon course, Hawke's Bay or Auckland (5th/4293 in 2023) would suit his strengths.",
+    "qualifying_note": "His marathon PB of 2:25:02 qualifies for Boston under the M 18–34 standard (3:00:00) with a 35-minute margin. His half PB of 1:06:26 places him in the top 0.06% globally for his age group. As he develops his marathon fitness, a sub-2:20 is a realistic near-term target."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.97,
+    "best_result_race": "Queenstown Marathon 2025",
+    "age_grading_marathon": 82.2,
+    "age_grading_half": 86.0,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Queenstown Marathon", "Queenstown Half Marathon", "Hawke's Bay Half Marathon"],
+    "challenging_races": []
+  }
+}
