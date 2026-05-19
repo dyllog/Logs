@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import RaceResultsBlock from '@/components/RaceResultsBlock';
+import AveragesChart from '@/components/AveragesChart';
+import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
+import { devHalfStats, dev10kStats } from '@/data/devonportData';
 
 const devHalfElevation: [number, number][] = [
   [0,5],[1,8],[2,10],[3,10],[3.7,8],
@@ -34,7 +39,19 @@ const dev10kAnnotations = [
 ];
 
 export default function Devonport() {
+  const navigate = useNavigate();
   const [distId, setDistId] = useState<'half' | '10k'>('half');
+
+  const seedCRM    = useMemo(() => Math.min(...devHalfStats.map(s => s.winnerM)) + 1, []);
+  const seedCRW    = useMemo(() => Math.min(...devHalfStats.map(s => s.winnerW)) + 1, []);
+  const seedCRM10k = useMemo(() => Math.min(...dev10kStats.map(s => s.winnerM)) + 1, []);
+  const seedCRW10k = useMemo(() => Math.min(...dev10kStats.map(s => s.winnerW)) + 1, []);
+
+  const recordM    = { time: '1:10:59', holder: 'Fabe Downs',        nationality: 'NZL', club: '—', year: 2020, previous: '—' };
+  const recordW    = { time: '1:21:27', holder: 'Hannah Oldroyd',    nationality: 'NZL', club: '—', year: 2018, previous: '—' };
+  const recordM10k = { time: '32:10',   holder: 'Andre Waring',      nationality: 'NZL', club: '—', year: 2018, previous: '—' };
+  const recordW10k = { time: '38:31',   holder: 'Tara la Grange',    nationality: 'NZL', club: '—', year: 2011, previous: '—' };
+
   const isHalf = distId === 'half';
 
   return (
@@ -66,7 +83,18 @@ export default function Devonport() {
         </div>
       </section>
 
-      {/* Course profile */}
+      {/* 1. Results */}
+      <section id="results" className="section">
+        <div className="page">
+          <RaceResultsBlock
+            dist={isHalf ? '21.1 km' : '10 km'}
+            raceId={isHalf ? 'dev-half' : 'dev-10k'}
+            onOpenAthlete={() => navigate('/athletes')}
+          />
+        </div>
+      </section>
+
+      {/* 2. Course profile */}
       <section className="section">
         <div className="page">
           <div className="section-header">
@@ -109,6 +137,66 @@ export default function Devonport() {
                   ? "Two laps of the Devonport peninsula loop, finishing with a short out-and-back. The course climbs North Head twice, rewarding runners with panoramic views of Rangitoto Island and the Auckland city skyline. One of the most scenic — and most challenging — half marathons in Auckland."
                   : "A single loop tour of the eastern Devonport peninsula. Mostly flat with a turnaround at Narrow Neck Beach before the challenging climb up North Head, with views of Rangitoto Island and the city skyline on the descent."
                 }</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Averages */}
+      <section className="section">
+        <div className="page">
+          <div className="section-header">
+            <div>
+              <div className="eyebrow mb-8">Averages · {isHalf ? '21.1 km' : '10 km'}</div>
+              <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
+                Median finish · winning times · by year
+              </h2>
+            </div>
+          </div>
+          <AveragesChart stats={isHalf ? devHalfStats : dev10kStats} />
+        </div>
+      </section>
+
+      {/* 4. Course records */}
+      <section className="section">
+        <div className="page">
+          <div className="section-header">
+            <div>
+              <div className="eyebrow mb-8">Course records · {isHalf ? '21.1 km' : '10 km'}</div>
+              <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
+                {isHalf ? '21.1 km' : '10 km'} · current marks
+              </h2>
+            </div>
+          </div>
+          <div className="card-dark">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, marginTop: 8 }}>
+              {([['Men · Open', isHalf ? recordM : recordM10k], ['Women · Open', isHalf ? recordW : recordW10k]] as [string, typeof recordM][]).map(([label, rec], col) => (
+                <div key={label} style={{ paddingRight: col === 0 ? 40 : 0, paddingLeft: col === 1 ? 40 : 0, borderRight: col === 0 ? '0.5px solid var(--on-dark-rule)' : 'none' }}>
+                  <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>{label}</div>
+                  <div className="serif" style={{ fontSize: 56, lineHeight: 0.95, letterSpacing: '-0.02em' }}>{rec.time}</div>
+                  <div className="mt-20">
+                    <div className="serif" style={{ fontSize: 22, lineHeight: 1.15 }}>{rec.holder}</div>
+                    <div className="label mt-8" style={{ color: 'var(--on-dark-meta)' }}>
+                      {rec.club} · {rec.nationality} · set {rec.year}
+                    </div>
+                  </div>
+                  {rec.previous !== '—' && (
+                    <div className="mt-20" style={{ fontSize: 11, color: 'var(--on-dark-meta)', letterSpacing: '0.04em' }}>
+                      Previous: <span style={{ color: 'var(--on-dark)' }}>{rec.previous}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{ color: 'var(--on-dark)', marginTop: 40, paddingTop: 32, borderTop: '0.5px solid var(--on-dark-rule)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+              <div>
+                <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Men · winner vs CR</div>
+                <CRWinnerChart stats={isHalf ? devHalfStats : dev10kStats} gender="men" seedCR={isHalf ? seedCRM : seedCRM10k} />
+              </div>
+              <div>
+                <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Women · winner vs CR</div>
+                <CRWinnerChart stats={isHalf ? devHalfStats : dev10kStats} gender="women" seedCR={isHalf ? seedCRW : seedCRW10k} />
               </div>
             </div>
           </div>

@@ -1,16 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2019 + 11/12, year: 2019, race: 'Queenstown Marathon',      short: 'QT',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:57', sec: 8937, pos: 1, total: 2262, cat: 'M 30–39', isPB: false },
-  { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',  short: 'DEV',  dist: '21.1 km', distId: 'half' as const, time: '1:10:59', sec: 4259, pos: 1, total: 598,  cat: 'M 30–39', isPB: true  },
-  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC',  dist: '42.2 km', distId: 'mar'  as const, time: '2:26:34', sec: 8794, pos: 2, total: 1619, cat: 'M 18–34', isPB: true  },
-  { dateNum: 2021 +  5/12, year: 2021, race: "Hawke's Bay Marathon",     short: 'HB',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:54', sec: 8934, pos: 2, total: 1025, cat: 'M 30–39', isPB: false },
-  { dateNum: 2021 +  6/12, year: 2021, race: 'Christchurch Half',        short: 'CHC½', dist: '21.1 km', distId: 'half' as const, time: '1:09:07', sec: 4147, pos: 5, total: 1332, cat: 'M 20–39', isPB: true  },
+  { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',  short: 'DEV', dist: '21.1 km', distId: 'half' as const, time: '1:28:07', sec: 5287,  pos: 20,  total: 598,  cat: 'M 20–29', isPB: true  },
+  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:30:32', sec: 12632, pos: 244, total: 1619, cat: 'M 18–34', isPB: true  },
+  { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:20:10', sec: 12010, pos: 75,  total: 870,  cat: 'M 18–34', isPB: true  },
+  { dateNum: 2023 +  2/12, year: 2023, race: 'Waterfront Half Marathon', short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:18:31', sec: 4711,  pos: 23,  total: 1414, cat: 'M 20–29', isPB: true  },
+  { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '2:45:22', sec: 9922,  pos: 15,  total: 1765, cat: 'M 25–29', isPB: true  },
+  { dateNum: 2024 +  2/12, year: 2024, race: 'Waterfront Half Marathon', short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:13:38', sec: 4418,  pos: 4,   total: 1822, cat: 'M 20–29', isPB: true  },
+  { dateNum: 2024 +  9/12, year: 2024, race: 'Devonport Half Marathon',  short: 'DEV', dist: '21.1 km', distId: 'half' as const, time: '1:15:22', sec: 4522,  pos: 2,   total: 708,  cat: 'M 20–29', isPB: false },
+  { dateNum: 2025 +  6/12, year: 2025, race: 'Christchurch Marathon',    short: 'CHC', dist: '42.2 km', distId: 'mar'  as const, time: '2:37:41', sec: 9461,  pos: 17,  total: 957,  cat: 'M 20–39', isPB: true  },
+  { dateNum: 2026 +  2/12, year: 2026, race: 'Waterfront 10 km',         short: 'WF',  dist: '10 km',   distId: '10k'  as const, time: '34:45',   sec: 2085,  pos: 9,   total: 1093, cat: 'M 30–39', isPB: true  },
 ];
 
 const PBs = {
-  mar:  { time: '2:26:34', sec: 8794, race: 'Auckland Marathon',    year: 2020 },
-  half: { time: '1:09:07', sec: 4147, race: 'Christchurch Half',    year: 2021 },
+  mar:  { time: '2:37:41', sec: 9461,  race: 'Christchurch Marathon',    year: 2025 },
+  half: { time: '1:13:38', sec: 4418,  race: 'Waterfront Half Marathon', year: 2024 },
+  '10k':{ time: '34:45',   sec: 2085,  race: 'Waterfront 10 km',         year: 2026 },
 };
 
 function fmtSec(s: number): string {
@@ -40,15 +45,15 @@ function ProgressionChart() {
   const xMax = pts[pts.length - 1].dateNum + 0.5;
   const sMin = Math.min(...pts.map(p => p.sec));
   const sMax = Math.max(...pts.map(p => p.sec));
-  const sPad = (sMax - sMin) * 0.2 || 120;
+  const sPad = (sMax - sMin) * 0.2 || 600;
   const yLo = sMin - sPad, yHi = sMax + sPad;
 
   const cx = (v: number) => padL + ((v - xMin) / (xMax - xMin)) * cW;
-  const cy = (v: number) => padT + ((v - yLo) / (yHi - yLo)) * cH;
+  const cy = (v: number) => padT + ((yHi - v) / (yHi - yLo)) * cH;
   const color = 'var(--on-dark)';
 
   const yTicks: number[] = [];
-  for (let s = Math.floor(yLo / 60) * 60; s <= Math.ceil(yHi / 60) * 60; s += 120) {
+  for (let s = Math.floor(yLo / 600) * 600; s <= Math.ceil(yHi / 600) * 600; s += 600) {
     if (s >= yLo && s <= yHi) yTicks.push(s);
   }
   const xYears: number[] = [];
@@ -88,7 +93,7 @@ function ProgressionChart() {
   );
 }
 
-export default function AthleteDowns() {
+export default function AthleteLogan() {
   const navigate = useNavigate();
   const sortedResults = [...RESULTS].sort((a, b) => b.dateNum - a.dateNum);
 
@@ -100,14 +105,14 @@ export default function AthleteDowns() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 48, alignItems: 'start' }} className="athlete-head-grid">
             <div>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '0.5px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 18, letterSpacing: '-0.01em', color: 'var(--on-dark)' }}>FD</div>
-              <h1 className="serif" style={{ fontSize: 'clamp(36px,5vw,60px)', lineHeight: 0.96, margin: 0, letterSpacing: '-0.025em', color: 'var(--on-dark)' }}>Fabe Downs</h1>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: '0.5px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 18, letterSpacing: '-0.01em', color: 'var(--on-dark)' }}>DL</div>
+              <h1 className="serif" style={{ fontSize: 'clamp(36px,5vw,60px)', lineHeight: 0.96, margin: 0, letterSpacing: '-0.025em', color: 'var(--on-dark)' }}>Dylan Logan</h1>
               <div style={{ marginTop: 16, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
                 {[
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
-                  { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '5' },
+                  { l: 'Category',     v: 'M 30–39' },
+                  { l: 'Races logged', v: '9' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -119,9 +124,9 @@ export default function AthleteDowns() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, background: 'var(--on-dark-rule)', border: '0.5px solid var(--on-dark-rule)' }} className="pb-grid">
               {[
-                { dist: '42.2 km', pb: PBs.mar.time,  race: 'Auckland Marathon',  year: PBs.mar.year,  highlight: true  },
-                { dist: '21.1 km', pb: PBs.half.time, race: 'Christchurch Half',  year: PBs.half.year, highlight: false },
-                { dist: '10 km',   pb: '—',            race: 'not on record',      year: null,          highlight: false },
+                { dist: '42.2 km', pb: PBs.mar.time,   race: 'Christchurch Marathon',    year: PBs.mar.year,   highlight: true  },
+                { dist: '21.1 km', pb: PBs.half.time,  race: 'Waterfront Half Marathon', year: PBs.half.year,  highlight: false },
+                { dist: '10 km',   pb: PBs['10k'].time, race: 'Waterfront 10 km',         year: PBs['10k'].year, highlight: false },
               ].map((d, i) => (
                 <div key={i} style={{ background: 'var(--surface-dark)', padding: '20px 20px 18px' }}>
                   <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 12 }}>{d.dist}</div>
@@ -158,7 +163,7 @@ export default function AthleteDowns() {
               <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px' }}>
                 <ProgressionChart />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                  Queenstown (Nov), Auckland (Oct) and Hawke's Bay (Jun) shown at separate dates
+                  Auckland (Oct) and Christchurch (Jun) shown at separate dates
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
@@ -166,7 +171,7 @@ export default function AthleteDowns() {
                   PB: <span style={{ color: 'var(--ink)' }}>{PBs.mar.time}</span>
                 </span>
                 <span style={{ fontFamily: "'DM Mono', monospace" }}>
-                  3 marathon finishes · 2019–2021
+                  4 marathon finishes · 2020–2025
                 </span>
               </div>
             </div>
@@ -174,10 +179,10 @@ export default function AthleteDowns() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '5',       sub: '3 marathons · 2 halves' },
-                { label: 'Marathon PB',      val: '2:26:34', sub: 'Auckland 2020 · 2nd overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '2 career wins · QT 2019 · DEV 2020' },
-                { label: 'Active years',     val: '3',       sub: '2019–2021 · QT · AUC · DEV · HB' },
+                { label: 'Races logged',     val: '9',       sub: '4 marathons · 4 halves · 1 10k' },
+                { label: 'Marathon PB',      val: '2:37:41', sub: 'Christchurch 2025 · 17th overall' },
+                { label: 'Half marathon PB', val: '1:13:38', sub: 'Waterfront 2024 · 4th overall' },
+                { label: 'Active years',     val: '7',       sub: '2020–2026 · AUC · DEV · WF · CHC' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -201,7 +206,7 @@ export default function AthleteDowns() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2019–2021 · QT · AUC · DEV · HB · CHC</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2020–2026 · AUC · DEV · WF · CHC</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -218,11 +223,10 @@ export default function AthleteDowns() {
                 {sortedResults.map((r, i) => (
                   <tr key={i} className="row"
                       onClick={() => {
-                        const d = r.dist === '42.2 km' ? '42' : '21';
+                        const d = r.dist === '42.2 km' ? '42' : r.dist === '10 km' ? '10' : '21';
                         if (r.race === 'Auckland Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
-                        else if (r.race === 'Christchurch Half') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
-                        else if (r.race.includes("Hawke")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
-                        else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race === 'Christchurch Marathon') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Devonport')) navigate(`/races/devonport-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
@@ -244,7 +248,7 @@ export default function AthleteDowns() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Christchurch, Hawke's Bay and Queenstown Marathon certified timings.
+            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Christchurch, Devonport and Waterfront certified timings.
           </div>
         </div>
       </section>
