@@ -36,6 +36,7 @@ import AthleteFaherty from "./pages/AthleteFaherty";
 import AthleteGraves from "./pages/AthleteGraves";
 import AthleteMcWhirter from "./pages/AthleteMcWhirter";
 import AthleteDowns from "./pages/AthleteDowns";
+import AthleteKnowles from "./pages/AthleteKnowles";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -43,6 +44,7 @@ import Christchurch from "./pages/Christchurch";
 import Queenstown from "./pages/Queenstown";
 import HawkesBay from "./pages/HawkesBay";
 import WaterfrontHalf from "./pages/WaterfrontHalf";
+import Devonport from "./pages/Devonport";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -62,6 +64,7 @@ function Layout() {
         <Route path="/races/queenstown-marathon" element={<Queenstown />} />
         <Route path="/races/hawkes-bay-marathon" element={<HawkesBay />} />
         <Route path="/races/waterfront-half-marathon" element={<WaterfrontHalf />} />
+        <Route path="/races/devonport-half-marathon" element={<Devonport />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
@@ -77,6 +80,7 @@ function Layout() {
         <Route path="/athletes/cameron-graves" element={<AthleteGraves />} />
         <Route path="/athletes/blair-mcwhirter" element={<AthleteMcWhirter />} />
         <Route path="/athletes/fabe-downs" element={<AthleteDowns />} />
+        <Route path="/athletes/scott-knowles" element={<AthleteKnowles />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

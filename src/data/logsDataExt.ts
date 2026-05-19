@@ -235,6 +235,17 @@ export async function loadWaterfrontHalf(year: number): Promise<ResultRow[]> {
 }
 export function getCachedWaterfrontHalf(year: number): ResultRow[] { return wfHalfCache[year] ?? []; }
 
+const wf10kCache: Record<number, ResultRow[]> = {};
+const wf10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWaterfront10k(year: number): Promise<ResultRow[]> {
+  if (wf10kCache[year]) return wf10kCache[year];
+  if (!wf10kInflight[year]) {
+    wf10kInflight[year] = fetch(`/data/results-wf-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wf10kCache[year] = rows; return rows; });
+  }
+  return wf10kInflight[year];
+}
+export function getCachedWaterfront10k(year: number): ResultRow[] { return wf10kCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

@@ -13,6 +13,7 @@ const PROFILE_MAP: Record<string, string> = {
   'cam graves':          'cameron-graves',
   'blair mcwhirter':     'blair-mcwhirter',
   'fabe downs':          'fabe-downs',
+  'scott knowles':       'scott-knowles',
 };
 
 export function normalise(s: string): string {
