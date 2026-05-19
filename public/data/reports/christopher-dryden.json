@@ -1,0 +1,23 @@
+{
+  "slug": "christopher-dryden",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Christopher Dryden is a half-marathon specialist with 13 results since 2017, all at 21.1 km. His 1:04:11 PB at Christchurch 2025 makes him one of the faster half-marathon runners in this database, and his Auckland Half win in 2025 — in a field of 6,614 — is one of the standout individual performances across all athletes tracked here. At 33, he is still improving and has never raced the marathon, leaving his long-distance ceiling entirely unknown. His Christchurch Half times form the clearest and most consistent performance arc of any athlete in the database.",
+    "trajectory": "The trajectory at the half-marathon is improving. Dryden's Christchurch Half sequence — 1:10:22 (2017), 1:07:27 (2019), 1:05:49 (2021), 1:05:20 (2023), 1:05:10 (2024), 1:04:11 (2025), 1:05:55 (2026) — is textbook progressive development with a sharp PB in 2025. His Auckland Half performances (1:07:39, 1:07:30, 1:09:24, 1:08:28, 1:05:24) show more variability but the 2025 Auckland win confirms the PB pace is repeatable. The 2026 Christchurch result (1:05:55) is a slight step back but remains close to his best, suggesting 2025 was a peak rather than an outlier.",
+    "best_result": "Dryden's Auckland Half Marathon win in 2025 — 1st from 6,614 finishers — produces the highest field-size percentile in the entire database at 99.98%. That is an extraordinary result: Auckland Half is New Zealand's largest half-marathon, and winning it outright against deep competitive fields is elite-level performance by any measure. His Christchurch Half PB (4th from 2,858 in 2025) is also a top-tier result, but the Auckland win edges it on sheer scale.",
+    "distance_profile": "Dryden is exclusively a half-marathon racer based on available data. His 1:04:11 half speed projects to a marathon of approximately 2:14–2:16 using standard conversion factors — well inside the top tier of NZ marathon running. Whether he has the specific marathon endurance to match that projection is untested, but his base fitness is clearly there. If he were to step up, even a 2:20 debut would be impressive given his relatively conservative half-marathon training load. The bigger question is whether he races faster with a competitor breathing down his neck, given the slightly slower 2026 result versus 2025.",
+    "where_to_race": "Christchurch Half in May is Dryden's definitive home race — he has raced it seven times and improved almost every year. For his next PB attempt, Christchurch remains the best venue given the course familiarity and his consistent improvement there. Auckland Half in October is where he won the biggest prize of his career; the larger field provides better competition and pushing dynamics. If he considers a marathon debut, Auckland Marathon (October) would be the natural choice given his familiarity with that city and the race's competitive structure.",
+    "qualifying_note": "Without a marathon PB, Boston qualifying cannot be confirmed directly. However, his 1:04:11 half projects to a marathon of approximately 2:15–2:17, which would comfortably qualify him as an M 18–34 runner (standard 3:00:00). His WMA half-marathon age-graded score of approximately 87.6% at age 33 is elite territory and suggests he would age-grade similarly on the marathon. He has no Comrades-relevant marathon time on record."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "N/A",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.98,
+    "best_result_race": "Auckland Half Marathon 2025",
+    "age_grading_marathon": null,
+    "age_grading_half": 87.6,
+    "boston_status": "outside",
+    "strong_placement_races": ["Auckland Half Marathon", "Christchurch Half Marathon"],
+    "challenging_races": ["Queenstown Half Marathon"]
+  }
+}

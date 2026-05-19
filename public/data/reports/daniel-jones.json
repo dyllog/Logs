@@ -1,0 +1,23 @@
+{
+  "slug": "daniel-jones",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Daniel Jones is the most prolific winner in this database: eight marathons, seven podium finishes, including multiple wins at Queenstown, Auckland, and Hawke's Bay. His career spans 2018 to 2023 and his PB of 2:20:00 — set at Auckland 2021 — came in a field of just 870 finishers, which was COVID-era reduced. That result is still a strong marker of fitness, and his pattern of winning smaller and mid-sized fields shows a tactically astute racer who knows how to execute from the front. No results since 2023 leave his current form an open question.",
+    "trajectory": "Marathon trajectory peaked in 2021 and has since declined. From his debut 2:24:48 in 2018, Jones improved through 2:21:57 (2020) and 2:20:00 (2021), then drifted back to 2:21:52 (2022), 2:26:30 (2022 QT), and 2:31:13 (2023 QT). The Queenstown times are consistently slower than his Auckland times, suggesting the hillier course doesn't suit him as well, but even the Auckland trajectory appears to have peaked. At 37, with no results since late 2023, his current form is unknown — a focused comeback block could bring him back toward 2:22–2:24.",
+    "best_result": "Jones's Queenstown Marathon 2022 win (1st of 1,740) and 2023 win (1st of 1,841) both produce high percentile scores, but his most impressive placement came at Queenstown 2018: 1st of 1,954 finishers at 99.95th percentile. His Auckland wins (1st of 1,299 in 2022) are comparably strong. What stands out about Jones's results is the consistency of winning: he doesn't just podium, he wins. Four marathon wins across three different race venues is exceptional in a database where many athletes celebrate single wins.",
+    "distance_profile": "Jones is a marathon specialist with no half-marathon results in the archive. His single-distance focus is unusual in this cohort and suggests he either doesn't race halfs or those results aren't captured. His 2:20:00 PB at age 33 implies genuine sub-2:18 capability if he had raced on a more PB-conducive course with deeper competition. His Queenstown times (consistently 5–11 minutes slower than his Auckland bests) suggest the hillier terrain costs him relative to flat, fast courses.",
+    "where_to_race": "Queenstown Marathon is Jones's most-raced event (four starts) and he has won it every time, but the course returns slower times. Auckland Marathon is where he sets his best times and races in competitive fields; his 2021 win there (even in a reduced-size field) shows he can compete at the front of NZ marathon running. For a PB attempt, Auckland or Christchurch (flat and fast) would be optimal. If he returns to racing, Queenstown is the most reliable winning opportunity.",
+    "qualifying_note": "Jones's 2:20:00 qualifies comfortably for Boston as an M 35–39 athlete (standard 3:00:00), sitting 40 minutes inside the cutoff. His WMA marathon age-graded score of approximately 86.9% at age 33 is in the upper tier for club-level competitive runners. His Comrades time (sub-5:00 qualifier at 18,000 seconds) is well within reach at his recorded marathon speed."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "declining",
+    "trajectory_half": "N/A",
+    "best_result_percentile": 99.95,
+    "best_result_race": "Queenstown Marathon 2018",
+    "age_grading_marathon": 86.9,
+    "age_grading_half": null,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Queenstown Marathon", "Auckland Marathon", "Hawke's Bay Marathon"],
+    "challenging_races": []
+  }
+}

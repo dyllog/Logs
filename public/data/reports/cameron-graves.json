@@ -1,0 +1,23 @@
+{
+  "slug": "cameron-graves",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Cameron Graves has built his reputation across the Hawke's Bay Half Marathon circuit before expanding into marathons and wider NZ racing with striking results. His record shows a runner who arrived at the front of competitive fields gradually: steady improvement at Auckland Half from 2017 to 2020, a half-marathon PB of 1:04:17 at Christchurch in 2025, and a breakthrough marathon of 2:21:04 at Auckland 2025 — his second marathon, and his best. At 33, Graves is in the middle of his prime and his trajectory since 2023 has been unmistakably upward.",
+    "trajectory": "Both distances show improvement. On the marathon, Graves's sample is small (three races) but the 2025 result — a 14-minute improvement on his 2021 debut and a massive step up from his 2024 Auckland result — suggests 2025 was a genuine fitness breakthrough rather than conditions luck. On the half-marathon, the trend is clearer: he progressed from 1:13 in 2017 to 1:04:17 in 2025 with improvement almost every race at Hawke's Bay. His 2022 Queenstown Half was an outlier (1:14), likely fatigue or terrain. The underlying trend is strongly upward.",
+    "best_result": "Winning the Hawke's Bay Half Marathon 2025 with 3,818 finishers behind him places Graves at the 99.97th percentile for that race. He has won HB Half three times in succession (2023, 2024, 2025) — an extraordinary run of dominance at what is now a sizeable regional event. His Auckland Marathon 2025 result (3rd of 2,775) is also top-tier, placing him among New Zealand's fastest marathon runners in the year's deepest race. The two achievements together paint a picture of a runner who has arrived at genuinely national-class level.",
+    "distance_profile": "Graves's half-marathon speed (1:04:17) suggests a marathon ceiling of approximately 2:15–2:17, making his 2:21:04 look like a performance that still has margin to improve. He appears to race halfs in a controlled, racing-to-win mode and marathons with more conservative targets — sensible given his limited marathon experience. A targeted marathon build with the goal of sub-2:18 looks achievable in the near term. His consistency across multiple race venues suggests fitness rather than course specificity, though his results at HB are markedly better than anywhere else.",
+    "where_to_race": "Hawke's Bay Half is Graves's racing home — three consecutive wins and each year faster than the last. It's a smaller field than Auckland or Christchurch but his dominance there has now made it a showcase event for him. For a marathon PB, Auckland in October is his best bet given his 2025 result there; a sub-2:18 attempt would benefit from the larger competitive field. Christchurch Half (where he ran his 1:04:17 PB in 2025) is worth revisiting for a sub-1:04 attempt as he improves further.",
+    "qualifying_note": "Graves's 2:21:04 marathon qualifies him comfortably for Boston as an M 18–34 athlete, 39 minutes inside the 3:00:00 cutoff. His WMA age-graded marathon score of approximately 86.3% at age 33 reflects a runner performing well into elite territory. His half-marathon age grading of 87.5% is even stronger, suggesting the marathon has more runway."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.97,
+    "best_result_race": "Hawke's Bay Half Marathon 2025",
+    "age_grading_marathon": 86.3,
+    "age_grading_half": 87.5,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Hawke's Bay Half Marathon", "Auckland Marathon", "Christchurch Half Marathon"],
+    "challenging_races": ["Queenstown Half Marathon"]
+  }
+}
