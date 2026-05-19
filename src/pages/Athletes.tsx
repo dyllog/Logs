@@ -12,8 +12,10 @@ const athletes = [
   { name: 'Daniel Jones',          nationality: 'NZL', gender: 'M', races: 8,  pb: '2:20:00', pbRace: 'Auckland Marathon 2021',          href: '/athletes/daniel-jones',          active: true  },
   { name: 'Aaron Pulford',         nationality: 'NZL', gender: 'M', races: 11, pb: '1:06:11', pbRace: 'Christchurch Half 2013',          href: '/athletes/aaron-pulford',         active: true  },
   { name: 'Oska Inkster-Baynes',   nationality: 'NZL', gender: 'M', races: 8,  pb: '2:18:11', pbRace: 'Christchurch Marathon 2019',      href: '/athletes/oska-inkster-baynes',   active: true  },
-  { name: 'Fabe Downs',            nationality: 'NZL', gender: 'M', races: 4,  pb: '2:26:34', pbRace: 'Auckland Marathon 2020',          href: '/athletes/fabe-downs',            active: true  },
+  { name: 'Fabe Downs',            nationality: 'NZL', gender: 'M', races: 5,  pb: '2:26:34', pbRace: 'Auckland Marathon 2020',          href: '/athletes/fabe-downs',            active: true  },
   { name: 'Hiro Tanimoto',         nationality: 'NZL', gender: 'M', races: 4,  pb: '2:29:17', pbRace: "Hawke's Bay Marathon 2022",       href: '/athletes/hiro-tanimoto',         active: true  },
+  { name: 'Scott Knowles',         nationality: 'NZL', gender: 'M', races: 3,  pb: '1:34:52', pbRace: 'Waterfront Half Marathon 2025',   href: '/athletes/scott-knowles',         active: true  },
+  { name: 'Dylan Logan',           nationality: 'NZL', gender: 'M', races: 9,  pb: '2:37:41', pbRace: 'Christchurch Marathon 2025',      href: '/athletes/dylan-logan',           active: true  },
 ];
 
 export default function Athletes() {
