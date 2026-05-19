@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
   { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:44:13', sec: 13453, pos: 398,  total: 1619, cat: 'M 18–34', isPB: true  },
@@ -133,14 +133,16 @@ export default function AthleteKnowles() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.half.time}&dist=21`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <Link to="/athletes/scott-knowles/report"
+                  style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                  className="btn">
+              View Report →
+            </Link>
           </div>
         </div>
       </section>
