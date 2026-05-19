@@ -1,0 +1,23 @@
+{
+  "slug": "hiro-tanimoto",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Hiro Tanimoto is a marathon specialist with a small but consistent record at 42.2 km. Four results across 2019–2025 show a runner who consistently performs in the 2:29–2:32 range, places second or third in competitive fields, and has found a reliable fitness plateau. His 2:29:17 PB at Hawke's Bay 2022 reflects genuine speed, and his 2:29:55 at the same race in 2025 — three years later, at age 36 — shows exceptional consistency. He has never won a race outright but has never finished outside the top 3.",
+    "trajectory": "With only four results, trend analysis is limited. His times cluster tightly: 2:31:10 (2019 QT), 2:29:17 (2022 HB PB), 2:31:33 (2022 QT), 2:29:55 (2025 HB). The pattern suggests a runner who has found his equilibrium fitness level rather than one who is actively improving or declining. His HB and QT times track consistently — the Hawke's Bay course produces his better times, which may reflect course characteristics or race-specific conditions. At 36, his trajectory is best described as plateaued at a strong club-competitive standard.",
+    "best_result": "Tanimoto's 2nd place at Queenstown Marathon 2019 — in a field of 2,262 — is his best placement by field size at the 99.96th percentile. He finished behind only the eventual winner in one of the larger NZ marathon fields in that year. His 2022 HB result (2nd of 415) and 2022 QT result (2nd of 1,740) reinforce a consistent pattern: Tanimoto is the perpetual runner-up, consistently strong enough to finish 2nd but rarely with the top-end finishing speed to claim first.",
+    "distance_profile": "Tanimoto races exclusively at the marathon distance based on available data. His four results span three different courses (Queenstown twice, Hawke's Bay twice), and his Hawke's Bay times are slightly faster — suggesting a preference or advantage on that course profile. His 2:29 speed implies a half-marathon capability around 1:11–1:12, which would be consistent with a solid but not exceptional half-marathon performer. There is no evidence he has raced at half-marathon distances, and his training is presumably marathon-specific.",
+    "where_to_race": "Hawke's Bay Marathon is Tanimoto's best venue — two of his fastest times have come there, and the May timing appears to suit his annual cycle. Queenstown is his other regular venue and he performs well there, though the hillier course costs him 2–3 minutes. He has not raced Auckland or Christchurch; both offer faster courses and might unlock a PB if he targeted one. Auckland's October timing and flat profile would likely produce his fastest result if his fitness holds.",
+    "qualifying_note": "Tanimoto's 2:29:17 PB qualifies for Boston as an M 35–39 athlete (standard 3:00:00) by 31 minutes. His WMA marathon age-graded score of approximately 81.5% at age 33 reflects a competent regional competitor rather than elite-level performance. His 2025 result (2:29:55 at age 36) produces a slightly better WMA-adjusted score given the age factor, confirming he is holding his level as a masters runner."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "plateaued",
+    "trajectory_half": "N/A",
+    "best_result_percentile": 99.96,
+    "best_result_race": "Queenstown Marathon 2019",
+    "age_grading_marathon": 81.5,
+    "age_grading_half": null,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Hawke's Bay Marathon", "Queenstown Marathon"],
+    "challenging_races": []
+  }
+}

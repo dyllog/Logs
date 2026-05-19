@@ -1,0 +1,23 @@
+{
+  "slug": "blair-mcwhirter",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Blair McWhirter has one of the longest and most varied careers in this database, spanning 2007 to 2025 — 18 years of competitive marathon running. His 2:25:24 PB came at Christchurch 2012, age 27, and remained his benchmark for 13 years. His career shows a runner who largely maintained a 2:25–2:33 window through his late 30s and has continued racing into his 40s. His 2025 season — two marathon finishes including a Christchurch result of 2:29:08 at age 40 — shows remarkable durability. Fourteen marathon results make him the most experienced marathoner in this database.",
+    "trajectory": "Marathon trajectory is best described as plateaued, with significant history. From a 2007 debut of 2:48:07, McWhirter improved steeply to his 2012 PB of 2:25:24, then went dormant in the records until 2017. His 2017–2021 results clustered in a 2:25–2:36 band with some variability (a 2:36:34 at Christchurch 2019 was an outlier). His 2025 results (2:29:08 and 2:32:10) reflect consistent M40 fitness rather than decline. On WMA-adjusted terms, his 2025 age-graded performance approaches his 2012 PB — suggesting he has maintained his relative physiological level across a decade.",
+    "best_result": "McWhirter's Rotorua Marathon 2018 win — 1st of 940 finishers — is his best field-size result at 99.89th percentile. His Auckland 2017 finish (3rd of 1,565) is comparable in field quality given the competitive nature of that race. His 2025 Christchurch win (1st of 957) at age 40 is his most age-grading-impressive result, even though the raw time is 4 minutes slower than his PB. A 40-year-old winning a 957-person marathon field outright reflects genuine fitness that transcends the raw splits.",
+    "distance_profile": "McWhirter is almost exclusively a marathon runner. His one half-marathon result (1:08:50 at Christchurch 2018) implies a marathon ceiling closer to 2:22–2:24 at peak fitness — consistent with his 2:25 PB having been achievable on a faster course or with better conditions. He appears to have found his niche in the marathon and races it 1–2 times per year consistently. His spread across Rotorua, Auckland, Christchurch, and Queenstown shows no strong course preference — he performs relatively consistently across all four venues.",
+    "where_to_race": "McWhirter's results are spread across multiple venues with reasonable consistency. Rotorua and Christchurch have been his most productive winning venues; Auckland has produced top-3 finishes but not wins. For a competitive placement, Christchurch Marathon in June offers good conditions and he has won it multiple times. For a WMA age-graded PB (his most realistic target given his age), any flat fast course in good conditions could produce a personal best on adjusted terms even without improving his raw time. Queenstown suits athletes who accept slower times for a more challenging course.",
+    "qualifying_note": "McWhirter's 2:25:24 PB qualifies for Boston as an M 40–44 athlete (standard 3:05:00) by 40 minutes. Even his 2025 form (2:29:08 at 40) clears the M 40–44 standard by 36 minutes. His WMA marathon age-graded score at peak was approximately 84.2%; his 2025 result produces a comparable WMA score around 80–82%, confirming he is performing at a relatively consistent absolute level as masters age factors apply. He is well inside Boston qualifying on any recent result."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "plateaued",
+    "trajectory_half": "insufficient data",
+    "best_result_percentile": 99.89,
+    "best_result_race": "Rotorua Marathon 2018",
+    "age_grading_marathon": 84.2,
+    "age_grading_half": null,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Rotorua Marathon", "Christchurch Marathon", "Auckland Marathon"],
+    "challenging_races": ["Queenstown Marathon"]
+  }
+}

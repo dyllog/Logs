@@ -136,14 +136,15 @@ export default function AthleteDryden() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${halfPB.time}&dist=21`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/christopher-dryden/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>

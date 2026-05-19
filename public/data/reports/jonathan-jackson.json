@@ -1,0 +1,23 @@
+{
+  "slug": "jonathan-jackson",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Jonathan Jackson had a sharp competitive window from 2014 to 2016, during which he set both his marathon PB (2:26:38, Auckland 2016) and his half-marathon PB (1:07:22, Christchurch 2015). His 20-race career spans 2014 to 2023 and covers a wide range of events, making him one of the more experienced athletes in this database. Post-2017, his times have gradually slowed across both distances, though he has remained active and continues to place well in smaller fields. His most recent results in 2023 (two top-six marathon finishes) suggest the door is not fully closed on competitive running.",
+    "trajectory": "Both marathon and half-marathon trajectories show decline from his 2015–2016 peak. Marathon times have moved from a 2:26 PB in 2016 to results in the 2:35–2:36 range in 2023. The regression is gradual rather than dramatic, which is consistent with a runner who has maintained training but not replicated the peak conditions or volume of his best years. On the half, his 2021 Rotorua result (1:16:12) was a low point, but his 2023 Waterfront result (1:12:48) showed some recovery. At 37, a return to sub-2:30 marathon shape is plausible with a focused block.",
+    "best_result": "Jackson won the Waterfront Half Marathon in 2018 with 1,371 finishers behind him — a 99.93rd percentile result. He also won Rotorua Half in 2018 and 2019, and took 2nd at Auckland Marathon in 2016 in a field of 1,630. His best-ever field-adjusted performance is probably the 2016 Auckland Marathon, where a 2:26:38 secured second place in a race that routinely draws national-level competition. The Waterfront win came in a smaller event, but it was a dominant performance on a challenging course.",
+    "distance_profile": "Jackson is a natural marathon runner whose half speed (1:07:22) implied a marathon ceiling closer to 2:22, so his 2:26 PB left some time on the table. His career shows consistent dual-distance racing without a clear specialisation. Given the post-2017 regression, his current marathon shape is likely in the 2:30–2:36 range depending on training focus. A dedicated marathon block could realistically bring him back below 2:30, but his current results suggest he is in maintenance mode rather than peak preparation.",
+    "where_to_race": "Jackson has historically done well at Waterfront Half (winner) and Rotorua Half (multiple wins), where smaller fields give him better placement. At larger events like Auckland and Christchurch his finishing position drops despite similar fitness, which speaks to the strength of those fields rather than any weakness in his running. For a time PB attempt, Auckland Marathon's pace group structure and flatter course suits him best. For a confidence result, Waterfront Half or Rotorua Half are reliable winning opportunities based on his form history.",
+    "qualifying_note": "Jackson's 2:26:38 PB would qualify him for Boston as an M 35–39 athlete (standard 3:00:00) with 33 minutes to spare. His WMA age-graded marathon score of approximately 83.4% was set at age 28; at his current age of 37, a 2:30 marathon would age-grade similarly (~83%) given the WMA adjustment for masters athletes. He is well within qualifying territory even on current form."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "declining",
+    "trajectory_half": "declining",
+    "best_result_percentile": 99.93,
+    "best_result_race": "Waterfront Half Marathon 2018",
+    "age_grading_marathon": 83.4,
+    "age_grading_half": 84.0,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Waterfront Half Marathon", "Rotorua Half Marathon", "Rotorua Marathon"],
+    "challenging_races": ["Auckland Marathon", "Christchurch Half Marathon"]
+  }
+}

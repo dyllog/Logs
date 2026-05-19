@@ -38,6 +38,7 @@ import AthleteMcWhirter from "./pages/AthleteMcWhirter";
 import AthleteDowns from "./pages/AthleteDowns";
 import AthleteKnowles from "./pages/AthleteKnowles";
 import AthleteLogan from "./pages/AthleteLogan";
+import AthleteReport from "./pages/AthleteReport";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -83,6 +84,7 @@ function Layout() {
         <Route path="/athletes/fabe-downs" element={<AthleteDowns />} />
         <Route path="/athletes/scott-knowles" element={<AthleteKnowles />} />
         <Route path="/athletes/dylan-logan" element={<AthleteLogan />} />
+        <Route path="/athletes/:slug/report" element={<AthleteReport />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

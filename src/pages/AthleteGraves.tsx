@@ -146,14 +146,15 @@ export default function AthleteGraves() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.mar.time}&dist=42`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/cameron-graves/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>
