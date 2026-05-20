@@ -209,9 +209,9 @@ export default function Index() {
             <em>New Zealand Running: <span style={{ color: 'var(--accent)' }}>Archived</span></em>
           </h1>
           <p className="lp-hero-sub">
-            A long-form record of road, trail, and ultra performances in New Zealand —
-            field results, course-record progressions, and athlete histories.
-            No subscriptions, no promotion. A reference, kept current.
+            A long-form record of road, trail, and ultra performances in New Zealand – field results, course-record progressions, and athlete histories.<br />
+            No subscriptions, no promotion.<br />
+            A reference, kept current.
           </p>
 
           <div className="lp-search-shell" onClick={() => inputRef.current?.focus()}>
