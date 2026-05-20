@@ -268,6 +268,17 @@ export async function loadDev10k(year: number): Promise<ResultRow[]> {
 }
 export function getCachedDev10k(year: number): ResultRow[] { return dev10kCache[year] ?? []; }
 
+const coastHalfCache: Record<number, ResultRow[]> = {};
+const coastHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadCoastHalf(year: number): Promise<ResultRow[]> {
+  if (coastHalfCache[year]) return coastHalfCache[year];
+  if (!coastHalfInflight[year]) {
+    coastHalfInflight[year] = fetch(`/data/results-coast-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { coastHalfCache[year] = rows; return rows; });
+  }
+  return coastHalfInflight[year];
+}
+export function getCachedCoastHalf(year: number): ResultRow[] { return coastHalfCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

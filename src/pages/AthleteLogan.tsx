@@ -1,15 +1,18 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',  short: 'DEV', dist: '21.1 km', distId: 'half' as const, time: '1:28:07', sec: 5287,  pos: 20,  total: 598,  cat: 'M 20–29', isPB: true  },
-  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:30:32', sec: 12632, pos: 244, total: 1619, cat: 'M 18–34', isPB: true  },
-  { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:20:10', sec: 12010, pos: 75,  total: 870,  cat: 'M 18–34', isPB: true  },
+  { dateNum: 2020 +  8/12, year: 2020, race: 'Coatesville Half Marathon', short: 'COAST', dist: '21.1 km', distId: 'half' as const, time: '1:36:28', sec: 5788,  pos: 67,  total: 1037, cat: 'M 20–29', isPB: true  },
+  { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',   short: 'DEV',   dist: '21.1 km', distId: 'half' as const, time: '1:28:07', sec: 5287,  pos: 20,  total: 598,  cat: 'M 20–29', isPB: true  },
+  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',         short: 'AUC',   dist: '42.2 km', distId: 'mar'  as const, time: '3:30:32', sec: 12632, pos: 244, total: 1619, cat: 'M 18–34', isPB: true  },
+  { dateNum: 2021 +  8/12, year: 2021, race: 'Coatesville Half Marathon', short: 'COAST', dist: '21.1 km', distId: 'half' as const, time: '1:30:47', sec: 5447,  pos: 18,  total: 732,  cat: 'M 20–29', isPB: false },
+  { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',         short: 'AUC',   dist: '42.2 km', distId: 'mar'  as const, time: '3:20:10', sec: 12010, pos: 75,  total: 870,  cat: 'M 18–34', isPB: true  },
   { dateNum: 2023 +  2/12, year: 2023, race: 'Waterfront Half Marathon', short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:18:31', sec: 4711,  pos: 23,  total: 1414, cat: 'M 20–29', isPB: true  },
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '2:45:22', sec: 9922,  pos: 15,  total: 1765, cat: 'M 25–29', isPB: true  },
   { dateNum: 2024 +  2/12, year: 2024, race: 'Waterfront Half Marathon', short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:13:38', sec: 4418,  pos: 4,   total: 1822, cat: 'M 20–29', isPB: true  },
   { dateNum: 2024 +  9/12, year: 2024, race: 'Devonport Half Marathon',  short: 'DEV', dist: '21.1 km', distId: 'half' as const, time: '1:15:22', sec: 4522,  pos: 2,   total: 708,  cat: 'M 20–29', isPB: false },
-  { dateNum: 2025 +  6/12, year: 2025, race: 'Christchurch Marathon',    short: 'CHC', dist: '42.2 km', distId: 'mar'  as const, time: '2:37:41', sec: 9461,  pos: 17,  total: 957,  cat: 'M 20–39', isPB: true  },
-  { dateNum: 2026 +  2/12, year: 2026, race: 'Waterfront 10 km',         short: 'WF',  dist: '10 km',   distId: '10k'  as const, time: '34:45',   sec: 2085,  pos: 9,   total: 1093, cat: 'M 30–39', isPB: true  },
+  { dateNum: 2025 +  6/12, year: 2025, race: 'Christchurch Marathon',    short: 'CHC',   dist: '42.2 km', distId: 'mar'  as const, time: '2:37:41', sec: 9461,  pos: 17, total: 957,  cat: 'M 20–39', isPB: true  },
+  { dateNum: 2025 +  8/12, year: 2025, race: 'Coatesville Half Marathon', short: 'COAST', dist: '21.1 km', distId: 'half' as const, time: '1:15:57', sec: 4557,  pos: 1,  total: 626,  cat: 'M 20–29', isPB: false },
+  { dateNum: 2026 +  2/12, year: 2026, race: 'Waterfront 10 km',         short: 'WF',    dist: '10 km',   distId: '10k'  as const, time: '34:45',   sec: 2085,  pos: 9,  total: 1093, cat: 'M 30–39', isPB: true  },
 ];
 
 const PBs = {
@@ -112,7 +115,7 @@ export default function AthleteLogan() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'M 30–39' },
-                  { l: 'Races logged', v: '9' },
+                  { l: 'Races logged', v: '12' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -179,10 +182,10 @@ export default function AthleteLogan() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '9',       sub: '4 marathons · 4 halves · 1 10k' },
+                { label: 'Races logged',     val: '12',      sub: '4 marathons · 7 halves · 1 10k' },
                 { label: 'Marathon PB',      val: '2:37:41', sub: 'Christchurch 2025 · 17th overall' },
                 { label: 'Half marathon PB', val: '1:13:38', sub: 'Waterfront 2024 · 4th overall' },
-                { label: 'Active years',     val: '7',       sub: '2020–2026 · AUC · DEV · WF · CHC' },
+                { label: 'Active years',     val: '7',       sub: '2020–2026 · AUC · COAST · DEV · WF · CHC' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -206,7 +209,7 @@ export default function AthleteLogan() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2020–2026 · AUC · DEV · WF · CHC</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2020–2026 · AUC · COAST · DEV · WF · CHC</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -228,6 +231,7 @@ export default function AthleteLogan() {
                         else if (r.race === 'Christchurch Marathon') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Devonport')) navigate(`/races/devonport-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Coatesville')) navigate(`/races/coatesville-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
@@ -248,7 +252,7 @@ export default function AthleteLogan() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Christchurch, Devonport and Waterfront certified timings.
+            Percentile computed across all finishers in that event and year. Results sourced from Auckland, Christchurch, Coatesville, Devonport and Waterfront certified timings.
           </div>
         </div>
       </section>

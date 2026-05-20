@@ -1,17 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
 import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
 import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
 import { wfHalfStats, wf10kStats, WF_YEARS } from '@/data/waterfrontData';
 import { devHalfStats, dev10kStats, DEV_HALF_YEARS, DEV_10K_YEARS } from '@/data/devonportData';
+import { coastStats, COAST_YEARS } from '@/data/coatesvilleData';
 import FullResultsOverlay from './FullResultsOverlay';
 import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half';
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
@@ -29,6 +30,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const isWf10k = raceId === 'wf-10k';
   const isDevHalf = raceId === 'dev-half';
   const isDev10k = raceId === 'dev-10k';
+  const isCoastHalf = raceId === 'coast-half';
   const availableYears = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
     : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
@@ -37,6 +39,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     : (isWfHalf || isWf10k) ? [...WF_YEARS].reverse()
     : isDevHalf ? [...DEV_HALF_YEARS].reverse()
     : isDev10k ? [...DEV_10K_YEARS].reverse()
+    : isCoastHalf ? [...COAST_YEARS].reverse()
     : [...YEARS].reverse();
   const years = availableYears as number[];
   const resolvedInitial = initialYear && (availableYears as number[]).includes(initialYear) ? initialYear : availableYears[0];
@@ -67,9 +70,10 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       : isWfHalf ? loadWaterfrontHalf(year)
       : isDevHalf ? loadDevHalf(year)
       : isDev10k ? loadDev10k(year)
+      : isCoastHalf ? loadCoastHalf(year)
       : loadResults(year, dist as '42.2 km' | '21.1 km');
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k]);
+  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf]);
 
   const ql = normalise(q.trim());
   const filtered = useMemo(() => {
@@ -89,7 +93,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
 
   return (
@@ -208,7 +212,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       <FullResultsOverlay
         open={fullOpen}
         year={year}
-        dist={(isRotoruaHalf || isHbHalf || isQtHalf || isWfHalf || isWf10k || isDevHalf || isDev10k) ? '21.1 km' : (isRotorua || isHb || isQt) ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
+        dist={(isRotoruaHalf || isHbHalf || isQtHalf || isWfHalf || isWf10k || isDevHalf || isDev10k || isCoastHalf) ? '21.1 km' : (isRotorua || isHb || isQt) ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
         raceId={raceId}
         initialQ={fullQ}
         onClose={() => setFullOpen(false)}

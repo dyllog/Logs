@@ -24,7 +24,8 @@ const suggestions = [
   { kind: 'race',    name: 'Queenstown Marathon', meta: 'Mixed · est 2014',                       href: '/races/queenstown-marathon' },
   { kind: 'race',    name: "Hawke's Bay Marathon", meta: 'Road · est 2016',                       href: '/races/hawkes-bay-marathon' },
   { kind: 'race',    name: 'Waterfront Half Marathon', meta: 'Road · Auckland waterfront',        href: '/races/waterfront-half-marathon' },
-  { kind: 'race',    name: 'Devonport Half Marathon',  meta: 'Mixed · Devonport peninsula',       href: '/races/devonport-half-marathon' },
+  { kind: 'race',    name: 'Devonport Half Marathon',    meta: 'Mixed · Devonport peninsula',       href: '/races/devonport-half-marathon' },
+  { kind: 'race',    name: 'Coatesville Half Marathon', meta: 'Road & trail · Coatesville, Rodney', href: '/races/coatesville-half-marathon' },
 ];
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
