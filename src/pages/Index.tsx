@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { recordsMen } from '@/data/logsData';
 import { upcoming } from '@/data/logsData';
@@ -138,46 +138,104 @@ const LEDGER = [
   },
 ];
 
+type SuggestItem = { label: string; sub: string; href: string; type: 'athlete' | 'race' };
+type SearchIndex = { athletes: { name: string; nat: string; slug: string | null }[]; races: { name: string; href: string; dist: string }[] };
+
 export default function Index() {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const caretRef = useRef<HTMLSpanElement>(null);
-  const navigate = useNavigate();
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const caretRef  = useRef<HTMLSpanElement>(null);
+  const dropRef   = useRef<HTMLDivElement>(null);
+  const indexRef  = useRef<SearchIndex | null>(null);
+  const loadingRef = useRef(false);
+  const navigate  = useNavigate();
+
+  const [query,     setQuery]     = useState('');
+  const [showDrop,  setShowDrop]  = useState(false);
+  const [suggests,  setSuggests]  = useState<SuggestItem[]>([]);
+  const [activeIdx, setActiveIdx] = useState(-1);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       const el = inputRef.current;
       if (!el) return;
-      if (e.key === '/' && document.activeElement !== el) {
-        e.preventDefault();
-        el.focus();
-      }
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        el.focus();
-      }
+      if (e.key === '/' && document.activeElement !== el) { e.preventDefault(); el.focus(); }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); el.focus(); }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, []);
 
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setShowDrop(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const loadIndex = useCallback(async () => {
+    if (indexRef.current || loadingRef.current) return;
+    loadingRef.current = true;
+    try {
+      const resp = await fetch('/data/search-index.json');
+      indexRef.current = await resp.json() as SearchIndex;
+    } catch { /* silently fail — search just won't show suggestions */ }
+    finally { loadingRef.current = false; }
+  }, []);
+
+  const filterResults = useCallback((q: string): SuggestItem[] => {
+    if (!indexRef.current || q.length < 2) return [];
+    const lower = q.toLowerCase();
+    const { athletes, races } = indexRef.current;
+    const out: SuggestItem[] = [];
+
+    for (const race of races) {
+      if (race.name.toLowerCase().includes(lower))
+        out.push({ label: race.name, sub: race.dist, href: race.href, type: 'race' });
+    }
+
+    let count = 0;
+    for (const ath of athletes) {
+      if (count >= 10) break;
+      if (ath.name.toLowerCase().includes(lower)) {
+        out.push({ label: ath.name, sub: ath.nat, href: ath.slug ? `/athletes/${ath.slug}` : '/athletes', type: 'athlete' });
+        count++;
+      }
+    }
+    return out.slice(0, 10);
+  }, []);
+
   const hideCaret = () => { if (caretRef.current) caretRef.current.style.display = 'none'; };
-  const showCaret = () => { if (caretRef.current && !inputRef.current?.value) caretRef.current.style.display = ''; };
+  const showCaret = (q = query) => { if (caretRef.current && !q) caretRef.current.style.display = ''; };
+
+  const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const q = e.target.value;
+    setQuery(q);
+    hideCaret();
+    await loadIndex();
+    if (q.length < 2) { setShowDrop(false); setSuggests([]); return; }
+    const results = filterResults(q);
+    setSuggests(results);
+    setShowDrop(results.length > 0);
+    setActiveIdx(-1);
+  };
 
   const handleExampleClick = (label: string, href: string) => {
-    if (inputRef.current) {
-      inputRef.current.value = label;
-      inputRef.current.focus();
-      hideCaret();
-    }
+    setQuery(label);
+    hideCaret();
+    inputRef.current?.focus();
+    setShowDrop(false);
     setTimeout(() => navigate(href), 180);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputRef.current?.value) {
-      const q = inputRef.current.value.toLowerCase();
-      const match = EXAMPLES.find(ex => ex.label.toLowerCase().includes(q));
-      if (match) navigate(match.href);
-      else navigate('/athletes');
+    if (e.key === 'Escape') { setShowDrop(false); setActiveIdx(-1); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, suggests.length - 1)); return; }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, -1)); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeIdx >= 0 && suggests[activeIdx]) { navigate(suggests[activeIdx].href); setShowDrop(false); return; }
+      if (query.trim()) { navigate('/athletes'); setShowDrop(false); }
     }
   };
 
@@ -214,7 +272,7 @@ export default function Index() {
             A reference, kept current.
           </p>
 
-          <div className="lp-search-shell" onClick={() => inputRef.current?.focus()}>
+          <div ref={dropRef} className="lp-search-shell" onClick={() => inputRef.current?.focus()}>
             <div className="lp-search-bar">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ flex: '0 0 auto', color: 'var(--ink)' }}>
                 <circle cx="10.5" cy="10.5" r="6.5" />
@@ -226,13 +284,35 @@ export default function Index() {
                 type="text"
                 placeholder="Search athletes, races, years, records…"
                 autoComplete="off"
-                onFocus={hideCaret}
-                onBlur={showCaret}
+                onFocus={() => { hideCaret(); loadIndex(); if (query.length >= 2) setShowDrop(suggests.length > 0); }}
+                onBlur={() => showCaret(query)}
+                onChange={handleInput}
                 onKeyDown={handleKeyDown}
+                value={query}
               />
               <span ref={caretRef} className="lp-search-caret" />
               <span className="lp-search-kbd">⌘ K</span>
             </div>
+
+            {showDrop && (
+              <div className="lp-drop" role="listbox">
+                {suggests.map((s, i) => (
+                  <div
+                    key={`${s.type}-${s.label}`}
+                    className={`lp-drop-item${i === activeIdx ? ' active' : ''}`}
+                    role="option"
+                    aria-selected={i === activeIdx}
+                    onMouseDown={(e) => { e.preventDefault(); navigate(s.href); setShowDrop(false); }}
+                    onMouseEnter={() => setActiveIdx(i)}
+                  >
+                    <span className="lp-drop-label">{s.label}</span>
+                    <span className="lp-drop-sub">{s.type === 'race' ? s.sub : s.sub}</span>
+                    <span className="lp-drop-type">{s.type === 'race' ? 'race' : 'athlete'}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="lp-search-examples">
               <span className="lp-label-x">Try</span>
               {EXAMPLES.map((ex, i) => (
