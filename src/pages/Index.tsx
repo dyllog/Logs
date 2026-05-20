@@ -255,7 +255,7 @@ export default function Index() {
         </div>
         <div className="lp-scale-cell">
           <span className="label">Athlete profiles</span>
-          <div className="lp-scale-num">140+</div>
+          <div className="lp-scale-num">24</div>
           <div className="lp-scale-note">Indexed and linked</div>
         </div>
         <div className="lp-scale-cell">
@@ -265,13 +265,13 @@ export default function Index() {
         </div>
         <div className="lp-scale-cell">
           <span className="label">Course records</span>
-          <div className="lp-scale-num">34+</div>
-          <div className="lp-scale-note">Progressions on file</div>
+          <div className="lp-scale-num">38</div>
+          <div className="lp-scale-note">Across all distances</div>
         </div>
         <div className="lp-scale-cell">
-          <span className="label">Earliest edition</span>
+          <span className="label">Data from</span>
           <div className="lp-scale-num">{SITE_STATS.earliestEdition}</div>
-          <div className="lp-scale-note">Auckland, inaugural</div>
+          <div className="lp-scale-note">Chr. Half · first on record</div>
         </div>
       </div>
 
@@ -333,7 +333,7 @@ export default function Index() {
               </div>
               <h3>Dylan Logan — <em>consistent across the distance.</em></h3>
               <p className="lp-cell-lede">
-                Auckland-based runner with finishes across Auckland, Christchurch, Waterfront, and Queenstown.
+                Auckland-based runner with finishes across Auckland, Christchurch, and Waterfront.
                 Multiple sub-3:15 performances on file. Competed across half and full marathon distances since 2019.
               </p>
 

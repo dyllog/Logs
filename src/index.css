@@ -1072,6 +1072,8 @@ body {
   background: var(--bg);
   transition: background 120ms;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .lp-hole:hover { background: var(--bg-alt); }
 .lp-hole-num {
@@ -1094,6 +1096,7 @@ body {
   line-height: 1.55;
   color: var(--meta);
   margin-bottom: 18px;
+  flex: 1 0 auto;
 }
 .lp-hole ol {
   list-style: none;
