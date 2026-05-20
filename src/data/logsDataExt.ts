@@ -301,6 +301,28 @@ export async function loadOmaha10k(year: number): Promise<ResultRow[]> {
 }
 export function getCachedOmaha10k(year: number): ResultRow[] { return omaha10kCache[year] ?? []; }
 
+const maraetaiHalfCache: Record<number, ResultRow[]> = {};
+const maraetaiHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMaraetaiHalf(year: number): Promise<ResultRow[]> {
+  if (maraetaiHalfCache[year]) return maraetaiHalfCache[year];
+  if (!maraetaiHalfInflight[year]) {
+    maraetaiHalfInflight[year] = fetch(`/data/results-maraetai-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { maraetaiHalfCache[year] = rows; return rows; });
+  }
+  return maraetaiHalfInflight[year];
+}
+export function getCachedMaraetaiHalf(year: number): ResultRow[] { return maraetaiHalfCache[year] ?? []; }
+
+const maraetai10kCache: Record<number, ResultRow[]> = {};
+const maraetai10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMaraetai10k(year: number): Promise<ResultRow[]> {
+  if (maraetai10kCache[year]) return maraetai10kCache[year];
+  if (!maraetai10kInflight[year]) {
+    maraetai10kInflight[year] = fetch(`/data/results-maraetai-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { maraetai10kCache[year] = rows; return rows; });
+  }
+  return maraetai10kInflight[year];
+}
+export function getCachedMaraetai10k(year: number): ResultRow[] { return maraetai10kCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;
