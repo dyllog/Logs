@@ -206,7 +206,7 @@ export default function Index() {
           <div className="lp-hero-eyebrow">The New Zealand Running Archive</div>
           <h1 className="lp-hero-title">
             Every result. Every runner.<br />
-            <em>New Zealand Running: Archived</em>
+            <em>New Zealand Running: <span style={{ color: 'var(--accent)' }}>Archived</span></em>
           </h1>
           <p className="lp-hero-sub">
             A long-form record of road, trail, and ultra performances in New Zealand —
