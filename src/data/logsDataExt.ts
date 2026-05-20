@@ -279,6 +279,28 @@ export async function loadCoastHalf(year: number): Promise<ResultRow[]> {
 }
 export function getCachedCoastHalf(year: number): ResultRow[] { return coastHalfCache[year] ?? []; }
 
+const omahaHalfCache: Record<number, ResultRow[]> = {};
+const omahaHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadOmahaHalf(year: number): Promise<ResultRow[]> {
+  if (omahaHalfCache[year]) return omahaHalfCache[year];
+  if (!omahaHalfInflight[year]) {
+    omahaHalfInflight[year] = fetch(`/data/results-omaha-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { omahaHalfCache[year] = rows; return rows; });
+  }
+  return omahaHalfInflight[year];
+}
+export function getCachedOmahaHalf(year: number): ResultRow[] { return omahaHalfCache[year] ?? []; }
+
+const omaha10kCache: Record<number, ResultRow[]> = {};
+const omaha10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadOmaha10k(year: number): Promise<ResultRow[]> {
+  if (omaha10kCache[year]) return omaha10kCache[year];
+  if (!omaha10kInflight[year]) {
+    omaha10kInflight[year] = fetch(`/data/results-omaha-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { omaha10kCache[year] = rows; return rows; });
+  }
+  return omaha10kInflight[year];
+}
+export function getCachedOmaha10k(year: number): ResultRow[] { return omaha10kCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

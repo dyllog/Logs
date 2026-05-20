@@ -57,6 +57,7 @@ import HawkesBay from "./pages/HawkesBay";
 import WaterfrontHalf from "./pages/WaterfrontHalf";
 import Devonport from "./pages/Devonport";
 import Coatesville from "./pages/Coatesville";
+import Omaha from "./pages/Omaha";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -78,6 +79,7 @@ function Layout() {
         <Route path="/races/waterfront-half-marathon" element={<WaterfrontHalf />} />
         <Route path="/races/devonport-half-marathon" element={<Devonport />} />
         <Route path="/races/coatesville-half-marathon" element={<Coatesville />} />
+        <Route path="/races/omaha-half-marathon" element={<Omaha />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />

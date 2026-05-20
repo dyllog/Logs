@@ -26,7 +26,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Daniel Jones',        slug: 'daniel-jones',        nationality: 'NZL', gender: 'M', pbTime: '2:20:00', pbRace: 'Auckland Marathon 2021',          racesLogged: 8  },
   { name: 'Ciaran Faherty',      slug: 'ciaran-faherty',      nationality: 'NZL', gender: 'M', pbTime: '2:24:11', pbRace: 'Christchurch Marathon 2017',      racesLogged: 13 },
   { name: 'Hiro Tanimoto',       slug: 'hiro-tanimoto',       nationality: 'NZL', gender: 'M', pbTime: '2:29:17', pbRace: "Hawke's Bay Marathon 2022",       racesLogged: 4,  aliases: ['Hirotaka Tanimoto'] },
-  { name: 'Fabe Downs',          slug: 'fabe-downs',          nationality: 'NZL', gender: 'M', pbTime: '2:26:34', pbRace: 'Auckland Marathon 2020',          racesLogged: 5  },
+  { name: 'Fabe Downs',          slug: 'fabe-downs',          nationality: 'NZL', gender: 'M', pbTime: '2:26:34', pbRace: 'Auckland Marathon 2020',          racesLogged: 6,  aliases: ['Fabian Downs'] },
   // New profiles
   { name: 'Cullern Thorby',      slug: 'cullern-thorby',      nationality: 'NZL', gender: 'M', pbTime: '2:22:59', pbRace: 'Auckland Marathon 2024',          racesLogged: 8  },
   { name: 'Casey Thorby',        slug: 'casey-thorby',        nationality: 'NZL', gender: 'M', pbTime: '1:07:12', pbRace: 'Auckland Half Marathon 2024',     racesLogged: 8  },
@@ -39,7 +39,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Mike Phillips',       slug: 'mike-phillips',       nationality: 'NZL', gender: 'M', pbTime: '1:09:46', pbRace: 'Christchurch Half 2026',          racesLogged: 10 },
   // Community / recreational
   { name: 'Scott Knowles',       slug: 'scott-knowles',       nationality: 'NZL', gender: 'M', pbTime: '1:34:52', pbRace: 'Waterfront Half Marathon 2025',   racesLogged: 3  },
-  { name: 'Dylan Logan',         slug: 'dylan-logan',         nationality: 'NZL', gender: 'M', pbTime: '2:37:41', pbRace: 'Christchurch Marathon 2025',      racesLogged: 12 },
+  { name: 'Dylan Logan',         slug: 'dylan-logan',         nationality: 'NZL', gender: 'M', pbTime: '2:37:41', pbRace: 'Christchurch Marathon 2025',      racesLogged: 14 },
 ];
 
 /** Build slug map including aliases for use in athleteProfiles.ts */

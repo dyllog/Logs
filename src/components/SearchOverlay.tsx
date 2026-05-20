@@ -26,6 +26,7 @@ const suggestions = [
   { kind: 'race',    name: 'Waterfront Half Marathon', meta: 'Road · Auckland waterfront',        href: '/races/waterfront-half-marathon' },
   { kind: 'race',    name: 'Devonport Half Marathon',    meta: 'Mixed · Devonport peninsula',       href: '/races/devonport-half-marathon' },
   { kind: 'race',    name: 'Coatesville Half Marathon', meta: 'Road & trail · Coatesville, Rodney', href: '/races/coatesville-half-marathon' },
+  { kind: 'race',    name: 'Omaha Half Marathon',      meta: 'Road · Omaha Beach, Rodney',         href: '/races/omaha-half-marathon' },
 ];
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {

@@ -1,19 +1,20 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, YEARS, ROTORUA_YEARS, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
 import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
 import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
 import { wfHalfStats, wf10kStats, WF_YEARS } from '@/data/waterfrontData';
 import { devHalfStats, dev10kStats, DEV_HALF_YEARS, DEV_10K_YEARS } from '@/data/devonportData';
 import { coastStats, COAST_YEARS } from '@/data/coatesvilleData';
+import { omahaHalfStats, omaha10kStats, OMAHA_HALF_YEARS, OMAHA_10K_YEARS } from '@/data/omahaData';
 import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half' | 'omaha-half' | 'omaha-10k';
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
@@ -41,6 +42,8 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   const isDevHalf = raceId === 'dev-half';
   const isDev10k = raceId === 'dev-10k';
   const isCoastHalf = raceId === 'coast-half';
+  const isOmahaHalf = raceId === 'omaha-half';
+  const isOmaha10k = raceId === 'omaha-10k';
   const years = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
     : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
@@ -50,6 +53,8 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     : isDevHalf ? [...DEV_HALF_YEARS].reverse()
     : isDev10k ? [...DEV_10K_YEARS].reverse()
     : isCoastHalf ? [...COAST_YEARS].reverse()
+    : isOmahaHalf ? [...OMAHA_HALF_YEARS].reverse()
+    : isOmaha10k ? [...OMAHA_10K_YEARS].reverse()
     : [...YEARS].reverse();
   const [year, setYear] = useState(yearProp);
   const [q, setQ] = useState(initialQ ?? '');
@@ -66,9 +71,9 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     if (!open) return;
     setLoading(true);
     setAll([]);
-    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : isHbHalf ? loadHbHalf(year) : isHb ? loadHb(year) : isQtHalf ? loadQtHalf(year) : isQt ? loadQt(year) : isWf10k ? loadWaterfront10k(year) : isWfHalf ? loadWaterfrontHalf(year) : isDevHalf ? loadDevHalf(year) : isDev10k ? loadDev10k(year) : isCoastHalf ? loadCoastHalf(year) : loadResults(year, dist);
+    const loader = isChcHalf ? loadChcHalf(year) : isChc ? loadChc(year) : isRotoruaHalf ? loadRotoruaHalf(year) : isRotorua ? loadRotorua(year) : isHbHalf ? loadHbHalf(year) : isHb ? loadHb(year) : isQtHalf ? loadQtHalf(year) : isQt ? loadQt(year) : isWf10k ? loadWaterfront10k(year) : isWfHalf ? loadWaterfrontHalf(year) : isDevHalf ? loadDevHalf(year) : isDev10k ? loadDev10k(year) : isCoastHalf ? loadCoastHalf(year) : isOmahaHalf ? loadOmahaHalf(year) : isOmaha10k ? loadOmaha10k(year) : loadResults(year, dist);
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf]);
+  }, [year, dist, open, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf, isOmahaHalf, isOmaha10k]);
 
   useEffect(() => {
     if (open) {
@@ -151,7 +156,7 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
     );
   };
 
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
   const grid = '60px 70px 1.6fr 1fr 100px';
 
@@ -178,6 +183,8 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
                   : isDevHalf ? 'Devonport Half Marathon'
                   : isDev10k ? 'Devonport 10 km'
                   : isCoastHalf ? 'Coatesville Half Marathon'
+                  : isOmahaHalf ? 'Omaha Half Marathon'
+                  : isOmaha10k ? 'Omaha 10 km'
                   : dist === '21.1 km' ? 'Auckland Half Marathon'
                   : 'Auckland Marathon'
                 } · full results
