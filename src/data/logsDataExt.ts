@@ -323,6 +323,17 @@ export async function loadMaraetai10k(year: number): Promise<ResultRow[]> {
 }
 export function getCachedMaraetai10k(year: number): ResultRow[] { return maraetai10kCache[year] ?? []; }
 
+const kerikeriHalfCache: Record<number, ResultRow[]> = {};
+const kerikeriHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadKerikeriHalf(year: number): Promise<ResultRow[]> {
+  if (kerikeriHalfCache[year]) return kerikeriHalfCache[year];
+  if (!kerikeriHalfInflight[year]) {
+    kerikeriHalfInflight[year] = fetch(`/data/results-kerikeri-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { kerikeriHalfCache[year] = rows; return rows; });
+  }
+  return kerikeriHalfInflight[year];
+}
+export function getCachedKerikeriHalf(year: number): ResultRow[] { return kerikeriHalfCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;
