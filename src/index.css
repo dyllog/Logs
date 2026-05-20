@@ -1061,6 +1061,8 @@ body {
 .lp-holes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  /* 2 card-rows × 5 slots: num · title · desc(1fr) · list · more */
+  grid-template-rows: repeat(2, auto auto 1fr auto auto);
   border-top: 0.5px solid var(--ink);
   border-left: 0.5px solid var(--rule);
 }
@@ -1072,8 +1074,11 @@ body {
   background: var(--bg);
   transition: background 120ms;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  /* subgrid: each card's 5 children align to the shared row tracks */
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  align-content: start;
 }
 .lp-hole:hover { background: var(--bg-alt); }
 .lp-hole-num {
@@ -1096,7 +1101,6 @@ body {
   line-height: 1.55;
   color: var(--meta);
   margin-bottom: 18px;
-  flex: 1 0 auto;
 }
 .lp-hole ol {
   list-style: none;
@@ -1232,6 +1236,59 @@ body {
 .lp-az span:hover { background: var(--ink); color: var(--bg); }
 .lp-az span:nth-child(13n) { border-right: 0; }
 .lp-az span:nth-last-child(-n+13) { border-bottom: 0; }
+
+/* Search typeahead dropdown */
+.lp-drop {
+  position: absolute;
+  top: calc(100% - 28px); /* sits flush under the search bar, above the examples row */
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border: 0.5px solid var(--ink);
+  border-top: 0;
+  z-index: 100;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.lp-drop-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 22px;
+  cursor: pointer;
+  border-bottom: 0.5px solid var(--rule-soft);
+  transition: background 80ms;
+}
+.lp-drop-item:last-child { border-bottom: 0; }
+.lp-drop-item:hover,
+.lp-drop-item.active { background: color-mix(in srgb, var(--ink) 6%, var(--bg)); }
+.lp-drop-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lp-drop-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--meta);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lp-drop-type {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--meta);
+  text-transform: uppercase;
+  border: 0.5px solid var(--rule);
+  padding: 2px 6px;
+  white-space: nowrap;
+}
 
 /* Landing responsive */
 @media (max-width: 1100px) {
