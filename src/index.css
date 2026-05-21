@@ -808,16 +808,6 @@ body {
   background: var(--bg);
   position: relative;
 }
-.lp-search-bar::before,
-.lp-search-bar::after {
-  content: "";
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: var(--ink);
-}
-.lp-search-bar::before { left: -1px; top: -1px; }
-.lp-search-bar::after  { right: -1px; bottom: -1px; }
 .lp-search-input {
   flex: 1;
   border: 0;
