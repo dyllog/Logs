@@ -26,41 +26,55 @@ function parseBib(raw) {
   return isNaN(n) ? 0 : n;
 }
 
-// Handles formats:
-//   "Male Open" / "Female 40-44"  (2008-2011)
-//   "M00-34" / "F45-49"           (2013+)
-//   "M" / "F" from gender column  (override)
+// Handles all observed Kerikeri category formats:
+//   "Open" / "Corporate" / "Registered Open"  (2003 — no gender, col is "X")
+//   "M0139" / "F0139" / "M4044"               (2004–2005 compact 4-digit)
+//   "30-39M" / "20-29F"                        (2006 reversed age-then-gender)
+//   "M20-29" / "M30-39"                        (2007)
+//   "Male Open" / "Female 40-44"               (2008–2011)
+//   "M00-34" / "F45-49"                        (2013+)
+// Returns { genderPfx: 'M'|'W'|'X', ageCat: string }
 function parseCatAndGender(catRaw, genderColRaw) {
-  let genderPfx, ageCat;
-
   const gRaw = catRaw.trim();
+  let genderPfx = 'X';
+  let ageCat = 'Open';
 
-  // Format: "Male Open", "Female 40-44", "Male 40-44" etc.
+  // "Male Open", "Female 40-44" etc.
   const longMatch = gRaw.match(/^(Male|Female)\s*(.*)$/i);
   if (longMatch) {
     genderPfx = longMatch[1].toLowerCase() === 'female' ? 'W' : 'M';
     const rest = longMatch[2].trim();
     ageCat = rest === '' || /^open$/i.test(rest) ? 'Open' : rest;
-  } else {
-    // Format: "M00-34", "F45-49", "M35-39" etc.
-    const shortMatch = gRaw.match(/^([MF])(\d{2})-?(\d{2,3})$/i);
-    if (shortMatch) {
-      genderPfx = shortMatch[1].toUpperCase() === 'F' ? 'W' : 'M';
-      let start = parseInt(shortMatch[2], 10);
-      const end   = parseInt(shortMatch[3], 10);
+  }
+  // "30-39M" / "20-29F" (reversed: age-gender)
+  else if (/^\d{2}-\d{2,3}[MF]$/i.test(gRaw)) {
+    const rev = gRaw.match(/^(\d{2})-(\d{2,3})([MF])$/i);
+    genderPfx = rev[3].toUpperCase() === 'F' ? 'W' : 'M';
+    let start = parseInt(rev[1], 10);
+    const end = parseInt(rev[2], 10);
+    if (start < 18) start = 18;
+    ageCat = `${start}-${end}`;
+  }
+  // "M00-34", "F45-49", "M20-29", "M0139", "F0139", "M4044" etc.
+  else if (/^[MF]\d/i.test(gRaw)) {
+    const g = gRaw[0].toUpperCase();
+    genderPfx = g === 'F' ? 'W' : 'M';
+    const digits = gRaw.slice(1).replace(/[^0-9]/g, '');
+    if (digits.length >= 4) {
+      let start = parseInt(digits.slice(0, 2), 10);
+      const end   = parseInt(digits.slice(2, 4), 10);
       if (start < 18) start = 18;
       ageCat = `${start}-${end}`;
-    } else {
-      // Fallback
-      genderPfx = 'M';
-      ageCat = 'Open';
     }
   }
+  // Ungrouped / non-gender categories ("Open", "Corporate", "Registered Open")
+  // genderPfx stays 'X'
 
-  // Override gender from dedicated gender column if present
+  // Override gender from dedicated gender column (M/F beats category inference; X means no data)
   const g = genderColRaw?.trim().toUpperCase();
   if (g === 'F') genderPfx = 'W';
   else if (g === 'M') genderPfx = 'M';
+  // 'X' leaves genderPfx as-is from category parse
 
   return { genderPfx, ageCat };
 }
@@ -73,7 +87,6 @@ function parseCSV(text) {
   const header = lines[0].toLowerCase();
   const hasNetTime = header.includes('net time');
 
-  // Column layout:
   // With Net Time:    Pos,Name,Bib,Time,NetTime,Cat,CatPos,Gender,GenderPos,...
   // Without Net Time: Pos,Name,Bib,Time,Cat,CatPos,Gender,GenderPos,...
   const iCat    = hasNetTime ? 5 : 4;
@@ -90,13 +103,18 @@ function parseCSV(text) {
     const sec = toSec(time);
     if (sec <= 0) continue;
 
-    const name = titleCase(cols[1]?.trim() ?? '');
-    const bib  = parseBib(cols[2]?.trim() ?? '');
+    const name      = titleCase(cols[1]?.trim() ?? '');
+    const bib       = parseBib(cols[2]?.trim() ?? '');
     const catRaw    = cols[iCat]?.trim() ?? '';
     const genderRaw = cols[iGender]?.trim() ?? '';
 
     const { genderPfx, ageCat } = parseCatAndGender(catRaw, genderRaw);
-    const cat = normalizeCat(`${genderPfx} ${ageCat}`);
+
+    // For ungrouped entries store cat as 'Open' (no gender prefix)
+    const cat = genderPfx === 'X'
+      ? 'Open'
+      : normalizeCat(`${genderPfx} ${ageCat}`);
+
     rows.push({ pos, name, bib, nat: '', cat, club: '—', time, sec });
   }
   return rows;
@@ -105,6 +123,16 @@ function parseCSV(text) {
 function fmt(s) {
   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
   return `${h}:${String(m).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+}
+
+function safeAvg(arr) {
+  if (!arr.length) return 0;
+  return Math.round(arr.reduce((s, r) => s + r.sec, 0) / arr.length);
+}
+function safeTop10Avg(arr) {
+  const top = [...arr].sort((a, b) => a.sec - b.sec).slice(0, 10);
+  if (!top.length) return 0;
+  return Math.round(top.reduce((s, r) => s + r.sec, 0) / top.length);
 }
 
 function processYear(year) {
@@ -126,25 +154,29 @@ function processYear(year) {
   const females = rows.filter(r => r.cat.startsWith('W'));
   const sorted  = [...rows].sort((a, b) => a.sec - b.sec);
   const median  = sorted[Math.floor(sorted.length / 2)]?.sec ?? 0;
-  const winnerM = [...males].sort((a, b) => a.sec - b.sec)[0]?.sec ?? 0;
-  const winnerW = [...females].sort((a, b) => a.sec - b.sec)[0]?.sec ?? 0;
-  const top10M  = Math.round([...males].sort((a, b) => a.sec - b.sec).slice(0, 10).reduce((s, r) => s + r.sec, 0) / Math.min(10, males.length));
-  const top10W  = Math.round([...females].sort((a, b) => a.sec - b.sec).slice(0, 10).reduce((s, r) => s + r.sec, 0) / Math.min(10, females.length));
-  const avgM    = Math.round(males.reduce((s, r) => s + r.sec, 0) / males.length);
-  const avgW    = Math.round(females.reduce((s, r) => s + r.sec, 0) / females.length);
 
-  const winNameM = [...males].sort((a, b) => a.sec - b.sec)[0]?.name ?? '?';
-  const winNameW = [...females].sort((a, b) => a.sec - b.sec)[0]?.name ?? '?';
+  // For years with no gender data, fall back to overall stats
+  const noGender = males.length === 0 && females.length === 0;
+  const winnerM  = males.length   ? [...males].sort((a,b) => a.sec-b.sec)[0].sec : (noGender ? sorted[0]?.sec ?? 0 : 0);
+  const winnerW  = females.length ? [...females].sort((a,b) => a.sec-b.sec)[0].sec : (noGender ? sorted[0]?.sec ?? 0 : 0);
+  const avgM     = males.length   ? safeAvg(males)   : (noGender ? median : 0);
+  const avgW     = females.length ? safeAvg(females) : (noGender ? median : 0);
+  const top10M   = males.length   ? safeTop10Avg(males)   : (noGender ? safeTop10Avg(sorted) : 0);
+  const top10W   = females.length ? safeTop10Avg(females) : (noGender ? safeTop10Avg(sorted) : 0);
+
+  const winNameM = males.length   ? [...males].sort((a,b) => a.sec-b.sec)[0].name : (sorted[0]?.name ?? '?');
+  const winNameW = females.length ? [...females].sort((a,b) => a.sec-b.sec)[0].name : (noGender ? '(no gender data)' : '?');
 
   const outFile = path.join(outDir, `results-kerikeri-half-${year}.json`);
   fs.writeFileSync(outFile, JSON.stringify(rows));
   const kb = Math.round(fs.statSync(outFile).size / 1024);
-  console.log(`  ${year}: ${rows.length} finishers (${males.length}M / ${females.length}W) · median ${fmt(median)} · ♂ ${fmt(winnerM)} ${winNameM} · ♀ ${fmt(winnerW)} ${winNameW} · ${kb}KB`);
+  const genderNote = noGender ? ' [no gender data]' : `${males.length}M / ${females.length}W`;
+  console.log(`  ${year}: ${rows.length} finishers (${genderNote}) · median ${fmt(median)} · ♂ ${fmt(winnerM)} ${winNameM} · ♀ ${fmt(winnerW)} ${winNameW} · ${kb}KB`);
 
   return { year, finishers: rows.length, avg: median, avgMen: avgM, avgWomen: avgW, winnerM, winnerW, top10M, top10W };
 }
 
-const years = [2008, 2009, 2010, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2022, 2023, 2024];
+const years = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2022, 2023, 2024, 2025];
 
 console.log('\n── Kerikeri Half Marathon (21.1 km) ──');
 const stats = [];

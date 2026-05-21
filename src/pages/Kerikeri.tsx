@@ -47,7 +47,7 @@ export default function Kerikeri() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, fontSize: 12 }}>
               <div><div className="label mb-8">Location</div><div>Kerikeri, Northland</div></div>
               <div><div className="label mb-8">Course</div><div>Rural loop</div></div>
-              <div><div className="label mb-8">Next edition</div><div>2025</div></div>
+              <div><div className="label mb-8">Next edition</div><div>2026</div></div>
               <div>
                 <div className="label mb-8">Entry</div>
                 <div><a href="https://www.kerikerimarathon.co.nz/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>kerikerimarathon.co.nz ↗</a></div>
@@ -104,7 +104,7 @@ export default function Kerikeri() {
                 <div className="label mb-8">Surface</div>
                 <div>Sealed road</div>
                 <div className="label mt-16 mb-8">Character</div>
-                <div>A challenging rural loop through the Bay of Islands countryside around Kerikeri. The course features rolling hills and significant climbs through the Northland farmland, rewarding runners with sweeping views across one of New Zealand's most historic regions. Held annually since 2008, it is one of Northland's premier running events.</div>
+                <div>A challenging rural loop through the Bay of Islands countryside around Kerikeri. The course features rolling hills and significant climbs through the Northland farmland, rewarding runners with sweeping views across one of New Zealand's most historic regions. Held annually since 2003, it is one of Northland's premier running events.</div>
               </div>
             </div>
           </div>
