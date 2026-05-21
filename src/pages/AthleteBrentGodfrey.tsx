@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 const RESULTS = [
   { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Marathon',       short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:47:16', sec: 10036, pos: 15, total: 1630, cat: 'M 18–34', isPB: false },
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Half Marathon',   short: 'AKL Half',dist: '21.1 km', distId: 'half' as const, time: '1:22:55', sec: 4975,  pos: 39, total: 5572, cat: 'M 18–34', isPB: false },
+  { dateNum: 2019 + 6/12,  year: 2019, race: 'Kerikeri Half Marathon',   short: 'KER Half',dist: '21.1 km', distId: 'half' as const, time: '1:18:20', sec: 4700,  pos: 12, total:  838, cat: 'M 35–39', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon',   short: 'AKL Half',dist: '21.1 km', distId: 'half' as const, time: '1:20:12', sec: 4812,  pos: 24, total: 5204, cat: 'M 35–39', isPB: false },
   { dateNum: 2020 + 4/12,  year: 2020, race: 'Devonport Half Marathon',  short: 'DEV Half',dist: '21.1 km', distId: 'half' as const, time: '1:20:17', sec: 4817,  pos: 4,  total: 598,  cat: 'M 30–39', isPB: false },
   { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:16:16', sec: 4576,  pos: 7,  total: 1611, cat: 'M 30–39', isPB: false },
@@ -16,6 +17,7 @@ const RESULTS = [
   { dateNum: 2024 + 4/12,  year: 2024, race: 'Rotorua Marathon',         short: 'ROT',     dist: '42.2 km', distId: 'mar'  as const, time: '2:39:14', sec: 9554,  pos: 5,  total: 1151, cat: 'M 40–44', isPB: false },
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',        short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:38:32', sec: 9512,  pos: 13, total: 2439, cat: 'M 40–44', isPB: false },
   { dateNum: 2025 + 3/12,  year: 2025, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:14:35', sec: 4475,  pos: 10, total: 2200, cat: 'M 40–49', isPB: true  },
+  { dateNum: 2025 + 6/12,  year: 2025, race: 'Kerikeri Half Marathon',   short: 'KER Half',dist: '21.1 km', distId: 'half' as const, time: '1:15:11', sec: 4511,  pos: 5,  total:  807, cat: 'M 40–44', isPB: false },
   { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',        short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:38:22', sec: 9502,  pos: 16, total: 2775, cat: 'M 40–44', isPB: true  },
   { dateNum: 2026 + 3/12,  year: 2026, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:17:35', sec: 4655,  pos: 24, total: 3006, cat: 'M 40–49', isPB: false },
 ];

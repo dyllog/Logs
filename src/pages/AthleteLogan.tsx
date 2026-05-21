@@ -1,9 +1,11 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
+  { dateNum: 2020 +  1/12, year: 2020, race: 'Maraetai Half Marathon',    short: 'MARA',  dist: '21.1 km', distId: 'half' as const, time: '1:40:28', sec: 6028,  pos: 124, total: 1179, cat: 'M 20–29', isPB: true  },
   { dateNum: 2020 +  8/12, year: 2020, race: 'Coatesville Half Marathon', short: 'COAST', dist: '21.1 km', distId: 'half' as const, time: '1:36:28', sec: 5788,  pos: 67,  total: 1037, cat: 'M 20–29', isPB: true  },
   { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',   short: 'DEV',   dist: '21.1 km', distId: 'half' as const, time: '1:28:07', sec: 5287,  pos: 20,  total: 598,  cat: 'M 20–29', isPB: true  },
   { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',         short: 'AUC',   dist: '42.2 km', distId: 'mar'  as const, time: '3:30:32', sec: 12632, pos: 244, total: 1619, cat: 'M 18–34', isPB: true  },
+  { dateNum: 2021 +  1/12, year: 2021, race: 'Maraetai Half Marathon',    short: 'MARA',  dist: '21.1 km', distId: 'half' as const, time: '1:30:38', sec: 5438,  pos: 31,  total:  874, cat: 'M 20–29', isPB: false },
   { dateNum: 2021 +  8/12, year: 2021, race: 'Coatesville Half Marathon', short: 'COAST', dist: '21.1 km', distId: 'half' as const, time: '1:30:47', sec: 5447,  pos: 18,  total: 732,  cat: 'M 20–29', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',         short: 'AUC',   dist: '42.2 km', distId: 'mar'  as const, time: '3:20:10', sec: 12010, pos: 75,  total: 870,  cat: 'M 18–34', isPB: true  },
   { dateNum: 2023 +  2/12, year: 2023, race: 'Waterfront Half Marathon', short: 'WF',    dist: '21.1 km', distId: 'half' as const, time: '1:18:31', sec: 4711,  pos: 23, total: 1414, cat: 'M 20–29', isPB: true  },
