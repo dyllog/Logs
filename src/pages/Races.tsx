@@ -11,7 +11,7 @@ const races = [
   { name: "Coatesville Half Marathon", slug: "coatesville-half-marathon", location: "Coatesville, Rodney", date: "2027",        distances: ["21.1 km"],                               surface: "Road",  since: "2011" },
   { name: "Omaha Half Marathon",       slug: "omaha-half-marathon",       location: "Omaha Beach, Rodney", date: "2027",        distances: ["21.1 km", "10 km"],                      surface: "Road",  since: "2016" },
   { name: "Maraetai Half Marathon",    slug: "maraetai-half-marathon",    location: "Maraetai Beach",      date: "2027",        distances: ["21.1 km", "10 km"],                      surface: "Road",  since: "2019" },
-  { name: "Kerikeri Half Marathon",    slug: "kerikeri-half-marathon",    location: "Kerikeri, Northland", date: "2025",        distances: ["21.1 km"],                               surface: "Road",  since: "2008" },
+  { name: "Kerikeri Half Marathon",    slug: "kerikeri-half-marathon",    location: "Kerikeri, Northland", date: "2026",        distances: ["21.1 km"],                               surface: "Road",  since: "2003" },
   { name: "Wellington Marathon",     slug: null,                   location: "Wellington",           date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Road",  since: "2011" },
   { name: "Tarawera Ultramarathon",  slug: null,                   location: "Rotorua",              date: "8 Feb 2027",  distances: ["102 km", "50 km", "21 km"],               surface: "Trail", since: "2008" },
   { name: "Round the Bays",          slug: null,                   location: "Auckland",             date: "2 Aug 2026",  distances: ["8.4 km", "5 km"],                         surface: "Road",  since: "1972" },
