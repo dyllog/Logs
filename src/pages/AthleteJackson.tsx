@@ -7,6 +7,7 @@ const RESULTS = [
   { dateNum: 2015 + 5/12,  year: 2015, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:22', sec: 4042, pos: 7,  total: 2038, cat: 'M 20–39', isPB: true  },
   { dateNum: 2015 + 10/12, year: 2015, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:27:32', sec: 8852, pos: 2,  total: 1507, cat: 'M 20–39', isPB: false },
   { dateNum: 2016 + 4/12,  year: 2016, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:30:37', sec: 9037, pos: 3,  total:  449, cat: 'M 20–39', isPB: false },
+  { dateNum: 2016 + 6/12,  year: 2016, race: 'Kerikeri Half Marathon',      short: 'KER Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:57', sec: 4077, pos: 1,  total: 1069, cat: 'M 18–34', isPB: false },
   { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:38', sec: 8798, pos: 2,  total: 1630, cat: 'M 20–39', isPB: true  },
   { dateNum: 2017 + 4/12,  year: 2017, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:32:44', sec: 9164, pos: 3,  total:  833, cat: 'M 20–39', isPB: false },
   { dateNum: 2017 + 10/12, year: 2017, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:51', sec: 4191, pos: 4,  total: 5706, cat: 'M 20–39', isPB: false },

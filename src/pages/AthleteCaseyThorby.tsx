@@ -7,6 +7,7 @@ const RESULTS = [
   { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:11:47', sec: 4307, pos: 5,  total: 4628, cat: 'M 18–34', isPB: false },
   { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon',   short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:10:07', sec: 4207, pos: 2,  total: 1611, cat: 'M 18–19', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:59', sec: 4199, pos: 3,  total: 2492, cat: 'M 18–34', isPB: false },
+  { dateNum: 2022 + 6/12,  year: 2022, race: 'Kerikeri Half Marathon',     short: 'KER Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:47', sec: 4187, pos: 1,  total:  551, cat: 'M 18–34', isPB: false },
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:12', sec: 4032, pos: 4,  total: 6161, cat: 'M 20–24', isPB: true  },
   { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Half Marathon',      short: 'ROT Half', dist: '21.1 km', distId: 'half' as const, time: '1:11:38', sec: 4298, pos: 1,  total: 1100, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 5/12,  year: 2025, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:16', sec: 4036, pos: 12, total: 2858, cat: 'M 20–39', isPB: false },

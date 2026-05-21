@@ -11,6 +11,7 @@ const RESULTS = [
   { dateNum: 2018 + 4/12,  year: 2018, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:46:25', sec: 9985, pos: 7,  total:  940, cat: 'M 20–39', isPB: false },
   { dateNum: 2018 + 5/12,  year: 2018, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:20', sec: 4100, pos: 4,  total: 1574, cat: 'M 20–39', isPB: false },
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Half Marathon',      short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:42', sec: 4062, pos: 2,  total: 5572, cat: 'M 20–39', isPB: false },
+  { dateNum: 2019 + 1/12,  year: 2019, race: 'Maraetai Half Marathon',      short: 'MARA Half',dist: '21.1 km', distId: 'half' as const, time: '1:09:26', sec: 4166, pos: 1,  total: 1310, cat: 'M 20–29', isPB: false },
   { dateNum: 2019 + 3/12,  year: 2019, race: 'Waterfront Half Marathon',    short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:07:34', sec: 4054, pos: 1,  total: 2015, cat: 'M 20–29', isPB: false },
   { dateNum: 2019 + 4/12,  year: 2019, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:27:35', sec: 8855, pos: 3,  total:  720, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:34', sec: 8554, pos: 2,  total: 1650, cat: 'M 20–39', isPB: false },

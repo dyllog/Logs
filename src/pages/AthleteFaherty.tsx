@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RESULTS = [
+  { dateNum: 2014 + 6/12,  year: 2014, race: 'Kerikeri Half Marathon', short: 'KER Half', dist: '21.1 km', distId: 'half' as const, time: '1:20:20', sec: 4820, pos: 9,  total: 1250, cat: 'M 18–34', isPB: true  },
   { dateNum: 2014 + 10/12, year: 2014, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:53:09', sec: 10389, pos: 36, total: 2306, cat: 'M 18–34', isPB: false },
   { dateNum: 2015 + 4/12,  year: 2015, race: 'Rotorua Marathon',     short: 'ROT', dist: '42.2 km', distId: 'mar' as const, time: '2:40:52', sec: 9652,  pos: 7,  total: 1172, cat: 'M 18–34', isPB: false },
   { dateNum: 2015 + 10/12, year: 2015, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:30:37', sec: 9037,  pos: 5,  total: 1507, cat: 'M 18–34', isPB: false },
