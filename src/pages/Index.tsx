@@ -267,9 +267,7 @@ export default function Index() {
             <em>New Zealand Running: <span style={{ color: 'var(--accent)' }}>Archived</span></em>
           </h1>
           <p className="lp-hero-sub">
-            A long-form record of road, trail, and ultra performances in New Zealand – field results, course-record progressions, and athlete histories.<br />
-            No subscriptions, no promotion.<br />
-            A reference, kept current.
+            Results, records, athlete histories, and course progression from across New Zealand road, trail, and ultra running.
           </p>
 
           <div ref={dropRef} className="lp-search-shell" onClick={() => inputRef.current?.focus()}>
@@ -291,7 +289,6 @@ export default function Index() {
                 value={query}
               />
               <span ref={caretRef} className="lp-search-caret" />
-              <span className="lp-search-kbd">⌘ K</span>
             </div>
 
             {showDrop && (
