@@ -28,6 +28,8 @@ const RESULTS = [
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:25', sec: 8545, pos: 2, total: 1299, cat: 'M 30–34', isPB: false },
   // CHC Marathon 2023 (June)
   { dateNum: 2023 + 5/12,  year: 2023, race: 'Christchurch Marathon',      short: 'CHC',      dist: '42.2 km', distId: 'mar'  as const, time: '2:20:31', sec: 8431, pos: 1, total:  521, cat: 'M 20–39', isPB: false },
+  // WEL Half 2023 (June)
+  { dateNum: 2023 + 5.2/12,year: 2023, race: 'Wellington Half Marathon',   short: 'WEL Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:42', sec: 4062, pos: 2, total: 1227, cat: 'M 30–39', isPB: false },
   // AKL Marathon 2023 (Oct)
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:09', sec: 8589, pos: 1, total: 1765, cat: 'M 30–34', isPB: false },
   // CHC Half 2024 (June) — half PB
@@ -196,7 +198,7 @@ export default function AthleteBalchin() {
                   { l: 'Nationality', v: 'NZL' },
                   { l: 'Gender',      v: 'M' },
                   { l: 'Category',    v: 'Elite' },
-                  { l: 'Races logged', v: '17' },
+                  { l: 'Races logged', v: '18' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -269,7 +271,7 @@ export default function AthleteBalchin() {
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
                   {chartDist === 'mar'
                     ? 'Christchurch (June), Rotorua (May) and Auckland (Oct) shown at separate dates'
-                    : 'Christchurch (June) and Auckland (Oct) shown at separate dates'}
+                    : 'Wellington (Jun), Christchurch (Jun) and Auckland (Oct) shown'}
                 </div>
               </div>
 
@@ -291,7 +293,7 @@ export default function AthleteBalchin() {
               <div className="eyebrow mb-16">At a glance</div>
 
               {[
-                { label: 'Races logged',     val: '17',         sub: '6 marathons · 11 halves' },
+                { label: 'Races logged',     val: '18',         sub: '6 marathons · 12 halves' },
                 { label: 'Marathon PB',      val: '2:19:55',    sub: 'Auckland 2025 · 1st overall' },
                 { label: 'Half marathon PB', val: '1:05:16',    sub: 'Christchurch 2024 · 3rd overall' },
                 { label: 'Best overall pos', val: '1st',        sub: '6 career wins · CHC · AKL · ROT' },
@@ -338,7 +340,7 @@ export default function AthleteBalchin() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · AKL · CHC · ROT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2025 · WEL · AKL · CHC · ROT</div>
           </div>
           <div className="tbl-wrap">
           <table className="tbl">
@@ -362,6 +364,7 @@ export default function AthleteBalchin() {
                       if (r.race === 'Auckland Marathon' || r.race === 'Auckland Half Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                       else if (r.race === 'Rotorua Marathon') navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                       else if (r.race === 'Christchurch Marathon' || r.race === 'Christchurch Half Marathon') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                      else if (r.race === 'Wellington Half Marathon') navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
                     }}>
                   <td className="dimmed">{r.year}</td>
                   <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

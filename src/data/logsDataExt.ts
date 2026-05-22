@@ -334,6 +334,28 @@ export async function loadKerikeriHalf(year: number): Promise<ResultRow[]> {
 }
 export function getCachedKerikeriHalf(year: number): ResultRow[] { return kerikeriHalfCache[year] ?? []; }
 
+const wellingtonMarCache: Record<number, ResultRow[]> = {};
+const wellingtonMarInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWellingtonMar(year: number): Promise<ResultRow[]> {
+  if (wellingtonMarCache[year]) return wellingtonMarCache[year];
+  if (!wellingtonMarInflight[year]) {
+    wellingtonMarInflight[year] = fetch(`/data/results-wellington-mar-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wellingtonMarCache[year] = rows; return rows; });
+  }
+  return wellingtonMarInflight[year];
+}
+export function getCachedWellingtonMar(year: number): ResultRow[] { return wellingtonMarCache[year] ?? []; }
+
+const wellingtonHalfCache: Record<number, ResultRow[]> = {};
+const wellingtonHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWellingtonHalf(year: number): Promise<ResultRow[]> {
+  if (wellingtonHalfCache[year]) return wellingtonHalfCache[year];
+  if (!wellingtonHalfInflight[year]) {
+    wellingtonHalfInflight[year] = fetch(`/data/results-wellington-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wellingtonHalfCache[year] = rows; return rows; });
+  }
+  return wellingtonHalfInflight[year];
+}
+export function getCachedWellingtonHalf(year: number): ResultRow[] { return wellingtonHalfCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

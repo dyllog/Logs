@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 const RESULTS = [
   { dateNum: 2017 + 5/12,  year: 2017, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', time: '1:10:22', sec: 4222, pos: 7,  total: 1579, cat: 'M 20–39', isPB: false },
   { dateNum: 2019 + 5/12,  year: 2019, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', time: '1:07:27', sec: 4047, pos: 3,  total: 1504, cat: 'M 20–39', isPB: false },
+  { dateNum: 2019 + 5.5/12,year: 2019, race: 'Wellington Half Marathon',   short: 'WEL Half', dist: '21.1 km', time: '1:08:54', sec: 4134, pos: 1,  total: 1060, cat: 'M 20–29', isPB: false },
   { dateNum: 2019 + 10/12, year: 2019, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', time: '1:07:39', sec: 4059, pos: 4,  total: 5204, cat: 'M 20–39', isPB: false },
   { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', time: '1:07:30', sec: 4050, pos: 2,  total: 4628, cat: 'M 20–39', isPB: false },
   { dateNum: 2021 + 5/12,  year: 2021, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', time: '1:05:49', sec: 3949, pos: 4,  total: 1332, cat: 'M 20–39', isPB: false },
@@ -108,7 +109,7 @@ export default function AthleteDryden() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '13' },
+                  { l: 'Races logged', v: '14' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -160,7 +161,7 @@ export default function AthleteDryden() {
               <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px' }}>
                 <ProgressionChart />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                  Christchurch (Jun), Auckland (Oct) and Queenstown (Nov) shown at separate dates
+                  Wellington (Jun), Christchurch (Jun), Auckland (Oct) and Queenstown (Nov) shown
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
@@ -176,7 +177,7 @@ export default function AthleteDryden() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '13',      sub: '13 half marathons' },
+                { label: 'Races logged',     val: '14',      sub: '14 half marathons' },
                 { label: 'Half marathon PB', val: '1:04:11', sub: 'Christchurch 2025 · 4th overall' },
                 { label: 'Best overall pos', val: '1st',     sub: 'Auckland Half 2025 · 1st of 6,614' },
                 { label: 'Active years',     val: '9',       sub: '2017–2026 · AKL · CHC · QT' },
@@ -219,7 +220,7 @@ export default function AthleteDryden() {
               <div className="eyebrow mb-8">Race history · 21.1 km</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2017–2026 · AKL · CHC · QT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2017–2026 · WEL · AKL · CHC · QT</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -239,6 +240,7 @@ export default function AthleteDryden() {
                         const d = r.dist === '42.2 km' ? '42' : '21';
                         if (r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Wellington')) navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
                         else navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>

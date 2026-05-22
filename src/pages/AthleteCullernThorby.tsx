@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 const RESULTS = [
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:12:59', sec: 4379, pos: 9,  total: 3988, cat: 'M 18–34', isPB: false },
   { dateNum: 2023 + 4/12,  year: 2023, race: 'Rotorua Marathon',           short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:28', sec: 8788, pos: 3,  total: 796,  cat: 'M 18–34', isPB: false },
+  { dateNum: 2023 + 5/12,  year: 2023, race: 'Wellington Half Marathon',   short: 'WEL Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:35', sec: 4115, pos: 3,  total: 1227, cat: 'M 20–29', isPB: true  },
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:16', sec: 4156, pos: 8,  total: 4293, cat: 'M 20–24', isPB: false },
   { dateNum: 2024 + 4/12,  year: 2024, race: 'Rotorua Marathon',           short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:52', sec: 8632, pos: 2,  total: 1151, cat: 'M 18–34', isPB: false },
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:59', sec: 8579, pos: 4,  total: 2439, cat: 'M 20–24', isPB: true  },
@@ -87,7 +88,7 @@ export default function AthleteCullernThorby() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2022–2025 · AKL · ROT · CHC</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2022–2025 · WEL · AKL · ROT · CHC</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -108,6 +109,7 @@ export default function AthleteCullernThorby() {
                         if (r.race.includes('Auckland Marathon') || r.race === 'Auckland Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Rotorua')) navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Christchurch')) navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Wellington')) navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Half') && r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>

@@ -1,12 +1,15 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2009 + 5/12,  year: 2009, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:59', sec: 4199, pos: 8,  total: 1020, cat: 'M 20–39', isPB: false },
+  { dateNum: 2006 + 5/12,  year: 2006, race: 'Wellington Half Marathon', short: 'WEL Half', dist: '21.1 km', distId: 'half' as const, time: '1:11:16', sec: 4276, pos: 1,  total: 1255, cat: 'M Open',  isPB: true  },
+  { dateNum: 2007 + 5/12,  year: 2007, race: 'Wellington Half Marathon', short: 'WEL Half', dist: '21.1 km', distId: 'half' as const, time: '1:11:41', sec: 4301, pos: 1,  total: 1281, cat: 'M 18–34', isPB: false },
+  { dateNum: 2009 + 5/12,  year: 2009, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:59', sec: 4199, pos: 8,  total: 1020, cat: 'M 20–39', isPB: true  },
   { dateNum: 2010 + 5/12,  year: 2010, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:16', sec: 3976, pos: 5,  total: 1200, cat: 'M 20–39', isPB: true  },
   { dateNum: 2011 + 5/12,  year: 2011, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:00', sec: 4140, pos: 2,  total: 1400, cat: 'M 20–39', isPB: false },
   { dateNum: 2012 + 5/12,  year: 2012, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:46', sec: 4186, pos: 7,  total: 1700, cat: 'M 20–39', isPB: false },
   { dateNum: 2013 + 5/12,  year: 2013, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:02', sec: 4142, pos: 11, total: 1948, cat: 'M 20–39', isPB: false },
   { dateNum: 2015 + 5/12,  year: 2015, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:27', sec: 4047, pos: 8,  total: 2300, cat: 'M 20–39', isPB: false },
+  { dateNum: 2013 + 5/12,  year: 2013, race: 'Wellington Marathon',         short: 'WEL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:25:33', sec: 8733, pos: 1,  total: 443,  cat: 'M 18–39', isPB: true  },
   { dateNum: 2015 + 10/12, year: 2015, race: 'Auckland Marathon',          short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:27:54', sec: 8874, pos: 3,  total: 1580, cat: 'M 18–34', isPB: false },
   { dateNum: 2016 + 5/12,  year: 2016, race: 'Christchurch Marathon',      short: 'CHC',     dist: '42.2 km', distId: 'mar'  as const, time: '2:24:51', sec: 8691, pos: 1,  total: 610,  cat: 'M 20–39', isPB: true  },
   { dateNum: 2018 + 5/12,  year: 2018, race: 'Christchurch Marathon',      short: 'CHC',     dist: '42.2 km', distId: 'mar'  as const, time: '2:30:43', sec: 9043, pos: 2,  total: 680,  cat: 'M 20–39', isPB: false },
@@ -89,7 +92,7 @@ export default function AthleteDougalThorburn() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2009–2023 · CHC · AKL</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2006–2023 · WEL · CHC · AKL</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -109,6 +112,7 @@ export default function AthleteDougalThorburn() {
                         const d = r.dist === '42.2 km' ? '42' : '21';
                         if (r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Christchurch')) navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Wellington')) navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

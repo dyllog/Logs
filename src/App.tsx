@@ -60,6 +60,7 @@ import Coatesville from "./pages/Coatesville";
 import Omaha from "./pages/Omaha";
 import Maraetai from "./pages/Maraetai";
 import Kerikeri from "./pages/Kerikeri";
+import Wellington from "./pages/Wellington";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -84,6 +85,7 @@ function Layout() {
         <Route path="/races/omaha-half-marathon" element={<Omaha />} />
         <Route path="/races/maraetai-half-marathon" element={<Maraetai />} />
         <Route path="/races/kerikeri-half-marathon" element={<Kerikeri />} />
+        <Route path="/races/wellington-marathon" element={<Wellington />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
