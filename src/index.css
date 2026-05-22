@@ -1277,7 +1277,10 @@ body {
   .lp-az-bar { grid-template-columns: 1fr !important; }
 }
 @media (max-width: 700px) {
-  .lp-hero { padding: 56px 0 56px; }
+  .lp-hero { padding: 28px 0 24px; }
+  .lp-hero-title { margin-top: 16px; }
+  .lp-hero-sub { margin: 14px auto 0; }
+  .lp-search-shell { margin-top: 32px; }
   .lp-scale { grid-template-columns: 1fr 1fr !important; }
   .lp-holes { grid-template-columns: 1fr !important; }
   .lp-cal { grid-template-columns: 1fr 1fr !important; }
