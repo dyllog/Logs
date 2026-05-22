@@ -36,6 +36,18 @@ import AthleteFaherty from "./pages/AthleteFaherty";
 import AthleteGraves from "./pages/AthleteGraves";
 import AthleteMcWhirter from "./pages/AthleteMcWhirter";
 import AthleteDowns from "./pages/AthleteDowns";
+import AthleteKnowles from "./pages/AthleteKnowles";
+import AthleteLogan from "./pages/AthleteLogan";
+import AthleteCullernThorby from "./pages/AthleteCullernThorby";
+import AthleteCaseyThorby from "./pages/AthleteCaseyThorby";
+import AthleteBrentGodfrey from "./pages/AthleteBrentGodfrey";
+import AthleteJackMoody from "./pages/AthleteJackMoody";
+import AthleteBenTwyman from "./pages/AthleteBenTwyman";
+import AthleteDougalThorburn from "./pages/AthleteDougalThorburn";
+import AthleteOrestasRimkus from "./pages/AthleteOrestasRimkus";
+import AthleteBrettTingay from "./pages/AthleteBrettTingay";
+import AthleteMikePhillips from "./pages/AthleteMikePhillips";
+import AthleteReport from "./pages/AthleteReport";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import Rotorua from "./pages/Rotorua";
@@ -43,6 +55,12 @@ import Christchurch from "./pages/Christchurch";
 import Queenstown from "./pages/Queenstown";
 import HawkesBay from "./pages/HawkesBay";
 import WaterfrontHalf from "./pages/WaterfrontHalf";
+import Devonport from "./pages/Devonport";
+import Coatesville from "./pages/Coatesville";
+import Omaha from "./pages/Omaha";
+import Maraetai from "./pages/Maraetai";
+import Kerikeri from "./pages/Kerikeri";
+import Wellington from "./pages/Wellington";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -62,6 +80,12 @@ function Layout() {
         <Route path="/races/queenstown-marathon" element={<Queenstown />} />
         <Route path="/races/hawkes-bay-marathon" element={<HawkesBay />} />
         <Route path="/races/waterfront-half-marathon" element={<WaterfrontHalf />} />
+        <Route path="/races/devonport-half-marathon" element={<Devonport />} />
+        <Route path="/races/coatesville-half-marathon" element={<Coatesville />} />
+        <Route path="/races/omaha-half-marathon" element={<Omaha />} />
+        <Route path="/races/maraetai-half-marathon" element={<Maraetai />} />
+        <Route path="/races/kerikeri-half-marathon" element={<Kerikeri />} />
+        <Route path="/races/wellington-marathon" element={<Wellington />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
@@ -77,6 +101,18 @@ function Layout() {
         <Route path="/athletes/cameron-graves" element={<AthleteGraves />} />
         <Route path="/athletes/blair-mcwhirter" element={<AthleteMcWhirter />} />
         <Route path="/athletes/fabe-downs" element={<AthleteDowns />} />
+        <Route path="/athletes/scott-knowles" element={<AthleteKnowles />} />
+        <Route path="/athletes/dylan-logan" element={<AthleteLogan />} />
+        <Route path="/athletes/cullern-thorby" element={<AthleteCullernThorby />} />
+        <Route path="/athletes/casey-thorby" element={<AthleteCaseyThorby />} />
+        <Route path="/athletes/brent-godfrey" element={<AthleteBrentGodfrey />} />
+        <Route path="/athletes/jack-moody" element={<AthleteJackMoody />} />
+        <Route path="/athletes/ben-twyman" element={<AthleteBenTwyman />} />
+        <Route path="/athletes/dougal-thorburn" element={<AthleteDougalThorburn />} />
+        <Route path="/athletes/orestas-rimkus" element={<AthleteOrestasRimkus />} />
+        <Route path="/athletes/brett-tingay" element={<AthleteBrettTingay />} />
+        <Route path="/athletes/mike-phillips" element={<AthleteMikePhillips />} />
+        <Route path="/athletes/:slug/report" element={<AthleteReport />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

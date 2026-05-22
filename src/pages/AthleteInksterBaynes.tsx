@@ -6,6 +6,7 @@ const RESULTS = [
   { dateNum: 2010 + 5/12, year: 2010, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:13:10', sec: 4390, pos: 18, total: 2337, cat: 'M 20–39', isPB: false },
   { dateNum: 2011 + 5/12, year: 2011, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:58', sec: 4198, pos: 5,  total: 1342, cat: 'M 20–39', isPB: false },
   { dateNum: 2012 + 5/12, year: 2012, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:09:16', sec: 4156, pos: 6,  total: 1680, cat: 'M 20–39', isPB: false },
+  { dateNum: 2015 + 5/12, year: 2015, race: 'Wellington Half Marathon',    short: 'WEL Half', dist: '21.1 km', distId: 'half' as const, time: '1:08:26', sec: 4106, pos: 1,  total: 1260, cat: 'M 20–39', isPB: true  },
   { dateNum: 2019 + 5/12, year: 2019, race: 'Christchurch Marathon',      short: 'CHC',      dist: '42.2 km', distId: 'mar'  as const, time: '2:18:11', sec: 8291, pos: 1,  total:  476, cat: 'M 20–39', isPB: true  },
   { dateNum: 2021 + 5/12, year: 2021, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:59', sec: 3899, pos: 1,  total: 1332, cat: 'M 20–39', isPB: true  },
   { dateNum: 2023 + 5/12, year: 2023, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:05:04', sec: 3904, pos: 2,  total: 1544, cat: 'M 20–39', isPB: false },
@@ -115,7 +116,7 @@ export default function AthleteInksterBaynes() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '8' },
+                  { l: 'Races logged', v: '9' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -144,14 +145,15 @@ export default function AthleteInksterBaynes() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.mar.time}&dist=42`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/oska-inkster-baynes/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>
@@ -175,7 +177,7 @@ export default function AthleteInksterBaynes() {
               <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px' }}>
                 <ProgressionChart distId={chartDist} />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                  All performances at Christchurch (June)
+                  Wellington (Jun) and Christchurch (May/Jun) shown
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
@@ -193,7 +195,7 @@ export default function AthleteInksterBaynes() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '8',       sub: '2 marathons · 6 halves' },
+                { label: 'Races logged',     val: '9',       sub: '2 marathons · 7 halves' },
                 { label: 'Marathon PB',      val: '2:18:11', sub: 'Christchurch 2019 · course record' },
                 { label: 'Half marathon PB', val: '1:04:59', sub: 'Christchurch 2021 · 1st overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '3 career wins · CHC Half & Marathon' },
@@ -218,7 +220,7 @@ export default function AthleteInksterBaynes() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2009–2025 · Christchurch</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2009–2025 · Wellington · Christchurch</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -233,7 +235,11 @@ export default function AthleteInksterBaynes() {
               </thead>
               <tbody>
                 {sortedResults.map((r, i) => (
-                  <tr key={i} className="row" onClick={() => navigate(`/races/christchurch-marathon?year=${r.year}&dist=${r.dist === '42.2 km' ? '42' : '21'}`)}>
+                  <tr key={i} className="row" onClick={() => {
+                        const d = r.dist === '42.2 km' ? '42' : '21';
+                        if (r.race.includes('Wellington')) navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
+                        else navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
+                      }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
                     <td className="dimmed">{r.dist}</td>

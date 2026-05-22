@@ -1,0 +1,23 @@
+{
+  "slug": "daniel-balchin",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Daniel Balchin is a runner who came to the marathon late but has made up for lost time emphatically. After a decade of half-marathon racing — where he was always competitive but rarely dominant — he stepped up to 42.2 km in 2022 and found his best distance immediately. His 2:19:55 at Auckland 2025 is the fastest time in this database, and it came at age 35, suggesting he is still on the ascent rather than the descent of his performance curve. A disciplined, consistent performer who races selectively, Balchin now sits alongside New Zealand's genuine marathon elite.",
+    "trajectory": "The marathon trajectory is emphatically improving. From his debut 2:22:25 in 2022, Balchin has now broken 2:20 — a benchmark that separates recreational fast runners from genuine competitors — and done it with a dominant race win in Auckland's elite field. Every full marathon he has run has been in the top 3 of its field, a record of podium consistency that is unmatched in this cohort. On the half, he has also steadily improved, setting a 1:05:16 PB in 2024. His half-marathon speed suggests a marathon ceiling closer to 2:15 with a dedicated build.",
+    "best_result": "Balchin's win at Auckland Marathon 2025 — 1st in a field of 2,775 — places him at the 99.96th percentile, but the number undersells the achievement. Auckland's elite field includes ringers and top club runners from across New Zealand; winning it outright is categorically different from winning a regional race. His 2:19:55 also won Christchurch Marathon 2023 (1st of 521) and Auckland 2023 (1st of 1,765). The pattern is unambiguous: Balchin races to win, and he does.",
+    "distance_profile": "Balchin is a marathon specialist who backed into it after years of strong half-marathon running. His half PB (1:05:16) implies a marathon ceiling around 2:17, so his 2:19:55 may still have 2–3 minutes in it. He has never shown signs of crumbling over the second half; his splits in races where data is available suggest disciplined even-pacing. At 35, masters physiology typically allows marathon performance to hold or improve for 3–5 more years if injury-free, making him a strong bet to break 2:18 before his performances plateau.",
+    "where_to_race": "Auckland Marathon in October is clearly Balchin's strongest venue — three podiums including a 2025 win. The course is fast and the field is competitive enough to draw a good pace. Christchurch Marathon (one win, one 2:20:31 run) is equally well-suited. Rotorua is a slightly harder course with smaller fields; his 2025 Rotorua win (2:24:41) showed he can manage it, but his times there run 3–5 minutes slower than Auckland. For a sub-2:18 attempt, Auckland or a well-paced Christchurch is the right venue.",
+    "qualifying_note": "Balchin's 2:19:55 clears the Boston M 35–39 qualifying standard (3:00:00) by 40 minutes. His WMA age-graded score of approximately 87.5% at the marathon is exceptional for a 35-year-old and is consistent with elite-level masters running internationally. He is age-grading better than many of his faster-on-paper peers because the WMA factor barely applies at 35 — his raw speed is simply very good."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.96,
+    "best_result_race": "Auckland Marathon 2025",
+    "age_grading_marathon": 87.5,
+    "age_grading_half": 86.1,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Auckland Marathon", "Christchurch Marathon", "Rotorua Marathon"],
+    "challenging_races": []
+  }
+}

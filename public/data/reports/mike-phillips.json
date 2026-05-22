@@ -1,0 +1,23 @@
+{
+  "slug": "mike-phillips",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Mike Phillips is a half marathon specialist who has competed at the front end of New Zealand's major road half marathons for over 14 years. His 10-race record includes a win at the 2015 Queenstown Half (1st/4000) and multiple podium finishes at Queenstown across the years. His most recent PB of 1:09:46 (Christchurch Half 2026, 11th overall in a field of 3,456) was set in the M35–39 category — evidence of continued competitive longevity.",
+    "trajectory": "His trajectory shows steady improvement from 1:14:18 (QT 2015 win) to a mid-career best of 1:10:12 (CHC 2017) to his current PB of 1:09:46 (CHC 2026). The 2020–2021 results (1:12:54, 1:15:24) represent a slight dip, but his 2026 PB confirms he has returned to — and surpassed — his previous best. Improving at age 35+ is unusual and speaks to disciplined long-term training.",
+    "best_result": "1st overall at the 2015 Queenstown Half Marathon (1:14:18) in a field of approximately 4,000. His CHC 2017 (4th overall, 1:10:12) and CHC 2026 PB (11th overall, 1:09:46) are his best time-based performances. Three top-5 finishes at Queenstown Half across 2016–2017 further establish his front-of-field credibility.",
+    "distance_profile": "Phillips is exclusively a half marathon racer in the archive. His 1:09:46 half PB projects to approximately 2:27 for the marathon — a competitive time at domestic level. If he were to race a marathon, he would be competitive for age-group honours at most NZ events. For now, the half is his natural distance.",
+    "where_to_race": "Christchurch Half Marathon produced his PB (2026) and his 4th-place career-best time (2017). Queenstown Half has been his most frequent race (six starts) with consistent top-10 finishes. For pure performance, Christchurch's flat course offers the fastest conditions.",
+    "qualifying_note": "As a half marathon specialist, Boston qualification standards do not directly apply. His half PB of 1:09:46 places him in approximately the top 0.2% globally for M35 runners. An equivalent marathon effort of ~2:27 would qualify comfortably for Boston under the M35–39 standard (3:00:00)."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": null,
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.75,
+    "best_result_race": "Queenstown Half Marathon 2015",
+    "age_grading_marathon": null,
+    "age_grading_half": 79.5,
+    "boston_status": "outside",
+    "strong_placement_races": ["Christchurch Half Marathon", "Queenstown Half Marathon"],
+    "challenging_races": []
+  }
+}

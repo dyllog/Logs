@@ -1,16 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 
 const races = [
-  { name: "Auckland Marathon",       slug: "auckland-marathon",    location: "Auckland",             date: "1 Nov 2026",  distances: ["42.2 km", "21.1 km", "11 km", "5 km"], surface: "Road",  since: "1992" },
-  { name: "Rotorua Marathon",        slug: "rotorua-marathon",     location: "Rotorua",              date: "2 May 2027",  distances: ["42.2 km", "21.1 km"],                   surface: "Road",  since: "1967" },
-  { name: "Queenstown Marathon",     slug: "queenstown-marathon",  location: "Queenstown",           date: "21 Nov 2026", distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Mixed", since: "2014" },
-  { name: "Hawke's Bay Marathon",    slug: "hawkes-bay-marathon",  location: "Napier",               date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km"],                    surface: "Road",  since: "2016" },
-  { name: "Christchurch Marathon",   slug: "christchurch-marathon",location: "Christchurch",         date: "12 Jul 2026", distances: ["42.2 km", "21.1 km"],                    surface: "Road",  since: "2007" },
-  { name: "Waterfront Half Marathon", slug: "waterfront-half-marathon", location: "Wellington",          date: "2027",        distances: ["21.1 km"],                               surface: "Road",  since: "2018" },
-  { name: "Wellington Marathon",     slug: null,                   location: "Wellington",           date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km", "10 km"],           surface: "Road",  since: "2011" },
-  { name: "Tarawera Ultramarathon",  slug: null,                   location: "Rotorua",              date: "8 Feb 2027",  distances: ["102 km", "50 km", "21 km"],               surface: "Trail", since: "2008" },
-  { name: "Round the Bays",          slug: null,                   location: "Auckland",             date: "2 Aug 2026",  distances: ["8.4 km", "5 km"],                         surface: "Road",  since: "1972" },
-  { name: "Mountain to Surf",        slug: null,                   location: "Egmont National Park", date: "20 Sep 2026", distances: ["37 km"],                                  surface: "Trail", since: "1977" },
+  { name: "Auckland Marathon",         slug: "auckland-marathon",          location: "Auckland",             date: "1 Nov 2026",  distances: ["42.2 km", "21.1 km", "11 km", "5 km"], surface: "Road",         since: "1992" },
+  { name: "Christchurch Marathon",     slug: "christchurch-marathon",      location: "Christchurch",         date: "12 Jul 2026", distances: ["42.2 km", "21.1 km"],                   surface: "Road",         since: "2007" },
+  { name: "Coatesville Half Marathon", slug: "coatesville-half-marathon",  location: "Coatesville, Rodney",  date: "2027",        distances: ["21.1 km"],                              surface: "Road & trail", since: "2011" },
+  { name: "Devonport Half Marathon",   slug: "devonport-half-marathon",    location: "Devonport",            date: "27 Sep 2026", distances: ["21.1 km", "10 km", "5 km"],             surface: "Mixed",        since: "2015" },
+  { name: "Hawke's Bay Marathon",      slug: "hawkes-bay-marathon",        location: "Napier",               date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km"],                   surface: "Road",         since: "2016" },
+  { name: "Kerikeri Half Marathon",    slug: "kerikeri-half-marathon",     location: "Kerikeri, Northland",  date: "2026",        distances: ["21.1 km"],                              surface: "Road",         since: "2003" },
+  { name: "Maraetai Half Marathon",    slug: "maraetai-half-marathon",     location: "Maraetai Beach",       date: "2027",        distances: ["21.1 km", "10 km"],                     surface: "Road",         since: "2019" },
+  { name: "Mountain to Surf",          slug: null,                         location: "Egmont National Park", date: "20 Sep 2026", distances: ["37 km"],                                surface: "Trail",        since: "1977" },
+  { name: "Omaha Half Marathon",       slug: "omaha-half-marathon",        location: "Omaha Beach, Rodney",  date: "2026",        distances: ["21.1 km", "10 km"],                     surface: "Road",         since: "2015" },
+  { name: "Queenstown Marathon",       slug: "queenstown-marathon",        location: "Queenstown",           date: "21 Nov 2026", distances: ["42.2 km", "21.1 km", "10 km"],          surface: "Mixed",        since: "2014" },
+  { name: "Rotorua Marathon",          slug: "rotorua-marathon",           location: "Rotorua",              date: "2 May 2027",  distances: ["42.2 km", "21.1 km"],                   surface: "Road",         since: "1967" },
+  { name: "Round the Bays",            slug: null,                         location: "Auckland",             date: "2 Aug 2026",  distances: ["8.4 km", "5 km"],                       surface: "Road",         since: "1972" },
+  { name: "Tarawera Ultramarathon",    slug: null,                         location: "Rotorua",              date: "8 Feb 2027",  distances: ["102 km", "50 km", "21 km"],             surface: "Trail",        since: "2008" },
+  { name: "Waterfront Half Marathon",  slug: "waterfront-half-marathon",   location: "Auckland",             date: "2027",        distances: ["21.1 km", "10 km"],                     surface: "Road",         since: "2018" },
+  { name: "Wellington Marathon",       slug: "wellington-marathon",        location: "Wellington",           date: "7 Jun 2026",  distances: ["42.2 km", "21.1 km", "10 km"],          surface: "Road",         since: "1996" },
 ];
 
 const Races = () => {

@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const RESULTS = [
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:24:48', sec: 8688, pos: 2, total: 1653, cat: 'M 18–34', isPB: false },
   { dateNum: 2018 + 11/12, year: 2018, race: 'Queenstown Marathon',  short: 'QT',  dist: '42.2 km', distId: 'mar' as const, time: '2:32:09', sec: 9129, pos: 1, total: 1954, cat: 'M 20–29', isPB: false },
-  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:21:57', sec: 8517, pos: 1, total: 1619, cat: 'M 18–34', isPB: false },
-  { dateNum: 2021 + 5/12,  year: 2021, race: "Hawke's Bay Marathon", short: 'HB',  dist: '42.2 km', distId: 'mar' as const, time: '2:25:33', sec: 8733, pos: 1, total: 1025, cat: 'M 30–39', isPB: false },
+  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',      short: 'AUC',  dist: '42.2 km', distId: 'mar'  as const, time: '2:21:57', sec: 8517, pos: 1,   total: 1619, cat: 'M 18–34', isPB: false },
+  { dateNum: 2021 + 1/12,  year: 2021, race: 'Maraetai Half Marathon', short: 'MARA', dist: '21.1 km', distId: 'half' as const, time: '2:07:00', sec: 7620, pos: 467, total: 874,  cat: 'M 30–39', isPB: true  },
+  { dateNum: 2021 + 5/12,  year: 2021, race: "Hawke's Bay Marathon",   short: 'HB',   dist: '42.2 km', distId: 'mar'  as const, time: '2:25:33', sec: 8733, pos: 1,   total: 1025, cat: 'M 30–39', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:20:00', sec: 8400, pos: 1, total: 870,  cat: 'M 18–34', isPB: true  },
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:21:52', sec: 8512, pos: 1, total: 1299, cat: 'M 18–34', isPB: false },
   { dateNum: 2022 + 11/12, year: 2022, race: 'Queenstown Marathon',  short: 'QT',  dist: '42.2 km', distId: 'mar' as const, time: '2:26:30', sec: 8790, pos: 1, total: 1740, cat: 'M 30–39', isPB: false },
@@ -13,7 +14,8 @@ const RESULTS = [
 ];
 
 const PBs = {
-  mar: { time: '2:20:00', sec: 8400, race: 'Auckland Marathon', year: 2021 },
+  mar:  { time: '2:20:00', sec: 8400, race: 'Auckland Marathon',       year: 2021 },
+  half: { time: '2:07:00', sec: 7620, race: 'Maraetai Half Marathon',  year: 2021 },
 };
 
 function fmtSec(s: number): string {
@@ -111,7 +113,7 @@ export default function AthleteJones() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '8' },
+                  { l: 'Races logged', v: '9' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -123,9 +125,9 @@ export default function AthleteJones() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, background: 'var(--on-dark-rule)', border: '0.5px solid var(--on-dark-rule)' }} className="pb-grid">
               {[
-                { dist: '42.2 km', pb: PBs.mar.time, race: 'Auckland Marathon',    year: PBs.mar.year, highlight: true  },
-                { dist: '21.1 km', pb: '—',          race: 'not on record',         year: null,         highlight: false },
-                { dist: '10 km',   pb: '—',          race: 'not on record',         year: null,         highlight: false },
+                { dist: '42.2 km', pb: PBs.mar.time,  race: PBs.mar.race,  year: PBs.mar.year,  highlight: true  },
+                { dist: '21.1 km', pb: PBs.half.time, race: PBs.half.race, year: PBs.half.year, highlight: false },
+                { dist: '10 km',   pb: '—',           race: 'not on record', year: null,          highlight: false },
               ].map((d, i) => (
                 <div key={i} style={{ background: 'var(--surface-dark)', padding: '20px 20px 18px' }}>
                   <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 12 }}>{d.dist}</div>
@@ -139,14 +141,15 @@ export default function AthleteJones() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.mar.time}&dist=42`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/daniel-jones/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>
@@ -178,7 +181,7 @@ export default function AthleteJones() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '8',       sub: '8 marathons' },
+                { label: 'Races logged',     val: '9',       sub: '8 marathons · 1 half' },
                 { label: 'Marathon PB',      val: '2:20:00', sub: 'Auckland 2021 · 1st overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '7 career wins · AUC × 3 · QT × 3 · HB × 1' },
                 { label: 'Active years',     val: '6',       sub: '2018–2023 · AUC · QT · HB' },
@@ -193,7 +196,7 @@ export default function AthleteJones() {
               ))}
               <div style={{ marginTop: 20 }}>
                 <div className="label mb-12">Marathon times</div>
-                {[...RESULTS].sort((a,b) => b.dateNum - a.dateNum).map((r, i, arr) => {
+                {[...RESULTS].filter(r => r.distId === 'mar').sort((a,b) => b.dateNum - a.dateNum).map((r, i, arr) => {
                   const pbSec = Math.min(...arr.map(x => x.sec));
                   const width = 100 - ((r.sec - pbSec) / (Math.max(...arr.map(x=>x.sec)) - pbSec + 1)) * 80;
                   return (
@@ -218,12 +221,12 @@ export default function AthleteJones() {
         <div className="page">
           <div className="section-header">
             <div>
-              <div className="eyebrow mb-8">Race history · 42.2 km</div>
+              <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AUC · QT · HB</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AUC · QT · HB · MARA</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -244,6 +247,7 @@ export default function AthleteJones() {
                         if (r.race === 'Auckland Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes("Hawke")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Maraetai')) navigate(`/races/maraetai-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

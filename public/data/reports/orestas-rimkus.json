@@ -1,0 +1,23 @@
+{
+  "slug": "orestas-rimkus",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Orestas Rimkus is a Lithuanian-born runner based in New Zealand who has assembled a focused eight-race marathon record across Christchurch and Queenstown. His 2:36:27 PB (2nd overall, Queenstown 2024) and a 3rd-place finish at Queenstown 2023 (2:38:06) establish him as a top-three competitor at one of New Zealand's most competitive marathons. His improvement from 2:51:02 in 2018 to 2:36:27 in 2024 is one of the most dramatic in the archive.",
+    "trajectory": "Clear and sustained improvement: 2:51:02 (CHC 2018) → 2:44:31 (QT 2020) → 2:37:34 (CHC 2021) → 2:38:06 (QT 2023) → 2:36:27 (QT 2024, PB). His 2025 Christchurch result (2:43:17) represents a moderate step back, but the overall arc is strongly upward. The 14-minute improvement over six years reflects dedicated long-term development.",
+    "best_result": "2nd overall at the 2024 Queenstown Marathon (2:36:27) in a field of 2,522 — a top-0.04% result. His 3rd place at Queenstown 2023 (2:38:06) in a field of approximately 2,400 is equally strong. These back-to-back Queenstown podium finishes make him one of the most competitive marathon runners in the NZ South Island circuit.",
+    "distance_profile": "Rimkus races exclusively at the marathon distance. His one half marathon result (1:16:33, Christchurch 2019) projects to a full marathon of approximately 2:42 — he has clearly surpassed that projection with his current PB of 2:36:27, indicating strong marathon-specific adaptation. A 1:12–1:13 half would be more consistent with his current marathon form.",
+    "where_to_race": "Queenstown Marathon is where he excels — two consecutive podium finishes (3rd and 2nd). The Queenstown course suits his strength-based running style. Christchurch has also yielded good results (11th/600 in 2021).",
+    "qualifying_note": "His marathon PB of 2:36:27 qualifies for Boston under the M 18–34 standard (3:00:00) with 23 minutes margin. As he moves into M30–34 (current), he has time to improve further. A sub-2:30 is a realistic medium-term target at his current rate of improvement."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": null,
+    "best_result_percentile": 99.96,
+    "best_result_race": "Queenstown Marathon 2024",
+    "age_grading_marathon": 76.9,
+    "age_grading_half": null,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Queenstown Marathon", "Christchurch Marathon"],
+    "challenging_races": []
+  }
+}

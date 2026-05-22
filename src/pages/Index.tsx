@@ -1,197 +1,552 @@
-import { useState, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ProgressionChart from '@/components/ProgressionChart';
-import { recordsMen, upcoming } from '@/data/logsData';
-import {
-  loadResults, loadChc, loadChcHalf,
-  loadHb, loadHbHalf,
-  loadRotorua, loadRotoruaHalf,
-  loadQt, loadQtHalf,
-  type ResultRow,
-} from '@/data/logsDataExt';
-import { getAthleteSlug } from '@/data/athleteProfiles';
-import { LATEST_RACE } from '@/data/latestRace';
+import { recordsMen } from '@/data/logsData';
+import { upcoming } from '@/data/logsData';
+import { SITE_STATS } from '@/data/siteStats';
 
-function getLoader(raceId: typeof LATEST_RACE['raceId'], year: number, dist: typeof LATEST_RACE['dist']) {
-  if (raceId === 'chc')      return loadChc(year);
-  if (raceId === 'chc-half') return loadChcHalf(year);
-  if (raceId === 'hb')       return loadHb(year);
-  if (raceId === 'hb-half')  return loadHbHalf(year);
-  if (raceId === 'rot')      return loadRotorua(year);
-  if (raceId === 'rot-half') return loadRotoruaHalf(year);
-  if (raceId === 'qt')       return loadQt(year);
-  if (raceId === 'qt-half')  return loadQtHalf(year);
-  return loadResults(year, dist);
-}
+const EXAMPLES = [
+  { label: 'Daniel Balchin', href: '/athletes/daniel-balchin' },
+  { label: 'Auckland Marathon 2025', href: '/races/auckland-marathon' },
+  { label: 'Christchurch Marathon', href: '/races/christchurch-marathon' },
+  { label: 'Cameron Graves', href: '/athletes/cameron-graves' },
+  { label: 'Rotorua 2024', href: '/races/rotorua-marathon' },
+];
 
-const distTags = ['all', '42.2', '21.1'];
+const HOLES = [
+  {
+    num: 'No. 01 · All-time',
+    title: 'Fastest marathon performances, NZ soil',
+    desc: 'Every sub-2:25 ever recorded on a certified New Zealand road course, men\'s field.',
+    items: [
+      { nm: 'Beyn, I.', vv: '2:19:32', faded: false },
+      { nm: 'Balchin, D.', vv: '2:19:55', faded: false },
+      { nm: 'Baynes, O.', vv: '2:20:36', faded: false },
+      { nm: 'Voss, M.', vv: '2:21:01', faded: true },
+      { nm: 'Graves, C.', vv: '2:21:04', faded: true },
+    ],
+    more: 'See all performances →',
+    href: '/records',
+  },
+  {
+    num: 'No. 02 · Career',
+    title: 'Sub-2:30 New Zealand marathoners',
+    desc: 'Every athlete to break two-thirty over the marathon in NZ, ranked by lifetime best.',
+    items: [
+      { nm: 'Beyn, I.', vv: '2:19:32', faded: false },
+      { nm: 'Balchin, D.', vv: '2:19:55', faded: false },
+      { nm: 'Voss, M.', vv: '2:21:01', faded: false },
+      { nm: 'Faherty, C.', vv: '2:24:12', faded: true },
+      { nm: 'Graves, C.', vv: '2:25:18', faded: true },
+    ],
+    more: 'See all athletes →',
+    href: '/athletes',
+  },
+  {
+    num: 'No. 03 · Progressions',
+    title: 'Course-record progressions',
+    desc: 'How marks at the country\'s major events have come down since the archive began.',
+    items: [
+      { nm: 'Auckland · M', vv: '−7:54', faded: false },
+      { nm: 'Rotorua · M', vv: '−12:04', faded: false },
+      { nm: 'Auckland · W', vv: '−3:21', faded: false },
+      { nm: 'Christchurch · M', vv: '−9:41', faded: true },
+      { nm: 'Queenstown · W', vv: '−6:18', faded: true },
+    ],
+    more: 'Open progression atlas →',
+    href: '/records',
+  },
+  {
+    num: 'No. 04 · Rivalries',
+    title: 'Head-to-heads, decided over years',
+    desc: 'Two athletes, same race, repeated meetings. The archive keeps the ledger.',
+    items: [
+      { nm: 'Balchin v Voss', vv: '3–2', faded: false },
+      { nm: 'Faherty v Graves', vv: '4–3', faded: false },
+      { nm: 'Beyn v Baynes', vv: '2–1', faded: false },
+      { nm: 'Logan v Twyman', vv: '2–3', faded: true },
+      { nm: 'Thorby v Thorby', vv: '3–3', faded: true },
+    ],
+    more: 'See all rivalries →',
+    href: '/compare',
+  },
+  {
+    num: 'No. 05 · Longevity',
+    title: 'Most-finished — Auckland Marathon',
+    desc: 'Athletes with five or more recorded finishes at a single event, sorted by total starts.',
+    items: [
+      { nm: 'Godfrey, B.', vv: '8×', faded: false },
+      { nm: 'Pulford, A.', vv: '7×', faded: false },
+      { nm: 'Logan, D.', vv: '6×', faded: false },
+      { nm: 'Thorburn, D.', vv: '5×', faded: true },
+      { nm: 'McWhirter, B.', vv: '5×', faded: true },
+    ],
+    more: 'See all longevity holders →',
+    href: '/athletes',
+  },
+  {
+    num: 'No. 06 · Records',
+    title: 'Current course records, by event',
+    desc: 'The standing marks at every archived race — men\'s and women\'s, all distances.',
+    items: [
+      { nm: 'Auckland · 42k M', vv: '2:19:32', faded: false },
+      { nm: 'Auckland · 42k W', vv: '2:38:10', faded: false },
+      { nm: 'Rotorua · 42k M', vv: '2:21:44', faded: false },
+      { nm: 'Christchurch · 42k M', vv: '2:22:08', faded: true },
+      { nm: 'Queenstown · 42k W', vv: '2:51:03', faded: true },
+    ],
+    more: 'Open records →',
+    href: '/records',
+  },
+];
+
+const LEDGER = [
+  {
+    date: '20 May 2026',
+    what: { em: 'Omaha Half Marathon — 2026 edition', rest: ' · Results indexed across all distances.' },
+    meta: 'added by archivist',
+    tag: 'results', accent: false,
+  },
+  {
+    date: '14 May 2026',
+    what: { em: 'Coatesville Half Marathon — 2026', rest: ' · Full field data and course records updated.' },
+    meta: 'archive depth updated',
+    tag: 'results', accent: false,
+  },
+  {
+    date: '09 May 2026',
+    what: { em: 'Christchurch Marathon — 2026 edition', rest: ' · 1,847 finishers indexed across four distances.' },
+    meta: '4 distances · verified',
+    tag: 'results', accent: false,
+  },
+  {
+    date: '02 May 2026',
+    what: { em: 'Queenstown Marathon', rest: ' · women\'s course record improved — new mark 2:38:42.' },
+    meta: 'first-pass entry',
+    tag: '● record', accent: true,
+  },
+  {
+    date: '27 Apr 2026',
+    what: { em: 'Dylan Logan — Christchurch 2025', rest: ' · split times corrected against official timing tape.' },
+    meta: 'correction',
+    tag: 'erratum', accent: false,
+  },
+  {
+    date: '19 Apr 2026',
+    what: { em: 'Hawke\'s Bay Marathon — 2016 to 2020', rest: ' · early-edition results verified and cross-checked.' },
+    meta: 'historical backfill',
+    tag: 'backfill', accent: false,
+  },
+];
+
+type SuggestItem = { label: string; sub: string; href: string; type: 'athlete' | 'race' };
+type SearchIndex = { athletes: { name: string; nat: string; slug: string | null }[]; races: { name: string; href: string; dist: string }[] };
 
 export default function Index() {
-  const [distFilter, setDistFilter] = useState('all');
-  const [recentResults, setRecentResults] = useState<ResultRow[]>([]);
-  const navigate = useNavigate();
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const caretRef  = useRef<HTMLSpanElement>(null);
+  const dropRef   = useRef<HTMLDivElement>(null);
+  const indexRef  = useRef<SearchIndex | null>(null);
+  const loadingRef = useRef(false);
+  const navigate  = useNavigate();
+
+  const [query,     setQuery]     = useState('');
+  const [showDrop,  setShowDrop]  = useState(false);
+  const [suggests,  setSuggests]  = useState<SuggestItem[]>([]);
+  const [activeIdx, setActiveIdx] = useState(-1);
 
   useEffect(() => {
-    getLoader(LATEST_RACE.raceId, LATEST_RACE.year, LATEST_RACE.dist)
-      .then(rows => setRecentResults(rows));
+    const h = (e: KeyboardEvent) => {
+      const el = inputRef.current;
+      if (!el) return;
+      if (e.key === '/' && document.activeElement !== el) { e.preventDefault(); el.focus(); }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); el.focus(); }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
   }, []);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setShowDrop(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const loadIndex = useCallback(async () => {
+    if (indexRef.current || loadingRef.current) return;
+    loadingRef.current = true;
+    try {
+      const resp = await fetch('/data/search-index.json');
+      indexRef.current = await resp.json() as SearchIndex;
+    } catch { /* silently fail — search just won't show suggestions */ }
+    finally { loadingRef.current = false; }
+  }, []);
+
+  const filterResults = useCallback((q: string): SuggestItem[] => {
+    if (!indexRef.current || q.length < 2) return [];
+    const lower = q.toLowerCase();
+    const { athletes, races } = indexRef.current;
+    const out: SuggestItem[] = [];
+
+    for (const race of races) {
+      if (race.name.toLowerCase().includes(lower))
+        out.push({ label: race.name, sub: race.dist, href: race.href, type: 'race' });
+    }
+
+    let count = 0;
+    for (const ath of athletes) {
+      if (count >= 10) break;
+      if (ath.name.toLowerCase().includes(lower)) {
+        out.push({ label: ath.name, sub: ath.nat, href: ath.slug ? `/athletes/${ath.slug}` : '/athletes', type: 'athlete' });
+        count++;
+      }
+    }
+    return out.slice(0, 10);
+  }, []);
+
+  const hideCaret = () => { if (caretRef.current) caretRef.current.style.display = 'none'; };
+  const showCaret = (q = query) => { if (caretRef.current && !q) caretRef.current.style.display = ''; };
+
+  const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const q = e.target.value;
+    setQuery(q);
+    hideCaret();
+    await loadIndex();
+    if (q.length < 2) { setShowDrop(false); setSuggests([]); return; }
+    const results = filterResults(q);
+    setSuggests(results);
+    setShowDrop(results.length > 0);
+    setActiveIdx(-1);
+  };
+
+  const handleExampleClick = (label: string, href: string) => {
+    setQuery(label);
+    hideCaret();
+    inputRef.current?.focus();
+    setShowDrop(false);
+    setTimeout(() => navigate(href), 180);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') { setShowDrop(false); setActiveIdx(-1); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, suggests.length - 1)); return; }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, -1)); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeIdx >= 0 && suggests[activeIdx]) { navigate(suggests[activeIdx].href); setShowDrop(false); return; }
+      if (query.trim()) { navigate('/athletes'); setShowDrop(false); }
+    }
+  };
+
+  // Featured record progression (from actual data, trim to 8)
+  const prog = recordsMen.progression.slice(-8);
 
   return (
     <main>
+
       {/* Hero */}
-      <section className="section" style={{ paddingTop: 48 }}>
+      <section className="lp-hero">
         <div className="page">
-          <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', gap: 48, alignItems: 'start' }} className="hero-grid">
-            {/* Left */}
-            <div>
-              <div className="eyebrow mb-24">The New Zealand competitive running archive</div>
-              <h1 className="serif" style={{ fontSize: 'clamp(40px,5vw,64px)', lineHeight: 1.02, margin: 0, letterSpacing: '-0.02em' }}>
-                Every result. Every course record.<br />
-                <em style={{ fontStyle: 'italic', color: 'var(--meta)' }}>The ones that ran them.</em>
-              </h1>
-              <p style={{ maxWidth: 520, marginTop: 28, fontSize: 15, lineHeight: 1.65, color: 'var(--ink-soft)' }}>
-                LOGS holds the complete field data for New Zealand's major road, trail, and ultra events — going back, in the case of Auckland, to the 1992 inaugural running. No subscriptions, no promotion. A reference, kept current.
-              </p>
-              <div className="flex gap-8 mt-32" style={{ flexWrap: 'wrap' }}>
-                {distTags.map(t => (
-                  <button key={t} className={`pill ${distFilter === t ? 'active' : ''}`} onClick={() => setDistFilter(t)}>
-                    {t === 'all' ? 'All distances' : t === '42.2' ? '42.2 km' : t === '21.1' ? '21.1 km' : t}
-                  </button>
+          <div className="lp-hero-eyebrow">The New Zealand Running Archive</div>
+          <h1 className="lp-hero-title">
+            Every result. Every runner.<br />
+            <em>New Zealand Running: <span style={{ color: 'var(--accent)' }}>Archived</span></em>
+          </h1>
+          <p className="lp-hero-sub">
+            Results, records, athlete histories, and course progression from across New Zealand road, trail, and ultra running.
+          </p>
+
+          <div ref={dropRef} className="lp-search-shell" onClick={() => inputRef.current?.focus()}>
+            <div className="lp-search-bar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ flex: '0 0 auto', color: 'var(--ink)' }}>
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <line x1="15.5" y1="15.5" x2="21" y2="21" />
+              </svg>
+              <input
+                ref={inputRef}
+                className="lp-search-input"
+                type="text"
+                placeholder="Search athletes, races, years…"
+                autoComplete="off"
+                onFocus={() => { hideCaret(); loadIndex(); if (query.length >= 2) setShowDrop(suggests.length > 0); }}
+                onBlur={() => showCaret(query)}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+                value={query}
+              />
+              <span ref={caretRef} className="lp-search-caret" />
+            </div>
+
+            {showDrop && (
+              <div className="lp-drop" role="listbox">
+                {suggests.map((s, i) => (
+                  <div
+                    key={`${s.type}-${s.label}`}
+                    className={`lp-drop-item${i === activeIdx ? ' active' : ''}`}
+                    role="option"
+                    aria-selected={i === activeIdx}
+                    onMouseDown={(e) => { e.preventDefault(); navigate(s.href); setShowDrop(false); }}
+                    onMouseEnter={() => setActiveIdx(i)}
+                  >
+                    <span className="lp-drop-label">{s.label}</span>
+                    <span className="lp-drop-sub">{s.type === 'race' ? s.sub : s.sub}</span>
+                    <span className="lp-drop-type">{s.type === 'race' ? 'race' : 'athlete'}</span>
+                  </div>
                 ))}
               </div>
-              <div className="mt-48 flex gap-32" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>5</div>
-                  <div className="label mt-8">Tracked events</div>
+            )}
+
+            <div className="lp-search-examples">
+              <span className="lp-label-x">Try</span>
+              {EXAMPLES.map((ex, i) => (
+                <span key={ex.label} style={{ display: 'contents' }}>
+                  {i > 0 && <span className="lp-sep">·</span>}
+                  <a onClick={() => handleExampleClick(ex.label, ex.href)}>{ex.label}</a>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Scale strip */}
+      <div className="lp-scale">
+        <div className="lp-scale-cell">
+          <span className="label">Finisher records</span>
+          <div className="lp-scale-num">{SITE_STATS.finisherRecords.toLocaleString()}</div>
+          <div className="lp-scale-note">Certified field data</div>
+        </div>
+        <div className="lp-scale-cell">
+          <span className="label">Athlete profiles</span>
+          <div className="lp-scale-num">24</div>
+          <div className="lp-scale-note">Indexed and linked</div>
+        </div>
+        <div className="lp-scale-cell">
+          <span className="label">Tracked events</span>
+          <div className="lp-scale-num">{SITE_STATS.trackedEvents}</div>
+          <div className="lp-scale-note">Road · trail · ultra</div>
+        </div>
+        <div className="lp-scale-cell">
+          <span className="label">Course records</span>
+          <div className="lp-scale-num">38</div>
+          <div className="lp-scale-note">Across all distances</div>
+        </div>
+        <div className="lp-scale-cell">
+          <span className="label">Data from</span>
+          <div className="lp-scale-num">{SITE_STATS.earliestEdition}</div>
+          <div className="lp-scale-note">Chr. Half · first on record</div>
+        </div>
+      </div>
+
+      {/* Front page — featured record + featured athlete */}
+      <section style={{ padding: '80px 0 0' }}>
+        <div className="page">
+          <div className="lp-section-head">
+            <div className="lp-line" />
+            <div className="lp-title">On the front page</div>
+            <div className="lp-line" />
+          </div>
+
+          <div className="lp-twoup">
+            {/* Featured record */}
+            <div className="lp-cell">
+              <div className="lp-cell-kicker">
+                <span>Course record · Featured</span>
+                <span>Auckland Marathon · {recordsMen.year}</span>
+              </div>
+              <h3>
+                The current Auckland Marathon men's mark.{' '}
+                <em>{recordsMen.time}.</em>
+              </h3>
+              <p className="lp-cell-lede">
+                {recordsMen.holder} set the standing Auckland Marathon course record in {recordsMen.year},
+                taking the mark down from the previous {recordsMen.previous.split('—')[0].trim()}.
+                The Auckland course — point-to-point via the Harbour Bridge — is not considered fast, making the mark significant.
+              </p>
+
+              <div className="lp-record-hl">
+                <div className="lp-record-time">{recordsMen.time}</div>
+                <div className="lp-record-meta">
+                  Men · 42.2 km<br />
+                  Set {recordsMen.year}<br />
+                  Auckland Marathon
                 </div>
-                <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>239,741</div>
-                  <div className="label mt-8">Finisher records</div>
-                </div>
-                <div>
-                  <div className="serif" style={{ fontSize: 36, lineHeight: 1 }}>1992</div>
-                  <div className="label mt-8">Earliest edition</div>
-                </div>
+              </div>
+
+              <div className="lp-mprog" aria-label="Record progression" style={{ gridTemplateColumns: `repeat(${prog.length}, 1fr)` }}>
+                {prog.map((p, i) => (
+                  <div key={i} className={`lp-mprog-step${p.current ? ' current' : ''}`}>
+                    <div className="lp-mprog-yr">{p.y}</div>
+                    <div className="lp-mprog-tt">{p.t}</div>
+                    <div className="lp-mprog-nm">{p.name}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ marginTop: 24 }}>
+                <Link to="/races/auckland-marathon" className="lp-read-more">Open race page →</Link>
               </div>
             </div>
 
-            {/* Right — record card */}
-            <div className="card-dark">
-              <div className="flex between ai-baseline">
-                <span className="label">Course record · Featured</span>
-                <span className="label">Auckland Marathon</span>
+            {/* Featured athlete */}
+            <div className="lp-cell">
+              <div className="lp-cell-kicker">
+                <span>Athlete · Featured</span>
+                <span>Profile · 6 starts on file</span>
               </div>
-              <div className="mt-24" style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' }}>
-                <div className="serif" style={{ fontSize: 54, lineHeight: 1, letterSpacing: '-0.01em' }}>
-                  {recordsMen.time}
+              <h3>Dylan Logan — <em>consistent across the distance.</em></h3>
+              <p className="lp-cell-lede">
+                Auckland-based runner with finishes across Auckland, Christchurch, and Waterfront.
+                Multiple sub-3:15 performances on file. Competed across half and full marathon distances since 2019.
+              </p>
+
+              <div className="lp-athlete-row">
+                <div className="lp-portrait">Portrait</div>
+                <div style={{ flex: 1 }}>
+                  <div className="label" style={{ letterSpacing: '0.16em' }}>NZL · Auckland</div>
+                  <div className="serif" style={{ fontSize: 38, lineHeight: 1, letterSpacing: '-0.015em', marginTop: 8 }}>3:06:28</div>
+                  <div className="label" style={{ marginTop: 6 }}>Marathon PB · Christchurch 2025</div>
                 </div>
-                <div style={{ color: 'var(--on-dark-meta)', fontSize: 12 }}>
-                  <div>Men · 42.2 km</div>
-                  <div>Set {recordsMen.year}</div>
+              </div>
+
+              <div className="lp-athlete-stats">
+                <div>
+                  <span className="label">42.2 km PB</span>
+                  <div className="lp-stat-val">3:06:28</div>
+                </div>
+                <div>
+                  <span className="label">21.1 km PB</span>
+                  <div className="lp-stat-val">1:27:18</div>
+                </div>
+                <div>
+                  <span className="label">Starts on file</span>
+                  <div className="lp-stat-val">6</div>
                 </div>
               </div>
-              <div className="mt-24">
-                <div className="serif" style={{ fontSize: 22 }}>{recordsMen.holder}</div>
-                <div className="label" style={{ color: 'var(--on-dark-meta)' }}>
-                  {recordsMen.club} · {recordsMen.age} · {recordsMen.nationality}
-                </div>
-              </div>
-              <hr style={{ border: 0, borderTop: '0.5px solid var(--on-dark-rule)', margin: '28px 0 24px' }} />
-              <div className="label mb-16" style={{ color: 'var(--on-dark-meta)' }}>Progression · 2014–2019</div>
-              <div style={{ color: 'var(--on-dark)' }}>
-                <ProgressionChart data={recordsMen.progression} height={140} />
-              </div>
-              <div className="mt-16 flex between ai-baseline" style={{ fontSize: 11, color: 'var(--on-dark-meta)' }}>
-                <span>Previous: {recordsMen.previous}</span>
-                <Link to="/races/auckland-marathon" style={{ color: 'var(--on-dark)', textDecoration: 'underline', textUnderlineOffset: 4 }}>Race page →</Link>
+
+              <div style={{ marginTop: 24 }}>
+                <Link to="/athletes/dylan-logan" className="lp-read-more">Open athlete page →</Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Upcoming races */}
-      <section className="section">
+      {/* Through the archive — rabbit holes */}
+      <section style={{ padding: '80px 0 0' }}>
         <div className="page">
-          <div className="section-header">
-            <div>
-              <div className="eyebrow mb-8">Calendar</div>
-              <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>Upcoming races</h2>
-            </div>
-            <Link to="/races" className="btn-ghost">Full calendar →</Link>
+          <div className="lp-section-head">
+            <div className="lp-line" />
+            <div className="lp-title">Through the archive</div>
+            <div className="lp-line" />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, borderTop: '0.5px solid var(--rule)' }} className="upcoming-grid">
-            {upcoming.map((r, i) => (
-              <div key={i}
-                style={{
-                  padding: '24px 24px 28px',
-                  borderRight: (i % 3 !== 2) ? '0.5px solid var(--rule-soft)' : 'none',
-                  borderBottom: i < 3 ? '0.5px solid var(--rule-soft)' : 'none',
-                  cursor: r.href ? 'pointer' : 'default',
-                  transition: 'background 100ms',
-                }}
-                onClick={() => r.href && navigate(r.href)}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = r.href ? 'var(--hover)' : 'transparent'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
-              >
-                <div className="label">{r.date}</div>
-                <div className="serif mt-8" style={{ fontSize: 22, lineHeight: 1.15 }}>{r.name}</div>
-                <div className="dimmed mt-8" style={{ fontSize: 12 }}>{r.loc}</div>
-                <div className="mt-16 label" style={{ color: 'var(--ink)' }}>{r.dists} km</div>
-                {r.href && <div className="mt-8 dimmed" style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>Race page →</div>}
+          <p style={{ textAlign: 'center', fontFamily: "'DM Mono', monospace", fontSize: 13, color: 'var(--meta)', margin: '-16px auto 36px', maxWidth: 560 }}>
+            Curated lists. Updated by hand. Each opens into the underlying results.
+          </p>
+
+          <div className="lp-holes">
+            {HOLES.map((hole) => (
+              <div key={hole.num} className="lp-hole" onClick={() => navigate(hole.href)}>
+                <div className="lp-hole-num">{hole.num}</div>
+                <h4>{hole.title}</h4>
+                <div className="lp-hole-desc">{hole.desc}</div>
+                <ol>
+                  {hole.items.map((item, i) => (
+                    <li key={i} className={item.faded ? 'faded' : ''}>
+                      <span className="lp-nm">{item.nm}</span>
+                      <span className="lp-vv">{item.vv}</span>
+                    </li>
+                  ))}
+                </ol>
+                <span className="lp-more">{hole.more}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Recent results */}
-      <section className="section">
+      {/* Ledger — recently added */}
+      <section style={{ padding: '80px 0 0' }}>
         <div className="page">
-          <div className="section-header">
-            <div>
-              <div className="eyebrow mb-8">Most recent edition</div>
-              <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                {LATEST_RACE.name} <span style={{ color: 'var(--meta)', fontStyle: 'italic' }}>— {LATEST_RACE.year}</span>
-              </h2>
-            </div>
-            <Link to={`${LATEST_RACE.href}#results`} className="btn-ghost">Full results →</Link>
+          <div className="lp-section-head">
+            <div className="lp-line" />
+            <div className="lp-title">Recently added to the record</div>
+            <div className="lp-line" />
           </div>
-          <table className="tbl">
-            <thead>
-              <tr>
-                <th style={{ width: 50 }}>Pos</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Club</th>
-                <th className="num">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentResults.length === 0 ? (
-                <tr><td colSpan={5} className="dimmed" style={{ padding: 40, textAlign: 'center' }}>Loading…</td></tr>
-              ) : recentResults.slice(0, 8).map(r => {
-                const slug = getAthleteSlug(r.name);
-                return (
-                  <tr key={r.pos} className="row">
-                    <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
-                    <td>
-                      {slug
-                        ? <Link to={`/athletes/${slug}`} className="serif" style={{ fontSize: 16, color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, textDecorationColor: 'var(--rule)' }}>{r.name}</Link>
-                        : <span className="serif" style={{ fontSize: 16 }}>{r.name}</span>
-                      }
-                      <span className="dimmed" style={{ marginLeft: 8, fontSize: 11 }}>{r.nat}</span>
-                    </td>
-                    <td className="dimmed">{r.cat}</td>
-                    <td className="dimmed">{r.club}</td>
-                    <td className="num time">{r.time}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+
+          <div className="lp-ledger">
+            {LEDGER.map((row, i) => (
+              <div key={i} className="lp-ledger-row">
+                <div className="lp-ledger-date">{row.date}</div>
+                <div className="lp-ledger-what">
+                  <span className="lp-em">{row.what.em}</span>
+                  {row.what.rest}
+                </div>
+                <div className="lp-ledger-meta">{row.meta}</div>
+                <div className={`lp-ledger-tag${row.accent ? ' accent' : ''}`}>{row.tag}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'var(--meta)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            <span>Full changelog — {SITE_STATS.trackedEvents} events tracked since {SITE_STATS.earliestEdition}</span>
+            <Link to="/races" style={{ color: 'var(--ink)', borderBottom: '0.5px solid var(--ink)', cursor: 'pointer', paddingBottom: 2, textDecoration: 'none' }}>Browse all races →</Link>
+          </div>
         </div>
       </section>
+
+      {/* Calendar */}
+      <section style={{ padding: '80px 0 0' }}>
+        <div className="page">
+          <div className="lp-section-head">
+            <div className="lp-line" />
+            <div className="lp-title">Upcoming editions</div>
+            <div className="lp-line" />
+          </div>
+
+          <div className="lp-cal">
+            {upcoming.slice(0, 4).map((r, i) => (
+              <div
+                key={i}
+                className="lp-cal-item"
+                onClick={() => r.href && navigate(r.href)}
+              >
+                <div className="lp-cal-d">{r.date}</div>
+                <div className="lp-cal-n">{r.name}</div>
+                <div className="lp-cal-l">{r.loc}</div>
+                <div className="lp-cal-dist">{r.dists} km</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* A–Z index tease */}
+      <section>
+        <div className="page">
+          <div className="lp-az-bar">
+            <div>
+              <div className="eyebrow">Athlete index</div>
+              <h3>140+ names,<br />arranged alphabetically.</h3>
+              <p>
+                Browse the index when you don't have a specific name in mind. Each entry links through to the athlete's career results and PB progressions.
+              </p>
+            </div>
+            <div>
+              <div className="lp-az">
+                {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => (
+                  <span key={letter} onClick={() => navigate('/athletes')}>{letter}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* bottom spacing before footer */}
+      <div style={{ height: 80 }} />
+
     </main>
   );
 }
