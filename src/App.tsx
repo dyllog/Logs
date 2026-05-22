@@ -47,6 +47,7 @@ import AthleteDougalThorburn from "./pages/AthleteDougalThorburn";
 import AthleteOrestasRimkus from "./pages/AthleteOrestasRimkus";
 import AthleteBrettTingay from "./pages/AthleteBrettTingay";
 import AthleteMikePhillips from "./pages/AthleteMikePhillips";
+import AthleteKylieBrown from "./pages/AthleteKylieBrown";
 import AthleteReport from "./pages/AthleteReport";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
@@ -112,6 +113,7 @@ function Layout() {
         <Route path="/athletes/orestas-rimkus" element={<AthleteOrestasRimkus />} />
         <Route path="/athletes/brett-tingay" element={<AthleteBrettTingay />} />
         <Route path="/athletes/mike-phillips" element={<AthleteMikePhillips />} />
+        <Route path="/athletes/kylie-brown" element={<AthleteKylieBrown />} />
         <Route path="/athletes/:slug/report" element={<AthleteReport />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
