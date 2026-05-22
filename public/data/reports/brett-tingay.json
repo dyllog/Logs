@@ -1,0 +1,23 @@
+{
+  "slug": "brett-tingay",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Brett Tingay is a versatile half marathon specialist who has competed consistently across Christchurch and Queenstown for over a decade. His 1:08:32 PB at the 2012 Christchurch Half (4th overall) came early in his career, and he has maintained remarkably consistent top-10 finishes ever since. Now competing in the M40 age group, he continues to place in the top 10 at Queenstown Half — a testament to his longevity and sustained fitness.",
+    "trajectory": "His half marathon career shows early speed (1:09:10, 3rd at CHC 2011; 1:08:32 PB at CHC 2012) followed by a period of slightly slower times as he aged and the fields grew more competitive. His Queenstown results (1:11:00 in 2017, 1:14:22 in 2018) then improve to 1:12:25 (QT 2022) and 1:11:59 (CHC 2024). As an M40+ athlete, he is holding his own against much younger competition.",
+    "best_result": "3rd overall at the 2011 Christchurch Half Marathon (1:09:10) and 4th at the 2012 edition (PB 1:08:32). He has also placed 3rd at Queenstown Half in 2017, 2018, and 2019 — an impressive run of podium finishes over consecutive editions. His CHC 2019 marathon (10th/700, 2:39:21) shows he has full-distance capability too.",
+    "distance_profile": "Tingay is primarily a half marathon racer with one marathon on record. His 1:08:32 half PB projects to approximately 2:24 for the marathon via standard conversion — his actual marathon of 2:39:21 suggests he has significant untapped potential if he were to focus on the full distance. For now, the half is clearly where he competes most effectively.",
+    "where_to_race": "Christchurch Half Marathon is where he set his PB and achieved his highest individual placings. Queenstown Half has been his most frequent race venue with consistent top-5 finishes. For a fast time, the Christchurch flat course is the natural choice.",
+    "qualifying_note": "His half marathon PB of 1:08:32 does not directly map to a Boston qualifying standard, but his 2019 marathon time of 2:39:21 qualifies comfortably for Boston under the M40–44 standard (3:05:00). As an M40+ athlete his age-graded half performance is strong at approximately 81%."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": null,
+    "trajectory_half": "plateaued",
+    "best_result_percentile": 99.78,
+    "best_result_race": "Christchurch Half Marathon 2012",
+    "age_grading_marathon": 76.3,
+    "age_grading_half": 81.0,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Christchurch Half Marathon", "Queenstown Half Marathon"],
+    "challenging_races": []
+  }
+}

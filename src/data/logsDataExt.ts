@@ -235,6 +235,127 @@ export async function loadWaterfrontHalf(year: number): Promise<ResultRow[]> {
 }
 export function getCachedWaterfrontHalf(year: number): ResultRow[] { return wfHalfCache[year] ?? []; }
 
+const wf10kCache: Record<number, ResultRow[]> = {};
+const wf10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWaterfront10k(year: number): Promise<ResultRow[]> {
+  if (wf10kCache[year]) return wf10kCache[year];
+  if (!wf10kInflight[year]) {
+    wf10kInflight[year] = fetch(`/data/results-wf-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wf10kCache[year] = rows; return rows; });
+  }
+  return wf10kInflight[year];
+}
+export function getCachedWaterfront10k(year: number): ResultRow[] { return wf10kCache[year] ?? []; }
+
+const devHalfCache: Record<number, ResultRow[]> = {};
+const devHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadDevHalf(year: number): Promise<ResultRow[]> {
+  if (devHalfCache[year]) return devHalfCache[year];
+  if (!devHalfInflight[year]) {
+    devHalfInflight[year] = fetch(`/data/results-dev-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { devHalfCache[year] = rows; return rows; });
+  }
+  return devHalfInflight[year];
+}
+export function getCachedDevHalf(year: number): ResultRow[] { return devHalfCache[year] ?? []; }
+
+const dev10kCache: Record<number, ResultRow[]> = {};
+const dev10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadDev10k(year: number): Promise<ResultRow[]> {
+  if (dev10kCache[year]) return dev10kCache[year];
+  if (!dev10kInflight[year]) {
+    dev10kInflight[year] = fetch(`/data/results-dev-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { dev10kCache[year] = rows; return rows; });
+  }
+  return dev10kInflight[year];
+}
+export function getCachedDev10k(year: number): ResultRow[] { return dev10kCache[year] ?? []; }
+
+const coastHalfCache: Record<number, ResultRow[]> = {};
+const coastHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadCoastHalf(year: number): Promise<ResultRow[]> {
+  if (coastHalfCache[year]) return coastHalfCache[year];
+  if (!coastHalfInflight[year]) {
+    coastHalfInflight[year] = fetch(`/data/results-coast-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { coastHalfCache[year] = rows; return rows; });
+  }
+  return coastHalfInflight[year];
+}
+export function getCachedCoastHalf(year: number): ResultRow[] { return coastHalfCache[year] ?? []; }
+
+const omahaHalfCache: Record<number, ResultRow[]> = {};
+const omahaHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadOmahaHalf(year: number): Promise<ResultRow[]> {
+  if (omahaHalfCache[year]) return omahaHalfCache[year];
+  if (!omahaHalfInflight[year]) {
+    omahaHalfInflight[year] = fetch(`/data/results-omaha-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { omahaHalfCache[year] = rows; return rows; });
+  }
+  return omahaHalfInflight[year];
+}
+export function getCachedOmahaHalf(year: number): ResultRow[] { return omahaHalfCache[year] ?? []; }
+
+const omaha10kCache: Record<number, ResultRow[]> = {};
+const omaha10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadOmaha10k(year: number): Promise<ResultRow[]> {
+  if (omaha10kCache[year]) return omaha10kCache[year];
+  if (!omaha10kInflight[year]) {
+    omaha10kInflight[year] = fetch(`/data/results-omaha-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { omaha10kCache[year] = rows; return rows; });
+  }
+  return omaha10kInflight[year];
+}
+export function getCachedOmaha10k(year: number): ResultRow[] { return omaha10kCache[year] ?? []; }
+
+const maraetaiHalfCache: Record<number, ResultRow[]> = {};
+const maraetaiHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMaraetaiHalf(year: number): Promise<ResultRow[]> {
+  if (maraetaiHalfCache[year]) return maraetaiHalfCache[year];
+  if (!maraetaiHalfInflight[year]) {
+    maraetaiHalfInflight[year] = fetch(`/data/results-maraetai-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { maraetaiHalfCache[year] = rows; return rows; });
+  }
+  return maraetaiHalfInflight[year];
+}
+export function getCachedMaraetaiHalf(year: number): ResultRow[] { return maraetaiHalfCache[year] ?? []; }
+
+const maraetai10kCache: Record<number, ResultRow[]> = {};
+const maraetai10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMaraetai10k(year: number): Promise<ResultRow[]> {
+  if (maraetai10kCache[year]) return maraetai10kCache[year];
+  if (!maraetai10kInflight[year]) {
+    maraetai10kInflight[year] = fetch(`/data/results-maraetai-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { maraetai10kCache[year] = rows; return rows; });
+  }
+  return maraetai10kInflight[year];
+}
+export function getCachedMaraetai10k(year: number): ResultRow[] { return maraetai10kCache[year] ?? []; }
+
+const kerikeriHalfCache: Record<number, ResultRow[]> = {};
+const kerikeriHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadKerikeriHalf(year: number): Promise<ResultRow[]> {
+  if (kerikeriHalfCache[year]) return kerikeriHalfCache[year];
+  if (!kerikeriHalfInflight[year]) {
+    kerikeriHalfInflight[year] = fetch(`/data/results-kerikeri-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { kerikeriHalfCache[year] = rows; return rows; });
+  }
+  return kerikeriHalfInflight[year];
+}
+export function getCachedKerikeriHalf(year: number): ResultRow[] { return kerikeriHalfCache[year] ?? []; }
+
+const wellingtonMarCache: Record<number, ResultRow[]> = {};
+const wellingtonMarInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWellingtonMar(year: number): Promise<ResultRow[]> {
+  if (wellingtonMarCache[year]) return wellingtonMarCache[year];
+  if (!wellingtonMarInflight[year]) {
+    wellingtonMarInflight[year] = fetch(`/data/results-wellington-mar-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wellingtonMarCache[year] = rows; return rows; });
+  }
+  return wellingtonMarInflight[year];
+}
+export function getCachedWellingtonMar(year: number): ResultRow[] { return wellingtonMarCache[year] ?? []; }
+
+const wellingtonHalfCache: Record<number, ResultRow[]> = {};
+const wellingtonHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadWellingtonHalf(year: number): Promise<ResultRow[]> {
+  if (wellingtonHalfCache[year]) return wellingtonHalfCache[year];
+  if (!wellingtonHalfInflight[year]) {
+    wellingtonHalfInflight[year] = fetch(`/data/results-wellington-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { wellingtonHalfCache[year] = rows; return rows; });
+  }
+  return wellingtonHalfInflight[year];
+}
+export function getCachedWellingtonHalf(year: number): ResultRow[] { return wellingtonHalfCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;

@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2019 + 11/12, year: 2019, race: 'Queenstown Marathon',  short: 'QT',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:57', sec: 8937, pos: 1, total: 2262, cat: 'M 30–39', isPB: false },
-  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',    short: 'AUC',  dist: '42.2 km', distId: 'mar'  as const, time: '2:26:34', sec: 8794, pos: 2, total: 1619, cat: 'M 18–34', isPB: true  },
-  { dateNum: 2021 + 5/12,  year: 2021, race: "Hawke's Bay Marathon", short: 'HB',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:54', sec: 8934, pos: 2, total: 1025, cat: 'M 30–39', isPB: false },
-  { dateNum: 2021 + 6/12,  year: 2021, race: 'Christchurch Half',    short: 'CHC½', dist: '21.1 km', distId: 'half' as const, time: '1:09:07', sec: 4147, pos: 5, total: 1332, cat: 'M 20–39', isPB: false },
+  { dateNum: 2019 + 11/12, year: 2019, race: 'Queenstown Marathon',      short: 'QT',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:57', sec: 8937, pos: 1, total: 2262, cat: 'M 30–39', isPB: false },
+  { dateNum: 2020 +  9/12, year: 2020, race: 'Devonport Half Marathon',  short: 'DEV',  dist: '21.1 km', distId: 'half' as const, time: '1:10:59', sec: 4259, pos: 1, total: 598,  cat: 'M 30–39', isPB: true  },
+  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC',  dist: '42.2 km', distId: 'mar'  as const, time: '2:26:34', sec: 8794, pos: 2, total: 1619, cat: 'M 18–34', isPB: true  },
+  { dateNum: 2021 +  5/12, year: 2021, race: "Hawke's Bay Marathon",     short: 'HB',   dist: '42.2 km', distId: 'mar'  as const, time: '2:28:54', sec: 8934, pos: 2, total: 1025, cat: 'M 30–39', isPB: false },
+  { dateNum: 2021 +  6/12, year: 2021, race: 'Christchurch Half',        short: 'CHC½', dist: '21.1 km', distId: 'half' as const, time: '1:09:07', sec: 4147, pos: 5, total: 1332, cat: 'M 20–39', isPB: true  },
 ];
 
 const PBs = {
@@ -106,7 +107,7 @@ export default function AthleteDowns() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '4' },
+                  { l: 'Races logged', v: '5' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -134,14 +135,15 @@ export default function AthleteDowns() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.mar.time}&dist=42`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/fabe-downs/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>
@@ -173,10 +175,10 @@ export default function AthleteDowns() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '4',       sub: '3 marathons · 1 half' },
+                { label: 'Races logged',     val: '5',       sub: '3 marathons · 2 halves' },
                 { label: 'Marathon PB',      val: '2:26:34', sub: 'Auckland 2020 · 2nd overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '1 career win · Queenstown 2019' },
-                { label: 'Active years',     val: '3',       sub: '2019–2021 · QT · AUC · HB' },
+                { label: 'Best overall pos', val: '1st',     sub: '2 career wins · QT 2019 · DEV 2020' },
+                { label: 'Active years',     val: '3',       sub: '2019–2021 · QT · AUC · DEV · HB' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -200,7 +202,7 @@ export default function AthleteDowns() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2019–2021 · QT · AUC · HB · CHC</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2019–2021 · QT · AUC · DEV · HB · CHC</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -222,6 +224,7 @@ export default function AthleteDowns() {
                         else if (r.race === 'Christchurch Half') navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes("Hawke")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Devonport')) navigate(`/races/devonport-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

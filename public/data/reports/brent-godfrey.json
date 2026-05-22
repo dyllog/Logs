@@ -1,0 +1,23 @@
+{
+  "slug": "brent-godfrey",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Brent Godfrey is a highly experienced New Zealand masters marathoner whose 17-race record stretches from 2016 to 2026. Racing across Auckland, Waterfront, Rotorua, and Devonport, he has built a reputation as a reliable top-20 finisher at major NZ road events. His marathon PB of 2:38:22 (Auckland 2025) and half PB of 1:14:35 (Waterfront 2025) were both set in his M40 age group — a remarkable achievement showing he is running faster now than at any point in his career.",
+    "trajectory": "His marathon trajectory shows a significant improvement arc: 2:47:16 (2016) → 2:44:25 (2021) → 2:39:17 (2023) → 2:38:22 (2025, PB). The half trajectory is similarly consistent: from 1:22:55 (AKL Half 2018) to 1:14:35 (Waterfront 2025). His 2026 Waterfront result (1:17:35) suggests a slight step back, but at 40+ this is normal race-to-race variation.",
+    "best_result": "His standout performance is 5th overall at the 2024 Rotorua Marathon (2:39:14) in a field of 1,151 — placing him in the top 0.35% of finishers. His Auckland Marathon results (6th/870 in 2021, 10th/1765 in 2023) are also exceptional for his age group. The Devonport Half 2020 (4th/598) showed his ability to place near the podium even in mixed fields.",
+    "distance_profile": "Godfrey is a committed marathon runner with consistent performances across both distances. His half PB of 1:14:35 projects to approximately 2:35 marathon — he is running close to that projection at 2:38:22, suggesting he has extracted most of his current marathon potential. For his M40 age group, his marathon PB represents an age-graded performance of approximately 76.6%.",
+    "where_to_race": "Waterfront Half is his most consistent venue — six starts spanning 2021–2026 with only modest variation. Auckland Marathon is his primary marathon, where he has four starts and his PB. Rotorua has also yielded excellent results (5th/1151 in 2024).",
+    "qualifying_note": "His marathon PB of 2:38:22 qualifies comfortably for Boston in the M40–44 category (standard: 3:05:00). His current age group performance suggests he could target a further improvement to sub-2:35, which would be exceptional for a masters athlete."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.65,
+    "best_result_race": "Rotorua Marathon 2024",
+    "age_grading_marathon": 76.6,
+    "age_grading_half": 78.4,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Rotorua Marathon", "Auckland Marathon", "Waterfront Half Marathon"],
+    "challenging_races": []
+  }
+}

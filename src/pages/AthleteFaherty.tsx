@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RESULTS = [
+  { dateNum: 2014 + 6/12,  year: 2014, race: 'Kerikeri Half Marathon', short: 'KER Half', dist: '21.1 km', distId: 'half' as const, time: '1:20:20', sec: 4820, pos: 9,  total: 1250, cat: 'M 18–34', isPB: true  },
   { dateNum: 2014 + 10/12, year: 2014, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:53:09', sec: 10389, pos: 36, total: 2306, cat: 'M 18–34', isPB: false },
   { dateNum: 2015 + 4/12,  year: 2015, race: 'Rotorua Marathon',     short: 'ROT', dist: '42.2 km', distId: 'mar' as const, time: '2:40:52', sec: 9652,  pos: 7,  total: 1172, cat: 'M 18–34', isPB: false },
   { dateNum: 2015 + 10/12, year: 2015, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:30:37', sec: 9037,  pos: 5,  total: 1507, cat: 'M 18–34', isPB: false },
   { dateNum: 2016 + 4/12,  year: 2016, race: 'Rotorua Marathon',     short: 'ROT', dist: '42.2 km', distId: 'mar' as const, time: '2:28:22', sec: 8902,  pos: 3,  total: 1018, cat: 'M 18–34', isPB: false },
+  { dateNum: 2016 + 5/12,  year: 2016, race: 'Wellington Marathon',  short: 'WEL', dist: '42.2 km', distId: 'mar' as const, time: '2:36:56', sec: 9416,  pos: 1,  total: 335,  cat: 'M 18–39', isPB: false },
   { dateNum: 2016 + 6/12,  year: 2016, race: 'Christchurch Marathon',short: 'CHC', dist: '42.2 km', distId: 'mar' as const, time: '2:26:38', sec: 8798,  pos: 2,  total: 449,  cat: 'M 20–39', isPB: false },
   { dateNum: 2016 + 10/12, year: 2016, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:29:38', sec: 8978,  pos: 4,  total: 1630, cat: 'M 18–34', isPB: false },
   { dateNum: 2017 + 6/12,  year: 2017, race: 'Christchurch Marathon',short: 'CHC', dist: '42.2 km', distId: 'mar' as const, time: '2:24:11', sec: 8651,  pos: 1,  total: 420,  cat: 'M 20–39', isPB: true  },
@@ -116,7 +118,7 @@ export default function AthleteFaherty() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '13' },
+                  { l: 'Races logged', v: '15' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -144,14 +146,15 @@ export default function AthleteFaherty() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
                     onClick={() => navigate(`/compare?time=${PBs.mar.time}&dist=42`)}>
               Open in Compare →
             </button>
-            <span style={{ fontSize: 11, color: 'var(--on-dark-meta)', fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              pre-fills your PB to stack against any year
-            </span>
+            <button className="btn" style={{ color: 'var(--on-dark)', borderColor: 'var(--on-dark)', fontSize: 10.5 }}
+                    onClick={() => navigate('/athletes/ciaran-faherty/report')}>
+              View Report →
+            </button>
           </div>
         </div>
       </section>
@@ -183,7 +186,7 @@ export default function AthleteFaherty() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '13',      sub: '12 marathons · 1 half' },
+                { label: 'Races logged',     val: '15',      sub: '13 marathons · 2 halves' },
                 { label: 'Marathon PB',      val: '2:24:11', sub: 'Christchurch 2017 · 1st overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '3 career wins · CHC · ROT · QT' },
                 { label: 'Active years',     val: '11',      sub: '2014–2024 · AUC · CHC · ROT · QT' },
@@ -228,7 +231,7 @@ export default function AthleteFaherty() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2024 · AUC · CHC · ROT · QT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2024 · WEL · AUC · CHC · ROT · QT</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -251,6 +254,7 @@ export default function AthleteFaherty() {
                         else if (r.race === 'Rotorua Marathon') navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Wellington')) navigate(`/races/wellington-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

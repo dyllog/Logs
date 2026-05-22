@@ -1,0 +1,23 @@
+{
+  "slug": "ben-twyman",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Ben Twyman is a Christchurch-based marathon runner with one of the most documented improvement arcs in the tracked record. He began racing the Christchurch Marathon in 2009 as a teenager (3:21:33) and has returned almost every year since, progressing steadily to his PB of 2:37:59 in 2018. His 14-race career, overwhelmingly concentrated at Christchurch, represents an unusual decade-long longitudinal record at a single venue.",
+    "trajectory": "Twyman's trajectory is one of patient, sustained improvement: 3:21:33 (2009) → 3:13:43 (2010) → 3:09:11 (2011) → 3:01:03 (2012) → 2:48:59 (2013) → 2:44:47 (2014) → 2:44:44 (2015) → 3:03:59 (2016, off year) → 2:42:30 (2017) → 2:37:59 (2018, PB). His 2023 Christchurch result (2:38:16) after a gap shows admirable retention of fitness after five years away.",
+    "best_result": "4th overall at the 2018 Christchurch Marathon (2:37:59) in approximately 580 finishers — a top-0.7% performance. His 7th place at Christchurch 2017 (2:42:30) and 9th at both 2013 and 2014 also represent consistent top-10 placements. His 5th place at Queenstown Marathon 2023 (2:43:08, M 30–39) shows he remains competitive at a national level.",
+    "distance_profile": "Twyman races almost exclusively at the marathon distance. His one recorded half (1:11:36 at Christchurch 2019) projects to a marathon of approximately 2:30–2:32, suggesting he may have untapped speed that could improve his marathon PB with focused half-marathon training. His marathon PB of 2:37:59 represents solid age-graded performance for a recreational to mid-competitive athlete.",
+    "where_to_race": "Christchurch is his home race and where he has his fastest time. The flat course clearly suits him. Queenstown Marathon is an alternative for scenic variety. If targeting a marathon PB, Christchurch in May remains the natural choice.",
+    "qualifying_note": "His marathon PB of 2:37:59 qualifies for Boston under the M 18–34 standard (3:00:00) with over 22 minutes margin. As he ages into the M40 category, the standard becomes 3:05:00, giving him even more buffer. A sub-2:35 is achievable with focused training."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "plateaued",
+    "trajectory_half": null,
+    "best_result_percentile": 99.31,
+    "best_result_race": "Christchurch Marathon 2018",
+    "age_grading_marathon": 74.2,
+    "age_grading_half": null,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Christchurch Marathon"],
+    "challenging_races": []
+  }
+}

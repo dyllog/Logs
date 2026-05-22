@@ -1,0 +1,23 @@
+{
+  "slug": "michael-voss",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Michael Voss is one of New Zealand's most active and consistent marathon competitors, having logged 30 results across marathon and half-marathon distances since 2014. Now 27, he is in the prime of his running career and his results confirm it — his 2:21:01 at Auckland 2025 is a genuine step forward for a runner who spent several seasons hovering in the 2:22–2:32 band. Voss has an unusual breadth: he races frequently, wins often at Rotorua, and consistently places top-3 at major city events. His half-marathon speed (1:04:30 PB) suggests meaningful marathon upside is still on the table.",
+    "trajectory": "On the marathon, Voss's trajectory is clearly improving. After a 2:46 debut in 2018, he broke into sub-2:25 territory by 2022 and has since tightened his results in the 2:21–2:27 range. His 2:21:01 Auckland win in 2025 is his first sub-2:22 and came in a competitive elite field, suggesting the time reflects genuine fitness rather than a thin field. On the half, his trajectory is more complex — his 2014–2016 times were already quick, he regressed slightly through 2018–2023, and then reset to a 1:04:30 PB in 2024. The half PB suggests marathon sub-2:18 is plausible if he targets it specifically.",
+    "best_result": "Winning the Auckland Half Marathon 2025 in a field of 6,614 finishers places Voss at the 99.98th percentile — the best single-race placement of his career by field size. What makes it notable is context: Auckland Half is the deepest half-marathon in New Zealand, routinely attracting the country's best half-marathon runners. Taking the win there, in a field that includes international-calibre athletes, confirms Voss belongs at the front of NZ road running. His Auckland Marathon podium finishes (2nd in 2019, 3rd in 2024) in competitive fields of 1,650–2,775 are similarly elite-tier placements.",
+    "distance_profile": "Voss is genuinely competitive at both distances. His half-marathon speed (1:04:30) implies a marathon ceiling around 2:15–2:17 using standard conversion ratios, so his 2:21 marathon PB is somewhat conservative relative to his half speed — either a pacing or volume issue, or simply room left to grow. He races half-marathons more frequently and wins them more reliably, but his heart is clearly in the marathon: he has raced the full 42.2 km 14 times versus 16 halfs, and his recent focus on Auckland Marathon suggests he is now prioritising the longer distance.",
+    "where_to_race": "Rotorua is Voss's home track — he has won the marathon there five times (2020, 2021, 2022, 2024, and narrowly missed in 2023 and 2025). For a PB attempt, Rotorua is not the fastest course, but the consistency of his wins there shows his reliability. For a genuine PB, Auckland Marathon in October is the better option: faster course, larger competitive field to push him early, and he has already broken 2:22 there twice. Hawke's Bay Half is worth considering for a half PB given his 2022 win in a strong field. Christchurch Half (1:04:30 PB set there) is his fastest half venue.",
+    "qualifying_note": "Voss's 2:21:01 comfortably qualifies him for the Boston Marathon as an M 18–34 athlete, sitting 39 minutes inside the 3:00:00 standard. He is 87% age-graded on the marathon, a mark that puts him in the top tier of masters-eligible club runners nationally, though his age (27) means no WMA adjustment applies yet. His half-marathon age grading of 88% at the 2024 CHC PB supports the marathon figure."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "improving",
+    "trajectory_half": "plateaued",
+    "best_result_percentile": 99.98,
+    "best_result_race": "Auckland Half Marathon 2025",
+    "age_grading_marathon": 86.8,
+    "age_grading_half": 87.8,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Rotorua Marathon", "Auckland Half Marathon", "Christchurch Half Marathon"],
+    "challenging_races": ["Auckland Marathon (competitive but winning eludes him)", "Hawke's Bay Marathon"]
+  }
+}

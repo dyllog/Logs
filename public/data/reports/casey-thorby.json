@@ -1,0 +1,23 @@
+{
+  "slug": "casey-thorby",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Casey Thorby is an exceptionally talented young New Zealand half marathon specialist, born around 2002, who has compiled an eight-race record of continuous improvement. From his Auckland debut in 2018 (1:23:44, 46th/5572) to a 4th-place finish at Auckland 2024 (1:07:12, PB), his progression chart is one of the most compelling in domestic running. He won the Rotorua Half Marathon outright in 2025 and has placed in the top five at Auckland on multiple occasions.",
+    "trajectory": "The trajectory is unambiguously upward across his career: 1:23:44 (2018) → 1:15:24 (2019) → 1:11:47 (2020) → 1:10:07 (WF 2021) → 1:09:59 (AKL 2021) → 1:07:12 (AKL 2024, PB). His 2025 results (1:11:38 Rotorua win, 1:07:16 Christchurch 12th) suggest he is consolidating at the sub-1:08 level. At his age, a sub-1:05 half marathon is a realistic long-term target.",
+    "best_result": "4th overall at the 2024 Auckland Half Marathon (1:07:12) in a field of 6,161 — his largest field and best finish. He ran 1:07:12 in the M 20–24 category, placing him among the fastest New Zealanders that year. His 2nd-place finish at the 2021 Waterfront Half (1:10:07 in a field of 1,611) as an M 18–19 is also notable for how young he was.",
+    "distance_profile": "Casey is exclusively a half marathon racer in the tracked record. His 1:07:12 half PB would project to approximately 2:21 for the marathon via standard conversion — if he transitions to the full distance, he could immediately be competitive. His field-relative performance is exceptional: top-5 finishes in most of his Auckland starts.",
+    "where_to_race": "Auckland Half Marathon has been his defining race — four starts, progressively faster results, including his PB. Waterfront Half is where he ran his breakout race in 2021 (2nd overall). For a fast course aimed at a PB, Christchurch offers a flat profile where he ran 1:07:16 in 2025.",
+    "qualifying_note": "As a half marathon specialist, standard marathon qualifying standards do not directly apply. His half PB of 1:07:12 places him in the top 0.1% of global half marathon runners for his age, and qualifies him for elite or sub-elite consideration at major international events."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": null,
+    "trajectory_half": "improving",
+    "best_result_percentile": 99.94,
+    "best_result_race": "Auckland Half Marathon 2024",
+    "age_grading_marathon": null,
+    "age_grading_half": 87.5,
+    "boston_status": "outside",
+    "strong_placement_races": ["Auckland Half Marathon", "Waterfront Half Marathon", "Rotorua Half Marathon"],
+    "challenging_races": []
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "fabe-downs",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Fabe Downs has the smallest result set in this database — four races across 2019–2021 — but every result places him at or near the front of competitive fields. His marathon PB of 2:26:34 at Auckland 2020 (2nd of 1,619) and his Queenstown 2019 win (1st of 2,262) paint a picture of a serious competitor who raced infrequently but effectively during this period. His 2021 results (Hawke's Bay 2nd and Christchurch Half 5th) suggest he was still active at a high level before going dark in the records. His current status is unknown.",
+    "trajectory": "With only three marathon results and one half, trajectory analysis is limited. His marathon times (2:28:57, 2:26:34, 2:28:54) bracket a single PB with two comparable performances, suggesting he was operating near his ceiling during this period rather than improving through it. The Auckland 2020 PB came in a reduced-field Covid-era race, which may have benefited from different competitive dynamics. There is insufficient data to determine whether he was improving, plateaued, or declining when his recorded career ended in 2021.",
+    "best_result": "Downs's Queenstown Marathon 2019 win — 1st of 2,262 finishers — places him at the 99.96th percentile, his best field-size result. Winning Queenstown outright in a field of over 2,000 is a top-tier competitive achievement; that year's field included several other athletes in this database, making the win even more meaningful in context. His Auckland 2020 result (2nd of 1,619) is also elite-standard, showing consistent front-of-field performance across different venues.",
+    "distance_profile": "Downs appears to be a marathon specialist with one half-marathon result. His 1:09:07 half-marathon time (Christchurch 2021, 5th of 1,332) is consistent with a runner whose marathon fitness is 2:25–2:28 range but who doesn't specifically target the shorter distance. His half time implies a marathon ceiling around 2:23–2:25, suggesting his 2:26 PB was close to his trained potential at the time. Without more data, it's impossible to assess whether a sub-2:24 was achievable with a targeted build.",
+    "where_to_race": "Queenstown is Downs's proven winning venue, and his Hawke's Bay 2nd place shows adaptability to the Bay course. Auckland is his PB venue. All three are reasonable targets depending on his goals. If he returns to racing, Queenstown is where he has the established podium history, and the October Auckland Marathon is where the faster course would benefit a PB attempt. His results don't give enough basis to identify a course preference or weakness.",
+    "qualifying_note": "Downs's 2:26:34 marathon PB qualifies for Boston as an M 35–39 athlete (standard 3:00:00) by 33 minutes. His WMA marathon age-graded score at peak was approximately 83.0% at age 33, which is a solid competitive level. His half-marathon WMA score (~81.3%) is slightly lower, consistent with a runner who is better-optimised for the marathon. He would also meet the Comrades qualifying standard (sub-5:00) comfortably at his current marathon PB pace."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "insufficient data",
+    "trajectory_half": "insufficient data",
+    "best_result_percentile": 99.96,
+    "best_result_race": "Queenstown Marathon 2019",
+    "age_grading_marathon": 83.0,
+    "age_grading_half": 81.3,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Queenstown Marathon", "Auckland Marathon", "Hawke's Bay Marathon"],
+    "challenging_races": []
+  }
+}

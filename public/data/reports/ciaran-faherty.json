@@ -1,0 +1,23 @@
+{
+  "slug": "ciaran-faherty",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Ciaran Faherty's career is a compelling story of rapid improvement followed by gradual decline, bookended by an unexpected late resurgence. He debuted with a 2:53 at Auckland 2014 and improved dramatically through 2017, peaking with a 2:24:11 Christchurch Marathon win. After that high point, times slowed through 2018–2023, including a 2:40:38 at Queenstown in 2023 that looked like a difficult late career. But his 2024 Queenstown win (2:34:05, 1st of 2,522) suggests he still has competitive running in him. Thirteen marathon results over a decade make him one of the most experienced athletes in this database.",
+    "trajectory": "Marathon trajectory declined from the 2017 PB. His improvement arc (2014–2017) was steep — nearly 29 minutes of improvement in three years — but the decline since has been gradual. His 2024 Queenstown win is a bright spot, though the 2:34:05 time reflects his current fitness ceiling rather than a return to 2:24 shape. The half-marathon dataset is too small (one result) for trend analysis. At 38, further improvement is unlikely without significant training uplift, but maintaining sub-2:35 marathon fitness is realistic.",
+    "best_result": "Faherty's Queenstown Marathon 2024 win — 1st of 2,522 finishers — is his best field-size percentile result at 99.96th. Winning a 2,500-runner marathon field outright at age 37 is a genuine achievement, even at a time that is 10 minutes slower than his PB. His 2017 Christchurch win (1st of 420) was the athletic peak of his career but the smaller field diminishes its percentile impact. His Rotorua 2019 win (1st of 720) is a similar mark. The Queenstown 2024 win is his most field-significant result.",
+    "distance_profile": "Faherty is a marathon-focused runner who has raced almost exclusively at 42.2 km. His sole half-marathon result (1:09:47 at Waterfront 2019) reflects reasonable fitness but not the speed one would expect from a sub-2:25 marathoner — suggesting the Waterfront half was not a focused effort. His marathon improvement from 2014 to 2017 was aggressive and reflects good coaching or training structure in that period. The gap between his peak performance (2:24:11) and current form (2:34–2:40) is large enough to suggest a significant training volume reduction rather than simple age-related decline.",
+    "where_to_race": "Queenstown is Faherty's most recent winning venue and represents his best current competitive opportunity — he won it in 2024 and has shown affinity for the course. Rotorua is also a familiar winning venue (2019 win). For a faster time, Christchurch Marathon (where he ran his PB in 2017) and Auckland Marathon (flatter course, better pace groups) would suit him better, but his recent results there suggest he would not challenge for the win. Queenstown is where he can still win.",
+    "qualifying_note": "Faherty's 2:24:11 PB qualifies for Boston as an M 35–39 athlete (standard 3:00:00) by 36 minutes. His WMA marathon age-graded score at peak was approximately 84.7% — solid but below the top tier in this database. Even his current form around 2:34 would qualify Boston M 35–39 by 26 minutes. His half-marathon WMA-adjusted score (~80.8%) is lower than his marathon equivalent, suggesting the half result was not representative of his full capability."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "declining",
+    "trajectory_half": "insufficient data",
+    "best_result_percentile": 99.96,
+    "best_result_race": "Queenstown Marathon 2024",
+    "age_grading_marathon": 84.7,
+    "age_grading_half": 80.8,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Queenstown Marathon", "Rotorua Marathon", "Christchurch Marathon"],
+    "challenging_races": ["Auckland Marathon"]
+  }
+}

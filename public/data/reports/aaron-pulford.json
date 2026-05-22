@@ -1,0 +1,23 @@
+{
+  "slug": "aaron-pulford",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Aaron Pulford is a long-standing competitor in NZ road running who peaked around 2013–2017 and has since gradually slowed. His standout result — winning the Auckland Half Marathon 2017 in a field of 5,706 — is one of the most impressive field-size victories in this database and reflects a runner who was genuinely elite at his peak. His sole marathon (2:27:01, Auckland 2015) was also a win in a competitive field. Since 2017, his half-marathon times have drifted upward, and his most recent result (2021) was a Waterfront Half win in a reduced-size field. His current racing status is unclear.",
+    "trajectory": "Half-marathon trajectory is declining from the 2013 PB. From 1:06:11 in 2013, times moved gradually to 1:08–1:09 through 2018–2019, and then to 1:15:22 at a small 2020 Rotorua race (likely an off day or early-season fitness check) before recovering to 1:09:47 at Waterfront 2021. The pattern is consistent with gradual maintenance-level training rather than peak preparation. His marathon trajectory is essentially unassessable with a single data point. A return to sub-1:08 is plausible with a focused block; sub-1:07 would require significant training lift.",
+    "best_result": "Pulford's win at Auckland Half Marathon 2017 — 1st from 5,706 finishers — ties for the highest field-size win in this database at 99.98th percentile. That race is genuinely elite: Auckland Half attracts NZ's best half-marathon runners and international visitors. Winning it reflects a performance level that is well above what his subsequent times suggest. His Auckland Marathon win in 2015 (1st of 1,507) is a complementary achievement that shows he was competitive across both distances at his peak.",
+    "distance_profile": "Pulford appears to be a natural half-marathon racer who successfully extended to the marathon once (2:27:01, a win). His half speed at peak (1:06:11) implied a marathon ceiling around 2:19–2:20, suggesting his 2:27 marathon result had room to improve if he had stayed marathon-focused. His current fitness level likely points to a 2:32–2:36 marathon range based on extrapolating from recent half times. He is best described as a dual-distance athlete whose best years were around 2013–2017.",
+    "where_to_race": "For a competitive placement, Pulford's best bet is Waterfront Half (where he won in 2021 and has shown he can front-run smaller fields) or Rotorua Half (where smaller fields suit his current pace relative to the NZ competitive pack). Auckland Half, where he won in 2017, now has a deeper field and his recent half times suggest a mid-pack finish there. If he targets a marathon return, Auckland's pace structure and flat course is his proven venue.",
+    "qualifying_note": "Pulford's 2:27:01 marathon PB qualifies for Boston as an M 35–39 athlete (standard 3:00:00) by 33 minutes. His WMA marathon age-graded score of approximately 83.3% at age 27 reflects a strong but not elite-top-tier performance at peak. His half-marathon WMA score (~85.7% at peak) is similar. On current form, a Boston qualifying time is well within reach even accounting for any fitness loss since 2021."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "insufficient data",
+    "trajectory_half": "declining",
+    "best_result_percentile": 99.98,
+    "best_result_race": "Auckland Half Marathon 2017",
+    "age_grading_marathon": 83.3,
+    "age_grading_half": 85.7,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Auckland Half Marathon", "Waterfront Half Marathon", "Auckland Marathon"],
+    "challenging_races": ["Rotorua Half Marathon", "Christchurch Half Marathon"]
+  }
+}

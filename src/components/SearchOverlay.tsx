@@ -15,11 +15,18 @@ const suggestions = [
   { kind: 'athlete', name: 'Blair McWhirter',    meta: 'NZL · Rotorua 2018 winner',              href: '/athletes/blair-mcwhirter' },
   { kind: 'athlete', name: 'Jonathan Jackson',   meta: 'NZL · Auckland 2016 2nd',                href: '/athletes/jonathan-jackson' },
   { kind: 'athlete', name: 'Oska Inkster-Baynes',meta: 'NZL · Auckland 2016 winner',             href: '/athletes/oska-inkster-baynes' },
+  { kind: 'athlete', name: 'Fabe Downs',         meta: 'NZL · Queenstown 2019 · Devonport 2020', href: '/athletes/fabe-downs' },
+  { kind: 'athlete', name: 'Scott Knowles',      meta: 'NZL · Waterfront Half 2025',             href: '/athletes/scott-knowles' },
+  { kind: 'athlete', name: 'Dylan Logan',        meta: 'NZL · CHC 2025 · WF 2024',              href: '/athletes/dylan-logan' },
   { kind: 'race',    name: 'Auckland Marathon',  meta: 'Road · est 1992',                         href: '/races/auckland-marathon' },
   { kind: 'race',    name: 'Rotorua Marathon',   meta: 'Road · est 1967',                         href: '/races/rotorua-marathon' },
   { kind: 'race',    name: 'Christchurch Marathon', meta: 'Road · est 2007',                      href: '/races/christchurch-marathon' },
   { kind: 'race',    name: 'Queenstown Marathon', meta: 'Mixed · est 2014',                       href: '/races/queenstown-marathon' },
   { kind: 'race',    name: "Hawke's Bay Marathon", meta: 'Road · est 2016',                       href: '/races/hawkes-bay-marathon' },
+  { kind: 'race',    name: 'Waterfront Half Marathon', meta: 'Road · Auckland waterfront',        href: '/races/waterfront-half-marathon' },
+  { kind: 'race',    name: 'Devonport Half Marathon',    meta: 'Mixed · Devonport peninsula',       href: '/races/devonport-half-marathon' },
+  { kind: 'race',    name: 'Coatesville Half Marathon', meta: 'Road & trail · Coatesville, Rodney', href: '/races/coatesville-half-marathon' },
+  { kind: 'race',    name: 'Omaha Half Marathon',      meta: 'Road · Omaha Beach, Rodney',         href: '/races/omaha-half-marathon' },
 ];
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {

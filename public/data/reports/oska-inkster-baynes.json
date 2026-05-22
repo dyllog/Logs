@@ -1,0 +1,23 @@
+{
+  "slug": "oska-inkster-baynes",
+  "generated_at": "2026-05-19T00:00:00.000Z",
+  "report": {
+    "career_summary": "Oska Inkster-Baynes is the kind of runner who quietly redefines what age means in long-distance running. His recorded career spans 2009 to 2025 — 16 years — and includes a marathon PB set at age 39 (2:18:11, Christchurch 2019) and a half-marathon PB at age 41 (1:04:59, Christchurch 2021). His 2025 Christchurch Marathon win (2:20:20 at age 45) is arguably more impressive than his PB on WMA-adjusted terms. With only eight results in the archive, he races selectively, but every race reveals a runner at an extraordinarily high level.",
+    "trajectory": "The marathon trajectory is difficult to assess from just two data points, but the 2025 result (2:20:20) compares favourably to the 2019 PB (2:18:11) given the 6-year gap and age difference. WMA-adjusted, the 2025 run is competitive with the 2019 effort. On the half, the jump from 1:09:16 in 2012 to 1:04:59 in 2021 — after a nine-year break from the database — is extraordinary and suggests significant improvement during years not captured here. His 2023 result (1:05:04) shows he maintained that level for at least two years, suggesting a genuine plateau at elite masters standard rather than a one-off performance.",
+    "best_result": "Inkster-Baynes won the Christchurch Half Marathon 2021 from a field of 1,332 — a 99.92nd percentile result. He also won Christchurch Marathon 2019 (1st of 476) and 2025 (1st of 957). Winning a national marathon outright at age 45, even in a smaller field, is genuinely rare and reflects sustained physiological excellence. His 2:18:11 at 39 — a race he won — would place competitively at any NZ marathon in any year in this database.",
+    "distance_profile": "Inkster-Baynes appears to be primarily a marathon athlete who uses half-marathons as preparation or standalone efforts. His half speed (1:04:59 at 41) implies a marathon ceiling around 2:15 at peak — better than his 2:18 PB suggests. His results at Christchurch across both distances suggest he has deeply optimised for that specific race and course. He has not raced Auckland, Rotorua, or Queenstown, which may reflect both selectivity and a strong local connection to Canterbury.",
+    "where_to_race": "Christchurch is unambiguously Inkster-Baynes's race — he has won the marathon and half-marathon there, and his results consistently show up best on that course. The May timing likely suits his training cycle. For a PB attempt, Christchurch Marathon in June is the right venue. If he were to explore new races, Auckland Marathon's October timing fits a second-half-of-year peak and the flat course would suit his marathon strength. Rotorua and Queenstown would test his adaptability on hillier terrain.",
+    "qualifying_note": "Inkster-Baynes's 2:18:11 PB qualifies for Boston in the M 40–44 standard (3:05:00) by 47 minutes, and even his current 2025 form (2:20:20 at 45) clears the M 45–49 standard (3:10:00) by nearly 50 minutes. His WMA marathon age-grading of approximately 87% at age 39 is elite-level, and his 2025 age-graded score at 45 is comparable — he is one of the better masters-adjusted performers in this database. Comrades (sub-5:00 qualifier) would be within reach if he chose to target it."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "plateaued",
+    "trajectory_half": "plateaued",
+    "best_result_percentile": 99.92,
+    "best_result_race": "Christchurch Half Marathon 2021",
+    "age_grading_marathon": 87.2,
+    "age_grading_half": 85.3,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Christchurch Marathon", "Christchurch Half Marathon"],
+    "challenging_races": []
+  }
+}

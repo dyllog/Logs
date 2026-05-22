@@ -1,0 +1,23 @@
+{
+  "slug": "dougal-thorburn",
+  "generated_at": "2026-05-20T00:00:00.000Z",
+  "report": {
+    "career_summary": "Dougal Thorburn is a Christchurch specialist who won the 2016 Christchurch Marathon outright (2:24:51) and placed 2nd in 2018 (2:30:43). His half marathon record is equally impressive, with a 1:06:16 PB at Christchurch 2010 (5th overall) and six half marathon starts at the same venue across a decade. His 10-race career is almost exclusively Christchurch-based, making him one of the most committed athletes to a single race series in the archive.",
+    "trajectory": "Thorburn's half trajectory shows early speed in 2010–2011 (1:06:16 PB, 2nd in 2011) followed by some regression, then consolidation in the 1:07–1:10 range through 2015. His marathon debut at Auckland 2015 (3rd overall, 2:27:54) was impressive. His 2016 marathon win (2:24:51) is his career best, with a solid 2nd place at 2:30:43 two years later. His 2023 half (1:10:43, M40–49) suggests he is still racing competitively after a five-year gap.",
+    "best_result": "1st overall at the 2016 Christchurch Marathon (2:24:51) — winning one of New Zealand's major road marathons is the defining achievement in his record. His 3rd-place finish at the 2015 Auckland Marathon (2:27:54) in a field of approximately 1,580 is also exceptional. His half marathon PB of 1:06:16 (5th at Christchurch 2010) demonstrates genuine speed at the shorter distance.",
+    "distance_profile": "Thorburn is equally capable at half and full marathon, with a half PB (1:06:16) that projects to a marathon of approximately 2:20 via standard conversion — suggesting his actual marathon PB of 2:24:51 has room for improvement that was never fully explored. He performs best on Christchurch's flat course.",
+    "where_to_race": "Christchurch is definitively his home race at both distances. His marathon and half PBs were both set there. For any future races, Christchurch would offer the best conditions for a time comparable to his peak performances.",
+    "qualifying_note": "His marathon PB of 2:24:51 qualifies for Boston under the M 18–34 standard (3:00:00) with 35 minutes margin. His half PB of 1:06:16 places him among the top tier of NZ half marathoners. As an M40+ athlete, Boston qualification remains very comfortable at 3:05:00."
+  },
+  "metrics_summary": {
+    "trajectory_marathon": "plateaued",
+    "trajectory_half": "plateaued",
+    "best_result_percentile": 99.84,
+    "best_result_race": "Christchurch Marathon 2016",
+    "age_grading_marathon": 83.4,
+    "age_grading_half": 86.4,
+    "boston_status": "qualified",
+    "strong_placement_races": ["Christchurch Marathon", "Auckland Marathon", "Christchurch Half Marathon"],
+    "challenging_races": []
+  }
+}
