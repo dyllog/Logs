@@ -2,14 +2,15 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '4:06:04', sec: 14764, pos: 678,  total: 1916, cat: 'W 18–34', isPB: true  },
-  { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon',   short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:38:00', sec: 5880,  pos: 198,  total: 1610, cat: 'W 30–39', isPB: true  },
+  { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon',   short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:38:00', sec: 5880,  pos: 198,  total: 1610, cat: 'W 30–39', isPB: false },
+  { dateNum: 2022 + 6/12,  year: 2022, race: 'Kerikeri Half Marathon',     short: 'KER Half', dist: '21.1 km', distId: 'half' as const, time: '1:28:29', sec: 5309,  pos: 34,   total: 551,  cat: 'W 35–39', isPB: true  },
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:47:59', sec: 6479,  pos: 694,  total: 4930, cat: 'W 35–39', isPB: false },
   { dateNum: 2023 + 3/12,  year: 2023, race: 'Waterfront 10k',             short: 'WF 10k',   dist: '10 km',   distId: '10k'  as const, time: '40:59',   sec: 2459,  pos: 27,   total: 626,  cat: 'W 30–39', isPB: true  },
 ];
 
 const PBs = {
   mar:  { time: '4:06:04', sec: 14764, race: 'Auckland Marathon',        year: 2018 },
-  half: { time: '1:38:00', sec: 5880,  race: 'Waterfront Half Marathon', year: 2021 },
+  half: { time: '1:28:29', sec: 5309,  race: 'Kerikeri Half Marathon',   year: 2022 },
   ten:  { time: '40:59',   sec: 2459,  race: 'Waterfront 10k',           year: 2023 },
 };
 
@@ -81,7 +82,7 @@ export default function AthleteKylieBrown() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AKL · WF</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AKL · WF · KER</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -104,6 +105,7 @@ export default function AthleteKylieBrown() {
                         else if (r.race.includes('Auckland Half')) navigate(`/races/auckland-marathon?year=${r.year}&dist=21`);
                         else if (r.race === 'Waterfront 10k')     navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=10`);
                         else if (r.race.includes('Waterfront'))   navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=21`);
+                        else if (r.race.includes('Kerikeri'))     navigate(`/races/kerikeri-half-marathon?year=${r.year}&dist=21`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
