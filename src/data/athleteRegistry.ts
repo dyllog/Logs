@@ -38,6 +38,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Brett Tingay',        slug: 'brett-tingay',        nationality: 'NZL', gender: 'M', pbTime: '1:08:32', pbRace: 'Christchurch Half 2012',          racesLogged: 11 },
   { name: 'Mike Phillips',       slug: 'mike-phillips',       nationality: 'NZL', gender: 'M', pbTime: '1:09:46', pbRace: 'Christchurch Half 2026',          racesLogged: 10 },
   // Women
+  { name: 'Amelia Lythe',        slug: 'amelia-lythe',        nationality: 'NZL', gender: 'W', pbTime: '1:20:36', pbRace: 'Waterfront Half Marathon 2026',   racesLogged: 7  },
   { name: 'Kylie Brown',         slug: 'kylie-brown',         nationality: 'NZL', gender: 'W', pbTime: '1:38:00', pbRace: 'Waterfront Half Marathon 2021',   racesLogged: 4  },
   // Community / recreational
   { name: 'Scott Knowles',       slug: 'scott-knowles',       nationality: 'NZL', gender: 'M', pbTime: '1:34:52', pbRace: 'Waterfront Half Marathon 2025',   racesLogged: 3  },
