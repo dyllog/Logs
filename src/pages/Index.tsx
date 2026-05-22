@@ -245,19 +245,6 @@ export default function Index() {
   return (
     <main>
 
-      {/* Edition strip */}
-      <div className="lp-edition">
-        <div>
-          <span>Vol. II · No. 09</span>
-          <span>Updated 20 May 2026</span>
-          <span>{SITE_STATS.finisherRecords.toLocaleString()} results indexed</span>
-        </div>
-        <div>
-          <span>A public reference</span>
-          <span>No subscriptions</span>
-        </div>
-      </div>
-
       {/* Hero */}
       <section className="lp-hero">
         <div className="page">
@@ -280,7 +267,7 @@ export default function Index() {
                 ref={inputRef}
                 className="lp-search-input"
                 type="text"
-                placeholder="Search athletes, races, years, records…"
+                placeholder="Search athletes, races, years…"
                 autoComplete="off"
                 onFocus={() => { hideCaret(); loadIndex(); if (query.length >= 2) setShowDrop(suggests.length > 0); }}
                 onBlur={() => showCaret(query)}

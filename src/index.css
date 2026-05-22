@@ -736,21 +736,6 @@ body {
 .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* ── Landing page ── */
-.lp-edition {
-  border-top: 0.5px solid var(--rule);
-  border-bottom: 0.5px solid var(--rule);
-  padding: 7px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--meta);
-  background: var(--bg-alt);
-}
-.lp-edition span + span::before { content: "·"; margin: 0 12px; color: var(--rule); }
 
 .lp-hero {
   padding: 96px 0 80px;
@@ -801,20 +786,21 @@ body {
 .lp-search-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   border-top: 0.5px solid var(--ink);
   border-bottom: 0.5px solid var(--ink);
-  padding: 22px;
+  padding: 14px 18px;
   background: var(--bg);
   position: relative;
 }
 .lp-search-input {
   flex: 1;
+  min-width: 0;
   border: 0;
   background: transparent;
   outline: none;
   font-family: 'DM Mono', monospace;
-  font-size: 17px;
+  font-size: 14px;
   letter-spacing: 0.01em;
   color: var(--ink);
   padding: 0;
@@ -822,12 +808,12 @@ body {
 .lp-search-input::placeholder { color: var(--meta); }
 .lp-search-caret {
   display: inline-block;
-  width: 9px;
-  height: 18px;
+  width: 8px;
+  height: 15px;
   background: var(--ink);
-  margin-left: -8px;
+  margin-left: -6px;
   animation: lpBlink 1.05s steps(2,end) infinite;
-  transform: translateY(2px);
+  transform: translateY(1px);
   pointer-events: none;
 }
 @keyframes lpBlink { 50% { opacity: 0; } }
@@ -1297,7 +1283,6 @@ body {
   .lp-cal { grid-template-columns: 1fr 1fr !important; }
   .lp-ledger-row { grid-template-columns: 80px 1fr !important; gap: 12px !important; }
   .lp-ledger-meta, .lp-ledger-tag { grid-column: 2 !important; }
-  .lp-edition { padding: 7px 20px; flex-wrap: wrap; gap: 6px; }
-  .lp-mprog { grid-template-columns: repeat(4, 1fr) !important; }
+.lp-mprog { grid-template-columns: repeat(4, 1fr) !important; }
   .lp-mprog-step:nth-child(4) { border-right: 0 !important; }
 }
