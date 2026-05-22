@@ -1,9 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2016 + 11/12, year: 2016, race: 'Queenstown Half Marathon',   short: 'QT Half',  dist: '21.1 km', distId: 'half' as const, time: '2:39:53', sec: 9593,  pos: 3371, total: 4399, cat: 'W 30–39', isPB: false },
-  { dateNum: 2017 + 5/12,  year: 2017, race: 'Christchurch Half Marathon', short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '2:21:40', sec: 8500,  pos: 1316, total: 1736, cat: 'W 20–39', isPB: false },
-  { dateNum: 2017 + 11/12, year: 2017, race: 'Queenstown Half Marathon',   short: 'QT Half',  dist: '21.1 km', distId: 'half' as const, time: '2:36:59', sec: 9419,  pos: 3074, total: 4004, cat: 'W 30–39', isPB: false },
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Marathon',          short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '4:06:04', sec: 14764, pos: 678,  total: 1916, cat: 'W 18–34', isPB: true  },
   { dateNum: 2021 + 3/12,  year: 2021, race: 'Waterfront Half Marathon',   short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:38:00', sec: 5880,  pos: 198,  total: 1610, cat: 'W 30–39', isPB: true  },
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Half Marathon',     short: 'AKL Half', dist: '21.1 km', distId: 'half' as const, time: '1:47:59', sec: 6479,  pos: 694,  total: 4930, cat: 'W 35–39', isPB: false },
@@ -84,7 +81,7 @@ export default function AthleteKylieBrown() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2016–2023 · QT · CHC · AKL · WF</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AKL · WF</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -126,7 +123,7 @@ export default function AthleteKylieBrown() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. CHC Half 2017 uses chip time.
+            Percentile computed across all finishers in that event and year.
           </div>
         </div>
       </section>
