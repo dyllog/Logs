@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAthleteSlug } from '@/data/athleteProfiles';
+import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -130,22 +130,38 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
     const hits: FinisherMatch[] = [];
     for (const [key, entry] of Object.entries(shard)) {
       if (key.includes(norm)) {
-        hits.push({
-          kind:    'finisher',
-          name:    entry.display,
-          meta:    bestResult(entry.results),
-          slug:    getAthleteSlug(entry.display),
-          results: entry.results,
-        });
+        const slug      = getAthleteSlug(entry.display);
+        const conflicts = NAME_DISAMBIGUATION[entry.display];
+
+        if (slug && conflicts?.length) {
+          type RE = typeof entry.results[number];
+          const isConflict = (r: RE) => conflicts.some(c => c.r === r.r && c.y === r.y);
+          const profileResults = entry.results.filter(r => !isConflict(r));
+          const otherResults   = entry.results.filter(r =>  isConflict(r));
+
+          hits.push({ kind: 'finisher', name: entry.display, meta: bestResult(profileResults), slug, results: profileResults });
+          if (otherResults.length) {
+            hits.push({ kind: 'finisher', name: entry.display, meta: bestResult(otherResults), slug: null, results: otherResults });
+          }
+        } else {
+          hits.push({
+            kind:    'finisher',
+            name:    entry.display,
+            meta:    bestResult(entry.results),
+            slug,
+            results: entry.results,
+          });
+        }
       }
     }
 
-    // Sort: exact match first, then most appearances, then alpha
+    // Sort: exact match first, profiled before unlinked when names equal, then most appearances, then alpha
     hits.sort((a, b) => {
       const aNorm = normalise(a.name);
       const bNorm = normalise(b.name);
       if (aNorm === norm && bNorm !== norm) return -1;
       if (bNorm === norm && aNorm !== norm) return 1;
+      if (a.name === b.name) return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
       if (b.results.length !== a.results.length) return b.results.length - a.results.length;
       return a.name.localeCompare(b.name);
     });

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAthleteSlug } from '@/data/athleteProfiles';
+import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -127,12 +127,29 @@ export function useInlineSearch(query: string) {
     const hits: FinisherMatch[] = [];
     for (const [key, entry] of Object.entries(shard)) {
       if (key.includes(norm)) {
-        hits.push({
-          name:    entry.display,
-          meta:    bestResultMeta(entry.results),
-          slug:    getAthleteSlug(entry.display),
-          results: entry.results,
-        });
+        const slug      = getAthleteSlug(entry.display);
+        const conflicts = NAME_DISAMBIGUATION[entry.display];
+
+        if (slug && conflicts?.length) {
+          // Split results: the profiled athlete gets all EXCEPT the conflicts;
+          // a second expandable entry gets only the conflicts (different person).
+          const isConflict = (r: ResultEntry) =>
+            conflicts.some(c => c.r === r.r && c.y === r.y);
+          const profileResults = entry.results.filter(r => !isConflict(r));
+          const otherResults   = entry.results.filter(r =>  isConflict(r));
+
+          hits.push({ name: entry.display, meta: bestResultMeta(profileResults), slug, results: profileResults });
+          if (otherResults.length) {
+            hits.push({ name: entry.display, meta: bestResultMeta(otherResults), slug: null, results: otherResults });
+          }
+        } else {
+          hits.push({
+            name:    entry.display,
+            meta:    bestResultMeta(entry.results),
+            slug,
+            results: entry.results,
+          });
+        }
       }
     }
 
@@ -140,6 +157,8 @@ export function useInlineSearch(query: string) {
       const an = normalise(a.name), bn = normalise(b.name);
       if (an === norm && bn !== norm) return -1;
       if (bn === norm && an !== norm) return  1;
+      // Profiled entries sort before non-profiled when names are equal
+      if (a.name === b.name) return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
       if (b.results.length !== a.results.length) return b.results.length - a.results.length;
       return a.name.localeCompare(b.name);
     });
