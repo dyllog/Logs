@@ -15,6 +15,9 @@ import { OMAHA_HALF_YEARS, OMAHA_10K_YEARS }    from './omahaData';
 import { MARAETAI_HALF_YEARS, MARAETAI_10K_YEARS } from './maraetaiData';
 import { KERIKERI_YEARS }                       from './kerikeriData';
 import { WELLINGTON_MAR_YEARS, WELLINGTON_HALF_YEARS } from './wellingtonData';
+import { ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS }    from './onehungaData';
+import { OREWA_HALF_YEARS, OREWA_10K_YEARS }          from './orewaData';
+import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
 
 export interface RaceEntry {
   label: string;   // Display name matching RACE_LABELS (e.g. "Christchurch Half")
@@ -44,8 +47,14 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Maraetai Half',         dist: '21.1 km', route: '/races/maraetai-half-marathon',    years: MARAETAI_HALF_YEARS},
   { label: 'Maraetai 10k',          dist: '10 km',   route: '/races/maraetai-half-marathon',    years: MARAETAI_10K_YEARS },
   { label: 'Kerikeri Half',         dist: '21.1 km', route: '/races/kerikeri-half-marathon',    years: KERIKERI_YEARS     },
-  { label: 'Wellington Marathon',   dist: '42.2 km', route: '/races/wellington-marathon',       years: WELLINGTON_MAR_YEARS  },
-  { label: 'Wellington Half',       dist: '21.1 km', route: '/races/wellington-marathon',       years: WELLINGTON_HALF_YEARS },
+  { label: 'Wellington Marathon',   dist: '42.2 km', route: '/races/wellington-marathon',            years: WELLINGTON_MAR_YEARS  },
+  { label: 'Wellington Half',       dist: '21.1 km', route: '/races/wellington-marathon',            years: WELLINGTON_HALF_YEARS },
+  { label: 'Onehunga Half',         dist: '21.1 km', route: '/races/onehunga-half-marathon',         years: ONEHUNGA_HALF_YEARS   },
+  { label: 'Onehunga 10k',          dist: '10 km',   route: '/races/onehunga-half-marathon',         years: ONEHUNGA_10K_YEARS    },
+  { label: 'Orewa Half',            dist: '21.1 km', route: '/races/orewa-half-marathon',            years: OREWA_HALF_YEARS      },
+  { label: 'Orewa 10k',             dist: '10 km',   route: '/races/orewa-half-marathon',            years: OREWA_10K_YEARS       },
+  { label: 'Tamaki Half',           dist: '21.1 km', route: '/races/tamaki-river-half-marathon',     years: TAMAKI_HALF_YEARS     },
+  { label: 'Tamaki 10k',            dist: '10 km',   route: '/races/tamaki-river-half-marathon',     years: TAMAKI_10K_YEARS      },
 ];
 
 /** Returns all race editions for a given year, sorted by label. */
