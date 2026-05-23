@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, loadMaraetaiHalf, loadMaraetai10k, loadKerikeriHalf, loadWellingtonMar, loadWellingtonHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
@@ -22,7 +22,7 @@ interface RaceResultsBlockProps {
 }
 
 export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYear, onOpenAthlete }: RaceResultsBlockProps) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const isRotorua = raceId === 'rotorua';
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
@@ -77,6 +77,9 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const [loading, setLoading] = useState(false);
   const perPage = 10;
 
+  // Track whether dist has mounted yet so we don't clobber URL-based init on first render
+  const distMounted = useRef(false);
+
   const hasData = true;
 
   useEffect(() => {
@@ -119,9 +122,28 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     );
   }, [all, ql]);
 
-  // Reset to latest year when distance changes
-  useEffect(() => { setYear(2025); setPage(1); setQ(''); }, [dist]);
-  useEffect(() => { setPage(1); }, [year, ql]);
+  // Reset to latest year when the *distance* prop changes (skip the initial mount so URL params survive)
+  useEffect(() => {
+    if (!distMounted.current) { distMounted.current = true; return; }
+    setYear(availableYears[0] as number);
+    setPage(1);
+    setQ('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dist]);
+
+  // Re-sync from URL params on same-page navigation (e.g. clicking a search result that
+  // links to this race page with ?year=YYYY&q=Name while already on the page)
+  useEffect(() => {
+    const yr = searchParams.get('year') ? Number(searchParams.get('year')) : null;
+    const qq = searchParams.get('q') ?? '';
+    if (yr && (availableYears as number[]).includes(yr)) setYear(yr);
+    setQ(qq);
+    setPage(1);
+    // availableYears is a stable derived value; searchParams is the real dep here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  useEffect(() => { setPage(1); }, [ql]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
@@ -143,7 +165,17 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
             <select
               className="pill-select"
               value={year}
-              onChange={e => setYear(Number(e.target.value))}
+              onChange={e => {
+                const y = Number(e.target.value);
+                setYear(y);
+                setPage(1);
+                setSearchParams(prev => {
+                  const p = new URLSearchParams(prev);
+                  p.set('year', String(y));
+                  p.delete('q'); // clear any deep-link filter when manually choosing a year
+                  return p;
+                }, { replace: true });
+              }}
             >
               {years.map(y => (
                 <option key={y} value={y}>{y}</option>
