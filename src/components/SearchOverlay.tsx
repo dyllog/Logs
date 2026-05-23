@@ -67,6 +67,7 @@ function bestResult(results: ResultEntry[]): string {
 interface SearchOverlayProps {
   open: boolean;
   onClose: () => void;
+  initialQuery?: string;
 }
 
 interface FinisherMatch {
@@ -86,7 +87,7 @@ interface StaticMatch {
 
 type Match = FinisherMatch | StaticMatch;
 
-export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
+export default function SearchOverlay({ open, onClose, initialQuery = '' }: SearchOverlayProps) {
   const [q, setQ]               = useState('');
   const [matches, setMatches]   = useState<Match[]>([]);
   const [loading, setLoading]   = useState(false);
@@ -94,11 +95,15 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
   const ref                     = useRef<HTMLInputElement>(null);
   const navigate                = useNavigate();
 
-  // Focus / reset on open/close
+  // Focus / reset on open/close — pre-fill query if provided
   useEffect(() => {
-    if (open) { ref.current?.focus(); }
-    else       { setQ(''); setMatches([]); setExpanded(null); }
-  }, [open]);
+    if (open) {
+      if (initialQuery) setQ(initialQuery);
+      ref.current?.focus();
+    } else {
+      setQ(''); setMatches([]); setExpanded(null);
+    }
+  }, [open, initialQuery]);
 
   // ESC to close
   useEffect(() => {

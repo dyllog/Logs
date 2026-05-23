@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { SearchContext } from './context/SearchContext';
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 function ScrollToTop() {
@@ -66,13 +67,19 @@ import Wellington from "./pages/Wellington";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen,  setSearchOpen]  = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const openSearch = useCallback((q = '') => {
+    setSearchQuery(q);
+    setSearchOpen(true);
+  }, []);
 
   return (
-    <>
+    <SearchContext.Provider value={openSearch}>
       <ScrollToTop />
-      <Nav onOpenSearch={() => setSearchOpen(true)} />
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <Nav onOpenSearch={() => openSearch()} />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} initialQuery={searchQuery} />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/races" element={<Races />} />
@@ -123,7 +130,7 @@ function Layout() {
       </Routes>
       <SiteFooter />
       <TweaksPanel />
-    </>
+    </SearchContext.Provider>
   );
 }
 
