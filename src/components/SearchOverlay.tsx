@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { racesForYear } from '@/data/raceDirectory';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -124,6 +125,21 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
 
     setLoading(true);
 
+    // ── Year query: return all race editions for that year ────────────────
+    if (/^\d{4}$/.test(norm)) {
+      const yr = parseInt(norm, 10);
+      const raceMatches: StaticMatch[] = racesForYear(yr).map(r => ({
+        kind: 'race' as const,
+        name: `${r.label} ${yr}`,
+        meta: r.dist,
+        href: `${r.route}?year=${yr}`,
+      }));
+      setMatches(raceMatches);
+      setLoading(false);
+      return;
+    }
+
+    // ── Name query: search sharded index ─────────────────────────────────
     const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
     const shard  = await loadShard(letter);
 

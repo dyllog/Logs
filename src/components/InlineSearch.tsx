@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { racesForYear } from '@/data/raceDirectory';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -103,17 +104,30 @@ function raceHref(res: ResultEntry): string | null {
   return `${base}?${params}`;
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FinisherMatch {
+  kind:    'finisher';
   name:    string;
   meta:    string;
   slug:    string | null;
   results: ResultEntry[];
 }
 
+interface YearRaceMatch {
+  kind:  'race';
+  label: string;   // e.g. "Auckland Marathon"
+  dist:  string;   // e.g. "42.2 km"
+  year:  number;
+  href:  string;   // e.g. "/races/auckland-marathon?year=2024"
+}
+
+type AnyMatch = FinisherMatch | YearRaceMatch;
+
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
 export function useInlineSearch(query: string) {
-  const [matches, setMatches] = useState<FinisherMatch[]>([]);
+  const [matches, setMatches] = useState<AnyMatch[]>([]);
   const [loading, setLoading] = useState(false);
 
   const search = useCallback(async (q: string) => {
@@ -121,6 +135,23 @@ export function useInlineSearch(query: string) {
     if (norm.length < 2) { setMatches([]); setLoading(false); return; }
 
     setLoading(true);
+
+    // ── Year query: show all race editions for that year ──────────────────
+    if (/^\d{4}$/.test(norm)) {
+      const yr = parseInt(norm, 10);
+      const raceMatches: YearRaceMatch[] = racesForYear(yr).map(r => ({
+        kind:  'race' as const,
+        label: r.label,
+        dist:  r.dist,
+        year:  yr,
+        href:  `${r.route}?year=${yr}`,
+      }));
+      setMatches(raceMatches);
+      setLoading(false);
+      return;
+    }
+
+    // ── Name query: search sharded index ─────────────────────────────────
     const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
     const shard  = await loadShard(letter);
 
@@ -131,24 +162,17 @@ export function useInlineSearch(query: string) {
         const conflicts = NAME_DISAMBIGUATION[entry.display];
 
         if (slug && conflicts?.length) {
-          // Split results: the profiled athlete gets all EXCEPT the conflicts;
-          // a second expandable entry gets only the conflicts (different person).
           const isConflict = (r: ResultEntry) =>
             conflicts.some(c => c.r === r.r && c.y === r.y);
           const profileResults = entry.results.filter(r => !isConflict(r));
           const otherResults   = entry.results.filter(r =>  isConflict(r));
 
-          hits.push({ name: entry.display, meta: bestResultMeta(profileResults), slug, results: profileResults });
+          hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(profileResults), slug, results: profileResults });
           if (otherResults.length) {
-            hits.push({ name: entry.display, meta: bestResultMeta(otherResults), slug: null, results: otherResults });
+            hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(otherResults), slug: null, results: otherResults });
           }
         } else {
-          hits.push({
-            name:    entry.display,
-            meta:    bestResultMeta(entry.results),
-            slug,
-            results: entry.results,
-          });
+          hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(entry.results), slug, results: entry.results });
         }
       }
     }
@@ -157,7 +181,6 @@ export function useInlineSearch(query: string) {
       const an = normalise(a.name), bn = normalise(b.name);
       if (an === norm && bn !== norm) return -1;
       if (bn === norm && an !== norm) return  1;
-      // Profiled entries sort before non-profiled when names are equal
       if (a.name === b.name) return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
       if (b.results.length !== a.results.length) return b.results.length - a.results.length;
       return a.name.localeCompare(b.name);
@@ -201,6 +224,20 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
       )}
 
       {!loading && matches.map((m, i) => {
+        // ── Race edition (year query) ──────────────────────────────────────
+        if (m.kind === 'race') {
+          return (
+            <div key={i} className="lp-search-dropdown-group">
+              <div className="lp-search-dropdown-row" onClick={() => pick(m.href)}>
+                <span className="lp-search-dropdown-count" style={{ color: 'var(--meta)' }}>→</span>
+                <span className="lp-search-dropdown-name">{m.label} {m.year}</span>
+                <span className="lp-search-dropdown-meta">{m.dist}</span>
+              </div>
+            </div>
+          );
+        }
+
+        // ── Athlete / finisher ────────────────────────────────────────────
         const profileHref = m.slug ? `/athletes/${m.slug}` : null;
         const isExpanded  = expanded === m.name;
 
