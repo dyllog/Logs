@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useOpenSearch } from '@/context/SearchContext';
+import InlineSearchDropdown from '@/components/InlineSearch';
 import { recordsMen } from '@/data/logsData';
 import { upcoming } from '@/data/logsData';
 import { SITE_STATS } from '@/data/siteStats';
@@ -142,37 +142,55 @@ const LEDGER = [
 export default function Index() {
   const inputRef = useRef<HTMLInputElement>(null);
   const caretRef = useRef<HTMLSpanElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const openSearch = useOpenSearch();
 
-  const [query, setQuery] = useState('');
+  const [searchQ,  setSearchQ]  = useState('');
+  const [dropOpen, setDropOpen] = useState(false);
 
+  // ⌘K / / keyboard shortcut — focus the landing input
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if (e.key === '/' && document.activeElement !== inputRef.current) { e.preventDefault(); openSearch(); }
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+      if (e.key === '/' && document.activeElement !== inputRef.current) {
+        e.preventDefault(); inputRef.current?.focus();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault(); inputRef.current?.focus();
+      }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [openSearch]);
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (shellRef.current && !shellRef.current.contains(e.target as Node)) {
+        setDropOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const hideCaret = () => { if (caretRef.current) caretRef.current.style.display = 'none'; };
-  const showCaret = (q = query) => { if (caretRef.current && !q) caretRef.current.style.display = ''; };
+  const showCaret = () => { if (caretRef.current && !searchQ) caretRef.current.style.display = ''; };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const q = e.target.value;
-    setQuery(q);
-    hideCaret();
-    // Hand off to the overlay as soon as the user types anything
-    if (q.length >= 1) openSearch(q);
+  const closeDropdown = () => {
+    setDropOpen(false);
+    setSearchQ('');
+    if (inputRef.current) inputRef.current.value = '';
   };
 
-  const handleExampleClick = (label: string, href: string) => {
+  const handleExampleClick = (_label: string, href: string) => {
     setTimeout(() => navigate(href), 180);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && query.trim()) openSearch(query);
+    if (e.key === 'Escape') {
+      setDropOpen(false);
+      inputRef.current?.blur();
+    }
   };
 
   // Featured record progression (from actual data, trim to 8)
@@ -193,7 +211,11 @@ export default function Index() {
             Results, records, athlete histories, and course progression from across New Zealand road, trail, and ultra running.
           </p>
 
-          <div className="lp-search-shell" onClick={() => openSearch()}>
+          <div
+            className="lp-search-shell"
+            ref={shellRef}
+            onClick={() => inputRef.current?.focus()}
+          >
             <div className="lp-search-bar">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ flex: '0 0 auto', color: 'var(--ink)' }}>
                 <circle cx="10.5" cy="10.5" r="6.5" />
@@ -205,14 +227,23 @@ export default function Index() {
                 type="text"
                 placeholder="Search athletes, races, years, records…"
                 autoComplete="off"
-                onFocus={() => { hideCaret(); openSearch(); }}
-                onBlur={() => showCaret(query)}
-                onChange={handleInput}
+                onFocus={hideCaret}
+                onBlur={showCaret}
                 onKeyDown={handleKeyDown}
-                value={query}
+                onChange={e => {
+                  const v = e.target.value;
+                  setSearchQ(v);
+                  setDropOpen(v.length >= 2);
+                  if (!v) showCaret();
+                  else hideCaret();
+                }}
               />
               <span ref={caretRef} className="lp-search-caret" />
             </div>
+
+            {dropOpen && (
+              <InlineSearchDropdown query={searchQ} onClose={closeDropdown} />
+            )}
 
             <div className="lp-search-examples">
               <span className="lp-label-x">Try</span>
