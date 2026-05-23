@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run generate && vite build",
     "build:dev": "vite build --mode development",
+    "generate": "node scripts/build-search-index.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

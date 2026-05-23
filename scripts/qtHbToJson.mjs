@@ -199,3 +199,7 @@ if (fileArg && yearArg) {
   console.log(`export const ${varName}Stats: YearStat[] = [\n${fmt(marStats)}\n];`);
   console.log(`\nexport const ${varName}HalfStats: YearStat[] = [\n${fmt(halfStats)}\n];`);
 }
+
+// Rebuild search index and stats after data update
+import { execSync } from 'child_process';
+execSync('node scripts/build-search-index.mjs', { stdio: 'inherit' });

@@ -166,3 +166,7 @@ console.log('\nyearStats (marathon) to paste into logsDataExt.ts:');
 console.log(marathonStats.map(fmtRow).join('\n'));
 console.log('\nhalfStats to paste into logsDataExt.ts:');
 console.log(halfStats.map(fmtRow).join('\n'));
+
+// Rebuild search index and stats after data update
+import { execSync } from 'child_process';
+execSync('node scripts/build-search-index.mjs', { stdio: 'inherit' });

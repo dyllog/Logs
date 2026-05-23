@@ -245,3 +245,7 @@ console.log('\n=== rotoruaHalfStats for logsDataExt.ts ===');
 halfStats.forEach(s => {
   console.log(`  { year: ${s.year}, finishers: ${s.finishers}, avg: ${s.avg}, avgMen: ${s.avgMen}, avgWomen: ${s.avgWomen}, winnerM: ${s.winnerM}, winnerW: ${s.winnerW}, top10M: ${s.top10M}, top10W: ${s.top10W} },`);
 });
+
+// Rebuild search index and stats after data update
+import { execSync } from 'child_process';
+execSync('node scripts/build-search-index.mjs', { stdio: 'inherit' });

@@ -189,3 +189,7 @@ if (batchMode) {
   }
   processFile(path.resolve(root, csvPath), parseInt(yearStr, 10), distFlag === 'half');
 }
+
+// Rebuild search index and stats after data update
+import { execSync } from 'child_process';
+execSync('node scripts/build-search-index.mjs', { stdio: 'inherit' });
