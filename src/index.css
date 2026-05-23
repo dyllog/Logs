@@ -237,6 +237,11 @@ body {
 }
 .tbl tr.row { cursor: pointer; transition: background 80ms; }
 .tbl tr.row:hover { background: var(--hover); }
+/* Position deep-link highlight */
+.tbl tr.row-hl { background: rgba(185, 85, 42, 0.07); box-shadow: inset 3px 0 0 var(--accent); }
+.tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.12); }
+html[data-theme="dark"] .tbl tr.row-hl { background: rgba(185, 85, 42, 0.13); }
+html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2); }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .pos { color: var(--meta); width: 40px; }
 .pos-1 { color: var(--ink); font-weight: 500; }

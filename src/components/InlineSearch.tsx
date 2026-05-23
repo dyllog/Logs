@@ -66,10 +66,10 @@ function raceBase(raceLabel: string): string | null {
   return null;
 }
 
-function raceHref(res: ResultEntry, athleteName: string): string | null {
+function raceHref(res: ResultEntry): string | null {
   const base = raceBase(res.r);
   if (!base) return null;
-  const params = new URLSearchParams({ year: String(res.y), q: athleteName });
+  const params = new URLSearchParams({ year: String(res.y), pos: String(res.p) });
   return `${base}?${params}`;
 }
 
@@ -185,7 +185,7 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
             {isExpanded && (
               <div className="lp-search-dropdown-results">
                 {m.results.map((res, j) => {
-                  const href = raceHref(res, m.name);
+                  const href = raceHref(res);
                   return (
                     <div
                       key={j}

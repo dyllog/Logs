@@ -63,14 +63,17 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const years = availableYears as number[];
   const urlYear  = searchParams.get('year') ? Number(searchParams.get('year')) : null;
   const urlQ     = searchParams.get('q') ?? '';
+  const urlPos   = searchParams.get('pos') ? Number(searchParams.get('pos')) : null;
   const resolvedInitial = (urlYear && (availableYears as number[]).includes(urlYear))
     ? urlYear
     : initialYear && (availableYears as number[]).includes(initialYear)
       ? initialYear
       : availableYears[0];
   const [year, setYear] = useState<number>(resolvedInitial);
-  const [q, setQ] = useState(urlQ);
-  const [page, setPage] = useState(1);
+  // If a position deep-link is present, don't pre-fill search filter
+  const [q, setQ] = useState(urlPos ? '' : urlQ);
+  // Jump straight to the page containing the highlighted position
+  const [page, setPage] = useState(urlPos ? Math.ceil(urlPos / 10) : 1);
   const [fullOpen, setFullOpen] = useState(false);
   const [fullQ, setFullQ] = useState('');
   const [all, setAll] = useState<ResultRow[]>([]);
@@ -132,13 +135,19 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   }, [dist]);
 
   // Re-sync from URL params on same-page navigation (e.g. clicking a search result that
-  // links to this race page with ?year=YYYY&q=Name while already on the page)
+  // links to this race page with ?year=YYYY&pos=NNN while already on the page)
   useEffect(() => {
-    const yr = searchParams.get('year') ? Number(searchParams.get('year')) : null;
-    const qq = searchParams.get('q') ?? '';
+    const yr  = searchParams.get('year') ? Number(searchParams.get('year')) : null;
+    const qq  = searchParams.get('q') ?? '';
+    const pos = searchParams.get('pos') ? Number(searchParams.get('pos')) : null;
     if (yr && (availableYears as number[]).includes(yr)) setYear(yr);
-    setQ(qq);
-    setPage(1);
+    if (pos) {
+      setQ('');
+      setPage(Math.ceil(pos / 10));
+    } else {
+      setQ(qq);
+      setPage(1);
+    }
     // availableYears is a stable derived value; searchParams is the real dep here
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -172,7 +181,8 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
                 setSearchParams(prev => {
                   const p = new URLSearchParams(prev);
                   p.set('year', String(y));
-                  p.delete('q'); // clear any deep-link filter when manually choosing a year
+                  p.delete('q');   // clear deep-link filter
+                  p.delete('pos'); // clear position highlight
                   return p;
                 }, { replace: true });
               }}
@@ -237,8 +247,9 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
                 </td></tr>
               ) : pageRows.map(r => {
                 const slug = getAthleteSlug(r.name);
+                const isHighlighted = r.pos === urlPos && !ql;
                 return (
-                  <tr key={r.pos} className="row">
+                  <tr key={r.pos} className={`row${isHighlighted ? ' row-hl' : ''}`}>
                     <td className={`pos ${r.pos === 1 ? 'pos-1' : ''}`}>{r.pos}</td>
                     <td className="dimmed time">{r.bib || '—'}</td>
                     <td>

@@ -170,20 +170,22 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
 
   const raceHref = (result: ResultEntry): string | null => {
     const r = result.r.toLowerCase();
-    if (r.includes('auckland marathon'))     return '/races/auckland-marathon';
-    if (r.includes('auckland half'))         return '/races/auckland-marathon';
-    if (r.includes('rotorua marathon'))      return '/races/rotorua-marathon';
-    if (r.includes('rotorua half'))          return '/races/rotorua-marathon';
-    if (r.includes('christchurch marathon')) return '/races/christchurch-marathon';
-    if (r.includes('christchurch half'))     return '/races/christchurch-marathon';
-    if (r.includes('queenstown marathon'))   return '/races/queenstown-marathon';
-    if (r.includes('queenstown half'))       return '/races/queenstown-marathon';
-    if (r.includes('hawke'))                 return '/races/hawkes-bay-marathon';
-    if (r.includes('waterfront'))            return '/races/waterfront-half-marathon';
-    if (r.includes('devonport'))             return '/races/devonport-half-marathon';
-    if (r.includes('coatesville'))           return '/races/coatesville-half-marathon';
-    if (r.includes('omaha'))                 return '/races/omaha-half-marathon';
-    return null;
+    let base: string | null = null;
+    if (r.includes('auckland marathon'))     base = '/races/auckland-marathon';
+    else if (r.includes('auckland half'))    base = '/races/auckland-marathon';
+    else if (r.includes('rotorua marathon')) base = '/races/rotorua-marathon';
+    else if (r.includes('rotorua half'))     base = '/races/rotorua-marathon';
+    else if (r.includes('christchurch marathon')) base = '/races/christchurch-marathon';
+    else if (r.includes('christchurch half'))     base = '/races/christchurch-marathon';
+    else if (r.includes('queenstown marathon'))   base = '/races/queenstown-marathon';
+    else if (r.includes('queenstown half'))       base = '/races/queenstown-marathon';
+    else if (r.includes('hawke'))            base = '/races/hawkes-bay-marathon';
+    else if (r.includes('waterfront'))       base = '/races/waterfront-half-marathon';
+    else if (r.includes('devonport'))        base = '/races/devonport-half-marathon';
+    else if (r.includes('coatesville'))      base = '/races/coatesville-half-marathon';
+    else if (r.includes('omaha'))            base = '/races/omaha-half-marathon';
+    if (!base) return null;
+    return `${base}?year=${result.y}&pos=${result.p}`;
   };
 
   return (
