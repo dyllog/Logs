@@ -216,34 +216,36 @@ export default function Index() {
             ref={shellRef}
             onClick={() => inputRef.current?.focus()}
           >
-            <div className="lp-search-bar">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ flex: '0 0 auto', color: 'var(--ink)' }}>
-                <circle cx="10.5" cy="10.5" r="6.5" />
-                <line x1="15.5" y1="15.5" x2="21" y2="21" />
-              </svg>
-              <input
-                ref={inputRef}
-                className="lp-search-input"
-                type="text"
-                placeholder="Search athletes, races, years, records…"
-                autoComplete="off"
-                onFocus={hideCaret}
-                onBlur={showCaret}
-                onKeyDown={handleKeyDown}
-                onChange={e => {
-                  const v = e.target.value;
-                  setSearchQ(v);
-                  setDropOpen(v.length >= 2);
-                  if (!v) showCaret();
-                  else hideCaret();
-                }}
-              />
-              <span ref={caretRef} className="lp-search-caret" />
-            </div>
+            <div style={{ position: 'relative' }}>
+              <div className="lp-search-bar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" style={{ flex: '0 0 auto', color: 'var(--ink)' }}>
+                  <circle cx="10.5" cy="10.5" r="6.5" />
+                  <line x1="15.5" y1="15.5" x2="21" y2="21" />
+                </svg>
+                <input
+                  ref={inputRef}
+                  className="lp-search-input"
+                  type="text"
+                  placeholder="Search athletes, races, years…"
+                  autoComplete="off"
+                  onFocus={hideCaret}
+                  onBlur={showCaret}
+                  onKeyDown={handleKeyDown}
+                  onChange={e => {
+                    const v = e.target.value;
+                    setSearchQ(v);
+                    setDropOpen(v.length >= 2);
+                    if (!v) showCaret();
+                    else hideCaret();
+                  }}
+                />
+                <span ref={caretRef} className="lp-search-caret" />
+              </div>
 
-            {dropOpen && (
-              <InlineSearchDropdown query={searchQ} onClose={closeDropdown} />
-            )}
+              {dropOpen && (
+                <InlineSearchDropdown query={searchQ} onClose={closeDropdown} />
+              )}
+            </div>
 
             <div className="lp-search-examples">
               <span className="lp-label-x">Try</span>

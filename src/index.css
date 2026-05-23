@@ -1216,7 +1216,7 @@ body {
 /* ── Inline search dropdown (landing page) ───────────────────────────────── */
 .lp-search-dropdown {
   position: absolute;
-  top: calc(100% - 44px);
+  top: 100%;
   left: 0;
   right: 0;
   background: var(--bg);
@@ -1315,7 +1315,7 @@ body {
 /* Search typeahead dropdown */
 .lp-drop {
   position: absolute;
-  top: calc(100% - 28px); /* sits flush under the search bar, above the examples row */
+  top: 100%;
   left: 0;
   right: 0;
   background: var(--bg);
