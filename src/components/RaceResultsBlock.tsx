@@ -61,16 +61,28 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     : isWellingtonHalf ? [...WELLINGTON_HALF_YEARS].reverse()
     : [...YEARS].reverse();
   const years = availableYears as number[];
+
+  // Each block has a unique key so it only responds to deep-links aimed at it.
+  // Auckland uses the same raceId for both distances, so we disambiguate via dist.
+  const blockKey = (raceId === 'auckland')
+    ? (dist === '42.2 km' ? 'auckland-full' : 'auckland-half')
+    : raceId;
+
   const urlYear  = searchParams.get('year') ? Number(searchParams.get('year')) : null;
   const urlQ     = searchParams.get('q') ?? '';
-  const urlPos   = searchParams.get('pos') ? Number(searchParams.get('pos')) : null;
+  const urlRace  = searchParams.get('race');
+  // Only honour the pos param when it targets this specific block (or no race key = legacy link)
+  const urlPosRaw = searchParams.get('pos');
+  const urlPos = urlPosRaw && (!urlRace || urlRace === blockKey)
+    ? Number(urlPosRaw) : null;
+
   const resolvedInitial = (urlYear && (availableYears as number[]).includes(urlYear))
     ? urlYear
     : initialYear && (availableYears as number[]).includes(initialYear)
       ? initialYear
       : availableYears[0];
   const [year, setYear] = useState<number>(resolvedInitial);
-  // If a position deep-link is present, don't pre-fill search filter
+  // If a position deep-link targets this block, start unfiltered so the full leaderboard shows
   const [q, setQ] = useState(urlPos ? '' : urlQ);
   // Jump straight to the page containing the highlighted position
   const [page, setPage] = useState(urlPos ? Math.ceil(urlPos / 10) : 1);
@@ -135,20 +147,26 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   }, [dist]);
 
   // Re-sync from URL params on same-page navigation (e.g. clicking a search result that
-  // links to this race page with ?year=YYYY&pos=NNN while already on the page)
+  // links to this race page with ?year=YYYY&pos=NNN&race=KEY while already on the page)
   useEffect(() => {
-    const yr  = searchParams.get('year') ? Number(searchParams.get('year')) : null;
-    const qq  = searchParams.get('q') ?? '';
-    const pos = searchParams.get('pos') ? Number(searchParams.get('pos')) : null;
+    const yr       = searchParams.get('year') ? Number(searchParams.get('year')) : null;
+    const qq       = searchParams.get('q') ?? '';
+    const raceParam = searchParams.get('race');
+    const posRaw    = searchParams.get('pos');
+    // Only apply pos navigation when this block is the intended target
+    const posForUs  = posRaw && (!raceParam || raceParam === blockKey)
+      ? Number(posRaw) : null;
+
     if (yr && (availableYears as number[]).includes(yr)) setYear(yr);
-    if (pos) {
+
+    if (posForUs) {
       setQ('');
-      setPage(Math.ceil(pos / 10));
+      setPage(Math.ceil(posForUs / 10));
     } else {
       setQ(qq);
       setPage(1);
     }
-    // availableYears is a stable derived value; searchParams is the real dep here
+    // availableYears and blockKey are stable derived values; searchParams is the real dep
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
