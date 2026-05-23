@@ -34,12 +34,13 @@ const RESULTS = [
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:55', sec: 8575, pos: 3,  total: 2439, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:52', sec: 8812, pos: 3,  total:  897, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 5/12,  year: 2025, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:39', sec: 3879, pos: 6,  total: 2858, cat: 'M 20–39', isPB: false },
-  { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:21:01', sec: 8461, pos: 2,  total: 2775, cat: 'M Elite',  isPB: true  },
+  { dateNum: 2025 + 10/12, year: 2025, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:21:01', sec: 8461, pos: 2,  total: 2775, cat: 'M Elite',  isPB: false },
   { dateNum: 2026 + 3/12,  year: 2026, race: 'Waterfront Half Marathon',    short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:08:16', sec: 4096, pos: 1,  total: 3006, cat: 'M 20–29', isPB: false },
+  { dateNum: 2026 + 4.5/12,year: 2026, race: "Hawke's Bay Marathon",        short: 'HB',       dist: '42.2 km', distId: 'mar'  as const, time: '2:19:52', sec: 8392, pos: 1,  total: 1126, cat: 'M 25–29', isPB: true  },
 ];
 
 const PBs = {
-  mar:  { time: '2:21:01', sec: 8461, race: 'Auckland Marathon',          year: 2025 },
+  mar:  { time: '2:19:52', sec: 8392, race: "Hawke's Bay Marathon",       year: 2026 },
   half: { time: '1:04:30', sec: 3870, race: 'Christchurch Half Marathon', year: 2024 },
 };
 
@@ -228,10 +229,10 @@ export default function AthleteVoss() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '34',      sub: '14 marathons · 20 halves' },
-                { label: 'Marathon PB',      val: '2:21:01', sub: 'Auckland 2025 · 2nd overall' },
+                { label: 'Races logged',     val: '35',      sub: '15 marathons · 20 halves' },
+                { label: 'Marathon PB',      val: '2:19:52', sub: "Hawke's Bay 2026 · 1st overall" },
                 { label: 'Half marathon PB', val: '1:04:30', sub: 'Christchurch 2024 · 1st overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '14 career wins · WEL · AKL · CHC · ROT · HB · WF' },
+                { label: 'Best overall pos', val: '1st',     sub: '16 career wins · WEL · AKL · CHC · ROT · HB · WF · MARA' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>

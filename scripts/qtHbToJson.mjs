@@ -164,8 +164,8 @@ if (!raceArg || !['qt', 'hb'].includes(raceArg)) {
 }
 
 const config = {
-  qt: { folder: 'Queenstown Marathon', prefix: 'qt', dataConst: 'qt' },
-  hb: { folder: 'Hawkes Bay Marathon', prefix: 'hb', dataConst: 'hb' },
+  qt: { folder: 'Race Files/Queenstown Marathon', prefix: 'qt', dataConst: 'qt' },
+  hb: { folder: 'Race Files/Hawkes Bay Marathon', prefix: 'hb', dataConst: 'hb' },
 }[raceArg];
 
 const folder = path.join(root, config.folder);

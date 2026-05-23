@@ -12,11 +12,12 @@ const RESULTS = [
   { dateNum: 2024 + 9/12,  year: 2024, race: "Hawke's Bay Half Marathon",   short: 'HB Half', dist: '21.1 km', distId: 'half' as const, time: '1:06:26', sec: 3986, pos: 2,   total: 2751, cat: 'M 30–34', isPB: true  },
   { dateNum: 2024 + 11/12, year: 2024, race: 'Queenstown Half Marathon',    short: 'QT Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:58', sec: 4078, pos: 4,   total: 4828, cat: 'M 30–34', isPB: false },
   { dateNum: 2025 + 9/12,  year: 2025, race: "Hawke's Bay Half Marathon",   short: 'HB Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:18', sec: 4038, pos: 2,   total: 3818, cat: 'M 30–34', isPB: false },
-  { dateNum: 2025 + 11/12, year: 2025, race: 'Queenstown Marathon',         short: 'QT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:25:02', sec: 8702, pos: 1,   total: 2929, cat: 'M 30–34', isPB: true  },
+  { dateNum: 2025 + 11/12, year: 2025, race: 'Queenstown Marathon',         short: 'QT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:25:02', sec: 8702, pos: 1,   total: 2929, cat: 'M 30–34', isPB: false },
+  { dateNum: 2026 + 4.5/12,year: 2026, race: "Hawke's Bay Marathon",        short: 'HB',      dist: '42.2 km', distId: 'mar'  as const, time: '2:20:02', sec: 8402, pos: 2,   total: 1126, cat: 'M 30–34', isPB: true  },
 ];
 
 const PBs = {
-  mar:  { time: '2:25:02', sec: 8702, race: 'Queenstown Marathon',       year: 2025 },
+  mar:  { time: '2:20:02', sec: 8402, race: "Hawke's Bay Marathon",      year: 2026 },
   half: { time: '1:06:26', sec: 3986, race: "Hawke's Bay Half Marathon", year: 2024 },
 };
 
@@ -91,7 +92,7 @@ export default function AthleteJackMoody() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2013–2025 · AKL · QT · HB · CHC</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2013–2026 · AKL · QT · HB · CHC</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -111,7 +112,7 @@ export default function AthleteJackMoody() {
                         const d = r.dist === '42.2 km' ? '42' : '21';
                         if (r.race.includes('Queenstown Marathon')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown Half')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
-                        else if (r.race.includes("Hawke's Bay")) navigate(`/races/hawkes-bay-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes("Hawke's Bay")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Auckland')) navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Christchurch')) navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                       }}>

@@ -10,6 +10,7 @@ const RESULTS = [
   { dateNum: 2021 + 4/12,  year: 2021, race: 'Rotorua Marathon',         short: 'ROT',     dist: '42.2 km', distId: 'mar'  as const, time: '2:47:45', sec: 10065, pos: 11, total: 746,  cat: 'M 35–39', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',        short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:44:25', sec: 9865,  pos: 6,  total: 870,  cat: 'M 35–39', isPB: false },
   { dateNum: 2022 + 3/12,  year: 2022, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:15:50', sec: 4550,  pos: 5,  total: 848,  cat: 'M 30–39', isPB: false },
+  { dateNum: 2023 + 2/12,  year: 2023, race: 'Orewa Half Marathon',      short: 'ORE Half',dist: '21.1 km', distId: 'half' as const, time: '1:16:31', sec: 4591,  pos: 3,  total: 271,  cat: 'M Open', isPB: false },
   { dateNum: 2023 + 3/12,  year: 2023, race: 'Waterfront Half Marathon', short: 'WF Half', dist: '21.1 km', distId: 'half' as const, time: '1:16:02', sec: 4562,  pos: 14, total: 1414, cat: 'M 30–39', isPB: false },
   { dateNum: 2023 + 4/12,  year: 2023, race: 'Rotorua Marathon',         short: 'ROT',     dist: '42.2 km', distId: 'mar'  as const, time: '2:40:56', sec: 9656,  pos: 6,  total: 796,  cat: 'M 35–39', isPB: false },
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',        short: 'AKL',     dist: '42.2 km', distId: 'mar'  as const, time: '2:39:17', sec: 9557,  pos: 10, total: 1765, cat: 'M 35–39', isPB: false },
@@ -98,7 +99,7 @@ export default function AthleteBrentGodfrey() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2016–2026 · AKL · WF · ROT · DEV</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2016–2026 · AKL · WF · ROT · DEV · KER · ORE</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -121,6 +122,8 @@ export default function AthleteBrentGodfrey() {
                         else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Rotorua')) navigate(`/races/rotorua-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Devonport')) navigate(`/races/devonport-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Kerikeri')) navigate(`/races/kerikeri-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Orewa')) navigate(`/races/orewa-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

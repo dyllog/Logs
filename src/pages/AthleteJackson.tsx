@@ -24,6 +24,7 @@ const RESULTS = [
   { dateNum: 2023 + 3/12,  year: 2023, race: 'Waterfront Half Marathon',    short: 'WF Half',  dist: '21.1 km', distId: 'half' as const, time: '1:12:48', sec: 4368, pos: 6,  total: 1414, cat: 'M 30–39', isPB: false },
   { dateNum: 2023 + 4/12,  year: 2023, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:36:26', sec: 9386, pos: 4,  total:  796, cat: 'M 20–39', isPB: false },
   { dateNum: 2023 + 10/12, year: 2023, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:35:49', sec: 9349, pos: 6,  total: 1765, cat: 'M 20–39', isPB: false },
+  { dateNum: 2026 + 4.5/12,year: 2026, race: "Hawke's Bay Marathon",        short: 'HB',       dist: '42.2 km', distId: 'mar'  as const, time: '2:33:49', sec: 9229, pos: 7,  total: 1126, cat: 'M 35–39', isPB: false },
 ];
 
 const PBs = {
@@ -250,7 +251,7 @@ export default function AthleteJackson() {
               <div className="eyebrow mb-8">Race history · all distances</div>
               <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>{RESULTS.length} finishes on record</h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2014–2023 · AKL · CHC · ROT · QT · WF</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2014–2026 · AKL · CHC · ROT · QT · WF · HB</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -273,6 +274,7 @@ export default function AthleteJackson() {
                         else if (r.race.includes('Christchurch')) navigate(`/races/christchurch-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Queenstown')) navigate(`/races/queenstown-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes("Hawke")) navigate(`/races/hawkes-bay-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>

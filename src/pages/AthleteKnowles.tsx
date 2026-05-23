@@ -1,14 +1,20 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',        short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:44:13', sec: 13453, pos: 398,  total: 1619, cat: 'M 18–34', isPB: true  },
-  { dateNum: 2025 +  3/12, year: 2025, race: 'Waterfront Half Marathon',  short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:34:52', sec: 5692,  pos: 309,  total: 2200, cat: 'M 30–39', isPB: true  },
-  { dateNum: 2026 +  3/12, year: 2026, race: 'Waterfront Half Marathon',  short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '2:29:05', sec: 8945,  pos: 2610, total: 3006, cat: 'M 30–39', isPB: false },
+  { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',           short: 'AUC', dist: '42.2 km', distId: 'mar'  as const, time: '3:44:13', sec: 13453, pos: 398,  total: 1619, cat: 'M 18–34', isPB: true  },
+  { dateNum: 2024 +  2/12, year: 2024, race: 'Orewa Half Marathon',         short: 'ORE', dist: '21.1 km', distId: 'half' as const, time: '1:34:33', sec: 5673,  pos: 31,   total: 360,  cat: 'M Open', isPB: true  },
+  { dateNum: 2024 +  3/12, year: 2024, race: 'Onehunga Half Marathon',      short: 'ONE', dist: '21.1 km', distId: 'half' as const, time: '1:46:23', sec: 6383,  pos: 69,   total: 314,  cat: 'M Open', isPB: false },
+  { dateNum: 2024 +  4/12, year: 2024, race: 'Tamaki River 10 km',          short: 'TAM', dist: '10 km',   distId: 'tenk' as const, time: '1:08:18', sec: 4098,  pos: 76,   total: 138,  cat: 'M Open', isPB: true  },
+  { dateNum: 2025 +  2/12, year: 2025, race: 'Orewa Half Marathon',         short: 'ORE', dist: '21.1 km', distId: 'half' as const, time: '1:40:15', sec: 6015,  pos: 96,   total: 482,  cat: 'M Open', isPB: false },
+  { dateNum: 2025 +  3/12, year: 2025, race: 'Waterfront Half Marathon',    short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '1:34:52', sec: 5692,  pos: 309,  total: 2200, cat: 'M 30–39', isPB: false },
+  { dateNum: 2025 +  4/12, year: 2025, race: 'Tamaki River Half Marathon',  short: 'TAM', dist: '21.1 km', distId: 'half' as const, time: '1:37:18', sec: 5838,  pos: 66,   total: 421,  cat: 'M Open', isPB: false },
+  { dateNum: 2026 +  3/12, year: 2026, race: 'Waterfront Half Marathon',    short: 'WF',  dist: '21.1 km', distId: 'half' as const, time: '2:29:05', sec: 8945,  pos: 2610, total: 3006, cat: 'M 30–39', isPB: false },
 ];
 
 const PBs = {
-  mar:  { time: '3:44:13', sec: 13453, race: 'Auckland Marathon',       year: 2020 },
-  half: { time: '1:34:52', sec: 5692,  race: 'Waterfront Half Marathon', year: 2025 },
+  mar:  { time: '3:44:13', sec: 13453, race: 'Auckland Marathon',    year: 2020 },
+  half: { time: '1:34:33', sec: 5673,  race: 'Orewa Half Marathon',  year: 2024 },
+  tenk: { time: '1:08:18', sec: 4098,  race: 'Tamaki River 10 km',   year: 2024 },
 };
 
 function fmtSec(s: number): string {
@@ -105,7 +111,7 @@ export default function AthleteKnowles() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'M 30–39' },
-                  { l: 'Races logged', v: '3' },
+                  { l: 'Races logged', v: String(RESULTS.length) },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -117,9 +123,9 @@ export default function AthleteKnowles() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, background: 'var(--on-dark-rule)', border: '0.5px solid var(--on-dark-rule)' }} className="pb-grid">
               {[
-                { dist: '42.2 km', pb: PBs.mar.time,  race: 'Auckland Marathon',       year: PBs.mar.year,  highlight: false },
-                { dist: '21.1 km', pb: PBs.half.time, race: 'Waterfront Half Marathon', year: PBs.half.year, highlight: true  },
-                { dist: '10 km',   pb: '—',            race: 'not on record',            year: null,          highlight: false },
+                { dist: '42.2 km', pb: PBs.mar.time,  race: PBs.mar.race,  year: PBs.mar.year,  highlight: false },
+                { dist: '21.1 km', pb: PBs.half.time, race: PBs.half.race, year: PBs.half.year, highlight: true  },
+                { dist: '10 km',   pb: PBs.tenk.time, race: PBs.tenk.race, year: PBs.tenk.year, highlight: false },
               ].map((d, i) => (
                 <div key={i} style={{ background: 'var(--surface-dark)', padding: '20px 20px 18px' }}>
                   <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 12 }}>{d.dist}</div>
@@ -158,7 +164,7 @@ export default function AthleteKnowles() {
               <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px' }}>
                 <ProgressionChart />
                 <div style={{ marginTop: 8, fontSize: 10, color: 'var(--on-dark-meta)', fontStyle: 'italic', textAlign: 'right', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                  Waterfront Half Marathon (March) shown at separate dates
+                  Orewa, Onehunga, Tamaki River and Waterfront half marathons
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
@@ -166,7 +172,7 @@ export default function AthleteKnowles() {
                   PB: <span style={{ color: 'var(--ink)' }}>{PBs.half.time}</span>
                 </span>
                 <span style={{ fontFamily: "'DM Mono', monospace" }}>
-                  2 half marathon finishes · 2025–2026
+                  6 half marathon finishes · 2024–2026
                 </span>
               </div>
             </div>
@@ -174,10 +180,10 @@ export default function AthleteKnowles() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '3',       sub: '1 marathon · 2 halves' },
-                { label: 'Half marathon PB', val: '1:34:52', sub: 'Waterfront 2025 · top 15%' },
+                { label: 'Races logged',     val: '8',       sub: '1 marathon · 6 halves · 1 10 km' },
+                { label: 'Half marathon PB', val: '1:34:33', sub: 'Orewa 2024 · top 9%' },
                 { label: 'Marathon PB',      val: '3:44:13', sub: 'Auckland 2020 · top 25%' },
-                { label: 'Active years',     val: '3',       sub: '2020–2026 · AUC · WF' },
+                { label: 'Active years',     val: '7',       sub: '2020–2026 · AUC · WF · ORE · ONE · TAM' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -201,7 +207,7 @@ export default function AthleteKnowles() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2020–2026 · AUC · WF</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2020–2026 · AUC · WF · ORE · ONE · TAM</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
@@ -218,9 +224,12 @@ export default function AthleteKnowles() {
                 {sortedResults.map((r, i) => (
                   <tr key={i} className="row"
                       onClick={() => {
-                        const d = r.dist === '42.2 km' ? '42' : '21';
+                        const d = r.dist === '42.2 km' ? '42' : r.dist === '21.1 km' ? '21' : '10';
                         if (r.race === 'Auckland Marathon') navigate(`/races/auckland-marathon?year=${r.year}&dist=${d}`);
                         else if (r.race.includes('Waterfront')) navigate(`/races/waterfront-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Orewa')) navigate(`/races/orewa-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Onehunga')) navigate(`/races/onehunga-half-marathon?year=${r.year}&dist=${d}`);
+                        else if (r.race.includes('Tamaki')) navigate(`/races/tamaki-river-half-marathon?year=${r.year}&dist=${d}`);
                       }}>
                     <td className="dimmed">{r.year}</td>
                     <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
@@ -240,7 +249,7 @@ export default function AthleteKnowles() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Percentile computed across all finishers in that event and year. Results sourced from Auckland Marathon and Waterfront Half Marathon certified timings.
+            Percentile computed across all finishers in that event and year. Results sourced from Auckland Marathon, Waterfront Half Marathon, and Run21 series certified timings.
           </div>
         </div>
       </section>

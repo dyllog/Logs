@@ -31,7 +31,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Cullern Thorby',      slug: 'cullern-thorby',      nationality: 'NZL', gender: 'M', pbTime: '2:22:59', pbRace: 'Auckland Marathon 2024',          racesLogged: 9  },
   { name: 'Casey Thorby',        slug: 'casey-thorby',        nationality: 'NZL', gender: 'M', pbTime: '1:07:12', pbRace: 'Auckland Half Marathon 2024',     racesLogged: 9  },
   { name: 'Jack Moody',          slug: 'jack-moody',          nationality: 'NZL', gender: 'M', pbTime: '2:25:02', pbRace: 'Queenstown Marathon 2025',        racesLogged: 12 },
-  { name: 'Brent Godfrey',       slug: 'brent-godfrey',       nationality: 'NZL', gender: 'M', pbTime: '2:38:22', pbRace: 'Auckland Marathon 2025',          racesLogged: 19 },
+  { name: 'Brent Godfrey',       slug: 'brent-godfrey',       nationality: 'NZL', gender: 'M', pbTime: '2:38:22', pbRace: 'Auckland Marathon 2025',          racesLogged: 20 },
   { name: 'Ben Twyman',          slug: 'ben-twyman',          nationality: 'NZL', gender: 'M', pbTime: '2:37:59', pbRace: 'Christchurch Marathon 2018',      racesLogged: 14 },
   { name: 'Dougal Thorburn',     slug: 'dougal-thorburn',     nationality: 'NZL', gender: 'M', pbTime: '2:24:51', pbRace: 'Christchurch Marathon 2016',      racesLogged: 10 },
   { name: 'Orestas Rimkus',      slug: 'orestas-rimkus',      nationality: 'NZL', gender: 'M', pbTime: '2:36:27', pbRace: 'Queenstown Marathon 2024',        racesLogged: 8  },
@@ -41,7 +41,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Amelia Lythe',        slug: 'amelia-lythe',        nationality: 'NZL', gender: 'W', pbTime: '1:20:36', pbRace: 'Waterfront Half Marathon 2026',   racesLogged: 7  },
   { name: 'Kylie Brown',         slug: 'kylie-brown',         nationality: 'NZL', gender: 'W', pbTime: '1:38:00', pbRace: 'Waterfront Half Marathon 2021',   racesLogged: 4  },
   // Community / recreational
-  { name: 'Scott Knowles',       slug: 'scott-knowles',       nationality: 'NZL', gender: 'M', pbTime: '1:34:52', pbRace: 'Waterfront Half Marathon 2025',   racesLogged: 3  },
+  { name: 'Scott Knowles',       slug: 'scott-knowles',       nationality: 'NZL', gender: 'M', pbTime: '1:34:33', pbRace: 'Orewa Half Marathon 2024',        racesLogged: 8  },
   { name: 'Dylan Logan',         slug: 'dylan-logan',         nationality: 'NZL', gender: 'M', pbTime: '2:37:41', pbRace: 'Christchurch Marathon 2025',      racesLogged: 16 },
 ];
 

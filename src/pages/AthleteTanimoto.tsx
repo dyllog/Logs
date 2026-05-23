@@ -8,6 +8,7 @@ const RESULTS = [
   { dateNum: 2022 + 11/12, year: 2022, race: 'Queenstown Marathon',  short: 'QT',  dist: '42.2 km', distId: 'mar' as const, time: '2:31:33', sec: 9093, pos: 2,  total: 1740, cat: 'M 30–39', isPB: false },
   { dateNum: 2025 + 4.5/12,year: 2025, race: "Hawke's Bay Marathon", short: 'HB',  dist: '42.2 km', distId: 'mar' as const, time: '2:29:55', sec: 8995, pos: 3,  total: 1184, cat: 'M 35–39', isPB: false },
   { dateNum: 2025 + 5/12,  year: 2025, race: 'Wellington Marathon',  short: 'WEL', dist: '42.2 km', distId: 'mar' as const, time: '2:31:02', sec: 9062, pos: 2,  total: 479,  cat: 'M 40–49', isPB: false },
+  { dateNum: 2026 + 4.5/12,year: 2026, race: "Hawke's Bay Marathon", short: 'HB',  dist: '42.2 km', distId: 'mar' as const, time: '2:29:15', sec: 8955, pos: 4,  total: 1126, cat: 'M 40–44', isPB: false },
 ];
 
 const PBs = {
@@ -177,10 +178,10 @@ export default function AthleteTanimoto() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '6',       sub: '6 marathons' },
+                { label: 'Races logged',     val: '7',       sub: '7 marathons' },
                 { label: 'Marathon PB',      val: '2:27:12', sub: 'Wellington 2019 · 1st overall' },
-                { label: 'Best overall pos', val: '1st',     sub: '6 podiums · WEL × 2 · QT × 2 · HB × 2' },
-                { label: 'Active years',     val: '7',       sub: '2019–2025 · WEL · QT · HB' },
+                { label: 'Best overall pos', val: '1st',     sub: '1 win · podiums across WEL · QT · HB' },
+                { label: 'Active years',     val: '8',       sub: '2019–2026 · WEL · QT · HB' },
               ].map((s, i) => (
                 <div key={i} style={{ padding: '16px 0', borderBottom: '0.5px solid var(--rule-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                   <div>
@@ -222,7 +223,7 @@ export default function AthleteTanimoto() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2019–2025 · WEL · HB · QT</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2019–2026 · WEL · QT · HB</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">

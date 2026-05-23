@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, loadMaraetaiHalf, loadMaraetai10k, loadKerikeriHalf, loadWellingtonMar, loadWellingtonHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, loadMaraetaiHalf, loadMaraetai10k, loadKerikeriHalf, loadWellingtonMar, loadWellingtonHalf, loadOnehungaHalf, loadOnehunga10k, loadOrewaHalf, loadOrewa10k, loadTamakiHalf, loadTamaki10k, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
 import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
 import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
@@ -11,12 +11,15 @@ import { omahaHalfStats, omaha10kStats, OMAHA_HALF_YEARS, OMAHA_10K_YEARS } from
 import { maraetaiHalfStats, maraetai10kStats, MARAETAI_HALF_YEARS, MARAETAI_10K_YEARS } from '@/data/maraetaiData';
 import { kerikeriStats, KERIKERI_YEARS } from '@/data/kerikeriData';
 import { wellingtonMarStats, wellingtonHalfStats, WELLINGTON_MAR_YEARS, WELLINGTON_HALF_YEARS } from '@/data/wellingtonData';
+import { onehungaHalfStats, onehunga10kStats, ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS } from '@/data/onehungaData';
+import { orewaHalfStats, orewa10kStats, OREWA_HALF_YEARS, OREWA_10K_YEARS } from '@/data/orewaData';
+import { tamakiHalfStats, tamaki10kStats, TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
 import FullResultsOverlay from './FullResultsOverlay';
 import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half' | 'omaha-half' | 'omaha-10k' | 'maraetai-half' | 'maraetai-10k' | 'kerikeri-half' | 'wellington-mar' | 'wellington-half';
+  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half' | 'omaha-half' | 'omaha-10k' | 'maraetai-half' | 'maraetai-10k' | 'kerikeri-half' | 'wellington-mar' | 'wellington-half' | 'onehunga-half' | 'onehunga-10k' | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k';
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
@@ -43,6 +46,12 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const isKerikeriHalf = raceId === 'kerikeri-half';
   const isWellingtonMar = raceId === 'wellington-mar';
   const isWellingtonHalf = raceId === 'wellington-half';
+  const isOnehungaHalf = raceId === 'onehunga-half';
+  const isOnehunga10k = raceId === 'onehunga-10k';
+  const isOrewaHalf = raceId === 'orewa-half';
+  const isOrewa10k = raceId === 'orewa-10k';
+  const isTamakiHalf = raceId === 'tamaki-half';
+  const isTamaki10k = raceId === 'tamaki-10k';
   const availableYears = (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
     : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
@@ -59,6 +68,12 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     : isKerikeriHalf ? [...KERIKERI_YEARS].reverse()
     : isWellingtonMar ? [...WELLINGTON_MAR_YEARS].reverse()
     : isWellingtonHalf ? [...WELLINGTON_HALF_YEARS].reverse()
+    : isOnehungaHalf ? [...ONEHUNGA_HALF_YEARS].reverse()
+    : isOnehunga10k ? [...ONEHUNGA_10K_YEARS].reverse()
+    : isOrewaHalf ? [...OREWA_HALF_YEARS].reverse()
+    : isOrewa10k ? [...OREWA_10K_YEARS].reverse()
+    : isTamakiHalf ? [...TAMAKI_HALF_YEARS].reverse()
+    : isTamaki10k ? [...TAMAKI_10K_YEARS].reverse()
     : [...YEARS].reverse();
   const years = availableYears as number[];
 
@@ -121,9 +136,15 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       : isKerikeriHalf ? loadKerikeriHalf(year)
       : isWellingtonMar ? loadWellingtonMar(year)
       : isWellingtonHalf ? loadWellingtonHalf(year)
+      : isOnehungaHalf ? loadOnehungaHalf(year)
+      : isOnehunga10k ? loadOnehunga10k(year)
+      : isOrewaHalf ? loadOrewaHalf(year)
+      : isOrewa10k ? loadOrewa10k(year)
+      : isTamakiHalf ? loadTamakiHalf(year)
+      : isTamaki10k ? loadTamaki10k(year)
       : loadResults(year, dist as '42.2 km' | '21.1 km');
     loader.then(rows => { setAll(rows); setLoading(false); });
-  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf, isOmahaHalf, isOmaha10k, isMaraetaiHalf, isMaraetai10k, isKerikeriHalf, isWellingtonMar, isWellingtonHalf]);
+  }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf, isOmahaHalf, isOmaha10k, isMaraetaiHalf, isMaraetai10k, isKerikeriHalf, isWellingtonMar, isWellingtonHalf, isOnehungaHalf, isOnehunga10k, isOrewaHalf, isOrewa10k, isTamakiHalf, isTamaki10k]);
 
   const ql = normalise(q.trim());
   const filtered = useMemo(() => {
@@ -175,7 +196,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : isMaraetaiHalf ? maraetaiHalfStats : isMaraetai10k ? maraetai10kStats : isKerikeriHalf ? kerikeriStats : isWellingtonMar ? wellingtonMarStats : isWellingtonHalf ? wellingtonHalfStats : (dist === '21.1 km' ? halfStats : yearStats);
+  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : isMaraetaiHalf ? maraetaiHalfStats : isMaraetai10k ? maraetai10kStats : isKerikeriHalf ? kerikeriStats : isWellingtonMar ? wellingtonMarStats : isWellingtonHalf ? wellingtonHalfStats : isOnehungaHalf ? onehungaHalfStats : isOnehunga10k ? onehunga10kStats : isOrewaHalf ? orewaHalfStats : isOrewa10k ? orewa10kStats : isTamakiHalf ? tamakiHalfStats : isTamaki10k ? tamaki10kStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
 
   return (
@@ -306,7 +327,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       <FullResultsOverlay
         open={fullOpen}
         year={year}
-        dist={(isRotoruaHalf || isHbHalf || isQtHalf || isWfHalf || isWf10k || isDevHalf || isDev10k || isCoastHalf || isOmahaHalf || isOmaha10k || isWellingtonHalf) ? '21.1 km' : (isRotorua || isHb || isQt || isWellingtonMar) ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
+        dist={(isRotoruaHalf || isHbHalf || isQtHalf || isWfHalf || isWf10k || isDevHalf || isDev10k || isCoastHalf || isOmahaHalf || isOmaha10k || isWellingtonHalf || isOnehungaHalf || isOnehunga10k || isOrewaHalf || isOrewa10k || isTamakiHalf || isTamaki10k) ? '21.1 km' : (isRotorua || isHb || isQt || isWellingtonMar) ? '42.2 km' : dist as '42.2 km' | '21.1 km'}
         raceId={raceId}
         initialQ={fullQ}
         onClose={() => setFullOpen(false)}

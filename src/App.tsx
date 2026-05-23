@@ -64,6 +64,9 @@ import Omaha from "./pages/Omaha";
 import Maraetai from "./pages/Maraetai";
 import Kerikeri from "./pages/Kerikeri";
 import Wellington from "./pages/Wellington";
+import Onehunga from "./pages/Onehunga";
+import Orewa from "./pages/Orewa";
+import TamakiRiver from "./pages/TamakiRiver";
 import NotFound from "./pages/NotFound";
 
 function Layout() {
@@ -95,6 +98,9 @@ function Layout() {
         <Route path="/races/maraetai-half-marathon" element={<Maraetai />} />
         <Route path="/races/kerikeri-half-marathon" element={<Kerikeri />} />
         <Route path="/races/wellington-marathon" element={<Wellington />} />
+        <Route path="/races/onehunga-half-marathon" element={<Onehunga />} />
+        <Route path="/races/orewa-half-marathon" element={<Orewa />} />
+        <Route path="/races/tamaki-river-half-marathon" element={<TamakiRiver />} />
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />

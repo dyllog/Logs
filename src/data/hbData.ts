@@ -1,7 +1,7 @@
 import type { YearStat } from './logsDataExt';
 
 export const HB_YEARS = [
-  2016, 2017, 2018, 2021, 2022, 2023, 2024, 2025,
+  2016, 2017, 2018, 2021, 2022, 2023, 2024, 2025, 2026,
 ] as const;
 
 export const hbStats: YearStat[] = [
@@ -13,6 +13,7 @@ export const hbStats: YearStat[] = [
   { year: 2023, finishers:  449, avg: 15006, avgMen: 14892, avgWomen: 16834, winnerM:  8871, winnerW: 10062, top10M:  9810, top10W: 11534 },
   { year: 2024, finishers:  789, avg: 14663, avgMen: 14431, avgWomen: 16375, winnerM:  8725, winnerW: 10007, top10M:  9573, top10W: 11201 },
   { year: 2025, finishers: 1184, avg: 15297, avgMen: 14914, avgWomen: 16683, winnerM:  8686, winnerW: 10067, top10M:  9223, top10W: 11177 },
+  { year: 2026, finishers: 1126, avg: 14320, avgMen: 14213, avgWomen: 15940, winnerM:  8392, winnerW:  9944, top10M:  9048, top10W: 10873 },
 ];
 
 export const hbHalfStats: YearStat[] = [
@@ -24,4 +25,5 @@ export const hbHalfStats: YearStat[] = [
   { year: 2023, finishers: 1554, avg: 7737, avgMen: 7426, avgWomen: 8892, winnerM: 4003, winnerW: 4483, top10M: 4417, top10W: 5286 },
   { year: 2024, finishers: 2751, avg: 7503, avgMen: 7174, avgWomen: 8452, winnerM: 3983, winnerW: 4857, top10M: 4296, top10W: 5271 },
   { year: 2025, finishers: 3818, avg: 7627, avgMen: 7253, avgWomen: 8599, winnerM: 3934, winnerW: 4647, top10M: 4184, top10W: 5145 },
+  { year: 2026, finishers: 3856, avg: 7449, avgMen: 7133, avgWomen: 8351, winnerM: 4084, winnerW: 4550, top10M: 4330, top10W: 5061 },
 ];

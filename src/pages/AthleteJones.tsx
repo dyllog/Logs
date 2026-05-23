@@ -5,7 +5,6 @@ const RESULTS = [
   { dateNum: 2018 + 10/12, year: 2018, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:24:48', sec: 8688, pos: 2, total: 1653, cat: 'M 18–34', isPB: false },
   { dateNum: 2018 + 11/12, year: 2018, race: 'Queenstown Marathon',  short: 'QT',  dist: '42.2 km', distId: 'mar' as const, time: '2:32:09', sec: 9129, pos: 1, total: 1954, cat: 'M 20–29', isPB: false },
   { dateNum: 2020 + 10/12, year: 2020, race: 'Auckland Marathon',      short: 'AUC',  dist: '42.2 km', distId: 'mar'  as const, time: '2:21:57', sec: 8517, pos: 1,   total: 1619, cat: 'M 18–34', isPB: false },
-  { dateNum: 2021 + 1/12,  year: 2021, race: 'Maraetai Half Marathon', short: 'MARA', dist: '21.1 km', distId: 'half' as const, time: '2:07:00', sec: 7620, pos: 467, total: 874,  cat: 'M 30–39', isPB: true  },
   { dateNum: 2021 + 5/12,  year: 2021, race: "Hawke's Bay Marathon",   short: 'HB',   dist: '42.2 km', distId: 'mar'  as const, time: '2:25:33', sec: 8733, pos: 1,   total: 1025, cat: 'M 30–39', isPB: false },
   { dateNum: 2021 + 10/12, year: 2021, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:20:00', sec: 8400, pos: 1, total: 870,  cat: 'M 18–34', isPB: true  },
   { dateNum: 2022 + 10/12, year: 2022, race: 'Auckland Marathon',    short: 'AUC', dist: '42.2 km', distId: 'mar' as const, time: '2:21:52', sec: 8512, pos: 1, total: 1299, cat: 'M 18–34', isPB: false },
@@ -14,8 +13,7 @@ const RESULTS = [
 ];
 
 const PBs = {
-  mar:  { time: '2:20:00', sec: 8400, race: 'Auckland Marathon',       year: 2021 },
-  half: { time: '2:07:00', sec: 7620, race: 'Maraetai Half Marathon',  year: 2021 },
+  mar: { time: '2:20:00', sec: 8400, race: 'Auckland Marathon', year: 2021 },
 };
 
 function fmtSec(s: number): string {
@@ -113,7 +111,7 @@ export default function AthleteJones() {
                   { l: 'Nationality',  v: 'NZL' },
                   { l: 'Gender',       v: 'M' },
                   { l: 'Category',     v: 'Open' },
-                  { l: 'Races logged', v: '9' },
+                  { l: 'Races logged', v: '8' },
                 ].map(x => (
                   <div key={x.l}>
                     <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--on-dark-meta)', marginBottom: 4 }}>{x.l}</div>
@@ -126,7 +124,7 @@ export default function AthleteJones() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, background: 'var(--on-dark-rule)', border: '0.5px solid var(--on-dark-rule)' }} className="pb-grid">
               {[
                 { dist: '42.2 km', pb: PBs.mar.time,  race: PBs.mar.race,  year: PBs.mar.year,  highlight: true  },
-                { dist: '21.1 km', pb: PBs.half.time, race: PBs.half.race, year: PBs.half.year, highlight: false },
+                { dist: '21.1 km', pb: '—',           race: 'not on record', year: null,          highlight: false },
                 { dist: '10 km',   pb: '—',           race: 'not on record', year: null,          highlight: false },
               ].map((d, i) => (
                 <div key={i} style={{ background: 'var(--surface-dark)', padding: '20px 20px 18px' }}>
@@ -181,7 +179,7 @@ export default function AthleteJones() {
             <div>
               <div className="eyebrow mb-16">At a glance</div>
               {[
-                { label: 'Races logged',     val: '9',       sub: '8 marathons · 1 half' },
+                { label: 'Races logged',     val: '8',       sub: '8 marathons' },
                 { label: 'Marathon PB',      val: '2:20:00', sub: 'Auckland 2021 · 1st overall' },
                 { label: 'Best overall pos', val: '1st',     sub: '7 career wins · AUC × 3 · QT × 3 · HB × 1' },
                 { label: 'Active years',     val: '6',       sub: '2018–2023 · AUC · QT · HB' },
@@ -226,7 +224,7 @@ export default function AthleteJones() {
                 {RESULTS.length} finishes on record
               </h2>
             </div>
-            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AUC · QT · HB · MARA</div>
+            <div className="dimmed" style={{ fontSize: 12 }}>2018–2023 · AUC · QT · HB</div>
           </div>
           <div className="tbl-wrap">
             <table className="tbl">
