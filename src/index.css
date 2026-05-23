@@ -1237,9 +1237,10 @@ body {
   border-bottom: 0.5px solid var(--rule-soft);
 }
 .lp-search-dropdown-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 36px 1fr auto auto;
   align-items: baseline;
-  gap: 12px;
+  gap: 0 12px;
   padding: 11px 24px;
   cursor: pointer;
   transition: background 80ms;
@@ -1250,8 +1251,6 @@ body {
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--meta);
-  min-width: 28px;
-  flex-shrink: 0;
 }
 .lp-search-dropdown-name {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -1260,7 +1259,10 @@ body {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .lp-search-dropdown-pill {
   font-family: 'DM Mono', monospace;
@@ -1270,20 +1272,18 @@ body {
   color: var(--meta);
   border: 0.5px solid var(--meta);
   padding: 1px 5px;
+  flex-shrink: 0;
 }
 .lp-search-dropdown-meta {
   font-family: 'DM Mono', monospace;
   font-size: 11px;
   color: var(--meta);
-  flex: 1;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: right;
 }
 .lp-search-dropdown-chevron {
   font-size: 11px;
   color: var(--meta);
-  flex-shrink: 0;
   transition: transform 150ms;
 }
 .lp-search-dropdown-results { padding-bottom: 6px; }
