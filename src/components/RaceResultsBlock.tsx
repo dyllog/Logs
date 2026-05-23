@@ -170,7 +170,8 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  useEffect(() => { setPage(1); }, [ql]);
+  // Page is reset in the search input's onChange so programmatic setQ() calls
+  // (e.g. from the URL sync effect) don't accidentally clobber the page jump.
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
@@ -231,7 +232,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
                 </svg>
                 <input className="input" style={{ paddingLeft: 20 }}
                        placeholder="e.g. Balchin · 11036 · IRL"
-                       value={q} onChange={e => setQ(e.target.value)} />
+                       value={q} onChange={e => { setQ(e.target.value); setPage(1); }} />
               </div>
               {ql && !loading && (
                 <div className="label mt-8">
