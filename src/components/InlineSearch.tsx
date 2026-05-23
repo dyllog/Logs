@@ -44,13 +44,11 @@ function normalise(s: string): string {
 
 function bestResultMeta(results: ResultEntry[]): string {
   if (!results.length) return '';
-  const latest = results[0]; // already sorted year-desc by build script
-  const count  = results.length;
-  const suffix = count > 1 ? ` · ${count} results on record` : '';
-  return `${latest.r} ${latest.y} · ${latest.t}${suffix}`;
+  const count = results.length;
+  return count === 1 ? '1 result on record' : `${count} results on record`;
 }
 
-function raceHref(raceLabel: string): string | null {
+function raceBase(raceLabel: string): string | null {
   const r = raceLabel.toLowerCase();
   if (r.includes('auckland marathon'))     return '/races/auckland-marathon';
   if (r.includes('auckland half'))         return '/races/auckland-marathon';
@@ -66,6 +64,13 @@ function raceHref(raceLabel: string): string | null {
   if (r.includes('coatesville'))           return '/races/coatesville-half-marathon';
   if (r.includes('omaha'))                 return '/races/omaha-half-marathon';
   return null;
+}
+
+function raceHref(res: ResultEntry, athleteName: string): string | null {
+  const base = raceBase(res.r);
+  if (!base) return null;
+  const params = new URLSearchParams({ year: String(res.y), q: athleteName });
+  return `${base}?${params}`;
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -180,7 +185,7 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
             {isExpanded && (
               <div className="lp-search-dropdown-results">
                 {m.results.map((res, j) => {
-                  const href = raceHref(res.r);
+                  const href = raceHref(res, m.name);
                   return (
                     <div
                       key={j}

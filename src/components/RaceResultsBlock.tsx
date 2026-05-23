@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, loadMaraetaiHalf, loadMaraetai10k, loadKerikeriHalf, loadWellingtonMar, loadWellingtonHalf, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
 import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
@@ -22,6 +22,7 @@ interface RaceResultsBlockProps {
 }
 
 export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYear, onOpenAthlete }: RaceResultsBlockProps) {
+  const [searchParams] = useSearchParams();
   const isRotorua = raceId === 'rotorua';
   const isRotoruaHalf = raceId === 'rotorua-half';
   const isChc = raceId === 'chc';
@@ -60,9 +61,15 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     : isWellingtonHalf ? [...WELLINGTON_HALF_YEARS].reverse()
     : [...YEARS].reverse();
   const years = availableYears as number[];
-  const resolvedInitial = initialYear && (availableYears as number[]).includes(initialYear) ? initialYear : availableYears[0];
+  const urlYear  = searchParams.get('year') ? Number(searchParams.get('year')) : null;
+  const urlQ     = searchParams.get('q') ?? '';
+  const resolvedInitial = (urlYear && (availableYears as number[]).includes(urlYear))
+    ? urlYear
+    : initialYear && (availableYears as number[]).includes(initialYear)
+      ? initialYear
+      : availableYears[0];
   const [year, setYear] = useState<number>(resolvedInitial);
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState(urlQ);
   const [page, setPage] = useState(1);
   const [fullOpen, setFullOpen] = useState(false);
   const [fullQ, setFullQ] = useState('');
