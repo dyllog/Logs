@@ -28,7 +28,7 @@ export default function SiteFooter() {
       </div>
       <div>
         <div className="label mb-8">Contact</div>
-        <div>dyl.logannz@gmail.com</div>
+        <a href="mailto:dyl.logannz@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>dyl.logannz@gmail.com</a>
         <div className="mt-16 dimmed" style={{ fontSize: 11 }}>© 2026 LOGS</div>
       </div>
     </footer>

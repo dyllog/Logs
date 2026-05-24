@@ -905,6 +905,8 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   text-transform: uppercase;
   color: var(--ink);
   white-space: nowrap;
+  font-weight: 400;
+  margin: 0;
 }
 
 .lp-twoup {

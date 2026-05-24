@@ -215,7 +215,7 @@ export default function Index() {
               {EXAMPLES.map((ex, i) => (
                 <span key={ex.label} style={{ display: 'contents' }}>
                   {i > 0 && <span className="lp-sep">·</span>}
-                  <a onClick={() => handleExampleClick(ex.label, ex.href)}>{ex.label}</a>
+                  <Link to={ex.href} onClick={() => handleExampleClick(ex.label, ex.href)}>{ex.label}</Link>
                 </span>
               ))}
             </div>
@@ -257,7 +257,7 @@ export default function Index() {
         <div className="page">
           <div className="lp-section-head">
             <div className="lp-line" />
-            <div className="lp-title">On the front page</div>
+            <h2 className="lp-title">On the front page</h2>
             <div className="lp-line" />
           </div>
 
@@ -351,7 +351,7 @@ export default function Index() {
         <div className="page">
           <div className="lp-section-head">
             <div className="lp-line" />
-            <div className="lp-title">Through the archive</div>
+            <h2 className="lp-title">Through the archive</h2>
             <div className="lp-line" />
           </div>
           <p style={{ textAlign: 'center', fontFamily: "'DM Mono', monospace", fontSize: 13, color: 'var(--meta)', margin: '-16px auto 36px', maxWidth: 560 }}>
@@ -384,7 +384,7 @@ export default function Index() {
         <div className="page">
           <div className="lp-section-head">
             <div className="lp-line" />
-            <div className="lp-title">Recently added to the record</div>
+            <h2 className="lp-title">Recently added to the record</h2>
             <div className="lp-line" />
           </div>
 
@@ -411,7 +411,7 @@ export default function Index() {
         <div className="page">
           <div className="lp-section-head">
             <div className="lp-line" />
-            <div className="lp-title">Athlete index</div>
+            <h2 className="lp-title">Athlete index</h2>
             <div className="lp-line" />
           </div>
           <div className="lp-az-bar">
@@ -424,7 +424,7 @@ export default function Index() {
             <div>
               <div className="lp-az">
                 {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => (
-                  <span key={letter} onClick={() => navigate(`/athletes/letter/${letter.toLowerCase()}`)}>{letter}</span>
+                  <Link key={letter} to={`/athletes/letter/${letter.toLowerCase()}`}>{letter}</Link>
                 ))}
               </div>
             </div>
