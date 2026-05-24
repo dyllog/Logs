@@ -396,7 +396,10 @@ export default function Index() {
                   <span className="lp-em">{row.em}</span>
                   {row.rest}
                 </div>
-                <div className={`lp-ledger-tag${row.accent ? ' accent' : ''}`}>{row.tag}</div>
+                {row.href
+                  ? <Link to={row.href} className="lp-ledger-arrow" aria-label={`Go to ${row.em}`}>→</Link>
+                  : <span className="lp-ledger-arrow lp-ledger-arrow--empty" />
+                }
               </div>
             ))}
           </div>

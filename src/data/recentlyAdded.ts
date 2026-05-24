@@ -5,6 +5,7 @@ export interface LedgerEntry {
   rest: string;
   tag: string;
   accent: boolean;
+  href?: string;
 }
 
 export const RECENTLY_ADDED: LedgerEntry[] = [
@@ -13,55 +14,87 @@ export const RECENTLY_ADDED: LedgerEntry[] = [
     "tag": "profile",
     "accent": false,
     "em": "Amelia Lythe",
-    "rest": " · Athlete profile added."
+    "rest": " · Athlete profile added.",
+    "href": "/athletes/amelia-lythe"
   },
   {
     "date": "23 May 2026",
     "tag": "profile",
     "accent": false,
     "em": "Kylie Brown",
-    "rest": " · Athlete profile added."
+    "rest": " · Athlete profile added.",
+    "href": "/athletes/kylie-brown"
+  },
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Tamaki River Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/tamaki-river-half-marathon"
+  },
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Orewa Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/orewa-half-marathon"
+  },
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Onehunga Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/onehunga-half-marathon"
   },
   {
     "date": "22 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Wellington Marathon",
-    "rest": " · Results indexed."
+    "rest": " · Results indexed.",
+    "href": "/races/wellington-marathon"
   },
   {
     "date": "20 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Kerikeri Half Marathon",
-    "rest": " · 14 years of results indexed."
+    "rest": " · 14 years of results indexed.",
+    "href": "/races/kerikeri-half-marathon"
   },
   {
     "date": "20 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Maraetai Half Marathon",
-    "rest": " · 8 years of results indexed."
+    "rest": " · 8 years of results indexed.",
+    "href": "/races/maraetai-half-marathon"
   },
   {
     "date": "20 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Omaha Half Marathon",
-    "rest": " · 21 years of results indexed."
+    "rest": " · 21 years of results indexed.",
+    "href": "/races/omaha-half-marathon"
   },
   {
     "date": "20 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Coatesville Half Marathon",
-    "rest": " · 16 years of results indexed."
+    "rest": " · 16 years of results indexed.",
+    "href": "/races/coatesville-half-marathon"
   },
   {
     "date": "13 May 2026",
     "tag": "results",
     "accent": false,
     "em": "Waterfront Half Marathon",
-    "rest": " · Results indexed."
+    "rest": " · Results indexed.",
+    "href": "/races/waterfront-half-marathon"
   }
 ];

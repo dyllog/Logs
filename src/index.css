@@ -1138,10 +1138,12 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 .lp-ledger {
   border-top: 0.5px solid var(--ink);
   border-bottom: 0.5px solid var(--ink);
+  max-width: 760px;
+  margin: 0 auto;
 }
 .lp-ledger-row {
   display: grid;
-  grid-template-columns: 80px 1fr auto;
+  grid-template-columns: 110px 1fr 24px;
   gap: 24px;
   padding: 14px 0;
   border-bottom: 0.5px solid var(--rule-soft);
@@ -1150,7 +1152,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   align-items: baseline;
 }
 .lp-ledger-row:last-child { border-bottom: 0; }
-.lp-ledger-date { color: var(--meta); letter-spacing: 0.08em; font-size: 11px; text-transform: uppercase; }
+.lp-ledger-date { color: var(--meta); letter-spacing: 0.08em; font-size: 11px; text-transform: uppercase; white-space: nowrap; }
 .lp-ledger-what { color: var(--ink); }
 .lp-ledger-what .lp-em {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -1158,8 +1160,16 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   font-size: 15px;
   letter-spacing: -0.005em;
 }
-.lp-ledger-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); text-align: right; }
-.lp-ledger-tag.accent { color: var(--accent); }
+.lp-ledger-arrow {
+  font-size: 14px;
+  color: var(--meta);
+  text-decoration: none;
+  text-align: right;
+  transition: color 100ms;
+  align-self: center;
+}
+.lp-ledger-arrow:hover { color: var(--ink); }
+.lp-ledger-arrow--empty { display: block; }
 
 .lp-cal {
   display: grid;
@@ -1392,8 +1402,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   .lp-scale { grid-template-columns: 1fr 1fr !important; }
   .lp-holes { grid-template-columns: 1fr !important; }
   .lp-cal { grid-template-columns: 1fr 1fr !important; }
-  .lp-ledger-row { grid-template-columns: 80px 1fr !important; gap: 12px !important; }
-  .lp-ledger-tag { grid-column: 2 !important; }
+  .lp-ledger-row { grid-template-columns: 100px 1fr 20px !important; gap: 12px !important; }
 .lp-mprog { grid-template-columns: repeat(4, 1fr) !important; }
   .lp-mprog-step:nth-child(4) { border-right: 0 !important; }
 }
