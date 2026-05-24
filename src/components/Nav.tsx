@@ -25,7 +25,10 @@ export default function Nav({ onOpenSearch }: NavProps) {
     <>
       <nav className="nav">
         <Link to="/" className="wordmark" onClick={close}>
-          LOGS<sup>NZ · est 2024</sup>
+          <span className="wordmark-inner">
+            <span className="wordmark-title">LOGS</span>
+            <span className="wordmark-sub">NZ · est 2026</span>
+          </span>
         </Link>
         {/* Desktop nav */}
         <div className="nav-items">
