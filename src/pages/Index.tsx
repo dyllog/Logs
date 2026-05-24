@@ -406,38 +406,16 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Calendar */}
+      {/* A–Z index tease */}
       <section style={{ padding: '80px 0 0' }}>
         <div className="page">
           <div className="lp-section-head">
             <div className="lp-line" />
-            <div className="lp-title">Upcoming editions</div>
+            <div className="lp-title">Athlete index</div>
             <div className="lp-line" />
           </div>
-
-          <div className="lp-cal">
-            {upcoming.slice(0, 4).map((r, i) => (
-              <div
-                key={i}
-                className="lp-cal-item"
-                onClick={() => r.href && navigate(r.href)}
-              >
-                <div className="lp-cal-d">{r.date}</div>
-                <div className="lp-cal-n">{r.name}</div>
-                <div className="lp-cal-l">{r.loc}</div>
-                <div className="lp-cal-dist">{r.dists} km</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* A–Z index tease */}
-      <section>
-        <div className="page">
           <div className="lp-az-bar">
             <div>
-              <div className="eyebrow">Athlete index</div>
               <h3>140+ names,<br />arranged alphabetically.</h3>
               <p>
                 Browse the index when you don't have a specific name in mind. Each entry links through to the athlete's career results and PB progressions.
