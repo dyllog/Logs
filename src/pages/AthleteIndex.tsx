@@ -49,6 +49,8 @@ const LABEL_TO_RACE_KEY: Record<string, string> = {
   'Maraetai 10k':          'maraetai-10k',
   'Wellington Half':       'wellington-half',
   'Wellington Marathon':   'wellington-mar',
+  'Tamaki River Half':     'tamaki-half',
+  'Tamaki River 10k':      'tamaki-10k',
 };
 
 function raceHref(res: ResultEntry): string | null {
@@ -66,6 +68,7 @@ function raceHref(res: ResultEntry): string | null {
   else if (r.includes('maraetai'))     base = '/races/maraetai-half-marathon';
   else if (r.includes('kerikeri'))     base = '/races/kerikeri-half-marathon';
   else if (r.includes('wellington'))   base = '/races/wellington-marathon';
+  else if (r.includes('tamaki'))       base = '/races/tamaki-river-half-marathon';
   if (!base) return null;
   const key = LABEL_TO_RACE_KEY[res.r];
   const params = new URLSearchParams({ year: String(res.y), pos: String(res.p) });

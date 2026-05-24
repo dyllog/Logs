@@ -65,6 +65,7 @@ function raceBase(label: string): string | null {
   if (r.includes('maraetai'))              return '/races/maraetai-half-marathon';
   if (r.includes('kerikeri'))              return '/races/kerikeri-half-marathon';
   if (r.includes('wellington'))            return '/races/wellington-marathon';
+  if (r.includes('tamaki'))               return '/races/tamaki-river-half-marathon';
   return null;
 }
 
@@ -93,6 +94,8 @@ const LABEL_TO_RACE_KEY: Record<string, string> = {
   'Maraetai 10k':          'maraetai-10k',
   'Wellington Half':       'wellington-half',
   'Wellington Marathon':   'wellington-mar',
+  'Tamaki River Half':     'tamaki-half',
+  'Tamaki River 10k':      'tamaki-10k',
 };
 
 function raceHref(res: ResultEntry): string | null {
