@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
@@ -30,8 +30,11 @@ const wf10kAnnotations = [
 ];
 
 export default function WaterfrontHalf() {
+  const [searchParams] = useSearchParams();
+  const initDist = searchParams.get('race') === 'wf-10k' ? '10k' : 'half' as 'half' | '10k';
+  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
   const navigate = useNavigate();
-  const [distId, setDistId] = useState<'half' | '10k'>('half');
+  const [distId, setDistId] = useState<'half' | '10k'>(initDist);
 
   const seedCRM    = useMemo(() => Math.min(...wfHalfStats.map(s => s.winnerM)) + 1, []);
   const seedCRW    = useMemo(() => Math.min(...wfHalfStats.map(s => s.winnerW)) + 1, []);
@@ -80,6 +83,7 @@ export default function WaterfrontHalf() {
           <RaceResultsBlock
             dist={isHalf ? '21.1 km' : '10 km'}
             raceId={isHalf ? 'wf-half' : 'wf-10k'}
+            initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>

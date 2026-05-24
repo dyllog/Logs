@@ -38,7 +38,7 @@ const chcAnnotationsFull = [
 
 export default function Christchurch() {
   const [searchParams] = useSearchParams();
-  const initDist = searchParams.get('dist') === '21' ? '21' : '42' as '42' | '21';
+  const initDist = (searchParams.get('dist') === '21' || searchParams.get('race') === 'chc-half') ? '21' : '42' as '42' | '21';
   const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
 
   const [distId, setDistId] = useState<'42' | '21'>(initDist);

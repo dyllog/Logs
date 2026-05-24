@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
@@ -35,7 +35,10 @@ const wellingtonAnnotationsHalf = [
 ];
 
 export default function Wellington() {
-  const [distId, setDistId] = useState<'42' | '21'>('42');
+  const [searchParams] = useSearchParams();
+  const initDist = (searchParams.get('dist') === '21' || searchParams.get('race') === 'wellington-half') ? '21' : '42' as '42' | '21';
+  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
+  const [distId, setDistId] = useState<'42' | '21'>(initDist);
   const navigate = useNavigate();
   const isHalf = distId === '21';
 
@@ -88,6 +91,7 @@ export default function Wellington() {
           <RaceResultsBlock
             dist={isHalf ? '21.1 km' : '42.2 km'}
             raceId={isHalf ? 'wellington-half' : 'wellington-mar'}
+            initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>

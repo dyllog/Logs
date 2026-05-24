@@ -11,7 +11,10 @@ type DistId = '42' | '21' | '11' | '5';
 
 export default function Race() {
   const [searchParams] = useSearchParams();
-  const initDist = (['42','21','11','5'].includes(searchParams.get('dist') ?? '')) ? searchParams.get('dist') as DistId : '42';
+  const initDist = (['42','21','11','5'].includes(searchParams.get('dist') ?? ''))
+    ? searchParams.get('dist') as DistId
+    : searchParams.get('race') === 'auckland-half' ? '21'
+    : '42';
   const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
 
   const [distId, setDistId] = useState<DistId>(initDist);

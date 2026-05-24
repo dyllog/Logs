@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
 import AveragesChart from '@/components/AveragesChart';
 import CRWinnerChart from '@/components/CRWinnerChart';
@@ -37,7 +37,10 @@ const qtAnnotationsHalf = [
 ];
 
 export default function Queenstown() {
-  const [distId, setDistId] = useState<'42' | '21'>('42');
+  const [searchParams] = useSearchParams();
+  const initDist = (searchParams.get('dist') === '21' || searchParams.get('race') === 'qt-half') ? '21' : '42' as '42' | '21';
+  const initYear = searchParams.get('year') ? parseInt(searchParams.get('year')!) : undefined;
+  const [distId, setDistId] = useState<'42' | '21'>(initDist);
   const navigate = useNavigate();
   const isHalf = distId === '21';
 
@@ -90,6 +93,7 @@ export default function Queenstown() {
           <RaceResultsBlock
             dist={isHalf ? '21.1 km' : '42.2 km'}
             raceId={isHalf ? 'qt-half' : 'qt'}
+            initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />
         </div>
