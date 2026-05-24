@@ -50,6 +50,7 @@ import AthleteBrettTingay from "./pages/AthleteBrettTingay";
 import AthleteMikePhillips from "./pages/AthleteMikePhillips";
 import AthleteKylieBrown from "./pages/AthleteKylieBrown";
 import AthleteLythe from "./pages/AthleteLythe";
+import AthleteIndex from "./pages/AthleteIndex";
 import AthleteReport from "./pages/AthleteReport";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
@@ -104,6 +105,7 @@ function Layout() {
         <Route path="/results" element={<Results />} />
         <Route path="/records" element={<Records />} />
         <Route path="/athletes" element={<Athletes />} />
+        <Route path="/athletes/letter/:letter" element={<AthleteIndex />} />
         <Route path="/athletes/daniel-balchin" element={<AthleteBalchin />} />
         <Route path="/athletes/michael-voss" element={<AthleteVoss />} />
         <Route path="/athletes/jonathan-jackson" element={<AthleteJackson />} />

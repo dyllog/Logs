@@ -424,7 +424,7 @@ export default function Index() {
             <div>
               <div className="lp-az">
                 {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => (
-                  <span key={letter} onClick={() => navigate('/athletes')}>{letter}</span>
+                  <span key={letter} onClick={() => navigate(`/athletes/letter/${letter.toLowerCase()}`)}>{letter}</span>
                 ))}
               </div>
             </div>

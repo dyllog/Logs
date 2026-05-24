@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ATHLETE_REGISTRY } from '@/data/athleteRegistry';
 
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
 export default function Athletes() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -24,6 +26,21 @@ export default function Athletes() {
             <div className="dimmed" style={{ fontSize: 13, fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
               {ATHLETE_REGISTRY.length} profiles with verified results on record
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '20px 0', borderBottom: '0.5px solid var(--rule)' }}>
+        <div className="page">
+          <div style={{ marginBottom: 8 }}>
+            <div className="label mb-8" style={{ color: 'var(--meta)' }}>Browse all names by letter</div>
+          </div>
+          <div className="lp-az">
+            {LETTERS.map(l => (
+              <span key={l} onClick={() => navigate(`/athletes/letter/${l.toLowerCase()}`)}>
+                {l}
+              </span>
+            ))}
           </div>
         </div>
       </section>
