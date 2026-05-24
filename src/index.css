@@ -176,8 +176,8 @@ body {
 }
 .wordmark-sub {
   font-family: 'DM Mono', ui-monospace, Menlo, monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  font-size: 7px;
+  letter-spacing: 0.06em;
   color: var(--meta);
   text-transform: uppercase;
   line-height: 1;
