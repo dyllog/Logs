@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ATHLETE_REGISTRY } from '@/data/athleteRegistry';
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -37,9 +37,9 @@ export default function Athletes() {
           </div>
           <div className="lp-az">
             {LETTERS.map(l => (
-              <span key={l} onClick={() => navigate(`/athletes/letter/${l.toLowerCase()}`)}>
+              <Link key={l} to={`/athletes/letter/${l.toLowerCase()}`}>
                 {l}
-              </span>
+              </Link>
             ))}
           </div>
         </div>

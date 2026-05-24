@@ -1246,6 +1246,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   transition: background 100ms, color 100ms;
 }
 .lp-az a:hover { background: var(--ink); color: var(--bg); }
+.lp-az a.lp-az-active { background: var(--ink); color: var(--bg); pointer-events: none; }
 .lp-az a:nth-child(13n) { border-right: 0; }
 .lp-az a:nth-last-child(-n+13) { border-bottom: 0; }
 

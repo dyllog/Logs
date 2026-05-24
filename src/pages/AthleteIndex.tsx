@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
 
 const PAGE_SIZE = 100;
@@ -144,13 +144,13 @@ export default function AthleteIndex() {
         <div className="page">
           <div className="lp-az">
             {LETTERS.map(l => (
-              <span
+              <Link
                 key={l}
-                onClick={() => navigate(`/athletes/letter/${l.toLowerCase()}`)}
-                style={l.toLowerCase() === ltr ? { background: 'var(--ink)', color: 'var(--bg)', pointerEvents: 'none' } : {}}
+                to={`/athletes/letter/${l.toLowerCase()}`}
+                className={l.toLowerCase() === ltr ? 'lp-az-active' : ''}
               >
                 {l}
-              </span>
+              </Link>
             ))}
           </div>
         </div>
