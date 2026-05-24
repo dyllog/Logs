@@ -47,8 +47,8 @@ const LABEL_TO_RACE_KEY: Record<string, string> = {
   'Kerikeri Half':         'kerikeri-half',
   'Maraetai Half':         'maraetai-half',
   'Maraetai 10k':          'maraetai-10k',
-  'wellington-half':       'wellington-half',
-  'wellington-mar':        'wellington-mar',
+  'Wellington Half':       'wellington-half',
+  'Wellington Marathon':   'wellington-mar',
 };
 
 function raceHref(res: ResultEntry): string | null {

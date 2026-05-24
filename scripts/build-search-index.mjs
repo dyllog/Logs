@@ -48,8 +48,10 @@ const RACE_LABELS = {
   'omaha-half':    'Omaha Half',
   'omaha-10k':     'Omaha 10k',
   'kerikeri-half': 'Kerikeri Half',
-  'maraetai-half': 'Maraetai Half',
-  'maraetai-10k':  'Maraetai 10k',
+  'maraetai-half':    'Maraetai Half',
+  'maraetai-10k':     'Maraetai 10k',
+  'wellington-half':  'Wellington Half',
+  'wellington-mar':   'Wellington Marathon',
 };
 
 function fileToMeta(filename) {
