@@ -1232,10 +1232,12 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   grid-template-columns: repeat(13, 1fr);
   border: 0.5px solid var(--rule);
 }
-.lp-az span {
+.lp-az a {
   border-right: 0.5px solid var(--rule-soft);
   border-bottom: 0.5px solid var(--rule-soft);
   padding: 14px 0;
+  text-decoration: none;
+  color: inherit;
   text-align: center;
   font-family: 'DM Mono', monospace;
   font-size: 13px;
@@ -1243,9 +1245,9 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   cursor: pointer;
   transition: background 100ms, color 100ms;
 }
-.lp-az span:hover { background: var(--ink); color: var(--bg); }
-.lp-az span:nth-child(13n) { border-right: 0; }
-.lp-az span:nth-last-child(-n+13) { border-bottom: 0; }
+.lp-az a:hover { background: var(--ink); color: var(--bg); }
+.lp-az a:nth-child(13n) { border-right: 0; }
+.lp-az a:nth-last-child(-n+13) { border-bottom: 0; }
 
 /* ── Inline search dropdown (landing page) ───────────────────────────────── */
 .lp-search-dropdown {
