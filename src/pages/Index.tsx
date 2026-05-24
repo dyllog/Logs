@@ -400,11 +400,6 @@ export default function Index() {
               </div>
             ))}
           </div>
-
-          <div style={{ marginTop: 24, display: 'flex', justifyContent: 'space-between', fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'var(--meta)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-            <span>Full changelog — {SITE_STATS.trackedEvents} events tracked since {SITE_STATS.earliestEdition}</span>
-            <Link to="/races" style={{ color: 'var(--ink)', borderBottom: '0.5px solid var(--ink)', cursor: 'pointer', paddingBottom: 2, textDecoration: 'none' }}>Browse all races →</Link>
-          </div>
         </div>
       </section>
 
