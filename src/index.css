@@ -1153,12 +1153,25 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 }
 .lp-ledger-row:last-child { border-bottom: 0; }
 .lp-ledger-date { color: var(--meta); letter-spacing: 0.08em; font-size: 11px; text-transform: uppercase; white-space: nowrap; }
-.lp-ledger-what { color: var(--ink); }
+.lp-ledger-what {
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: baseline;
+  gap: 0;
+}
 .lp-ledger-what .lp-em {
   font-family: 'DM Serif Display', Georgia, serif;
   font-style: normal;
   font-size: 15px;
   letter-spacing: -0.005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lp-ledger-what .lp-rest {
+  color: var(--meta);
+  white-space: nowrap;
 }
 .lp-ledger-arrow {
   font-size: 14px;

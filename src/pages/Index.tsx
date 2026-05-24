@@ -394,7 +394,7 @@ export default function Index() {
                 <div className="lp-ledger-date">{row.date}</div>
                 <div className="lp-ledger-what">
                   <span className="lp-em">{row.em}</span>
-                  {row.rest}
+                  <span className="lp-rest">{row.rest}</span>
                 </div>
                 {row.href
                   ? <Link to={row.href} className="lp-ledger-arrow" aria-label={`Go to ${row.em}`}>→</Link>
