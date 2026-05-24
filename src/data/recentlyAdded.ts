@@ -5,10 +5,34 @@ export interface LedgerEntry {
   rest: string;
   tag: string;
   accent: boolean;
-  href?: string;
+  href: string | null;
 }
 
 export const RECENTLY_ADDED: LedgerEntry[] = [
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Onehunga Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/onehunga-half-marathon"
+  },
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Orewa Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/orewa-half-marathon"
+  },
+  {
+    "date": "23 May 2026",
+    "tag": "results",
+    "accent": false,
+    "em": "Tamaki River Half Marathon",
+    "rest": " · Results indexed.",
+    "href": "/races/tamaki-river-half-marathon"
+  },
   {
     "date": "23 May 2026",
     "tag": "profile",
@@ -24,30 +48,6 @@ export const RECENTLY_ADDED: LedgerEntry[] = [
     "em": "Kylie Brown",
     "rest": " · Athlete profile added.",
     "href": "/athletes/kylie-brown"
-  },
-  {
-    "date": "23 May 2026",
-    "tag": "results",
-    "accent": false,
-    "em": "Tamaki River Half Marathon",
-    "rest": " · Results indexed.",
-    "href": "/races/tamaki-river-half-marathon"
-  },
-  {
-    "date": "23 May 2026",
-    "tag": "results",
-    "accent": false,
-    "em": "Orewa Half Marathon",
-    "rest": " · Results indexed.",
-    "href": "/races/orewa-half-marathon"
-  },
-  {
-    "date": "23 May 2026",
-    "tag": "results",
-    "accent": false,
-    "em": "Onehunga Half Marathon",
-    "rest": " · Results indexed.",
-    "href": "/races/onehunga-half-marathon"
   },
   {
     "date": "22 May 2026",
@@ -88,13 +88,5 @@ export const RECENTLY_ADDED: LedgerEntry[] = [
     "em": "Coatesville Half Marathon",
     "rest": " · 16 years of results indexed.",
     "href": "/races/coatesville-half-marathon"
-  },
-  {
-    "date": "13 May 2026",
-    "tag": "results",
-    "accent": false,
-    "em": "Waterfront Half Marathon",
-    "rest": " · Results indexed.",
-    "href": "/races/waterfront-half-marathon"
   }
 ];

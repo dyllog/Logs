@@ -7,39 +7,92 @@ import path from 'path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_FILE = path.resolve(__dirname, '../src/data/recentlyAdded.ts');
 
+// Maps commit slug keyword → display name
 const RACE_NAMES = {
-  omaha: 'Omaha Half Marathon',
+  omaha:       'Omaha Half Marathon',
   coatesville: 'Coatesville Half Marathon',
-  kerikeri: 'Kerikeri Half Marathon',
-  maraetai: 'Maraetai Half Marathon',
-  wellington: 'Wellington Marathon',
-  christchurch: 'Christchurch Marathon',
-  auckland: 'Auckland Marathon',
-  rotorua: 'Rotorua Marathon',
-  queenstown: 'Queenstown Marathon',
-  hawkes: "Hawke's Bay Marathon",
-  waterfront: 'Waterfront Half Marathon',
-  devonport: 'Devonport Half Marathon',
+  kerikeri:    'Kerikeri Half Marathon',
+  maraetai:    'Maraetai Half Marathon',
+  wellington:  'Wellington Marathon',
+  christchurch:'Christchurch Marathon',
+  auckland:    'Auckland Marathon',
+  rotorua:     'Rotorua Marathon',
+  queenstown:  'Queenstown Marathon',
+  hawkes:      "Hawke's Bay Marathon",
+  waterfront:  'Waterfront Half Marathon',
+  devonport:   'Devonport Half Marathon',
+  onehunga:    'Onehunga Half Marathon',
+  orewa:       'Orewa Half Marathon',
+  tamaki:      'Tamaki River Half Marathon',
+};
+
+// Maps display name → route path
+const RACE_HREFS = {
+  'Omaha Half Marathon':         '/races/omaha-half-marathon',
+  'Coatesville Half Marathon':   '/races/coatesville-half-marathon',
+  'Kerikeri Half Marathon':      '/races/kerikeri-half-marathon',
+  'Maraetai Half Marathon':      '/races/maraetai-half-marathon',
+  'Wellington Marathon':         '/races/wellington-marathon',
+  'Christchurch Marathon':       '/races/christchurch-marathon',
+  'Auckland Marathon':           '/races/auckland-marathon',
+  'Rotorua Marathon':            '/races/rotorua-marathon',
+  'Queenstown Marathon':         '/races/queenstown-marathon',
+  "Hawke's Bay Marathon":        '/races/hawkes-bay-marathon',
+  'Waterfront Half Marathon':    '/races/waterfront-half-marathon',
+  'Devonport Half Marathon':     '/races/devonport-half-marathon',
+  'Onehunga Half Marathon':      '/races/onehunga-half-marathon',
+  'Orewa Half Marathon':         '/races/orewa-half-marathon',
+  'Tamaki River Half Marathon':  '/races/tamaki-river-half-marathon',
 };
 
 // Commits matching these patterns are skipped entirely
 const SKIP_RE = /fix\(landing\)|fix\(search\)|feat\(search\)|chore:|feat\(landing\)|merge|search index|hero|nav|css|style|deploy/i;
 
-function parseCommit(date, hash, subject) {
-  if (SKIP_RE.test(subject)) return null;
+/** Convert "First Last" → "/athletes/first-last" */
+function athleteHref(name) {
+  return '/athletes/' + name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
 
-  // --- Course record (check before erratum) ---
+/**
+ * Given a raw title string that may contain multiple race names
+ * (e.g. "Onehunga, Orewa, and Tamaki River"), return an array of
+ * matched display names from RACE_NAMES values. Falls back to [title] if
+ * no individual matches found.
+ */
+function extractRaceNames(title) {
+  const allRaceNames = Object.values(RACE_NAMES);
+  const matched = allRaceNames.filter(n =>
+    title.toLowerCase().includes(n.toLowerCase().split(' ')[0]) // match on first word (e.g. "Onehunga")
+  );
+  if (matched.length > 0) return matched;
+
+  // Try to find any race by keyword match in title
+  for (const [key, name] of Object.entries(RACE_NAMES)) {
+    if (title.toLowerCase().includes(key)) matched.push(name);
+  }
+  if (matched.length > 0) return matched;
+
+  return [title.trim()];
+}
+
+/**
+ * Parse one git commit into zero or more ledger entries.
+ * Returns an array (may be empty, or multiple for multi-race commits).
+ */
+function parseCommit(date, hash, subject) {
+  if (SKIP_RE.test(subject)) return [];
+
+  // --- Course record ---
   if (/course record/i.test(subject)) {
-    return { date, tag: 'record', accent: true, em: subject, rest: ' · Course record.' };
+    return [{ date, tag: 'record', accent: true, em: subject, rest: ' · Course record.', href: null }];
   }
 
   // --- Backfill / historical ---
   if (/backfill|historical/i.test(subject)) {
-    return { date, tag: 'backfill', accent: false, em: subject, rest: ' · Historical results indexed.' };
+    return [{ date, tag: 'backfill', accent: false, em: subject, rest: ' · Historical results indexed.', href: null }];
   }
 
   // --- Race results: feat(slug): add ... race page OR add ... results ---
-  // Check this BEFORE athlete profile so "Add X race page" doesn't accidentally match athlete regex
   const featSlugRe = /^feat\((\w[\w-]*)\):/;
   const featSlugMatch = subject.match(featSlugRe);
   if (featSlugMatch) {
@@ -52,47 +105,46 @@ function parseCommit(date, hash, subject) {
         /add.*results/i.test(subject);
 
       if (isResultsCommit) {
-        // Try to extract year count
         const yearMatch = subject.match(/(\d+)\s+year/i);
         const rest = yearMatch
           ? ` · ${yearMatch[1]} years of results indexed.`
           : ' · Results indexed.';
-        return { date, tag: 'results', accent: false, em: raceName, rest };
+        return [{ date, tag: 'results', accent: false, em: raceName, rest, href: RACE_HREFS[raceName] ?? null }];
       }
     }
-    // feat(slug) but not a results commit — skip
-    return null;
+    return [];
   }
 
-  // --- Bare "Add X race page" commit (no feat() prefix) ---
-  const addRaceRe = /^Add\s+(.+?)\s+race page/i;
+  // --- Bare "Add X race page(s)" commit (no feat() prefix) ---
+  const addRaceRe = /^Add\s+(.+?)\s+race pages?/i;
   const addRaceMatch = subject.match(addRaceRe);
   if (addRaceMatch) {
     const title = addRaceMatch[1].trim();
-    // Try to find a matching race name
-    const matched = Object.values(RACE_NAMES).find(
-      n => title.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(title.toLowerCase())
-    );
-    const em = matched || title;
-    return { date, tag: 'results', accent: false, em, rest: ' · Results indexed.' };
+    const raceNames = extractRaceNames(title);
+    const yearMatch = subject.match(/(\d+)\s+year/i);
+    const rest = yearMatch
+      ? ` · ${yearMatch[1]} years of results indexed.`
+      : ' · Results indexed.';
+    return raceNames.map(em => ({
+      date, tag: 'results', accent: false, em, rest,
+      href: RACE_HREFS[em] ?? null,
+    }));
   }
 
-  // --- Single athlete profile: "Add <Name> athlete profile" (not "add N new athlete profiles") ---
-  // Must be exactly one name (not "9 new" or "Maraetai and Kerikeri appearances to")
+  // --- Single athlete profile ---
   const singleAthleteRe = /^(?:feat\([^)]+\):\s*)?[Aa]dd\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\s+athlete\s+profile/;
   const athleteMatch = subject.match(singleAthleteRe);
   if (athleteMatch) {
     const name = athleteMatch[1].replace(/\s*\(#\d+\)\s*$/, '').trim();
-    return { date, tag: 'profile', accent: false, em: name, rest: ' · Athlete profile added.' };
+    return [{ date, tag: 'profile', accent: false, em: name, rest: ' · Athlete profile added.', href: athleteHref(name) }];
   }
 
-  // --- Erratum / correction (last, since "corrected CSVs" in fix() commits should still be skipped) ---
-  // Only fire for commits that look like genuine result corrections, not CSV refreshes
+  // --- Erratum / correction ---
   if (/fix.*result.*correct|correct.*split|erratum/i.test(subject) && !/corrected CSV/i.test(subject)) {
-    return { date, tag: 'erratum', accent: false, em: subject, rest: ' · Correction applied.' };
+    return [{ date, tag: 'erratum', accent: false, em: subject, rest: ' · Correction applied.', href: null }];
   }
 
-  return null;
+  return [];
 }
 
 function main() {
@@ -110,19 +162,19 @@ function main() {
     const pipeIdx2 = line.indexOf('|', pipeIdx1 + 1);
     if (pipeIdx1 === -1 || pipeIdx2 === -1) continue;
 
-    const date = line.slice(0, pipeIdx1);
-    const hash = line.slice(pipeIdx1 + 1, pipeIdx2);
+    const date    = line.slice(0, pipeIdx1);
+    const hash    = line.slice(pipeIdx1 + 1, pipeIdx2);
     const subject = line.slice(pipeIdx2 + 1);
 
-    const entry = parseCommit(date, hash, subject);
-    if (!entry) continue;
-
-    const key = `${entry.em}|${entry.tag}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    entries.push(entry);
-    if (entries.length >= 8) break;
+    const parsed = parseCommit(date, hash, subject);
+    for (const entry of parsed) {
+      const key = `${entry.em}|${entry.tag}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      entries.push(entry);
+      if (entries.length >= 10) break;
+    }
+    if (entries.length >= 10) break;
   }
 
   const json = JSON.stringify(entries, null, 2);
@@ -133,6 +185,7 @@ export interface LedgerEntry {
   rest: string;
   tag: string;
   accent: boolean;
+  href: string | null;
 }
 
 export const RECENTLY_ADDED: LedgerEntry[] = ${json};
