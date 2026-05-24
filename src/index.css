@@ -1136,7 +1136,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 }
 .lp-ledger-row {
   display: grid;
-  grid-template-columns: 100px 1fr 200px 90px;
+  grid-template-columns: 80px 1fr auto;
   gap: 24px;
   padding: 14px 0;
   border-bottom: 0.5px solid var(--rule-soft);
@@ -1153,7 +1153,6 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   font-size: 15px;
   letter-spacing: -0.005em;
 }
-.lp-ledger-meta { color: var(--meta); }
 .lp-ledger-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); text-align: right; }
 .lp-ledger-tag.accent { color: var(--accent); }
 
@@ -1389,7 +1388,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   .lp-holes { grid-template-columns: 1fr !important; }
   .lp-cal { grid-template-columns: 1fr 1fr !important; }
   .lp-ledger-row { grid-template-columns: 80px 1fr !important; gap: 12px !important; }
-  .lp-ledger-meta, .lp-ledger-tag { grid-column: 2 !important; }
+  .lp-ledger-tag { grid-column: 2 !important; }
 .lp-mprog { grid-template-columns: repeat(4, 1fr) !important; }
   .lp-mprog-step:nth-child(4) { border-right: 0 !important; }
 }

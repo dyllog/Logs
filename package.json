@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "npm run generate && vite build",
     "build:dev": "vite build --mode development",
-    "generate": "node scripts/build-search-index.mjs",
+    "generate": "node scripts/generateChangelog.mjs && node scripts/build-search-index.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

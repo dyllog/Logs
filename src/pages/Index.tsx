@@ -4,6 +4,7 @@ import InlineSearchDropdown from '@/components/InlineSearch';
 import { recordsMen } from '@/data/logsData';
 import { upcoming } from '@/data/logsData';
 import { SITE_STATS } from '@/data/siteStats';
+import { RECENTLY_ADDED } from '@/data/recentlyAdded';
 
 const EXAMPLES = [
   { label: 'Daniel Balchin', href: '/athletes/daniel-balchin' },
@@ -100,44 +101,6 @@ const HOLES = [
   },
 ];
 
-const LEDGER = [
-  {
-    date: '20 May 2026',
-    what: { em: 'Omaha Half Marathon — 2026 edition', rest: ' · Results indexed across all distances.' },
-    meta: 'added by archivist',
-    tag: 'results', accent: false,
-  },
-  {
-    date: '14 May 2026',
-    what: { em: 'Coatesville Half Marathon — 2026', rest: ' · Full field data and course records updated.' },
-    meta: 'archive depth updated',
-    tag: 'results', accent: false,
-  },
-  {
-    date: '09 May 2026',
-    what: { em: 'Christchurch Marathon — 2026 edition', rest: ' · 1,847 finishers indexed across four distances.' },
-    meta: '4 distances · verified',
-    tag: 'results', accent: false,
-  },
-  {
-    date: '02 May 2026',
-    what: { em: 'Queenstown Marathon', rest: ' · women\'s course record improved — new mark 2:38:42.' },
-    meta: 'first-pass entry',
-    tag: '● record', accent: true,
-  },
-  {
-    date: '27 Apr 2026',
-    what: { em: 'Dylan Logan — Christchurch 2025', rest: ' · split times corrected against official timing tape.' },
-    meta: 'correction',
-    tag: 'erratum', accent: false,
-  },
-  {
-    date: '19 Apr 2026',
-    what: { em: 'Hawke\'s Bay Marathon — 2016 to 2020', rest: ' · early-edition results verified and cross-checked.' },
-    meta: 'historical backfill',
-    tag: 'backfill', accent: false,
-  },
-];
 
 export default function Index() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -426,14 +389,13 @@ export default function Index() {
           </div>
 
           <div className="lp-ledger">
-            {LEDGER.map((row, i) => (
+            {RECENTLY_ADDED.map((row, i) => (
               <div key={i} className="lp-ledger-row">
                 <div className="lp-ledger-date">{row.date}</div>
                 <div className="lp-ledger-what">
-                  <span className="lp-em">{row.what.em}</span>
-                  {row.what.rest}
+                  <span className="lp-em">{row.em}</span>
+                  {row.rest}
                 </div>
-                <div className="lp-ledger-meta">{row.meta}</div>
                 <div className={`lp-ledger-tag${row.accent ? ' accent' : ''}`}>{row.tag}</div>
               </div>
             ))}
