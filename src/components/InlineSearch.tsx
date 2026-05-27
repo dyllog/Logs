@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
-import { racesForYear } from '@/data/raceDirectory';
+import { racesForYear, RACE_DIRECTORY } from '@/data/raceDirectory';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -154,6 +154,23 @@ export function useInlineSearch(query: string) {
       return;
     }
 
+    // ── Race name query (synchronous) ────────────────────────────────────
+    const raceNameHits: YearRaceMatch[] = [];
+    const seenLabels = new Set<string>();
+    for (const race of RACE_DIRECTORY) {
+      if (normalise(race.label).includes(norm) && !seenLabels.has(race.label)) {
+        seenLabels.add(race.label);
+        const latestYear = Math.max(...(race.years as number[]));
+        raceNameHits.push({
+          kind:  'race',
+          label: race.label,
+          dist:  race.dist,
+          year:  latestYear,
+          href:  race.route,
+        });
+      }
+    }
+
     // ── Name query: search sharded index ─────────────────────────────────
     const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
     const shard  = await loadShard(letter);
@@ -189,7 +206,8 @@ export function useInlineSearch(query: string) {
       return a.name.localeCompare(b.name);
     });
 
-    setMatches(hits.slice(0, 40));
+    const athleteSlots = Math.max(0, 40 - raceNameHits.length);
+    setMatches([...raceNameHits, ...hits.slice(0, athleteSlots)]);
     setLoading(false);
   }, []);
 
