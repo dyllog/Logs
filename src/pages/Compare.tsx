@@ -1160,33 +1160,6 @@ export default function Compare() {
         </div>
       </section>
 
-      {/* Mode tabs */}
-      <nav className="mode-tabs">
-        <button
-          className={`mode-tab${mode === 'racetime' ? ' is-active' : ''}`}
-          onClick={() => setMode('racetime')}
-        >
-          <span className="mode-tab-num">Mode 01 · Field stack-up</span>
-          <span className="mode-tab-name">Race time</span>
-          <span className="mode-tab-sub">A finish time against any certified field — placement, percentile, equivalents.</span>
-        </button>
-        <button
-          className={`mode-tab${mode === 'athletes' ? ' is-active' : ''}`}
-          onClick={() => setMode('athletes')}
-        >
-          <span className="mode-tab-num">Mode 02 · Career overlap</span>
-          <span className="mode-tab-name">Athletes <em>head-to-head</em></span>
-          <span className="mode-tab-sub">Two athletes with finisher data — career bests, shared races, edge.</span>
-        </button>
-        <button className="mode-tab is-preview" disabled>
-          <span className="mode-tab-num">Mode 03 · Cross-cohort</span>
-          <span className="mode-tab-name">Age-graded <span className="badge-pv">Preview</span></span>
-          <span className="mode-tab-sub">Convert times across age and gender bands using WMA grading.</span>
-        </button>
-        <div className="mode-tab mode-tab-help">
-          <span className="help-link">Methodology ↗</span>
-        </div>
-      </nav>
 
       {/* Two-column shell */}
       <div className="compare-shell-new">
