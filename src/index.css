@@ -1642,6 +1642,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 .lp-search-dropdown-race { flex: 1; }
 .lp-search-dropdown-year { color: var(--meta); }
 .lp-search-dropdown-pos  { color: var(--meta); flex-shrink: 0; }
+.lp-search-dropdown-row--name { grid-template-columns: 1fr; }
 .lp-search-dropdown-footer {
   padding: 8px 24px;
   font-family: 'DM Mono', monospace;

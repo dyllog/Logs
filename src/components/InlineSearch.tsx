@@ -348,7 +348,7 @@ export function AthleteNameDropdown({ query, onSelect, onClose }: AthleteNameDro
       {loading && <div className="lp-search-dropdown-status">Searching…</div>}
       {!loading && athletes.map((m, i) => (
         <div key={i} className="lp-search-dropdown-group">
-          <div className="lp-search-dropdown-row" onClick={() => pick(m.name)}>
+          <div className="lp-search-dropdown-row lp-search-dropdown-row--name" onClick={() => pick(m.name)}>
             <span className="lp-search-dropdown-name">{m.name}</span>
           </div>
         </div>
