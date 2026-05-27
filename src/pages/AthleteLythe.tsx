@@ -1,7 +1,8 @@
 import { useNavigate, Link } from 'react-router-dom';
 
 const RESULTS = [
-  { dateNum: 2022 +  9/12, year: 2022, race: 'Auckland Half Marathon',       short: 'AUC',    dist: '21.1 km', distId: 'half' as const, time: '1:25:58', sec: 5158, pos: 61,  total: 3988, cat: 'W 16–34', isPB: true  },
+  { dateNum: 2022 +  7/12, year: 2022, race: 'Mt Maunganui Half Marathon',   short: 'MTM',    dist: '21.1 km', distId: 'half' as const, time: '1:23:27', sec: 5007, pos: 1,   total:  861, cat: 'W 18–19', isPB: true  },
+  { dateNum: 2022 +  9/12, year: 2022, race: 'Auckland Half Marathon',       short: 'AUC',    dist: '21.1 km', distId: 'half' as const, time: '1:25:58', sec: 5158, pos: 61,  total: 3988, cat: 'W 16–34', isPB: false },
   { dateNum: 2023 +  1/12, year: 2023, race: 'Waterfront Half Marathon',      short: 'WF',     dist: '21.1 km', distId: 'half' as const, time: '1:22:39', sec: 4959, pos: 49,  total: 1414, cat: 'W 20–29', isPB: true  },
   { dateNum: 2023 +  9/12, year: 2023, race: 'Auckland Marathon',             short: 'AUC',    dist: '42.2 km', distId: 'mar'  as const, time: '2:50:51', sec: 10251,pos: 26,  total: 1765, cat: 'W 20–24', isPB: true  },
   { dateNum: 2024 +  9/12, year: 2024, race: 'Auckland Half Marathon',        short: 'AUC',    dist: '21.1 km', distId: 'half' as const, time: '1:22:22', sec: 4942, pos: 53,  total: 6164, cat: 'W 20–24', isPB: true  },

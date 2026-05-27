@@ -18,6 +18,7 @@ import { WELLINGTON_MAR_YEARS, WELLINGTON_HALF_YEARS } from './wellingtonData';
 import { ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS }    from './onehungaData';
 import { OREWA_HALF_YEARS, OREWA_10K_YEARS }          from './orewaData';
 import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
+import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
 
 export interface RaceEntry {
   label: string;   // Display name matching RACE_LABELS (e.g. "Christchurch Half")
@@ -55,6 +56,9 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Orewa 10k',             dist: '10 km',   route: '/races/orewa-half-marathon',            years: OREWA_10K_YEARS       },
   { label: 'Tamaki Half',           dist: '21.1 km', route: '/races/tamaki-river-half-marathon',     years: TAMAKI_HALF_YEARS     },
   { label: 'Tamaki 10k',            dist: '10 km',   route: '/races/tamaki-river-half-marathon',     years: TAMAKI_10K_YEARS      },
+  { label: 'Mt Maunganui Half',     dist: '21.1 km', route: '/races/mount-maunganui-half-marathon',  years: MTM_HALF_YEARS        },
+  { label: 'Mt Maunganui 10k',      dist: '10 km',   route: '/races/mount-maunganui-half-marathon',  years: MTM_10K_YEARS         },
+  { label: 'Mt Maunganui 5k',       dist: '5 km',    route: '/races/mount-maunganui-half-marathon',  years: MTM_5K_YEARS          },
 ];
 
 /** Returns all race editions for a given year, sorted by label. */

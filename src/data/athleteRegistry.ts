@@ -15,7 +15,7 @@ export interface AthleteEntry {
 }
 
 export const ATHLETE_REGISTRY: AthleteEntry[] = [
-  { name: 'Michael Voss',        slug: 'michael-voss',        nationality: 'NZL', gender: 'M', pbTime: '2:21:01', pbRace: 'Auckland Marathon 2025',          racesLogged: 34 },
+  { name: 'Michael Voss',        slug: 'michael-voss',        nationality: 'NZL', gender: 'M', pbTime: '2:21:01', pbRace: 'Auckland Marathon 2025',          racesLogged: 35 },
   { name: 'Daniel Balchin',      slug: 'daniel-balchin',      nationality: 'NZL', gender: 'M', pbTime: '2:19:55', pbRace: 'Auckland Marathon 2025',          racesLogged: 18 },
   { name: 'Cameron Graves',      slug: 'cameron-graves',      nationality: 'NZL', gender: 'M', pbTime: '2:21:04', pbRace: 'Auckland Marathon 2025',          racesLogged: 12, aliases: ['Cam Graves'] },
   { name: 'Oska Inkster-Baynes', slug: 'oska-inkster-baynes', nationality: 'NZL', gender: 'M', pbTime: '2:18:11', pbRace: 'Christchurch Marathon 2019',      racesLogged: 8,  aliases: ['Oska Baynes'] },
@@ -38,7 +38,7 @@ export const ATHLETE_REGISTRY: AthleteEntry[] = [
   { name: 'Brett Tingay',        slug: 'brett-tingay',        nationality: 'NZL', gender: 'M', pbTime: '1:08:32', pbRace: 'Christchurch Half 2012',          racesLogged: 11 },
   { name: 'Mike Phillips',       slug: 'mike-phillips',       nationality: 'NZL', gender: 'M', pbTime: '1:09:46', pbRace: 'Christchurch Half 2026',          racesLogged: 10 },
   // Women
-  { name: 'Amelia Lythe',        slug: 'amelia-lythe',        nationality: 'NZL', gender: 'W', pbTime: '1:20:36', pbRace: 'Waterfront Half Marathon 2026',   racesLogged: 7  },
+  { name: 'Amelia Lythe',        slug: 'amelia-lythe',        nationality: 'NZL', gender: 'W', pbTime: '1:20:36', pbRace: 'Waterfront Half Marathon 2026',   racesLogged: 8  },
   { name: 'Kylie Brown',         slug: 'kylie-brown',         nationality: 'NZL', gender: 'W', pbTime: '1:38:00', pbRace: 'Waterfront Half Marathon 2021',   racesLogged: 4  },
   // Community / recreational
   { name: 'Scott Knowles',       slug: 'scott-knowles',       nationality: 'NZL', gender: 'M', pbTime: '1:34:33', pbRace: 'Orewa Half Marathon 2024',        racesLogged: 8  },

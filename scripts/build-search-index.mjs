@@ -54,6 +54,9 @@ const RACE_LABELS = {
   'wellington-mar':   'Wellington Marathon',
   'tamaki-half':      'Tamaki River Half',
   'tamaki-10k':       'Tamaki River 10k',
+  'mtm-half':         'Mt Maunganui Half',
+  'mtm-10k':          'Mt Maunganui 10k',
+  'mtm-5k':           'Mt Maunganui 5k',
 };
 
 function fileToMeta(filename) {

@@ -59,11 +59,12 @@ export function normalizeCat(cat) {
 // ── Apply to every JSON file in public/data ───────────────────────────────────
 
 let totalChanged = 0;
-const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.json'));
+const files = fs.readdirSync(dataDir).filter(f => f.startsWith('results-') && f.endsWith('.json'));
 
 for (const file of files) {
   const filePath = path.join(dataDir, file);
   const rows = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  if (!Array.isArray(rows)) continue;
   let changed = 0;
   const updated = rows.map(r => {
     const newCat = normalizeCat(r.cat);
@@ -82,7 +83,9 @@ console.log(`\nDone — ${totalChanged} rows updated across ${files.length} file
 // Summary of unique categories remaining
 const allCats = new Set();
 for (const file of files) {
-  JSON.parse(fs.readFileSync(path.join(dataDir, file), 'utf8')).forEach(r => allCats.add(r.cat));
+  const rows = JSON.parse(fs.readFileSync(path.join(dataDir, file), 'utf8'));
+  if (!Array.isArray(rows)) continue;
+  rows.forEach(r => allCats.add(r.cat));
 }
 console.log('\nUnique categories after normalisation:');
 [...allCats].sort().forEach(c => console.log(' ', c));

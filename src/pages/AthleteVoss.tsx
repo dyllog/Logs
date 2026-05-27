@@ -31,6 +31,7 @@ const RESULTS = [
   { dateNum: 2024 + 4/12,  year: 2024, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:23:48', sec: 8628, pos: 1,  total: 1151, cat: 'M 20–39', isPB: false },
   { dateNum: 2024 + 4.5/12,year: 2024, race: "Hawke's Bay Marathon",        short: 'HB',       dist: '42.2 km', distId: 'mar'  as const, time: '2:25:25', sec: 8725, pos: 1,  total:  789, cat: 'M 25–29', isPB: false },
   { dateNum: 2024 + 5/12,  year: 2024, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:30', sec: 3870, pos: 1,  total: 2172, cat: 'M 20–39', isPB: true  },
+  { dateNum: 2024 + 7/12,  year: 2024, race: 'Mt Maunganui Half Marathon',  short: 'MTM Half', dist: '21.1 km', distId: 'half' as const, time: '1:07:13', sec: 4033, pos: 1,  total: 1654, cat: 'M 25–29', isPB: false },
   { dateNum: 2024 + 10/12, year: 2024, race: 'Auckland Marathon',           short: 'AKL',      dist: '42.2 km', distId: 'mar'  as const, time: '2:22:55', sec: 8575, pos: 3,  total: 2439, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 4/12,  year: 2025, race: 'Rotorua Marathon',            short: 'ROT',      dist: '42.2 km', distId: 'mar'  as const, time: '2:26:52', sec: 8812, pos: 3,  total:  897, cat: 'M 20–39', isPB: false },
   { dateNum: 2025 + 5/12,  year: 2025, race: 'Christchurch Half Marathon',  short: 'CHC Half', dist: '21.1 km', distId: 'half' as const, time: '1:04:39', sec: 3879, pos: 6,  total: 2858, cat: 'M 20–39', isPB: false },

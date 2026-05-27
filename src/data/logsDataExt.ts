@@ -422,6 +422,39 @@ export async function loadTamaki10k(year: number): Promise<ResultRow[]> {
 }
 export function getCachedTamaki10k(year: number): ResultRow[] { return tamaki10kCache[year] ?? []; }
 
+const mtmHalfCache: Record<number, ResultRow[]> = {};
+const mtmHalfInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMtmHalf(year: number): Promise<ResultRow[]> {
+  if (mtmHalfCache[year]) return mtmHalfCache[year];
+  if (!mtmHalfInflight[year]) {
+    mtmHalfInflight[year] = fetch(`/data/results-mtm-half-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { mtmHalfCache[year] = rows; return rows; });
+  }
+  return mtmHalfInflight[year];
+}
+export function getCachedMtmHalf(year: number): ResultRow[] { return mtmHalfCache[year] ?? []; }
+
+const mtm10kCache: Record<number, ResultRow[]> = {};
+const mtm10kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMtm10k(year: number): Promise<ResultRow[]> {
+  if (mtm10kCache[year]) return mtm10kCache[year];
+  if (!mtm10kInflight[year]) {
+    mtm10kInflight[year] = fetch(`/data/results-mtm-10k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { mtm10kCache[year] = rows; return rows; });
+  }
+  return mtm10kInflight[year];
+}
+export function getCachedMtm10k(year: number): ResultRow[] { return mtm10kCache[year] ?? []; }
+
+const mtm5kCache: Record<number, ResultRow[]> = {};
+const mtm5kInflight: Record<number, Promise<ResultRow[]>> = {};
+export async function loadMtm5k(year: number): Promise<ResultRow[]> {
+  if (mtm5kCache[year]) return mtm5kCache[year];
+  if (!mtm5kInflight[year]) {
+    mtm5kInflight[year] = fetch(`/data/results-mtm-5k-${year}.json`).then(r => r.json()).then((rows: ResultRow[]) => { mtm5kCache[year] = rows; return rows; });
+  }
+  return mtm5kInflight[year];
+}
+export function getCachedMtm5k(year: number): ResultRow[] { return mtm5kCache[year] ?? []; }
+
 export function yearStatsForDist(distId: string): YearStat[] {
   if (distId === '21') return halfStats;
   return yearStats;
