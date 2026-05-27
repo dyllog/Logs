@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   YEARS, ROTORUA_YEARS,
@@ -16,6 +16,7 @@ import {
 import { CHC_YEARS } from '@/data/chcData';
 import { HB_YEARS } from '@/data/hbData';
 import { QT_YEARS } from '@/data/qtData';
+import { AthleteNameDropdown } from '@/components/InlineSearch';
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -888,6 +889,10 @@ export default function Compare() {
   const [ag] = useState('all');
   const [h2hA, setH2hA] = useState('');
   const [h2hB, setH2hB] = useState('');
+  const [dropA, setDropA] = useState(false);
+  const [dropB, setDropB] = useState(false);
+  const refA = useRef<HTMLDivElement>(null);
+  const refB = useRef<HTMLDivElement>(null);
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
 
@@ -922,6 +927,15 @@ export default function Compare() {
       loadQtHalf(y).then(() => markLoaded(`qt-21-${y}`));
     });
   }, [markLoaded]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (refA.current && !refA.current.contains(e.target as Node)) setDropA(false);
+      if (refB.current && !refB.current.contains(e.target as Node)) setDropB(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const currentRows = useMemo(
     () => race.getYear(currentYear),
@@ -1185,14 +1199,24 @@ export default function Compare() {
 
               <div className="rail-field">
                 <div className="rail-label"><span>Athlete A</span></div>
-                <div className="rail-ath-wrap a">
-                  <input
-                    value={h2hA}
-                    onChange={e => setH2hA(e.target.value)}
-                    placeholder="Name or bib"
-                    spellCheck={false}
-                  />
-                  {h2hA && <button className="clear-btn" onClick={() => setH2hA('')}>×</button>}
+                <div ref={refA} style={{ position: 'relative' }}>
+                  <div className="rail-ath-wrap a">
+                    <input
+                      value={h2hA}
+                      onChange={e => { setH2hA(e.target.value); setDropA(e.target.value.length >= 2); }}
+                      onKeyDown={e => { if (e.key === 'Escape') setDropA(false); }}
+                      placeholder="Name or bib"
+                      spellCheck={false}
+                    />
+                    {h2hA && <button className="clear-btn" onClick={() => { setH2hA(''); setDropA(false); }}>×</button>}
+                  </div>
+                  {dropA && (
+                    <AthleteNameDropdown
+                      query={h2hA}
+                      onSelect={name => setH2hA(name)}
+                      onClose={() => setDropA(false)}
+                    />
+                  )}
                 </div>
                 {h2hA.trim() && !aRow && (
                   <div style={{ fontSize: 10.5, color: 'var(--meta)', marginTop: 6, fontStyle: 'italic' }}>
@@ -1205,14 +1229,24 @@ export default function Compare() {
 
               <div className="rail-field">
                 <div className="rail-label"><span>Athlete B</span></div>
-                <div className="rail-ath-wrap b">
-                  <input
-                    value={h2hB}
-                    onChange={e => setH2hB(e.target.value)}
-                    placeholder="Name or bib"
-                    spellCheck={false}
-                  />
-                  {h2hB && <button className="clear-btn" onClick={() => setH2hB('')}>×</button>}
+                <div ref={refB} style={{ position: 'relative' }}>
+                  <div className="rail-ath-wrap b">
+                    <input
+                      value={h2hB}
+                      onChange={e => { setH2hB(e.target.value); setDropB(e.target.value.length >= 2); }}
+                      onKeyDown={e => { if (e.key === 'Escape') setDropB(false); }}
+                      placeholder="Name or bib"
+                      spellCheck={false}
+                    />
+                    {h2hB && <button className="clear-btn" onClick={() => { setH2hB(''); setDropB(false); }}>×</button>}
+                  </div>
+                  {dropB && (
+                    <AthleteNameDropdown
+                      query={h2hB}
+                      onSelect={name => setH2hB(name)}
+                      onClose={() => setDropB(false)}
+                    />
+                  )}
                 </div>
                 {h2hB.trim() && !bRow && (
                   <div style={{ fontSize: 10.5, color: 'var(--meta)', marginTop: 6, fontStyle: 'italic' }}>

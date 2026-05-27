@@ -325,3 +325,37 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
     </div>
   );
 }
+
+// ─── Athlete-name-only dropdown (compare tool) ────────────────────────────────
+
+interface AthleteNameDropdownProps {
+  query:    string;
+  onSelect: (name: string) => void;
+  onClose:  () => void;
+}
+
+export function AthleteNameDropdown({ query, onSelect, onClose }: AthleteNameDropdownProps) {
+  const { matches, loading } = useInlineSearch(query);
+
+  const athletes = matches.filter((m): m is FinisherMatch => m.kind === 'finisher');
+
+  if (query.length < 2) return null;
+
+  const pick = (name: string) => { onSelect(name); onClose(); };
+
+  return (
+    <div className="lp-search-dropdown">
+      {loading && <div className="lp-search-dropdown-status">Searching…</div>}
+      {!loading && athletes.map((m, i) => (
+        <div key={i} className="lp-search-dropdown-group">
+          <div className="lp-search-dropdown-row" onClick={() => pick(m.name)}>
+            <span className="lp-search-dropdown-name">{m.name}</span>
+          </div>
+        </div>
+      ))}
+      {!loading && athletes.length === 0 && (
+        <div className="lp-search-dropdown-status">No results for "{query}"</div>
+      )}
+    </div>
+  );
+}
