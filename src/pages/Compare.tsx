@@ -47,15 +47,6 @@ function ordSuffix(n: number): string {
   return n + (sfx[(v - 20) % 10] || sfx[v] || sfx[0]);
 }
 
-function parseAgBand(cat: string): string | null {
-  const m = cat.match(/^[MW]\s+(.+)$/);
-  if (!m) return null;
-  const rest = m[1];
-  if (rest === 'Elite' || rest === 'Open') return null;
-  if (!/^\d/.test(rest)) return null;
-  return rest;
-}
-
 function fmtKm(km: number): string {
   if (Math.abs(km - 42.195) < 0.1) return 'Marathon';
   if (Math.abs(km - 21.0975) < 0.1) return 'Half marathon';
@@ -71,14 +62,6 @@ type Venue = 'akl' | 'chc' | 'rot' | 'hb' | 'qt';
 type DistId = '42' | '21';
 
 // ── Race config ──────────────────────────────────────────
-
-const VENUE_LABELS: [Venue, string][] = [
-  ['akl', 'Auckland'],
-  ['chc', 'Christchurch'],
-  ['rot', 'Rotorua'],
-  ['hb', "Hawke's Bay"],
-  ['qt', 'Queenstown'],
-];
 
 function getRaceConfig(venue: Venue, distId: DistId) {
   const isHalf = distId === '21';
@@ -899,10 +882,10 @@ export default function Compare() {
   const [mode, setMode] = useState<Mode>('athletes');
   const [input, setInput] = useState(initialTime);
   const [committed, setCommitted] = useState(initialTime);
-  const [venue, setVenue] = useState<Venue>('akl');
-  const [distId, setDistId] = useState<DistId>(initialDist);
-  const [gender, setGender] = useState('M');
-  const [ag, setAg] = useState('all');
+  const [venue] = useState<Venue>('akl');
+  const [distId] = useState<DistId>(initialDist);
+  const [gender] = useState('M');
+  const [ag] = useState('all');
   const [h2hA, setH2hA] = useState('');
   const [h2hB, setH2hB] = useState('');
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
@@ -1030,15 +1013,6 @@ export default function Compare() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec, currentKm, loadedKeys]);
 
-  const agOptions = useMemo(() => {
-    const set = new Set<string>();
-    currentRows.forEach(r => {
-      const band = parseAgBand(r.cat);
-      if (band) set.add(band);
-    });
-    return Array.from(set).sort((a, b) => parseInt(a) - parseInt(b));
-  }, [currentRows]);
-
   // Athletes mode — search all loaded races, most recent year first per race
   const findAthlete = useCallback((name: string): H2HRow | null => {
     if (!name.trim()) return null;
@@ -1149,8 +1123,6 @@ export default function Compare() {
 
   const commit = () => setCommitted(input);
   const onKey = (e: React.KeyboardEvent) => { if (e.key === 'Enter') commit(); };
-
-  useEffect(() => { setAg('all'); }, [venue, distId]);
 
   return (
     <main>
@@ -1276,47 +1248,6 @@ export default function Compare() {
             <select className="rail-sel">
               <option>Race time (actual)</option>
               <option>Age-graded</option>
-            </select>
-          </div>
-
-          <div className="rail-field">
-            <div className="rail-label"><span>Race</span></div>
-            <div className="rail-pill-row">
-              {VENUE_LABELS.map(([v, label]) => (
-                <button key={v} className={`rail-pill${venue === v ? ' active' : ''}`} onClick={() => setVenue(v)}>
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="rail-field">
-            <div className="rail-label"><span>Distance</span></div>
-            <div className="rail-pill-row">
-              {([['42', '42.2 km'], ['21', '21.1 km']] as [DistId, string][]).map(([id, label]) => (
-                <button key={id} className={`rail-pill${distId === id ? ' active' : ''}`} onClick={() => setDistId(id)}>
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="rail-field">
-            <div className="rail-label"><span>Gender</span></div>
-            <div className="rail-pill-row">
-              {([['all', 'All'], ['M', 'Men'], ['W', 'Women']] as [string, string][]).map(([k, l]) => (
-                <button key={k} className={`rail-pill${gender === k ? ' active' : ''}`} onClick={() => setGender(k)}>
-                  {l}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="rail-field">
-            <div className="rail-label"><span>Age group</span></div>
-            <select className="rail-sel" value={ag} onChange={e => setAg(e.target.value)}>
-              <option value="all">All ages</option>
-              {agOptions.map(a => <option key={a} value={a}>{a.replace('-', '–')}</option>)}
             </select>
           </div>
 
