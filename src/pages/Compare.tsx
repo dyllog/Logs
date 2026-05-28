@@ -56,11 +56,74 @@ function fmtKm(km: number): string {
   return `${km} km`;
 }
 
+function pctFmt(p: number): string {
+  return p < 1 ? '<1%' : p >= 99.9 ? '>99%' : p.toFixed(1) + '%';
+}
+
 // ── Types ────────────────────────────────────────────────
 
 type Mode = 'racetime' | 'athletes';
 type Venue = 'akl' | 'chc' | 'rot' | 'hb' | 'qt';
 type DistId = '42' | '21';
+
+interface Placement { pos: number; total: number; beat: number; behind: number; pct: number; }
+interface FieldStats { rows: ResultRow[]; winner: number; median: number; last: number; }
+interface YearStripItem { year: number; cancelled?: boolean; percentile?: number; beat?: number; behind?: number; finishers?: number; medianSec?: number; loading?: boolean; }
+interface BestRace { year: number; raceName: string; equivSec: number; pos: number; total: number; pct: number; }
+interface H2HRow { name: string; time: string; pos: number; cat: string; sec: number; foundRace?: string; foundYear?: number; }
+
+interface SharedRace {
+  year: number;
+  label: string;
+  aSec: number;
+  bSec: number;
+  aWon: boolean;
+  dist: string;
+  aPos: number;
+  bPos: number;
+  aTotal: number;
+  aPct: number;
+  bPct: number;
+}
+
+interface FinishRecord {
+  race: string;
+  km: number;
+  year: number;
+  sec: number;
+  pos: number;
+  total: number;
+  cat: string;
+  club: string;
+  percentile: number;
+}
+
+interface AthleteStats {
+  finishes: FinishRecord[];
+  totalFinishes: number;
+  firstYear: number;
+  latestYear: number;
+  seasons: number[];
+  activeYears: number;
+  club: string;
+  primaryDistances: number[];
+  wins: number;
+  podiums: number;
+  top10s: number;
+  bestPlacing: number;
+  worstPlacing: number;
+  avgPlacing: number;
+  medianPlacing: number;
+  avgPercentile: number;
+  medianPercentile: number;
+  bestPercentile: number;
+  largeFieldPercentile: number | null;
+  pctVariance: number;
+  racesPerYear: number;
+  peakSeason: number | null;
+  peakSeasonPercentile: number | null;
+  archetype: string;
+}
 
 // ── Race config ──────────────────────────────────────────
 
@@ -112,14 +175,103 @@ const ALL_RACES = [
   { name: 'Queenstown Half Marathon',   km: 21.0975, years: [...QT_YEARS],      getYear: getCachedQtHalf },
 ];
 
-// ── Shared types ─────────────────────────────────────────
+// ── Stat helpers ──────────────────────────────────────────
 
-interface Placement { pos: number; total: number; beat: number; behind: number; pct: number; }
-interface FieldStats { rows: ResultRow[]; winner: number; median: number; last: number; }
-interface YearStripItem { year: number; cancelled?: boolean; percentile?: number; beat?: number; behind?: number; finishers?: number; medianSec?: number; loading?: boolean; }
-interface BestRace { year: number; raceName: string; equivSec: number; pos: number; total: number; pct: number; }
-interface H2HRow { name: string; time: string; pos: number; cat: string; sec: number; foundRace?: string; foundYear?: number; }
-interface SharedRace { year: number; label: string; aSec: number; bSec: number; aWon: boolean; dist: string; }
+function collectAllFinishes(name: string): FinishRecord[] {
+  if (!name.trim()) return [];
+  const lower = name.trim().toLowerCase();
+  const records: FinishRecord[] = [];
+  for (const rc of ALL_RACES) {
+    for (const y of rc.years) {
+      const rows = rc.getYear(y);
+      if (rows.length === 0) continue;
+      const hit = rows.find(r => r.name.toLowerCase() === lower);
+      if (!hit) continue;
+      const beat = rows.filter(r => r.sec > hit.sec).length;
+      records.push({
+        race: rc.name, km: rc.km, year: y, sec: hit.sec,
+        pos: hit.pos, total: rows.length,
+        cat: hit.cat, club: (hit as ResultRow & { club?: string }).club ?? '',
+        percentile: (beat / rows.length) * 100,
+      });
+    }
+  }
+  return records.sort((a, b) => a.year - b.year);
+}
+
+function computeAthleteStats(finishes: FinishRecord[]): AthleteStats | null {
+  if (finishes.length === 0) return null;
+  const total = finishes.length;
+  const years = finishes.map(f => f.year);
+  const seasons = Array.from(new Set(years)).sort((a, b) => a - b);
+  const firstYear = Math.min(...years);
+  const latestYear = Math.max(...years);
+
+  const sortedByYear = [...finishes].sort((a, b) => b.year - a.year);
+  const club = sortedByYear.find(f => f.club)?.club ?? '';
+
+  const distCount = new Map<number, number>();
+  finishes.forEach(f => distCount.set(f.km, (distCount.get(f.km) ?? 0) + 1));
+  const primaryDistances = Array.from(distCount.entries())
+    .sort((a, b) => b[1] - a[1]).slice(0, 2).map(([km]) => km);
+
+  const placingsSorted = finishes.map(f => f.pos).sort((a, b) => a - b);
+  const wins = finishes.filter(f => f.pos === 1).length;
+  const podiums = finishes.filter(f => f.pos <= 3).length;
+  const top10s = finishes.filter(f => f.pos <= 10).length;
+  const bestPlacing = placingsSorted[0];
+  const worstPlacing = placingsSorted[placingsSorted.length - 1];
+  const avgPlacing = placingsSorted.reduce((a, b) => a + b, 0) / total;
+  const medianPlacing = placingsSorted[Math.floor(total / 2)];
+
+  const percentiles = finishes.map(f => f.percentile);
+  const avgPercentile = percentiles.reduce((a, b) => a + b, 0) / total;
+  const sortedPcts = [...percentiles].sort((a, b) => b - a);
+  const medianPercentile = sortedPcts[Math.floor(total / 2)];
+  const bestPercentile = sortedPcts[0];
+
+  const pctVariance = Math.sqrt(
+    percentiles.reduce((a, b) => a + Math.pow(b - avgPercentile, 2), 0) / total
+  );
+
+  const largeFin = finishes.filter(f => f.total > 500);
+  const largeFieldPercentile = largeFin.length > 0
+    ? largeFin.reduce((a, b) => a + b.percentile, 0) / largeFin.length : null;
+
+  const racesPerYear = total / Math.max(1, seasons.length);
+
+  const seasonPcts = new Map<number, number[]>();
+  finishes.forEach(f => {
+    if (!seasonPcts.has(f.year)) seasonPcts.set(f.year, []);
+    seasonPcts.get(f.year)!.push(f.percentile);
+  });
+  let peakSeason: number | null = null;
+  let peakSeasonPercentile: number | null = null;
+  seasonPcts.forEach((pcts, year) => {
+    const avg = pcts.reduce((a, b) => a + b, 0) / pcts.length;
+    if (peakSeasonPercentile === null || avg > peakSeasonPercentile) {
+      peakSeason = year; peakSeasonPercentile = avg;
+    }
+  });
+
+  const marathonRatio = finishes.filter(f => Math.abs(f.km - 42.195) < 0.1).length / total;
+  const halfRatio = finishes.filter(f => Math.abs(f.km - 21.0975) < 0.1).length / total;
+  let archetype = 'Road generalist';
+  if (total < 3) archetype = 'Limited record';
+  else if (marathonRatio > 0.75) archetype = 'Marathon specialist';
+  else if (halfRatio > 0.75) archetype = 'Half marathon specialist';
+  else if (racesPerYear > 3.5) archetype = 'High-frequency racer';
+
+  return {
+    finishes, totalFinishes: total, firstYear, latestYear, seasons,
+    activeYears: latestYear - firstYear + 1,
+    club, primaryDistances, wins, podiums, top10s,
+    bestPlacing, worstPlacing, avgPlacing, medianPlacing,
+    avgPercentile, medianPercentile, bestPercentile,
+    largeFieldPercentile, pctVariance, racesPerYear,
+    peakSeason, peakSeasonPercentile, archetype,
+  };
+}
 
 // ── Race-time canvas sub-components ──────────────────────
 
@@ -310,7 +462,7 @@ function RaceTimeCanvas({
 
 // ── Athletes canvas sub-components ───────────────────────
 
-function AthleteCard({ side, row, careerBests, raceName, year,
+function AthleteCard({ side, row, careerBests, raceName, year, stats,
   searchValue, setSearchValue, dropOpen, setDropOpen, searchRef,
 }: {
   side: 'a' | 'b';
@@ -318,6 +470,7 @@ function AthleteCard({ side, row, careerBests, raceName, year,
   careerBests: { km: number; sec: number; leadA: boolean }[];
   raceName: string;
   year: number;
+  stats: AthleteStats | null;
   searchValue: string;
   setSearchValue: (v: string) => void;
   dropOpen: boolean;
@@ -379,8 +532,46 @@ function AthleteCard({ side, row, careerBests, raceName, year,
         <span className="first">{firstName}</span>
       </div>
       <h2 className="ath-last">{lastName}</h2>
-      <div className="ath-club">{row.cat}</div>
-      <div className="ath-id">{row.foundRace ?? raceName} {row.foundYear ?? year} · {row.time} · {ordSuffix(row.pos)}</div>
+
+      {/* Identity block */}
+      <div className="ath-identity">
+        {stats?.club && (
+          <div className="ath-id-row">
+            <span className="k">Club</span>
+            <span className="v">{stats.club}</span>
+          </div>
+        )}
+        {stats && (
+          <>
+            <div className="ath-id-row">
+              <span className="k">Active</span>
+              <span className="v">
+                {stats.firstYear === stats.latestYear
+                  ? `${stats.firstYear}`
+                  : `${stats.firstYear}–${stats.latestYear}`}
+              </span>
+            </div>
+            <div className="ath-id-row">
+              <span className="k">On file</span>
+              <span className="v">{stats.totalFinishes} finish{stats.totalFinishes !== 1 ? 'es' : ''}</span>
+            </div>
+            <div className="ath-id-row">
+              <span className="k">Primary</span>
+              <span className="v">{stats.primaryDistances.map(fmtKm).join(' · ')}</span>
+            </div>
+          </>
+        )}
+        {!stats && (
+          <div className="ath-id-row">
+            <span className="k">First found</span>
+            <span className="v">{row.foundRace ?? raceName} {row.foundYear ?? year}</span>
+          </div>
+        )}
+      </div>
+
+      {stats && (
+        <div className="ath-archetype">{stats.archetype}</div>
+      )}
 
       {careerBests.length > 0 && (
         <>
@@ -488,6 +679,218 @@ function EdgeBar({ aName, bName, edgePct, avgGapSec, seriesRecord, narrowestGapS
   );
 }
 
+// ── § 01 — Raw performance metrics ───────────────────────
+
+function RawMetricsSection({ aName, bName, aStats, bStats }: {
+  aName: string; bName: string;
+  aStats: AthleteStats | null; bStats: AthleteStats | null;
+}) {
+  if (!aStats && !bStats) return null;
+
+  const aShort = aName.split(' ').pop() || aName;
+  const bShort = bName.split(' ').pop() || bName;
+
+  type DuelRow = { label: string; aVal: string; bVal: string; aLeads?: boolean | null };
+
+  const rows: DuelRow[] = [
+    {
+      label: 'Finishes on file',
+      aVal: aStats ? aStats.totalFinishes.toString() : '—',
+      bVal: bStats ? bStats.totalFinishes.toString() : '—',
+      aLeads: aStats && bStats ? aStats.totalFinishes >= bStats.totalFinishes : null,
+    },
+    {
+      label: 'Wins',
+      aVal: aStats ? aStats.wins.toString() : '—',
+      bVal: bStats ? bStats.wins.toString() : '—',
+      aLeads: aStats && bStats ? aStats.wins > bStats.wins : null,
+    },
+    {
+      label: 'Podiums',
+      aVal: aStats ? aStats.podiums.toString() : '—',
+      bVal: bStats ? bStats.podiums.toString() : '—',
+      aLeads: aStats && bStats ? aStats.podiums > bStats.podiums : null,
+    },
+    {
+      label: 'Top-10 finishes',
+      aVal: aStats ? aStats.top10s.toString() : '—',
+      bVal: bStats ? bStats.top10s.toString() : '—',
+      aLeads: aStats && bStats ? aStats.top10s > bStats.top10s : null,
+    },
+    {
+      label: 'Best placing',
+      aVal: aStats ? ordSuffix(aStats.bestPlacing) : '—',
+      bVal: bStats ? ordSuffix(bStats.bestPlacing) : '—',
+      aLeads: aStats && bStats ? aStats.bestPlacing < bStats.bestPlacing : null,
+    },
+    {
+      label: 'Average placing',
+      aVal: aStats ? ordSuffix(Math.round(aStats.avgPlacing)) : '—',
+      bVal: bStats ? ordSuffix(Math.round(bStats.avgPlacing)) : '—',
+      aLeads: aStats && bStats ? aStats.avgPlacing < bStats.avgPlacing : null,
+    },
+    {
+      label: 'Median placing',
+      aVal: aStats ? ordSuffix(aStats.medianPlacing) : '—',
+      bVal: bStats ? ordSuffix(bStats.medianPlacing) : '—',
+      aLeads: aStats && bStats ? aStats.medianPlacing < bStats.medianPlacing : null,
+    },
+    {
+      label: 'Worst placing',
+      aVal: aStats ? ordSuffix(aStats.worstPlacing) : '—',
+      bVal: bStats ? ordSuffix(bStats.worstPlacing) : '—',
+      aLeads: aStats && bStats ? aStats.worstPlacing < bStats.worstPlacing : null,
+    },
+  ];
+
+  const bothPresent = aStats && bStats;
+
+  return (
+    <section className="cmp-sect">
+      <div className="cmp-sect-head">
+        <div className="cmp-sect-num">No. 01</div>
+        <h2>Raw performance metrics</h2>
+        <div className="cmp-sect-note">Across all certified finishes on file</div>
+      </div>
+
+      <div className="metrics-duel">
+        <div className="md-names">
+          <span className="a">{aShort}</span>
+          <span className="sep" />
+          <span className="b">{bShort}</span>
+        </div>
+        {rows.map(row => (
+          <div key={row.label} className="md-row">
+            <span className={`a-val${bothPresent && row.aLeads === true ? ' leads' : bothPresent && row.aLeads === false ? ' trails' : ''}`}>
+              {row.aVal}
+            </span>
+            <span className="md-label">{row.label}</span>
+            <span className={`b-val${bothPresent && row.aLeads === false ? ' leads' : bothPresent && row.aLeads === true ? ' trails' : ''}`}>
+              {row.bVal}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {bothPresent && (
+        <div className="tbl-foot">
+          <span>
+            {aStats!.wins > bStats!.wins
+              ? `${aShort} holds an edge in win count across the archive.`
+              : bStats!.wins > aStats!.wins
+              ? `${bShort} holds an edge in win count across the archive.`
+              : aStats!.avgPlacing < bStats!.avgPlacing
+              ? `${aShort} holds a narrower average placing across the archive.`
+              : bStats!.avgPlacing < aStats!.avgPlacing
+              ? `${bShort} holds a narrower average placing across the archive.`
+              : 'Closely matched across the archive.'}
+          </span>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ── § 02 — Field-normalized metrics ──────────────────────
+
+function FieldNormalizedSection({ aName, bName, aStats, bStats }: {
+  aName: string; bName: string;
+  aStats: AthleteStats | null; bStats: AthleteStats | null;
+}) {
+  if (!aStats && !bStats) return null;
+
+  const aShort = aName.split(' ').pop() || aName;
+  const bShort = bName.split(' ').pop() || bName;
+  const bothPresent = aStats && bStats;
+
+  type DuelRow = { label: string; note: string; aVal: string; bVal: string; aLeads?: boolean | null };
+
+  const rows: DuelRow[] = [
+    {
+      label: 'Average percentile',
+      note: 'Mean finishing percentile',
+      aVal: aStats ? pctFmt(aStats.avgPercentile) : '—',
+      bVal: bStats ? pctFmt(bStats.avgPercentile) : '—',
+      aLeads: aStats && bStats ? aStats.avgPercentile > bStats.avgPercentile : null,
+    },
+    {
+      label: 'Median percentile',
+      note: 'More stable measure of typical performance',
+      aVal: aStats ? pctFmt(aStats.medianPercentile) : '—',
+      bVal: bStats ? pctFmt(bStats.medianPercentile) : '—',
+      aLeads: aStats && bStats ? aStats.medianPercentile > bStats.medianPercentile : null,
+    },
+    {
+      label: 'Peak percentile',
+      note: 'Strongest single-race field-relative performance',
+      aVal: aStats ? pctFmt(aStats.bestPercentile) : '—',
+      bVal: bStats ? pctFmt(bStats.bestPercentile) : '—',
+      aLeads: aStats && bStats ? aStats.bestPercentile > bStats.bestPercentile : null,
+    },
+    {
+      label: 'Large-field average',
+      note: 'Performance in fields above 500 finishers',
+      aVal: aStats ? (aStats.largeFieldPercentile != null ? pctFmt(aStats.largeFieldPercentile) : 'n/a') : '—',
+      bVal: bStats ? (bStats.largeFieldPercentile != null ? pctFmt(bStats.largeFieldPercentile) : 'n/a') : '—',
+      aLeads: aStats?.largeFieldPercentile != null && bStats?.largeFieldPercentile != null
+        ? aStats.largeFieldPercentile > bStats.largeFieldPercentile : null,
+    },
+    {
+      label: 'Percentile spread',
+      note: 'Standard deviation across all races — lower = more consistent',
+      aVal: aStats ? `±${aStats.pctVariance.toFixed(1)}pp` : '—',
+      bVal: bStats ? `±${bStats.pctVariance.toFixed(1)}pp` : '—',
+      aLeads: aStats && bStats ? aStats.pctVariance < bStats.pctVariance : null,
+    },
+  ];
+
+  return (
+    <section className="cmp-sect">
+      <div className="cmp-sect-head">
+        <div className="cmp-sect-num">No. 02</div>
+        <h2>Field-normalized metrics</h2>
+        <div className="cmp-sect-note">Performance relative to field depth · not absolute time</div>
+      </div>
+
+      <div className="metrics-duel">
+        <div className="md-names">
+          <span className="a">{aShort}</span>
+          <span className="sep" />
+          <span className="b">{bShort}</span>
+        </div>
+        {rows.map(row => (
+          <div key={row.label} className="md-row">
+            <span className={`a-val${bothPresent && row.aLeads === true ? ' leads' : bothPresent && row.aLeads === false ? ' trails' : ''}`}>
+              {row.aVal}
+            </span>
+            <div className="md-label-stack">
+              <span className="md-label">{row.label}</span>
+              <span className="md-note">{row.note}</span>
+            </div>
+            <span className={`b-val${bothPresent && row.aLeads === false ? ' leads' : bothPresent && row.aLeads === true ? ' trails' : ''}`}>
+              {row.bVal}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {bothPresent && (
+        <div className="tbl-foot">
+          <span>
+            {aStats!.avgPercentile > bStats!.avgPercentile
+              ? `${aShort} holds a higher average percentile across the archive — ${(aStats!.avgPercentile - bStats!.avgPercentile).toFixed(1)} percentile points.`
+              : bStats!.avgPercentile > aStats!.avgPercentile
+              ? `${bShort} holds a higher average percentile across the archive — ${(bStats!.avgPercentile - aStats!.avgPercentile).toFixed(1)} percentile points.`
+              : 'Closely matched field-relative performance across the archive.'}
+          </span>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ── § 03 — Shared race ledger ─────────────────────────────
+
 function SharedRaceLedger({ aName, bName, races }: {
   aName: string; bName: string; races: SharedRace[];
 }) {
@@ -496,10 +899,24 @@ function SharedRaceLedger({ aName, bName, races }: {
   const aWins = races.filter(r => r.aWon).length;
   const bWins = races.filter(r => !r.aWon).length;
 
+  const avgMargin = races.length > 0
+    ? races.reduce((s, r) => s + Math.abs(r.aSec - r.bSec), 0) / races.length : 0;
+  const closestRace = races.length > 0
+    ? races.reduce((best, r) => Math.abs(r.aSec - r.bSec) < Math.abs(best.aSec - best.bSec) ? r : best, races[0]) : null;
+  const largestMarginRace = races.length > 0
+    ? races.reduce((best, r) => Math.abs(r.aSec - r.bSec) > Math.abs(best.aSec - best.bSec) ? r : best, races[0]) : null;
+
+  const distCounts = new Map<string, { a: number; b: number }>();
+  races.forEach(r => {
+    if (!distCounts.has(r.dist)) distCounts.set(r.dist, { a: 0, b: 0 });
+    const e = distCounts.get(r.dist)!;
+    if (r.aWon) e.a++; else e.b++;
+  });
+
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
-        <div className="cmp-sect-num">No. 01</div>
+        <div className="cmp-sect-num">No. 03</div>
         <h2>Shared race ledger</h2>
         <div className="cmp-sect-note">{races.length} meeting{races.length !== 1 ? 's' : ''} on file · A — B gap convention</div>
       </div>
@@ -508,29 +925,43 @@ function SharedRaceLedger({ aName, bName, races }: {
         <thead>
           <tr>
             <th>Race · edition</th>
-            <th style={{ width: 110 }}>{aShort}</th>
-            <th style={{ width: 110 }}>{bShort}</th>
+            <th style={{ width: 120 }}>{aShort}</th>
+            <th style={{ width: 120 }}>{bShort}</th>
             <th style={{ width: 70 }}>Gap</th>
-            <th style={{ width: 100 }}>Leader</th>
+            <th style={{ width: 90 }}>Pct edge</th>
           </tr>
         </thead>
         <tbody>
-          {races.map((r, i) => (
-            <tr key={i}>
-              <td>
-                <span className="race-em">{r.label}</span>
-                <span className="race-lo">{r.dist}</span>
-              </td>
-              <td className={`ti ${r.aWon ? 'lead' : 'trail'}`}>{fmtSec(r.aSec)}</td>
-              <td className={`ti ${r.aWon ? 'trail' : 'lead'}`}>{fmtSec(r.bSec)}</td>
-              <td className={r.aWon ? 'gap-pos' : 'gap-neg'}>
-                {r.aWon ? '+' : '−'}{fmtSec(Math.abs(r.aSec - r.bSec))}
-              </td>
-              <td className={r.aWon ? 'leader-a' : 'leader-b'}>
-                {r.aWon ? aShort : bShort}
-              </td>
-            </tr>
-          ))}
+          {races.map((r, i) => {
+            const pctDiff = r.aPct - r.bPct;
+            const pctEdgeLabel = Math.abs(pctDiff) < 0.5
+              ? '≈'
+              : pctDiff > 0
+              ? `A +${pctDiff.toFixed(1)}pp`
+              : `B +${Math.abs(pctDiff).toFixed(1)}pp`;
+            const pctEdgeClass = Math.abs(pctDiff) < 0.5
+              ? '' : pctDiff > 0 ? 'pct-a' : 'pct-b';
+            return (
+              <tr key={i}>
+                <td>
+                  <span className="race-em">{r.label}</span>
+                  <span className="race-lo">{r.dist}</span>
+                </td>
+                <td className={`ti ${r.aWon ? 'lead' : 'trail'}`}>
+                  {fmtSec(r.aSec)}
+                  <span className="pos-sub">{ordSuffix(r.aPos)}</span>
+                </td>
+                <td className={`ti ${r.aWon ? 'trail' : 'lead'}`}>
+                  {fmtSec(r.bSec)}
+                  <span className="pos-sub">{ordSuffix(r.bPos)}</span>
+                </td>
+                <td className={r.aWon ? 'gap-pos' : 'gap-neg'}>
+                  {r.aWon ? '+' : '−'}{fmtSec(Math.abs(r.aSec - r.bSec))}
+                </td>
+                <td className={`pct-edge ${pctEdgeClass}`}>{pctEdgeLabel}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
@@ -541,9 +972,154 @@ function SharedRaceLedger({ aName, bName, races }: {
         </span>
         <span>▸ marks the faster finisher</span>
       </div>
+
+      {/* Derived insights */}
+      {races.length >= 2 && (
+        <div className="h2h-insights">
+          <div className="h2h-insight-row">
+            <div className="h2h-insight">
+              <div className="k">Average margin</div>
+              <div className="v">{fmtSec(avgMargin)}</div>
+            </div>
+            {closestRace && (
+              <div className="h2h-insight">
+                <div className="k">Closest meeting</div>
+                <div className="v">{fmtSec(Math.abs(closestRace.aSec - closestRace.bSec))}</div>
+                <div className="vm">{closestRace.label}</div>
+              </div>
+            )}
+            {largestMarginRace && (
+              <div className="h2h-insight">
+                <div className="k">Largest margin</div>
+                <div className="v">{fmtSec(Math.abs(largestMarginRace.aSec - largestMarginRace.bSec))}</div>
+                <div className="vm">{largestMarginRace.label}</div>
+              </div>
+            )}
+            <div className="h2h-insight">
+              <div className="k">Distance split</div>
+              <div className="v" style={{ fontSize: 13, lineHeight: 1.4 }}>
+                {Array.from(distCounts.entries()).map(([dist, v]) =>
+                  `${dist}: ${v.a}–${v.b}`
+                ).join(' · ')}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+
+// ── § 04 — Consistency & longevity ───────────────────────
+
+function ConsistencyLongevitySection({ aName, bName, aStats, bStats }: {
+  aName: string; bName: string;
+  aStats: AthleteStats | null; bStats: AthleteStats | null;
+}) {
+  if (!aStats && !bStats) return null;
+
+  const aShort = aName.split(' ').pop() || aName;
+  const bShort = bName.split(' ').pop() || bName;
+  const bothPresent = aStats && bStats;
+
+  type DuelRow = { label: string; note: string; aVal: string; bVal: string; aLeads?: boolean | null };
+
+  const rows: DuelRow[] = [
+    {
+      label: 'Active years',
+      note: 'First to latest recorded finish',
+      aVal: aStats
+        ? (aStats.firstYear === aStats.latestYear ? `${aStats.firstYear}` : `${aStats.firstYear}–${aStats.latestYear}`)
+        : '—',
+      bVal: bStats
+        ? (bStats.firstYear === bStats.latestYear ? `${bStats.firstYear}` : `${bStats.firstYear}–${bStats.latestYear}`)
+        : '—',
+      aLeads: aStats && bStats ? aStats.activeYears >= bStats.activeYears : null,
+    },
+    {
+      label: 'Seasons raced',
+      note: 'Distinct years with at least one finish',
+      aVal: aStats ? aStats.seasons.length.toString() : '—',
+      bVal: bStats ? bStats.seasons.length.toString() : '—',
+      aLeads: aStats && bStats ? aStats.seasons.length >= bStats.seasons.length : null,
+    },
+    {
+      label: 'Races per year',
+      note: 'Average across seasons with finishes',
+      aVal: aStats ? aStats.racesPerYear.toFixed(1) : '—',
+      bVal: bStats ? bStats.racesPerYear.toFixed(1) : '—',
+      aLeads: null,
+    },
+    {
+      label: 'Percentile spread',
+      note: 'Lower value indicates more consistent field-relative results',
+      aVal: aStats ? `±${aStats.pctVariance.toFixed(1)}pp` : '—',
+      bVal: bStats ? `±${bStats.pctVariance.toFixed(1)}pp` : '—',
+      aLeads: aStats && bStats ? aStats.pctVariance < bStats.pctVariance : null,
+    },
+    {
+      label: 'Peak season',
+      note: 'Year with highest average percentile',
+      aVal: aStats?.peakSeason != null ? `${aStats.peakSeason}` : '—',
+      bVal: bStats?.peakSeason != null ? `${bStats.peakSeason}` : '—',
+      aLeads: null,
+    },
+    {
+      label: 'Peak season %ile',
+      note: 'Average percentile across races in peak year',
+      aVal: aStats?.peakSeasonPercentile != null ? pctFmt(aStats.peakSeasonPercentile) : '—',
+      bVal: bStats?.peakSeasonPercentile != null ? pctFmt(bStats.peakSeasonPercentile) : '—',
+      aLeads: aStats?.peakSeasonPercentile != null && bStats?.peakSeasonPercentile != null
+        ? aStats.peakSeasonPercentile > bStats.peakSeasonPercentile : null,
+    },
+  ];
+
+  return (
+    <section className="cmp-sect">
+      <div className="cmp-sect-head">
+        <div className="cmp-sect-num">No. 04</div>
+        <h2>Consistency & longevity</h2>
+        <div className="cmp-sect-note">Durability, reliability, and peak performance window</div>
+      </div>
+
+      <div className="metrics-duel">
+        <div className="md-names">
+          <span className="a">{aShort}</span>
+          <span className="sep" />
+          <span className="b">{bShort}</span>
+        </div>
+        {rows.map(row => (
+          <div key={row.label} className="md-row">
+            <span className={`a-val${bothPresent && row.aLeads === true ? ' leads' : bothPresent && row.aLeads === false ? ' trails' : ''}`}>
+              {row.aVal}
+            </span>
+            <div className="md-label-stack">
+              <span className="md-label">{row.label}</span>
+              <span className="md-note">{row.note}</span>
+            </div>
+            <span className={`b-val${bothPresent && row.aLeads === false ? ' leads' : bothPresent && row.aLeads === true ? ' trails' : ''}`}>
+              {row.bVal}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {bothPresent && (
+        <div className="tbl-foot">
+          <span>
+            {aStats!.activeYears > bStats!.activeYears
+              ? `${aShort} has the longer archive footprint — ${aStats!.activeYears} years spanning the record.`
+              : bStats!.activeYears > aStats!.activeYears
+              ? `${bShort} has the longer archive footprint — ${bStats!.activeYears} years spanning the record.`
+              : `Both athletes share a ${aStats!.activeYears}-year archive span.`}
+          </span>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ── § 05 — Progression ───────────────────────────────────
 
 function ProgressionSection({ aName, bName, aData, bData }: {
   aName: string; bName: string;
@@ -569,7 +1145,7 @@ function ProgressionSection({ aName, bName, aData, bData }: {
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
-        <div className="cmp-sect-num">No. 02</div>
+        <div className="cmp-sect-num">No. 05</div>
         <h2>Progression · all courses</h2>
         <div className="cmp-sect-note">Faster sits higher · each point is a recorded finish</div>
       </div>
@@ -633,6 +1209,117 @@ function ProgressionSection({ aName, bName, aData, bData }: {
   );
 }
 
+// ── § 06 — Historical context ─────────────────────────────
+
+function HistoricalContextSection({ aName, bName, aStats, bStats }: {
+  aName: string; bName: string;
+  aStats: AthleteStats | null; bStats: AthleteStats | null;
+}) {
+  if (!aStats && !bStats) return null;
+
+  const aShort = aName.split(' ').pop() || aName;
+  const bShort = bName.split(' ').pop() || bName;
+
+  const getTopRace = (stats: AthleteStats | null): string => {
+    if (!stats) return '—';
+    const raceCounts = new Map<string, number>();
+    stats.finishes.forEach(f => raceCounts.set(f.race, (raceCounts.get(f.race) ?? 0) + 1));
+    let top = ''; let topCount = 0;
+    raceCounts.forEach((count, race) => { if (count > topCount) { top = race; topCount = count; } });
+    return topCount > 1 ? `${top} (×${topCount})` : top;
+  };
+
+  const getSeriesCount = (stats: AthleteStats | null): string => {
+    if (!stats) return '—';
+    return String(new Set(stats.finishes.map(f => f.race)).size);
+  };
+
+  const bothPresent = aStats && bStats;
+
+  type DuelRow = { label: string; note: string; aVal: string; bVal: string; aLeads?: boolean | null };
+
+  const rows: DuelRow[] = [
+    {
+      label: 'First recorded',
+      note: 'Earliest finish in the archive',
+      aVal: aStats ? `${aStats.firstYear}` : '—',
+      bVal: bStats ? `${bStats.firstYear}` : '—',
+      aLeads: aStats && bStats ? aStats.firstYear <= bStats.firstYear : null,
+    },
+    {
+      label: 'Latest recorded',
+      note: 'Most recent finish in the archive',
+      aVal: aStats ? `${aStats.latestYear}` : '—',
+      bVal: bStats ? `${bStats.latestYear}` : '—',
+      aLeads: null,
+    },
+    {
+      label: 'Archive span',
+      note: 'Years between first and latest finish',
+      aVal: aStats ? `${aStats.activeYears} yr${aStats.activeYears !== 1 ? 's' : ''}` : '—',
+      bVal: bStats ? `${bStats.activeYears} yr${bStats.activeYears !== 1 ? 's' : ''}` : '—',
+      aLeads: aStats && bStats ? aStats.activeYears >= bStats.activeYears : null,
+    },
+    {
+      label: 'Race series covered',
+      note: 'Distinct race events with at least one finish',
+      aVal: getSeriesCount(aStats),
+      bVal: getSeriesCount(bStats),
+      aLeads: aStats && bStats
+        ? new Set(aStats.finishes.map(f => f.race)).size >= new Set(bStats.finishes.map(f => f.race)).size
+        : null,
+    },
+    {
+      label: 'Most appearances',
+      note: 'Race series with highest repeat attendance',
+      aVal: getTopRace(aStats),
+      bVal: getTopRace(bStats),
+      aLeads: null,
+    },
+    {
+      label: 'Archive category',
+      note: 'Registered competitive category (most recent)',
+      aVal: aStats ? (aStats.finishes[aStats.finishes.length - 1]?.cat || '—') : '—',
+      bVal: bStats ? (bStats.finishes[bStats.finishes.length - 1]?.cat || '—') : '—',
+      aLeads: null,
+    },
+  ];
+
+  return (
+    <section className="cmp-sect">
+      <div className="cmp-sect-head">
+        <div className="cmp-sect-num">No. 06</div>
+        <h2>Historical context</h2>
+        <div className="cmp-sect-note">Placement within the broader archive · era and footprint</div>
+      </div>
+
+      <div className="metrics-duel">
+        <div className="md-names">
+          <span className="a">{aShort}</span>
+          <span className="sep" />
+          <span className="b">{bShort}</span>
+        </div>
+        {rows.map(row => (
+          <div key={row.label} className="md-row">
+            <span className={`a-val${bothPresent && row.aLeads === true ? ' leads' : bothPresent && row.aLeads === false ? ' trails' : ''}`}>
+              {row.aVal}
+            </span>
+            <div className="md-label-stack">
+              <span className="md-label">{row.label}</span>
+              <span className="md-note">{row.note}</span>
+            </div>
+            <span className={`b-val${bothPresent && row.aLeads === false ? ' leads' : bothPresent && row.aLeads === true ? ' trails' : ''}`}>
+              {row.bVal}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Distribution of shared races ──────────────────────────
+
 function DistributionSection({ aName, bName, races }: {
   aName: string; bName: string; races: SharedRace[];
 }) {
@@ -652,17 +1339,15 @@ function DistributionSection({ aName, bName, races }: {
     else { byDist[r.dist].b++; byYear[r.year].b++; }
   });
 
-  const distEntries = Object.entries(byDist).sort((a, b) => {
-    const aKm = parseFloat(a[0]);
-    const bKm = parseFloat(b[0]);
-    return bKm - aKm;
-  });
-  const yearEntries = Object.entries(byYear).map(([y, v]) => ([parseInt(y), v] as [number, { a: number; b: number }])).sort((a, b) => a[0] - b[0]);
+  const distEntries = Object.entries(byDist).sort((a, b) => parseFloat(b[0]) - parseFloat(a[0]));
+  const yearEntries = Object.entries(byYear)
+    .map(([y, v]) => ([parseInt(y), v] as [number, { a: number; b: number }]))
+    .sort((a, b) => a[0] - b[0]);
 
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
-        <div className="cmp-sect-num">No. 03</div>
+        <div className="cmp-sect-num">No. 07</div>
         <h2>Distribution of shared races</h2>
         <div className="cmp-sect-note">{races.length} meetings · faster finisher counted toward leading column</div>
       </div>
@@ -747,7 +1432,7 @@ function MethodologySection({ raceName }: { raceName: string }) {
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
-        <div className="cmp-sect-num">No. 04</div>
+        <div className="cmp-sect-num">No. 08</div>
         <h2>Methodology · assumptions in force</h2>
         <div className="cmp-sect-note">Reflects current settings</div>
       </div>
@@ -756,15 +1441,16 @@ function MethodologySection({ raceName }: { raceName: string }) {
         <div className="meth-col-l">
           <div className="k">On reading these results</div>
           <h3>What the figures do and do not claim.</h3>
-          <p>LOGS is a reference, not a verdict. Edge values describe an observed lean across a defined sample; they should not be read as a forecast.</p>
+          <p>LOGS is a reference, not a verdict. Edge values describe an observed lean across a defined sample; they should not be read as a forecast or definitive ranking.</p>
         </div>
         <div className="meth-col-r">
           <ol>
             <li><span className="k">Cohort</span><span className="v">Only certified, in-LOGS finishes are counted. Provisional results and unverified profiles are excluded.</span></li>
-            <li><span className="k">Equivalency</span><span className="v">Cross-distance equivalency uses the Riegel formula t₂ = t₁ · (d₂/d₁)^1.06. Applied only where same-distance data is unavailable.</span></li>
-            <li><span className="k">Normalization</span><span className="v">Default mode is race time, actual — no age or gender adjustment.</span></li>
+            <li><span className="k">Percentile</span><span className="v">Calculated as finishers beaten divided by field size. Handles ties by exact time matching. Higher percentile = faster relative to field.</span></li>
+            <li><span className="k">Equivalency</span><span className="v">Cross-distance equivalency uses the Riegel formula t₂ = t₁ · (d₂/d₁)^1.06. Applied only in Race time mode.</span></li>
+            <li><span className="k">Normalization</span><span className="v">Default mode is race time, actual — no age or gender adjustment. Field-normalized metrics compare within the full open field.</span></li>
             <li><span className="k">Course parity</span><span className="v">Re-measured or re-routed courses are flagged in the race page; figures treat each certified edition as a distinct cohort.</span></li>
-            <li><span className="k">Identity</span><span className="v">Athlete profiles are matched by name. Where a name resolves to multiple records, the first match is used.</span></li>
+            <li><span className="k">Identity</span><span className="v">Athlete profiles are matched by exact name. Where a name resolves to multiple records, the canonical match from search is used.</span></li>
             <li><span className="k">Confidence</span><span className="v">High when shared-race sample ≥ 5 meetings; otherwise reported as moderate or low.</span></li>
           </ol>
         </div>
@@ -782,7 +1468,7 @@ function ExtendSection({ aName, bName, raceName, year }: {
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
-        <div className="cmp-sect-num">No. 05</div>
+        <div className="cmp-sect-num">No. 09</div>
         <h2>Extend this analysis</h2>
         <div className="cmp-sect-note">Each card opens a configured query</div>
       </div>
@@ -824,14 +1510,18 @@ function ExtendSection({ aName, bName, raceName, year }: {
 
 function AthletesCanvas({
   aRow, bRow, careerBests, sharedRaces, aProgression, bProgression,
+  aStats, bStats,
   raceName, currentYear, distLabel, h2hA, h2hB, setH2hA, setH2hB,
   gender, setGender,
 }: {
   aRow: H2HRow | null; bRow: H2HRow | null;
   careerBests: { km: number; aSecBest: number | null; bSecBest: number | null }[];
-  sharedRaces: SharedRace[]; aProgression: { year: number; sec: number }[];
-  bProgression: { year: number; sec: number }[]; raceName: string;
-  currentYear: number; distLabel: string; h2hA: string; h2hB: string;
+  sharedRaces: SharedRace[];
+  aProgression: { year: number; sec: number; km: number }[];
+  bProgression: { year: number; sec: number; km: number }[];
+  aStats: AthleteStats | null; bStats: AthleteStats | null;
+  raceName: string; currentYear: number; distLabel: string;
+  h2hA: string; h2hB: string;
   setH2hA: (v: string) => void; setH2hB: (v: string) => void;
   gender: string; setGender: (v: string) => void;
 }) {
@@ -877,7 +1567,6 @@ function AthletesCanvas({
   const aName = aRow?.name || h2hA || 'Athlete A';
   const bName = bRow?.name || h2hB || 'Athlete B';
 
-  // Map career bests with lead markers
   const aPbs = careerBests.map(({ km, aSecBest, bSecBest }) => ({
     km, sec: aSecBest!, leadA: aSecBest != null && (bSecBest == null || aSecBest < bSecBest),
   })).filter(x => x.sec != null);
@@ -887,14 +1576,17 @@ function AthletesCanvas({
 
   return (
     <div>
+      {/* Identity hero */}
       <div className="compare-hero">
         <AthleteCard
           side="a" row={aRow} careerBests={aPbs} raceName={raceName} year={currentYear}
+          stats={aStats}
           searchValue={h2hA} setSearchValue={setH2hA}
           dropOpen={dropA} setDropOpen={setDropA} searchRef={refA}
         />
         <AthleteCard
           side="b" row={bRow} careerBests={bPbs} raceName={raceName} year={currentYear}
+          stats={bStats}
           searchValue={h2hB} setSearchValue={setH2hB}
           dropOpen={dropB} setDropOpen={setDropB} searchRef={refB}
         />
@@ -909,14 +1601,37 @@ function AthletesCanvas({
         />
       )}
 
+      {/* § 01 Raw metrics */}
+      {(aStats || bStats) && (
+        <RawMetricsSection aName={aName} bName={bName} aStats={aStats} bStats={bStats} />
+      )}
+
+      {/* § 02 Field-normalized */}
+      {(aStats || bStats) && (
+        <FieldNormalizedSection aName={aName} bName={bName} aStats={aStats} bStats={bStats} />
+      )}
+
+      {/* § 03 Shared race ledger */}
       {sharedRaces.length > 0 && (
         <SharedRaceLedger aName={aName} bName={bName} races={sharedRaces} />
       )}
 
+      {/* § 04 Consistency & longevity */}
+      {(aStats || bStats) && (
+        <ConsistencyLongevitySection aName={aName} bName={bName} aStats={aStats} bStats={bStats} />
+      )}
+
+      {/* § 05 Progression */}
       {(aProgression.length > 0 || bProgression.length > 0) && (
         <ProgressionSection aName={aName} bName={bName} aData={aProgression} bData={bProgression} />
       )}
 
+      {/* § 06 Historical context */}
+      {(aStats || bStats) && (
+        <HistoricalContextSection aName={aName} bName={bName} aStats={aStats} bStats={bStats} />
+      )}
+
+      {/* § 07 Distribution */}
       {sharedRaces.length > 1 && (
         <DistributionSection aName={aName} bName={bName} races={sharedRaces} />
       )}
@@ -930,10 +1645,10 @@ function AthletesCanvas({
   );
 }
 
-// ── Main component ────────────────────────────────────────
-
 // ── Popular athlete chips ────────────────────────────────
 const POPULAR_ATHLETES = ['Jack Moody', 'Ben Twyman', 'Brent Godfrey', 'Josh Voss', 'Daniel Balchin'];
+
+// ── Main component ────────────────────────────────────────
 
 export default function Compare() {
   const [searchParams] = useSearchParams();
@@ -1098,85 +1813,56 @@ export default function Compare() {
   const aRow = useMemo(() => findAthlete(h2hA), [h2hA, findAthlete]);
   const bRow = useMemo(() => findAthlete(h2hB), [h2hB, findAthlete]);
 
-  // Compute career bests from all loaded race data
+  // Comprehensive finish history for each athlete
+  const aFinishes = useMemo(
+    () => collectAllFinishes(aRow?.name ?? ''),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [aRow, loadedKeys]
+  );
+  const bFinishes = useMemo(
+    () => collectAllFinishes(bRow?.name ?? ''),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bRow, loadedKeys]
+  );
+
+  const aStats = useMemo(() => computeAthleteStats(aFinishes), [aFinishes]);
+  const bStats = useMemo(() => computeAthleteStats(bFinishes), [bFinishes]);
+
+  // Career bests derived from finish history
   const careerBests = useMemo(() => {
-    const aLower = aRow?.name.toLowerCase() ?? '';
-    const bLower = bRow?.name.toLowerCase() ?? '';
     const aMap = new Map<number, number>();
     const bMap = new Map<number, number>();
-
-    if (aLower || bLower) {
-      for (const rc of ALL_RACES) {
-        for (const y of rc.years) {
-          const rows = rc.getYear(y);
-          if (aLower) {
-            const hit = rows.find(r => r.name.toLowerCase() === aLower);
-            if (hit) {
-              const prev = aMap.get(rc.km) ?? Infinity;
-              if (hit.sec < prev) aMap.set(rc.km, hit.sec);
-            }
-          }
-          if (bLower) {
-            const hit = rows.find(r => r.name.toLowerCase() === bLower);
-            if (hit) {
-              const prev = bMap.get(rc.km) ?? Infinity;
-              if (hit.sec < prev) bMap.set(rc.km, hit.sec);
-            }
-          }
-        }
-      }
-    }
-
+    aFinishes.forEach(f => { const p = aMap.get(f.km) ?? Infinity; if (f.sec < p) aMap.set(f.km, f.sec); });
+    bFinishes.forEach(f => { const p = bMap.get(f.km) ?? Infinity; if (f.sec < p) bMap.set(f.km, f.sec); });
     const kms = Array.from(new Set([...aMap.keys(), ...bMap.keys()])).sort((a, b) => b - a);
-    return kms.map(km => ({
-      km,
-      aSecBest: aMap.get(km) ?? null,
-      bSecBest: bMap.get(km) ?? null,
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aRow, bRow, loadedKeys]);
+    return kms.map(km => ({ km, aSecBest: aMap.get(km) ?? null, bSecBest: bMap.get(km) ?? null }));
+  }, [aFinishes, bFinishes]);
 
-  // Progression data — all courses and distances, best per year-km combo
+  // Progression data derived from finish history
   const aProgression = useMemo(() => {
-    if (!aRow) return [];
-    const lower = aRow.name.toLowerCase();
     const best = new Map<string, { year: number; sec: number; km: number }>();
-    for (const rc of ALL_RACES) {
-      for (const y of rc.years) {
-        const row = rc.getYear(y).find(r => r.name.toLowerCase() === lower);
-        if (row) {
-          const k = `${y}-${rc.km}`;
-          if (!best.has(k) || row.sec < best.get(k)!.sec) best.set(k, { year: y, sec: row.sec, km: rc.km });
-        }
-      }
-    }
+    aFinishes.forEach(f => {
+      const k = `${f.year}-${f.km}`;
+      if (!best.has(k) || f.sec < best.get(k)!.sec) best.set(k, { year: f.year, sec: f.sec, km: f.km });
+    });
     return Array.from(best.values()).sort((a, b) => a.year - b.year || b.km - a.km);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aRow, loadedKeys]);
+  }, [aFinishes]);
 
   const bProgression = useMemo(() => {
-    if (!bRow) return [];
-    const lower = bRow.name.toLowerCase();
     const best = new Map<string, { year: number; sec: number; km: number }>();
-    for (const rc of ALL_RACES) {
-      for (const y of rc.years) {
-        const row = rc.getYear(y).find(r => r.name.toLowerCase() === lower);
-        if (row) {
-          const k = `${y}-${rc.km}`;
-          if (!best.has(k) || row.sec < best.get(k)!.sec) best.set(k, { year: y, sec: row.sec, km: rc.km });
-        }
-      }
-    }
+    bFinishes.forEach(f => {
+      const k = `${f.year}-${f.km}`;
+      if (!best.has(k) || f.sec < best.get(k)!.sec) best.set(k, { year: f.year, sec: f.sec, km: f.km });
+    });
     return Array.from(best.values()).sort((a, b) => a.year - b.year || b.km - a.km);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bRow, loadedKeys]);
+  }, [bFinishes]);
 
-  // Shared races — real data from all years
+  // Shared races with full position and percentile data
   const sharedRaces = useMemo((): SharedRace[] => {
     if (!aRow || !bRow) return [];
-    const results: SharedRace[] = [];
     const aLower = aRow.name.toLowerCase();
     const bLower = bRow.name.toLowerCase();
+    const results: SharedRace[] = [];
 
     for (const rc of ALL_RACES) {
       for (const y of rc.years) {
@@ -1184,16 +1870,20 @@ export default function Compare() {
         if (rows.length === 0) continue;
         const aEntry = rows.find(r => r.name.toLowerCase() === aLower);
         const bEntry = rows.find(r => r.name.toLowerCase() === bLower);
-        if (aEntry && bEntry) {
-          results.push({
-            year: y,
-            label: `${rc.name} ${y}`,
-            aSec: aEntry.sec,
-            bSec: bEntry.sec,
-            aWon: aEntry.sec < bEntry.sec,
-            dist: rc.km === 42.195 ? '42.2 km' : rc.km === 21.0975 ? '21.1 km' : `${rc.km} km`,
-          });
-        }
+        if (!aEntry || !bEntry) continue;
+        const aBeat = rows.filter(r => r.sec > aEntry.sec).length;
+        const bBeat = rows.filter(r => r.sec > bEntry.sec).length;
+        results.push({
+          year: y,
+          label: `${rc.name} ${y}`,
+          aSec: aEntry.sec, bSec: bEntry.sec,
+          aWon: aEntry.sec < bEntry.sec,
+          dist: rc.km === 42.195 ? '42.2 km' : rc.km === 21.0975 ? '21.1 km' : `${rc.km} km`,
+          aPos: aEntry.pos, bPos: bEntry.pos,
+          aTotal: rows.length,
+          aPct: (aBeat / rows.length) * 100,
+          bPct: (bBeat / rows.length) * 100,
+        });
       }
     }
 
@@ -1214,11 +1904,11 @@ export default function Compare() {
               <div className="eyebrow">Compare · statistical analysis</div>
               <h1 className="th-title">Compare</h1>
               <p className="th-sub">
-                Place any finish time, or any two athletes with finisher data, into the field of certified New Zealand results — percentile, equivalent placement, historical context.
+                Place any finish time, or any two athletes with finisher data, into the field of certified New Zealand results — percentile, field-normalized metrics, historical context.
               </p>
             </div>
             <div className="th-stamp">
-              <div>Method · <span className="v">v1.4</span></div>
+              <div>Method · <span className="v">v2.0</span></div>
               <div>Surface · <span className="v">road · trail</span></div>
               <div>Mode · <span className="v">{mode === 'racetime' ? 'Race time' : 'Athletes'}</span></div>
             </div>
@@ -1235,6 +1925,7 @@ export default function Compare() {
             sharedRaces={sharedRaces}
             aProgression={aProgression}
             bProgression={bProgression}
+            aStats={aStats} bStats={bStats}
             raceName={race.name}
             currentYear={currentYear}
             distLabel={distLabel}
