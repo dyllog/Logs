@@ -310,12 +310,19 @@ function RaceTimeCanvas({
 
 // ── Athletes canvas sub-components ───────────────────────
 
-function AthleteCard({ side, row, careerBests, raceName, year }: {
+function AthleteCard({ side, row, careerBests, raceName, year,
+  searchValue, setSearchValue, dropOpen, setDropOpen, searchRef,
+}: {
   side: 'a' | 'b';
   row: H2HRow | null;
   careerBests: { km: number; sec: number; leadA: boolean }[];
   raceName: string;
   year: number;
+  searchValue: string;
+  setSearchValue: (v: string) => void;
+  dropOpen: boolean;
+  setDropOpen: (v: boolean) => void;
+  searchRef: React.RefObject<HTMLDivElement>;
 }) {
   const num = side === 'a' ? '01' : '02';
   const firstName = row ? row.name.split(' ')[0] : '';
@@ -325,8 +332,42 @@ function AthleteCard({ side, row, careerBests, raceName, year }: {
     return (
       <div className={`ath-card ${side}`}>
         <div className="ath-badge"><span className="no">{num}</span></div>
-        <h2 className="ath-last" style={{ fontSize: 40, color: 'var(--meta)', fontStyle: 'italic' }}>Enter name</h2>
-        <div className="ath-id" style={{ marginTop: 12 }}>Search for an athlete in the left panel</div>
+        <h2 className="ath-card-title">{side === 'a' ? 'Athlete A' : 'Athlete B'}</h2>
+        <div ref={searchRef} style={{ position: 'relative' }}>
+          <div className="ath-card-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ flex: '0 0 auto', color: 'var(--meta)' }}>
+              <circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" />
+            </svg>
+            <input
+              value={searchValue}
+              onChange={e => { setSearchValue(e.target.value); setDropOpen(e.target.value.length >= 2); }}
+              onKeyDown={e => { if (e.key === 'Escape') setDropOpen(false); }}
+              placeholder="Search athlete name, bib, or recorded finish…"
+              spellCheck={false}
+              autoComplete="off"
+            />
+            {searchValue && (
+              <button className="clear-btn" onClick={() => { setSearchValue(''); setDropOpen(false); }}>×</button>
+            )}
+          </div>
+          {dropOpen && (
+            <AthleteNameDropdown
+              query={searchValue}
+              onSelect={name => { setSearchValue(name); setDropOpen(false); }}
+              onClose={() => setDropOpen(false)}
+            />
+          )}
+        </div>
+        <div className="ath-popular">
+          <div className="ath-popular-lbl">Popular searches</div>
+          <div className="ath-popular-chips">
+            {POPULAR_ATHLETES.map(name => (
+              <button key={name} className="ath-chip" onClick={() => { setSearchValue(name); setDropOpen(false); }}>
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -777,14 +818,31 @@ function ExtendSection({ aName, bName, raceName, year }: {
 
 function AthletesCanvas({
   aRow, bRow, careerBests, sharedRaces, aProgression, bProgression,
-  raceName, currentYear, distLabel, h2hA, h2hB,
+  raceName, currentYear, distLabel, h2hA, h2hB, setH2hA, setH2hB,
+  gender, setGender,
 }: {
   aRow: H2HRow | null; bRow: H2HRow | null;
   careerBests: { km: number; aSecBest: number | null; bSecBest: number | null }[];
   sharedRaces: SharedRace[]; aProgression: { year: number; sec: number }[];
   bProgression: { year: number; sec: number }[]; raceName: string;
   currentYear: number; distLabel: string; h2hA: string; h2hB: string;
+  setH2hA: (v: string) => void; setH2hB: (v: string) => void;
+  gender: string; setGender: (v: string) => void;
 }) {
+  const [dropA, setDropA] = useState(false);
+  const [dropB, setDropB] = useState(false);
+  const refA = useRef<HTMLDivElement>(null);
+  const refB = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (refA.current && !refA.current.contains(e.target as Node)) setDropA(false);
+      if (refB.current && !refB.current.contains(e.target as Node)) setDropB(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const hasAny = aRow || bRow;
 
   const edgePct = useMemo(() => {
@@ -828,15 +886,40 @@ function AthletesCanvas({
         <button className="canvas-share">Share ↗</button>
       </div>
 
-      {!hasAny && (
-        <div style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: 'italic', color: 'var(--meta)', fontSize: 16, lineHeight: 1.6, marginBottom: 24 }}>
-          Enter two athlete names or bib numbers in the left panel to compare their career records.
+      <div className="cmp-filter-bar">
+        <div className="cmp-filter-seg">
+          <span className="cmp-filter-key">Normalise by</span>
+          <select className="cmp-filter-sel">
+            <option>Race time (actual)</option>
+            <option>Age-graded</option>
+          </select>
         </div>
-      )}
+        <div className="cmp-filter-seg">
+          <span className="cmp-filter-key">Gender</span>
+          <div className="cmp-pill-row">
+            {(['all', 'M', 'W'] as const).map(g => (
+              <button key={g} className={`cmp-pill${gender === g ? ' active' : ''}`} onClick={() => setGender(g)}>
+                {g === 'all' ? 'All' : g === 'M' ? 'Men' : 'Women'}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="cmp-filter-seg" style={{ cursor: 'pointer' }} onClick={() => { setH2hA(''); setH2hB(''); }}>
+          Reset all ↻
+        </div>
+      </div>
 
       <div className="compare-hero">
-        <AthleteCard side="a" row={aRow} careerBests={aPbs} raceName={raceName} year={currentYear} />
-        <AthleteCard side="b" row={bRow} careerBests={bPbs} raceName={raceName} year={currentYear} />
+        <AthleteCard
+          side="a" row={aRow} careerBests={aPbs} raceName={raceName} year={currentYear}
+          searchValue={h2hA} setSearchValue={setH2hA}
+          dropOpen={dropA} setDropOpen={setDropA} searchRef={refA}
+        />
+        <AthleteCard
+          side="b" row={bRow} careerBests={bPbs} raceName={raceName} year={currentYear}
+          searchValue={h2hB} setSearchValue={setH2hB}
+          dropOpen={dropB} setDropOpen={setDropB} searchRef={refB}
+        />
       </div>
 
       {sharedRaces.length > 0 && (
@@ -875,6 +958,9 @@ function AthletesCanvas({
 
 // ── Main component ────────────────────────────────────────
 
+// ── Popular athlete chips ────────────────────────────────
+const POPULAR_ATHLETES = ['Jack Moody', 'Ben Twyman', 'Brent Godfrey', 'Josh Voss', 'Daniel Balchin'];
+
 export default function Compare() {
   const [searchParams] = useSearchParams();
   const initialTime = searchParams.get('time') || '3:15:10';
@@ -885,14 +971,10 @@ export default function Compare() {
   const [committed, setCommitted] = useState(initialTime);
   const [venue] = useState<Venue>('akl');
   const [distId] = useState<DistId>(initialDist);
-  const [gender] = useState('M');
+  const [gender, setGender] = useState('all');
   const [ag] = useState('all');
   const [h2hA, setH2hA] = useState('');
   const [h2hB, setH2hB] = useState('');
-  const [dropA, setDropA] = useState(false);
-  const [dropB, setDropB] = useState(false);
-  const refA = useRef<HTMLDivElement>(null);
-  const refB = useRef<HTMLDivElement>(null);
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
 
@@ -927,15 +1009,6 @@ export default function Compare() {
       loadQtHalf(y).then(() => markLoaded(`qt-21-${y}`));
     });
   }, [markLoaded]);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (refA.current && !refA.current.contains(e.target as Node)) setDropA(false);
-      if (refB.current && !refB.current.contains(e.target as Node)) setDropB(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
 
   const currentRows = useMemo(
     () => race.getYear(currentYear),
@@ -1035,13 +1108,18 @@ export default function Compare() {
       const sortedYears = [...rc.years].sort((a, b) => b - a);
       for (const y of sortedYears) {
         const rows = rc.getYear(y);
-        const r = rows.find(row => row.name.toLowerCase().includes(lower));
+        const r = rows.find(row => {
+          if (!row.name.toLowerCase().includes(lower)) return false;
+          if (gender === 'M' && !row.cat.startsWith('M')) return false;
+          if (gender === 'W' && !row.cat.startsWith('W')) return false;
+          return true;
+        });
         if (r) return { name: r.name, time: r.time, pos: r.pos, cat: r.cat, sec: r.sec, foundRace: rc.name, foundYear: y };
       }
     }
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedKeys]);
+  }, [loadedKeys, gender]);
 
   const aRow = useMemo(() => findAthlete(h2hA), [h2hA, findAthlete]);
   const bRow = useMemo(() => findAthlete(h2hB), [h2hB, findAthlete]);
@@ -1161,136 +1239,50 @@ export default function Compare() {
       </section>
 
 
-      {/* Two-column shell */}
-      <div className="compare-shell-new">
-
-        {/* Left rail */}
-        <aside className="rail-new">
-          {mode === 'athletes' ? (
-            <>
-              <div className="rail-head-label">Compare athletes</div>
-
-              <div className="rail-field">
-                <div className="rail-label"><span>Athlete A</span></div>
-                <div ref={refA} style={{ position: 'relative' }}>
-                  <div className="rail-ath-wrap a">
-                    <input
-                      value={h2hA}
-                      onChange={e => { setH2hA(e.target.value); setDropA(e.target.value.length >= 2); }}
-                      onKeyDown={e => { if (e.key === 'Escape') setDropA(false); }}
-                      placeholder="Name or bib"
-                      spellCheck={false}
-                    />
-                    {h2hA && <button className="clear-btn" onClick={() => { setH2hA(''); setDropA(false); }}>×</button>}
-                  </div>
-                  {dropA && (
-                    <AthleteNameDropdown
-                      query={h2hA}
-                      onSelect={name => setH2hA(name)}
-                      onClose={() => setDropA(false)}
-                    />
-                  )}
-                </div>
-                {h2hA.trim() && !aRow && (
-                  <div style={{ fontSize: 10.5, color: 'var(--meta)', marginTop: 6, fontStyle: 'italic' }}>
-                    Not found in archive
-                  </div>
-                )}
-              </div>
-
-              <div className="vs-sep">vs</div>
-
-              <div className="rail-field">
-                <div className="rail-label"><span>Athlete B</span></div>
-                <div ref={refB} style={{ position: 'relative' }}>
-                  <div className="rail-ath-wrap b">
-                    <input
-                      value={h2hB}
-                      onChange={e => { setH2hB(e.target.value); setDropB(e.target.value.length >= 2); }}
-                      onKeyDown={e => { if (e.key === 'Escape') setDropB(false); }}
-                      placeholder="Name or bib"
-                      spellCheck={false}
-                    />
-                    {h2hB && <button className="clear-btn" onClick={() => { setH2hB(''); setDropB(false); }}>×</button>}
-                  </div>
-                  {dropB && (
-                    <AthleteNameDropdown
-                      query={h2hB}
-                      onSelect={name => setH2hB(name)}
-                      onClose={() => setDropB(false)}
-                    />
-                  )}
-                </div>
-                {h2hB.trim() && !bRow && (
-                  <div style={{ fontSize: 10.5, color: 'var(--meta)', marginTop: 6, fontStyle: 'italic' }}>
-                    Not found in archive
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="rail-head-label">Race-time inputs</div>
-
-              <div className="rail-field">
-                <div className="rail-label"><span>Finish time</span></div>
-                <input
-                  className="rail-input"
-                  placeholder="h:mm:ss"
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={onKey}
-                  onBlur={commit}
-                />
-              </div>
-            </>
-          )}
-
-          {/* Shared filters */}
-          <div className="rail-field" style={{ marginTop: 4 }}>
-            <div className="rail-label">
-              <span>Normalise</span>
-              <span className="info" title="When on, times are adjusted using WMA age-graded tables.">i</span>
+      {mode === 'athletes' ? (
+        <div className="cmp-athletes-shell page">
+          <AthletesCanvas
+            aRow={aRow} bRow={bRow}
+            careerBests={careerBests}
+            sharedRaces={sharedRaces}
+            aProgression={aProgression}
+            bProgression={bProgression}
+            raceName={race.name}
+            currentYear={currentYear}
+            distLabel={distLabel}
+            h2hA={h2hA} h2hB={h2hB}
+            setH2hA={setH2hA} setH2hB={setH2hB}
+            gender={gender} setGender={setGender}
+          />
+        </div>
+      ) : (
+        <div className="compare-shell-new">
+          <aside className="rail-new">
+            <div className="rail-head-label">Race-time inputs</div>
+            <div className="rail-field">
+              <div className="rail-label"><span>Finish time</span></div>
+              <input
+                className="rail-input"
+                placeholder="h:mm:ss"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={onKey}
+                onBlur={commit}
+              />
             </div>
-            <select className="rail-sel">
-              <option>Race time (actual)</option>
-              <option>Age-graded</option>
-            </select>
-          </div>
-
-          <hr className="rail-hr" />
-
-          {sharedRaces.length > 0 ? (
-            <div className="rail-meta">
-              <strong>{sharedRaces.length} shared race{sharedRaces.length !== 1 ? 's' : ''}</strong> on file.<br />
-              Result class: <strong>certified only</strong>.
+            <div className="rail-field" style={{ marginTop: 4 }}>
+              <div className="rail-label"><span>Normalise</span></div>
+              <select className="rail-sel">
+                <option>Race time (actual)</option>
+                <option>Age-graded</option>
+              </select>
             </div>
-          ) : (
-            <div className="rail-meta">
-              Enter athlete names to see shared race history.
-            </div>
-          )}
-
-          <button className="rail-reset" onClick={() => { setH2hA(''); setH2hB(''); setInput('3:15:10'); setCommitted('3:15:10'); }}>
-            Reset all ↻
-          </button>
-        </aside>
-
-        {/* Canvas */}
-        <section className="canvas-new">
-          {mode === 'athletes' ? (
-            <AthletesCanvas
-              aRow={aRow} bRow={bRow}
-              careerBests={careerBests}
-              sharedRaces={sharedRaces}
-              aProgression={aProgression}
-              bProgression={bProgression}
-              raceName={race.name}
-              currentYear={currentYear}
-              distLabel={distLabel}
-              h2hA={h2hA} h2hB={h2hB}
-            />
-          ) : (
+            <hr className="rail-hr" />
+            <button className="rail-reset" onClick={() => { setInput('3:15:10'); setCommitted('3:15:10'); }}>
+              Reset ↻
+            </button>
+          </aside>
+          <section className="canvas-new">
             <RaceTimeCanvas
               sec={sec}
               raceName={race.name}
@@ -1305,10 +1297,9 @@ export default function Compare() {
               bestRace={bestRace}
               interpretation={interpretation}
             />
-          )}
-        </section>
-
-      </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

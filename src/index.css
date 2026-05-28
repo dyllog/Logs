@@ -856,6 +856,30 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 .eb-foot-stat .v.b { color: var(--aB); }
 .eb-foot-stat .vm { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--meta); margin-top: 4px; letter-spacing: 0.04em; }
 
+/* Athletes full-width layout */
+.cmp-athletes-shell { padding-top: 32px; padding-bottom: 64px; }
+.cmp-filter-bar { display: flex; align-items: stretch; border: 0.5px solid var(--rule); font-family: 'DM Mono', monospace; margin-bottom: 0; overflow-x: auto; }
+.cmp-filter-seg { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-right: 0.5px solid var(--rule); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+.cmp-filter-seg:last-child { border-right: 0; margin-left: auto; cursor: pointer; color: var(--meta); }
+.cmp-filter-seg:last-child:hover { color: var(--ink); }
+.cmp-filter-key { color: var(--meta); }
+.cmp-filter-sel { border: 0; background: transparent; font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); outline: none; cursor: pointer; }
+.cmp-pill-row { display: flex; }
+.cmp-pill { padding: 3px 9px; border: 0.5px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); cursor: pointer; background: var(--bg); }
+.cmp-pill + .cmp-pill { border-left: 0; }
+.cmp-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Athlete card empty state (search) */
+.ath-card-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 28px; font-style: italic; color: var(--ink); margin: 6px 0 20px; letter-spacing: -0.01em; line-height: 1.1; }
+.ath-card-search { display: flex; align-items: center; gap: 10px; border: 0.5px solid var(--rule); padding: 10px 14px; }
+.ath-card-search input { flex: 1; border: 0; background: transparent; font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--ink); outline: none; min-width: 0; }
+.ath-card-search input::placeholder { color: var(--meta); }
+.ath-card-search .clear-btn { color: var(--meta); cursor: pointer; font-size: 13px; line-height: 1; background: none; border: none; padding: 0; }
+.ath-popular { margin-top: 20px; }
+.ath-popular-lbl { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); margin-bottom: 10px; }
+.ath-popular-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ath-chip { font-family: 'DM Mono', monospace; font-size: 10.5px; padding: 5px 11px; border: 0.5px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; white-space: nowrap; transition: background 80ms, color 80ms; }
+.ath-chip:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
 /* Sections */
 .cmp-sect { margin-top: 56px; }
 .cmp-sect-head { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: baseline; padding-bottom: 12px; margin-bottom: 22px; border-bottom: 0.5px solid var(--ink); }
@@ -991,6 +1015,7 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   .th-stamp { display: none; }
   .th-title { font-size: 38px; }
   .compare-hero { grid-template-columns: 1fr; gap: 16px; }
+  .cmp-athletes-shell { padding-top: 20px; padding-bottom: 40px; }
   .ath-last { font-size: 44px; }
   .eb-name-a, .eb-name-b { display: none; }
   .ath-summary { grid-template-columns: repeat(2, 1fr); gap: 14px; }
