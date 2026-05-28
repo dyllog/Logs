@@ -463,7 +463,8 @@ function RaceTimeCanvas({
 // ── Athletes canvas sub-components ───────────────────────
 
 function AthleteCard({ side, row, careerBests, raceName, year, stats,
-  searchValue, setSearchValue, dropOpen, setDropOpen, searchRef,
+  searchQuery, setSearchQuery, onSelectAthlete, onClearAthlete,
+  dropOpen, setDropOpen, searchRef,
 }: {
   side: 'a' | 'b';
   row: H2HRow | null;
@@ -471,8 +472,10 @@ function AthleteCard({ side, row, careerBests, raceName, year, stats,
   raceName: string;
   year: number;
   stats: AthleteStats | null;
-  searchValue: string;
-  setSearchValue: (v: string) => void;
+  searchQuery: string;
+  setSearchQuery: (v: string) => void;
+  onSelectAthlete: (name: string) => void;
+  onClearAthlete: () => void;
   dropOpen: boolean;
   setDropOpen: (v: boolean) => void;
   searchRef: React.RefObject<HTMLDivElement>;
@@ -492,21 +495,22 @@ function AthleteCard({ side, row, careerBests, raceName, year, stats,
               <circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" />
             </svg>
             <input
-              value={searchValue}
-              onChange={e => { setSearchValue(e.target.value); setDropOpen(e.target.value.length >= 2); }}
+              value={searchQuery}
+              onChange={e => { setSearchQuery(e.target.value); setDropOpen(e.target.value.length >= 2); }}
               onKeyDown={e => { if (e.key === 'Escape') setDropOpen(false); }}
-              placeholder="Search athlete name, bib, or recorded finish…"
+              placeholder="Search athlete name…"
               spellCheck={false}
               autoComplete="off"
+              autoFocus={false}
             />
-            {searchValue && (
-              <button className="clear-btn" onClick={() => { setSearchValue(''); setDropOpen(false); }}>×</button>
+            {searchQuery && (
+              <button className="clear-btn" onClick={() => { setSearchQuery(''); setDropOpen(false); }}>×</button>
             )}
           </div>
           {dropOpen && (
             <AthleteNameDropdown
-              query={searchValue}
-              onSelect={name => { setSearchValue(name); setDropOpen(false); }}
+              query={searchQuery}
+              onSelect={name => { onSelectAthlete(name); setDropOpen(false); }}
               onClose={() => setDropOpen(false)}
             />
           )}
@@ -515,7 +519,7 @@ function AthleteCard({ side, row, careerBests, raceName, year, stats,
           <div className="ath-popular-lbl">Popular searches</div>
           <div className="ath-popular-chips">
             {POPULAR_ATHLETES.map(name => (
-              <button key={name} className="ath-chip" onClick={() => { setSearchValue(name); setDropOpen(false); }}>
+              <button key={name} className="ath-chip" onClick={() => { onSelectAthlete(name); setDropOpen(false); }}>
                 {name}
               </button>
             ))}
@@ -531,6 +535,9 @@ function AthleteCard({ side, row, careerBests, raceName, year, stats,
         <span className="no">{num}</span>
         <span className="first">{firstName}</span>
       </div>
+      <button className="ath-change-btn" onClick={onClearAthlete} title="Change athlete">
+        ↩ change
+      </button>
       <h2 className="ath-last">{lastName}</h2>
 
       {/* Identity block */}
@@ -1530,6 +1537,12 @@ function AthletesCanvas({
   const refA = useRef<HTMLDivElement>(null);
   const refB = useRef<HTMLDivElement>(null);
 
+  // Local query state — what the user is currently typing.
+  // Kept separate from h2hA/h2hB (the committed selections) so that
+  // keystrokes don't trigger findAthlete on every character.
+  const [queryA, setQueryA] = useState('');
+  const [queryB, setQueryB] = useState('');
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (refA.current && !refA.current.contains(e.target as Node)) setDropA(false);
@@ -1581,13 +1594,19 @@ function AthletesCanvas({
         <AthleteCard
           side="a" row={aRow} careerBests={aPbs} raceName={raceName} year={currentYear}
           stats={aStats}
-          searchValue={h2hA} setSearchValue={setH2hA}
+          searchQuery={queryA}
+          setSearchQuery={setQueryA}
+          onSelectAthlete={name => { setQueryA(name); setH2hA(name); }}
+          onClearAthlete={() => { setQueryA(''); setH2hA(''); }}
           dropOpen={dropA} setDropOpen={setDropA} searchRef={refA}
         />
         <AthleteCard
           side="b" row={bRow} careerBests={bPbs} raceName={raceName} year={currentYear}
           stats={bStats}
-          searchValue={h2hB} setSearchValue={setH2hB}
+          searchQuery={queryB}
+          setSearchQuery={setQueryB}
+          onSelectAthlete={name => { setQueryB(name); setH2hB(name); }}
+          onClearAthlete={() => { setQueryB(''); setH2hB(''); }}
           dropOpen={dropB} setDropOpen={setDropB} searchRef={refB}
         />
       </div>
