@@ -87,6 +87,13 @@ function fmtKm(km: number): string {
   return `${km} km`;
 }
 
+function nameToSlug(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+function slugToQuery(slug: string): string {
+  return slug.replace(/-/g, ' ');
+}
+
 // ── Types ────────────────────────────────────────────────
 
 type Mode = 'racetime' | 'athletes';
@@ -363,7 +370,7 @@ function RaceTimeCanvas({
 
 function AthleteCard({ side, row, careerBests, raceName, year,
   searchQuery, setSearchQuery, onSelectAthlete, onClearAthlete,
-  dropOpen, setDropOpen, searchRef,
+  dropOpen, setDropOpen, searchRef, loadingFromUrl, notFound,
 }: {
   side: 'a' | 'b';
   row: H2HRow | null;
@@ -377,12 +384,22 @@ function AthleteCard({ side, row, careerBests, raceName, year,
   dropOpen: boolean;
   setDropOpen: (v: boolean) => void;
   searchRef: React.RefObject<HTMLDivElement>;
+  loadingFromUrl?: boolean;
+  notFound?: boolean;
 }) {
   const num = side === 'a' ? '01' : '02';
   const firstName = row ? row.name.split(' ')[0] : '';
   const lastName = row ? row.name.split(' ').slice(1).join(' ') || row.name : (side === 'a' ? 'Athlete A' : 'Athlete B');
 
   if (!row) {
+    if (loadingFromUrl) {
+      return (
+        <div className={`ath-card ${side}`}>
+          <div className="ath-badge"><span className="no">{num}</span></div>
+          <div className="ath-url-state">{notFound ? 'Athlete not found' : 'Searching…'}</div>
+        </div>
+      );
+    }
     return (
       <div className={`ath-card ${side}`}>
         <div className="ath-badge"><span className="no">{num}</span></div>
@@ -882,7 +899,7 @@ function ExtendSection({ aName, bName, raceName, year }: {
 function AthletesCanvas({
   aRow, bRow, careerBests, sharedRaces, aProgression, bProgression,
   raceName, currentYear, distLabel, h2hA, h2hB, setH2hA, setH2hB,
-  gender, setGender,
+  gender, setGender, loadingA, loadingB, notFoundA, notFoundB,
 }: {
   aRow: H2HRow | null; bRow: H2HRow | null;
   careerBests: { km: number; aSecBest: number | null; bSecBest: number | null }[];
@@ -891,16 +908,19 @@ function AthletesCanvas({
   currentYear: number; distLabel: string; h2hA: string; h2hB: string;
   setH2hA: (v: string) => void; setH2hB: (v: string) => void;
   gender: string; setGender: (v: string) => void;
+  loadingA?: boolean; loadingB?: boolean;
+  notFoundA?: boolean; notFoundB?: boolean;
 }) {
   const [dropA, setDropA] = useState(false);
   const [dropB, setDropB] = useState(false);
   const refA = useRef<HTMLDivElement>(null);
   const refB = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
 
   // Local query state for the search inputs — kept separate from h2hA/h2hB
   // (the committed selections) so that keystrokes don't trigger findAthlete.
-  const [queryA, setQueryA] = useState('');
-  const [queryB, setQueryB] = useState('');
+  const [queryA, setQueryA] = useState(h2hA);
+  const [queryB, setQueryB] = useState(h2hB);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -947,6 +967,13 @@ function AthletesCanvas({
     km, sec: bSecBest!, leadA: aSecBest != null && (bSecBest == null || aSecBest < bSecBest),
   })).filter(x => x.sec != null);
 
+  function handleShare() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
   return (
     <div>
       <div className="compare-hero">
@@ -956,6 +983,7 @@ function AthletesCanvas({
           onSelectAthlete={name => { setQueryA(name); setH2hA(name); }}
           onClearAthlete={() => { setQueryA(''); setH2hA(''); }}
           dropOpen={dropA} setDropOpen={setDropA} searchRef={refA}
+          loadingFromUrl={loadingA} notFound={notFoundA}
         />
         <AthleteCard
           side="b" row={bRow} careerBests={bPbs} raceName={raceName} year={currentYear}
@@ -963,8 +991,17 @@ function AthletesCanvas({
           onSelectAthlete={name => { setQueryB(name); setH2hB(name); }}
           onClearAthlete={() => { setQueryB(''); setH2hB(''); }}
           dropOpen={dropB} setDropOpen={setDropB} searchRef={refB}
+          loadingFromUrl={loadingB} notFound={notFoundB}
         />
       </div>
+
+      {aRow && bRow && (
+        <div className="cmp-share-strip">
+          <button className="cmp-share-btn" onClick={handleShare}>
+            {copied ? 'Copied!' : 'Share comparison'}
+          </button>
+        </div>
+      )}
 
       {sharedRaces.length > 0 && (
         <EdgeBar
@@ -1005,6 +1042,8 @@ export default function Compare() {
   const [searchParams] = useSearchParams();
   const initialTime = searchParams.get('time') || '3:15:10';
   const initialDist = (searchParams.get('dist') as DistId) || '42';
+  const paramA = searchParams.get('a');
+  const paramB = searchParams.get('b');
 
   const [mode, setMode] = useState<Mode>('athletes');
   const [input, setInput] = useState(initialTime);
@@ -1013,8 +1052,8 @@ export default function Compare() {
   const [distId] = useState<DistId>(initialDist);
   const [gender, setGender] = useState('all');
   const [ag] = useState('all');
-  const [h2hA, setH2hA] = useState('');
-  const [h2hB, setH2hB] = useState('');
+  const [h2hA, setH2hA] = useState(() => paramA ? slugToQuery(paramA) : '');
+  const [h2hB, setH2hB] = useState(() => paramB ? slugToQuery(paramB) : '');
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
 
@@ -1222,6 +1261,24 @@ export default function Compare() {
   const aRow = useMemo(() => findAthlete(h2hA), [h2hA, findAthlete]);
   const bRow = useMemo(() => findAthlete(h2hB), [h2hB, findAthlete]);
 
+  // Sync URL when both athletes are resolved
+  useEffect(() => {
+    if (mode !== 'athletes') return;
+    if (aRow && bRow) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('a', nameToSlug(aRow.name));
+      url.searchParams.set('b', nameToSlug(bRow.name));
+      history.pushState(null, '', url.toString());
+    }
+  }, [aRow?.name, bRow?.name, mode]);
+
+  // Loading/not-found state for URL-param-initiated searches
+  // notFound fires once enough data has loaded (~30 keys) but athlete is still missing
+  const loadingA = !!paramA && !aRow && !!h2hA;
+  const loadingB = !!paramB && !bRow && !!h2hB;
+  const notFoundA = loadingA && loadedKeys.size >= 30;
+  const notFoundB = loadingB && loadedKeys.size >= 30;
+
   // Compute career bests from all loaded race data
   const careerBests = useMemo(() => {
     const aLower = aRow?.name.toLowerCase() ?? '';
@@ -1365,6 +1422,8 @@ export default function Compare() {
             h2hA={h2hA} h2hB={h2hB}
             setH2hA={setH2hA} setH2hB={setH2hB}
             gender={gender} setGender={setGender}
+            loadingA={loadingA} loadingB={loadingB}
+            notFoundA={notFoundA} notFoundB={notFoundB}
           />
         </div>
       ) : (

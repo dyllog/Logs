@@ -881,6 +881,11 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 .ath-popular-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .ath-chip { font-family: 'DM Mono', monospace; font-size: 10.5px; padding: 5px 11px; border: 0.5px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; white-space: nowrap; transition: background 80ms, color 80ms; }
 .ath-chip:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ath-url-state { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--meta); letter-spacing: 0.08em; margin-top: 8px; }
+
+.cmp-share-strip { display: flex; justify-content: flex-end; margin-top: 10px; }
+.cmp-share-btn { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 16px; border: 0.5px solid var(--rule); background: var(--bg); color: var(--meta); cursor: pointer; transition: background 80ms, color 80ms, border-color 80ms; }
+.cmp-share-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 /* Sections */
 .cmp-sect { margin-top: 56px; }
