@@ -399,7 +399,7 @@ function AthleteCard({ side, row, careerBests, raceName, year,
         </>
       )}
 
-      <div className="ath-section-title">This race</div>
+      <div className="ath-section-title">Most recent finish</div>
       <div className="ath-summary">
         <div className="stat"><div className="k">Pos</div><div className="v">{row.pos}</div></div>
         <div className="stat"><div className="k">Time</div><div className="v" style={{ fontSize: 18 }}>{row.time}</div></div>
@@ -545,47 +545,33 @@ function SharedRaceLedger({ aName, bName, races }: {
   );
 }
 
-function ProgressionSection({ aName, bName, aData, bData, distLabel }: {
+function ProgressionSection({ aName, bName, aData, bData }: {
   aName: string; bName: string;
-  aData: { year: number; sec: number }[];
-  bData: { year: number; sec: number }[];
-  distLabel: string;
+  aData: { year: number; sec: number; km: number }[];
+  bData: { year: number; sec: number; km: number }[];
 }) {
   const aShort = aName.split(' ').pop() || aName;
   const bShort = bName.split(' ').pop() || bName;
 
-  const allYears = Array.from(new Set([...aData.map(d => d.year), ...bData.map(d => d.year)])).sort();
-  if (allYears.length < 2) return null;
+  const allKms = Array.from(new Set([...aData.map(d => d.km), ...bData.map(d => d.km)])).sort((a, b) => b - a);
+  const kmsWithData = allKms.filter(km => {
+    const a = aData.filter(d => d.km === km);
+    const b = bData.filter(d => d.km === km);
+    return a.length + b.length >= 2;
+  });
 
-  const allSecs = [...aData.map(d => d.sec), ...bData.map(d => d.sec)];
-  const minSec = Math.min(...allSecs);
-  const maxSec = Math.max(...allSecs);
-  const range = maxSec - minSec || 1;
+  if (kmsWithData.length === 0) return null;
+
   const W = 220, H = 110, PAD = 22;
   const usableW = W - PAD;
   const usableH = H - 20;
-
-  function toX(year: number) {
-    return PAD + ((year - allYears[0]) / (allYears[allYears.length - 1] - allYears[0] || 1)) * usableW;
-  }
-  function toY(sec: number) {
-    // Lower time = better = higher on chart
-    return 10 + ((sec - minSec) / range) * usableH;
-  }
-
-  const aPath = aData.map((d, i) => `${i === 0 ? 'M' : 'L'}${toX(d.year).toFixed(1)},${toY(d.sec).toFixed(1)}`).join(' ');
-  const bPath = bData.map((d, i) => `${i === 0 ? 'M' : 'L'}${toX(d.year).toFixed(1)},${toY(d.sec).toFixed(1)}`).join(' ');
-
-  const aBest = aData.reduce((a, b) => a.sec < b.sec ? a : b, aData[0]);
-  const bBest = bData.reduce((a, b) => a.sec < b.sec ? a : b, bData[0]);
-  const aLeads = aBest && bBest && aBest.sec < bBest.sec;
 
   return (
     <section className="cmp-sect">
       <div className="cmp-sect-head">
         <div className="cmp-sect-num">No. 02</div>
-        <h2>Progression · {distLabel}</h2>
-        <div className="cmp-sect-note">Faster sits higher · markers are race-day finishes</div>
+        <h2>Progression · all courses</h2>
+        <div className="cmp-sect-note">Faster sits higher · each point is a recorded finish</div>
       </div>
 
       <div className="prog-shell">
@@ -594,32 +580,52 @@ function ProgressionSection({ aName, bName, aData, bData, distLabel }: {
           <span className="item"><span className="swatch b" /><span className="name">{bShort}</span></span>
         </div>
 
-        <div className="shape-grid" style={{ gridTemplateColumns: '1fr' }}>
-          <div className="shape-cell" style={{ borderRight: 0 }}>
-            <div className="sh">
-              <span>{distLabel}</span>
-              {aBest && bBest && (
-                <span className={`edge-mark ${aLeads ? 'a' : 'b'}`}>
-                  {aLeads ? 'A' : 'B'} · {fmtSec(Math.abs(aBest.sec - bBest.sec))} ahead
-                </span>
-              )}
-            </div>
-            <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} style={{ display: 'block', overflow: 'visible' }}>
-              <line x1={PAD} x2={W} y1={H / 3} y2={H / 3} stroke="currentColor" strokeOpacity="0.06" />
-              <line x1={PAD} x2={W} y1={H * 2 / 3} y2={H * 2 / 3} stroke="currentColor" strokeOpacity="0.06" />
-              {aData.length > 0 && <path d={aPath} fill="none" stroke="var(--aA)" strokeWidth="1.2" />}
-              {aData.map(d => <circle key={d.year} cx={toX(d.year)} cy={toY(d.sec)} r="2" fill="var(--aA)" />)}
-              {bData.length > 0 && <path d={bPath} fill="none" stroke="var(--aB)" strokeWidth="1.2" />}
-              {bData.map(d => <circle key={d.year} cx={toX(d.year)} cy={toY(d.sec)} r="2" fill="var(--aB)" />)}
-            </svg>
-            <div className="yrs">
-              {allYears.map(y => <span key={y}>'{String(y).slice(2)}</span>)}
-            </div>
-          </div>
+        <div className="shape-grid">
+          {kmsWithData.map(km => {
+            const aKm = aData.filter(d => d.km === km).sort((a, b) => a.year - b.year);
+            const bKm = bData.filter(d => d.km === km).sort((a, b) => a.year - b.year);
+            const allYears = Array.from(new Set([...aKm.map(d => d.year), ...bKm.map(d => d.year)])).sort();
+            const allSecs = [...aKm.map(d => d.sec), ...bKm.map(d => d.sec)];
+            const minSec = Math.min(...allSecs);
+            const maxSec = Math.max(...allSecs);
+            const range = maxSec - minSec || 1;
+
+            const toX = (year: number) => PAD + ((year - allYears[0]) / (allYears[allYears.length - 1] - allYears[0] || 1)) * usableW;
+            const toY = (sec: number) => 10 + ((sec - minSec) / range) * usableH;
+            const path = (pts: { year: number; sec: number }[]) => pts.map((d, i) => `${i === 0 ? 'M' : 'L'}${toX(d.year).toFixed(1)},${toY(d.sec).toFixed(1)}`).join(' ');
+
+            const aBest = aKm.length ? aKm.reduce((a, b) => a.sec < b.sec ? a : b) : null;
+            const bBest = bKm.length ? bKm.reduce((a, b) => a.sec < b.sec ? a : b) : null;
+            const aLeads = aBest && bBest ? aBest.sec < bBest.sec : null;
+
+            return (
+              <div key={km} className="shape-cell">
+                <div className="sh">
+                  <span>{fmtKm(km)}</span>
+                  {aBest && bBest && aLeads !== null && (
+                    <span className={`edge-mark ${aLeads ? 'a' : 'b'}`}>
+                      {aLeads ? 'A' : 'B'} · {fmtSec(Math.abs(aBest.sec - bBest.sec))} ahead
+                    </span>
+                  )}
+                </div>
+                <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} style={{ display: 'block', overflow: 'visible' }}>
+                  <line x1={PAD} x2={W} y1={H / 3} y2={H / 3} stroke="currentColor" strokeOpacity="0.06" />
+                  <line x1={PAD} x2={W} y1={H * 2 / 3} y2={H * 2 / 3} stroke="currentColor" strokeOpacity="0.06" />
+                  {aKm.length > 0 && <path d={path(aKm)} fill="none" stroke="var(--aA)" strokeWidth="1.2" />}
+                  {aKm.map(d => <circle key={d.year} cx={toX(d.year)} cy={toY(d.sec)} r="2" fill="var(--aA)" />)}
+                  {bKm.length > 0 && <path d={path(bKm)} fill="none" stroke="var(--aB)" strokeWidth="1.2" />}
+                  {bKm.map(d => <circle key={d.year} cx={toX(d.year)} cy={toY(d.sec)} r="2" fill="var(--aB)" />)}
+                </svg>
+                <div className="yrs">
+                  {allYears.map(y => <span key={y}>'{String(y).slice(2)}</span>)}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div className="prog-foot">
-          <span>Seasonal best per athlete at this race · {distLabel}</span>
+          <span>Best per year per distance across all courses on file</span>
           <span>Edge marks · A — B sign convention</span>
         </div>
       </div>
@@ -881,34 +887,6 @@ function AthletesCanvas({
 
   return (
     <div>
-      <div className="canvas-head">
-        <div className="eyebrow">Athlete comparison · {raceName} {currentYear}</div>
-        <button className="canvas-share">Share ↗</button>
-      </div>
-
-      <div className="cmp-filter-bar">
-        <div className="cmp-filter-seg">
-          <span className="cmp-filter-key">Normalise by</span>
-          <select className="cmp-filter-sel">
-            <option>Race time (actual)</option>
-            <option>Age-graded</option>
-          </select>
-        </div>
-        <div className="cmp-filter-seg">
-          <span className="cmp-filter-key">Gender</span>
-          <div className="cmp-pill-row">
-            {(['all', 'M', 'W'] as const).map(g => (
-              <button key={g} className={`cmp-pill${gender === g ? ' active' : ''}`} onClick={() => setGender(g)}>
-                {g === 'all' ? 'All' : g === 'M' ? 'Men' : 'Women'}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="cmp-filter-seg" style={{ cursor: 'pointer' }} onClick={() => { setH2hA(''); setH2hB(''); }}>
-          Reset all ↻
-        </div>
-      </div>
-
       <div className="compare-hero">
         <AthleteCard
           side="a" row={aRow} careerBests={aPbs} raceName={raceName} year={currentYear}
@@ -935,12 +913,8 @@ function AthletesCanvas({
         <SharedRaceLedger aName={aName} bName={bName} races={sharedRaces} />
       )}
 
-      {(aProgression.length > 1 || bProgression.length > 1) && (
-        <ProgressionSection
-          aName={aName} bName={bName}
-          aData={aProgression} bData={bProgression}
-          distLabel={distLabel}
-        />
+      {(aProgression.length > 0 || bProgression.length > 0) && (
+        <ProgressionSection aName={aName} bName={bName} aData={aProgression} bData={bProgression} />
       )}
 
       {sharedRaces.length > 1 && (
@@ -1162,26 +1136,40 @@ export default function Compare() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aRow, bRow, loadedKeys]);
 
-  // Progression data for current venue/dist
+  // Progression data — all courses and distances, best per year-km combo
   const aProgression = useMemo(() => {
     if (!aRow) return [];
     const lower = aRow.name.toLowerCase();
-    return race.years.flatMap(y => {
-      const rows = race.getYear(y);
-      const row = rows.find(r => r.name.toLowerCase() === lower);
-      return row ? [{ year: y, sec: row.sec }] : [];
-    });
-  }, [aRow, race, loadedKeys]); // eslint-disable-line react-hooks/exhaustive-deps
+    const best = new Map<string, { year: number; sec: number; km: number }>();
+    for (const rc of ALL_RACES) {
+      for (const y of rc.years) {
+        const row = rc.getYear(y).find(r => r.name.toLowerCase() === lower);
+        if (row) {
+          const k = `${y}-${rc.km}`;
+          if (!best.has(k) || row.sec < best.get(k)!.sec) best.set(k, { year: y, sec: row.sec, km: rc.km });
+        }
+      }
+    }
+    return Array.from(best.values()).sort((a, b) => a.year - b.year || b.km - a.km);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aRow, loadedKeys]);
 
   const bProgression = useMemo(() => {
     if (!bRow) return [];
     const lower = bRow.name.toLowerCase();
-    return race.years.flatMap(y => {
-      const rows = race.getYear(y);
-      const row = rows.find(r => r.name.toLowerCase() === lower);
-      return row ? [{ year: y, sec: row.sec }] : [];
-    });
-  }, [bRow, race, loadedKeys]); // eslint-disable-line react-hooks/exhaustive-deps
+    const best = new Map<string, { year: number; sec: number; km: number }>();
+    for (const rc of ALL_RACES) {
+      for (const y of rc.years) {
+        const row = rc.getYear(y).find(r => r.name.toLowerCase() === lower);
+        if (row) {
+          const k = `${y}-${rc.km}`;
+          if (!best.has(k) || row.sec < best.get(k)!.sec) best.set(k, { year: y, sec: row.sec, km: rc.km });
+        }
+      }
+    }
+    return Array.from(best.values()).sort((a, b) => a.year - b.year || b.km - a.km);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bRow, loadedKeys]);
 
   // Shared races — real data from all years
   const sharedRaces = useMemo((): SharedRace[] => {
