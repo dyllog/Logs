@@ -874,6 +874,8 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 .ath-card-search input { flex: 1; border: 0; background: transparent; font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--ink); outline: none; min-width: 0; }
 .ath-card-search input::placeholder { color: var(--meta); }
 .ath-card-search .clear-btn { color: var(--meta); cursor: pointer; font-size: 13px; line-height: 1; background: none; border: none; padding: 0; }
+.ath-change-btn { position: absolute; top: 18px; right: 18px; font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--meta); background: none; border: 0.5px solid var(--rule); padding: 3px 8px; cursor: pointer; transition: color 100ms, border-color 100ms; }
+.ath-change-btn:hover { color: var(--ink); border-color: var(--ink); }
 .ath-popular { margin-top: 20px; }
 .ath-popular-lbl { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); margin-bottom: 10px; }
 .ath-popular-chips { display: flex; flex-wrap: wrap; gap: 6px; }
