@@ -11,11 +11,42 @@ import {
   loadHbHalf, getCachedHbHalf,
   loadQt, getCachedQt,
   loadQtHalf, getCachedQtHalf,
+  loadWaterfrontHalf, getCachedWaterfrontHalf,
+  loadWaterfront10k, getCachedWaterfront10k,
+  loadDevHalf, getCachedDevHalf,
+  loadDev10k, getCachedDev10k,
+  loadCoastHalf, getCachedCoastHalf,
+  loadOmahaHalf, getCachedOmahaHalf,
+  loadOmaha10k, getCachedOmaha10k,
+  loadMaraetaiHalf, getCachedMaraetaiHalf,
+  loadMaraetai10k, getCachedMaraetai10k,
+  loadKerikeriHalf, getCachedKerikeriHalf,
+  loadWellingtonMar, getCachedWellingtonMar,
+  loadWellingtonHalf, getCachedWellingtonHalf,
+  loadOnehungaHalf, getCachedOnehungaHalf,
+  loadOnehunga10k, getCachedOnehunga10k,
+  loadOrewaHalf, getCachedOrewaHalf,
+  loadOrewa10k, getCachedOrewa10k,
+  loadTamakiHalf, getCachedTamakiHalf,
+  loadTamaki10k, getCachedTamaki10k,
+  loadMtmHalf, getCachedMtmHalf,
+  loadMtm10k, getCachedMtm10k,
   type ResultRow,
 } from '@/data/logsDataExt';
 import { CHC_YEARS } from '@/data/chcData';
 import { HB_YEARS } from '@/data/hbData';
 import { QT_YEARS } from '@/data/qtData';
+import { WF_YEARS } from '@/data/waterfrontData';
+import { COAST_YEARS } from '@/data/coatesvilleData';
+import { DEV_HALF_YEARS, DEV_10K_YEARS } from '@/data/devonportData';
+import { KERIKERI_YEARS } from '@/data/kerikeriData';
+import { MARAETAI_HALF_YEARS, MARAETAI_10K_YEARS } from '@/data/maraetaiData';
+import { MTM_HALF_YEARS, MTM_10K_YEARS } from '@/data/mtmData';
+import { OMAHA_HALF_YEARS, OMAHA_10K_YEARS } from '@/data/omahaData';
+import { ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS } from '@/data/onehungaData';
+import { OREWA_HALF_YEARS, OREWA_10K_YEARS } from '@/data/orewaData';
+import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
+import { WELLINGTON_MAR_YEARS, WELLINGTON_HALF_YEARS } from '@/data/wellingtonData';
 import { AthleteNameDropdown } from '@/components/InlineSearch';
 
 // ── Helpers ──────────────────────────────────────────────
@@ -100,16 +131,36 @@ function getRaceConfig(venue: Venue, distId: DistId) {
 }
 
 const ALL_RACES = [
-  { name: 'Auckland Marathon',          km: 42.195,  years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '42.2 km') },
-  { name: 'Auckland Half Marathon',     km: 21.0975, years: [...YEARS],         getYear: (y: number) => getCachedResults(y, '21.1 km') },
-  { name: 'Christchurch Marathon',      km: 42.195,  years: [...CHC_YEARS],     getYear: getCachedChc },
-  { name: 'Christchurch Half Marathon', km: 21.0975, years: [...CHC_YEARS],     getYear: getCachedChcHalf },
-  { name: 'Rotorua Marathon',           km: 42.195,  years: [...ROTORUA_YEARS], getYear: getCachedRotorua },
-  { name: 'Rotorua Half Marathon',      km: 21.0975, years: [...ROTORUA_YEARS], getYear: getCachedRotoruaHalf },
-  { name: "Hawke's Bay Marathon",       km: 42.195,  years: [...HB_YEARS],      getYear: getCachedHb },
-  { name: "Hawke's Bay Half Marathon",  km: 21.0975, years: [...HB_YEARS],      getYear: getCachedHbHalf },
-  { name: 'Queenstown Marathon',        km: 42.195,  years: [...QT_YEARS],      getYear: getCachedQt },
-  { name: 'Queenstown Half Marathon',   km: 21.0975, years: [...QT_YEARS],      getYear: getCachedQtHalf },
+  { name: 'Auckland Marathon',            km: 42.195,  years: [...YEARS],                getYear: (y: number) => getCachedResults(y, '42.2 km') },
+  { name: 'Auckland Half Marathon',       km: 21.0975, years: [...YEARS],                getYear: (y: number) => getCachedResults(y, '21.1 km') },
+  { name: 'Christchurch Marathon',        km: 42.195,  years: [...CHC_YEARS],            getYear: getCachedChc },
+  { name: 'Christchurch Half Marathon',   km: 21.0975, years: [...CHC_YEARS],            getYear: getCachedChcHalf },
+  { name: 'Rotorua Marathon',             km: 42.195,  years: [...ROTORUA_YEARS],        getYear: getCachedRotorua },
+  { name: 'Rotorua Half Marathon',        km: 21.0975, years: [...ROTORUA_YEARS],        getYear: getCachedRotoruaHalf },
+  { name: "Hawke's Bay Marathon",         km: 42.195,  years: [...HB_YEARS],             getYear: getCachedHb },
+  { name: "Hawke's Bay Half Marathon",    km: 21.0975, years: [...HB_YEARS],             getYear: getCachedHbHalf },
+  { name: 'Queenstown Marathon',          km: 42.195,  years: [...QT_YEARS],             getYear: getCachedQt },
+  { name: 'Queenstown Half Marathon',     km: 21.0975, years: [...QT_YEARS],             getYear: getCachedQtHalf },
+  { name: 'Wellington Marathon',          km: 42.195,  years: [...WELLINGTON_MAR_YEARS], getYear: getCachedWellingtonMar },
+  { name: 'Wellington Half Marathon',     km: 21.0975, years: [...WELLINGTON_HALF_YEARS], getYear: getCachedWellingtonHalf },
+  { name: 'Waterfront Half Marathon',     km: 21.0975, years: [...WF_YEARS],             getYear: getCachedWaterfrontHalf },
+  { name: 'Waterfront 10K',              km: 10,      years: [...WF_YEARS],             getYear: getCachedWaterfront10k },
+  { name: 'Coatesville Half Marathon',    km: 21.0975, years: [...COAST_YEARS],          getYear: getCachedCoastHalf },
+  { name: 'Devonport Half Marathon',      km: 21.0975, years: [...DEV_HALF_YEARS],       getYear: getCachedDevHalf },
+  { name: 'Devonport 10K',               km: 10,      years: [...DEV_10K_YEARS],        getYear: getCachedDev10k },
+  { name: 'Kerikeri Half Marathon',       km: 21.0975, years: [...KERIKERI_YEARS],       getYear: getCachedKerikeriHalf },
+  { name: 'Maraetai Half Marathon',       km: 21.0975, years: [...MARAETAI_HALF_YEARS],  getYear: getCachedMaraetaiHalf },
+  { name: 'Maraetai 10K',                km: 10,      years: [...MARAETAI_10K_YEARS],   getYear: getCachedMaraetai10k },
+  { name: 'Mt Maunganui Half Marathon',   km: 21.0975, years: [...MTM_HALF_YEARS],       getYear: getCachedMtmHalf },
+  { name: 'Mt Maunganui 10K',            km: 10,      years: [...MTM_10K_YEARS],        getYear: getCachedMtm10k },
+  { name: 'Omaha Half Marathon',          km: 21.0975, years: [...OMAHA_HALF_YEARS],     getYear: getCachedOmahaHalf },
+  { name: 'Omaha 10K',                   km: 10,      years: [...OMAHA_10K_YEARS],      getYear: getCachedOmaha10k },
+  { name: 'Onehunga Half Marathon',       km: 21.0975, years: [...ONEHUNGA_HALF_YEARS],  getYear: getCachedOnehungaHalf },
+  { name: 'Onehunga 10K',                km: 10,      years: [...ONEHUNGA_10K_YEARS],   getYear: getCachedOnehunga10k },
+  { name: 'Orewa Half Marathon',          km: 21.0975, years: [...OREWA_HALF_YEARS],     getYear: getCachedOrewaHalf },
+  { name: 'Orewa 10K',                   km: 10,      years: [...OREWA_10K_YEARS],      getYear: getCachedOrewa10k },
+  { name: 'Tamaki Half Marathon',         km: 21.0975, years: [...TAMAKI_HALF_YEARS],    getYear: getCachedTamakiHalf },
+  { name: 'Tamaki 10K',                  km: 10,      years: [...TAMAKI_10K_YEARS],     getYear: getCachedTamaki10k },
 ];
 
 // ── Shared types ─────────────────────────────────────────
@@ -996,6 +1047,64 @@ export default function Compare() {
     QT_YEARS.forEach(y => {
       loadQt(y).then(() => markLoaded(`qt-42-${y}`));
       loadQtHalf(y).then(() => markLoaded(`qt-21-${y}`));
+    });
+    WF_YEARS.forEach(y => {
+      loadWaterfrontHalf(y).then(() => markLoaded(`wf-21-${y}`));
+      loadWaterfront10k(y).then(() => markLoaded(`wf-10-${y}`));
+    });
+    COAST_YEARS.forEach(y => {
+      loadCoastHalf(y).then(() => markLoaded(`coast-21-${y}`));
+    });
+    DEV_HALF_YEARS.forEach(y => {
+      loadDevHalf(y).then(() => markLoaded(`dev-21-${y}`));
+    });
+    DEV_10K_YEARS.forEach(y => {
+      loadDev10k(y).then(() => markLoaded(`dev-10-${y}`));
+    });
+    KERIKERI_YEARS.forEach(y => {
+      loadKerikeriHalf(y).then(() => markLoaded(`kerikeri-21-${y}`));
+    });
+    MARAETAI_HALF_YEARS.forEach(y => {
+      loadMaraetaiHalf(y).then(() => markLoaded(`maraetai-21-${y}`));
+    });
+    MARAETAI_10K_YEARS.forEach(y => {
+      loadMaraetai10k(y).then(() => markLoaded(`maraetai-10-${y}`));
+    });
+    MTM_HALF_YEARS.forEach(y => {
+      loadMtmHalf(y).then(() => markLoaded(`mtm-21-${y}`));
+    });
+    MTM_10K_YEARS.forEach(y => {
+      loadMtm10k(y).then(() => markLoaded(`mtm-10-${y}`));
+    });
+    OMAHA_HALF_YEARS.forEach(y => {
+      loadOmahaHalf(y).then(() => markLoaded(`omaha-21-${y}`));
+    });
+    OMAHA_10K_YEARS.forEach(y => {
+      loadOmaha10k(y).then(() => markLoaded(`omaha-10-${y}`));
+    });
+    ONEHUNGA_HALF_YEARS.forEach(y => {
+      loadOnehungaHalf(y).then(() => markLoaded(`onehunga-21-${y}`));
+    });
+    ONEHUNGA_10K_YEARS.forEach(y => {
+      loadOnehunga10k(y).then(() => markLoaded(`onehunga-10-${y}`));
+    });
+    OREWA_HALF_YEARS.forEach(y => {
+      loadOrewaHalf(y).then(() => markLoaded(`orewa-21-${y}`));
+    });
+    OREWA_10K_YEARS.forEach(y => {
+      loadOrewa10k(y).then(() => markLoaded(`orewa-10-${y}`));
+    });
+    TAMAKI_HALF_YEARS.forEach(y => {
+      loadTamakiHalf(y).then(() => markLoaded(`tamaki-21-${y}`));
+    });
+    TAMAKI_10K_YEARS.forEach(y => {
+      loadTamaki10k(y).then(() => markLoaded(`tamaki-10-${y}`));
+    });
+    WELLINGTON_MAR_YEARS.forEach(y => {
+      loadWellingtonMar(y).then(() => markLoaded(`wellington-42-${y}`));
+    });
+    WELLINGTON_HALF_YEARS.forEach(y => {
+      loadWellingtonHalf(y).then(() => markLoaded(`wellington-21-${y}`));
     });
   }, [markLoaded]);
 
