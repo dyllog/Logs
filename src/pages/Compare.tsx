@@ -1394,15 +1394,10 @@ export default function Compare() {
             <div>
               <div className="eyebrow">Compare · statistical analysis</div>
               <h1 className="th-title">Compare</h1>
-              <p className="th-sub">
-                Place any finish time, or any two athletes with finisher data, into the field of certified New Zealand results — percentile, equivalent placement, historical context.
-              </p>
             </div>
-            <div className="th-stamp">
-              <div>Method · <span className="v">v1.4</span></div>
-              <div>Surface · <span className="v">road · trail</span></div>
-              <div>Mode · <span className="v">{mode === 'racetime' ? 'Race time' : 'Athletes'}</span></div>
-            </div>
+            <p className="th-sub">
+              Place any finish time, or any two athletes with finisher data, into the field of certified New Zealand results — percentile, equivalent placement, historical context.
+            </p>
           </div>
         </div>
       </section>

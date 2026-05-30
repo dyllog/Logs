@@ -709,15 +709,14 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 }
 
 /* ── Compare v2 ── */
-.tool-head { padding: 28px 0 0; border-bottom: 0.5px solid var(--rule); }
+.tool-head { padding: 14px 0 0; border-bottom: 0.5px solid var(--rule); }
 .th-row {
-  display: grid; grid-template-columns: 1fr auto;
-  gap: 24px; align-items: end; padding-bottom: 22px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 40px; align-items: end; padding-bottom: 16px;
 }
 .th-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 52px; line-height: 0.95; letter-spacing: -0.025em; margin: 8px 0 0; }
-.th-sub { font-family: 'DM Serif Display', Georgia, serif; font-style: italic; font-size: 15px; line-height: 1.55; color: var(--meta); max-width: 440px; margin: 14px 0 0; }
-.th-stamp { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); text-align: right; line-height: 1.7; }
-.th-stamp .v { color: var(--ink); }
+.th-sub { font-family: 'DM Serif Display', Georgia, serif; font-style: italic; font-size: 15px; line-height: 1.55; color: var(--meta); max-width: 420px; margin: 0; justify-self: end; text-align: right; }
+.th-stamp { display: none; }
 
 /* Mode tabs */
 .mode-tabs { display: grid; grid-template-columns: repeat(3, 1fr) auto; border-bottom: 0.5px solid var(--ink); background: var(--bg); font-family: 'DM Mono', monospace; }
@@ -1018,8 +1017,8 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
   .rail-new { padding: 20px 20px 24px; }
   .mode-tabs { grid-template-columns: 1fr 1fr; }
   .mode-tab.mode-tab-help { display: none; }
-  .th-row { grid-template-columns: 1fr; }
-  .th-stamp { display: none; }
+  .th-row { grid-template-columns: 1fr; gap: 12px; }
+  .th-sub { justify-self: start; text-align: left; }
   .th-title { font-size: 38px; }
   .compare-hero { grid-template-columns: 1fr; gap: 16px; }
   .cmp-athletes-shell { padding-top: 20px; padding-bottom: 40px; }
@@ -1079,6 +1078,123 @@ html[data-theme="dark"] .tbl tr.row-hl:hover { background: rgba(185, 85, 42, 0.2
 
 /* Tables always scrollable horizontally inside tbl-wrap (needed at all widths when content is wide) */
 .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Race Archive page ── */
+.races-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 64px;
+  align-items: start;
+  padding-top: 56px;
+  padding-bottom: 52px;
+  border-bottom: 0.5px solid var(--rule);
+}
+.races-hero-right {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+.races-hero-map {
+  flex-shrink: 0;
+}
+.races-hero-stats {
+  padding-top: 6px;
+  flex-shrink: 0;
+}
+.races-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+.races-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.races-sep { opacity: 0.35; }
+.races-cat-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--meta);
+  transition: color 100ms;
+}
+.races-cat-link:hover { color: var(--ink); }
+.races-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.races-search-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.races-search-input {
+  padding: 9px 12px 9px 32px;
+  width: 240px;
+  border: 0.5px solid var(--rule);
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 120ms;
+}
+.races-search-input::placeholder { color: var(--meta); }
+.races-search-input:focus { border-color: var(--ink); }
+.races-sort {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.races-sort-select {
+  appearance: none;
+  border: 0.5px solid var(--rule);
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  padding: 7px 28px 7px 12px;
+  outline: none;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: border-color 100ms;
+}
+.races-sort-select:hover { border-color: var(--ink); }
+.races-sort-select option {
+  background: var(--bg);
+  color: var(--ink);
+}
+@media (max-width: 860px) {
+  .races-hero {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .races-hero-right {
+    gap: 32px;
+  }
+}
+@media (max-width: 600px) {
+  .races-hero-map { display: none; }
+  .races-hero-right { gap: 24px; }
+  .races-search-input { width: 100%; }
+  .races-controls { gap: 12px; }
+  .races-sort { margin-left: 0; }
+}
 
 /* ── Landing page ── */
 
