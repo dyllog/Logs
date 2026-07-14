@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { getAthleteSlug, preloadAthleteIndex, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
 import { racesForYear } from '@/data/raceDirectory';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -143,8 +143,13 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
     const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
     const shard  = await loadShard(letter);
 
+    // Preload athlete-index shards for every matched name so getAthleteSlug can
+    // resolve multi-race profiles (a substring hit may start with any letter).
+    const matched = Object.entries(shard).filter(([key]) => key.includes(norm));
+    await Promise.all(matched.map(([, entry]) => preloadAthleteIndex(entry.display)));
+
     const hits: FinisherMatch[] = [];
-    for (const [key, entry] of Object.entries(shard)) {
+    for (const [key, entry] of matched) {
       if (key.includes(norm)) {
         const slug      = getAthleteSlug(entry.display);
         const conflicts = NAME_DISAMBIGUATION[entry.display];

@@ -15,7 +15,7 @@ import { onehungaHalfStats, onehunga10kStats, ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_
 import { orewaHalfStats, orewa10kStats, OREWA_HALF_YEARS, OREWA_10K_YEARS } from '@/data/orewaData';
 import { tamakiHalfStats, tamaki10kStats, TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats, MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from '@/data/mtmData';
-import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
+import { normalise, getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
 
 interface FullResultsOverlayProps {
   open: boolean;
@@ -180,6 +180,23 @@ export default function FullResultsOverlay({ open, year: yearProp, dist = '42.2 
   const topPad = startIdx * rowH;
   const botPad = (filtered.length - endIdx) * rowH;
   const slice = filtered.slice(startIdx, endIdx);
+
+  // Preload athlete-index shards for visible rows so multi-race names link out.
+  const [, bumpIndex] = useState(0);
+  const idxLoaded = useRef(new Set<string>());
+  useEffect(() => {
+    const letters = new Set(slice.map(r => {
+      const c = normalise(r.name)[0];
+      return c >= 'a' && c <= 'z' ? c : '_';
+    }));
+    const missing = [...letters].filter(l => !idxLoaded.current.has(l));
+    if (!missing.length) return;
+    missing.forEach(l => idxLoaded.current.add(l));
+    let cancelled = false;
+    Promise.all(slice.map(r => preloadAthleteIndex(r.name)))
+      .then(() => { if (!cancelled) bumpIndex(v => v + 1); });
+    return () => { cancelled = true; };
+  }, [slice]);
 
   const colHeader = (k: SortKey, label: string, align?: string) => {
     const active = sortK === k;

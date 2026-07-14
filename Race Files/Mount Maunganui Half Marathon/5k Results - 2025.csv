@@ -1,0 +1,452 @@
+Position,Name,Bib,Time,Gender,Gender Position,Age Group,Age Group Position
+1,William LeRoy,1184,17:33,M,1,20-29,1
+2,Cooper Hogan,1178,19:18,M,2,10-15,1
+3,Bryce MONNAY,1734,19:28,M,3,20-29,2
+4,Grant Lincoln,2953,19:45,M,4,50-59,1
+5,Georgia Stanton,2378,20:02,F,1,10-15,1
+6,Lewis Jones,2356,20:27,M,5,30-39,1
+7,Zander Kriel,1106,21:40,M,6,20-29,3
+8,Harley Stanton,2377,21:43,M,7,10-15,2
+9,Damian Tilley,2348,22:01,M,8,30-39,2
+10,Liam Pettengell,511,22:09,M,9,30-39,3
+11,Aida Miyamura-Brown,558,22:26,F,2,10-15,2
+12,Dave Gardner,1729,22:39,M,10,50-59,2
+13,Manihera Gardiner,2331,22:42,M,11,16-19,1
+14,Chloe Forlong,2391,23:06,F,3,10-15,3
+15,Ben Clark,1197,23:25,M,12,20-29,4
+16,Suzy Riddington,1173,23:29,F,4,30-39,1
+17,Charles Taylor,2358,23:45,M,13,Under 10,1
+18,Ruby Needham,1140,23:51,F,5,10-15,4
+19,Erin Shaw,2913,24:10,F,6,30-39,2
+20,Oliver Patterson,1748,24:20,M,14,10-15,3
+21,Guillaume FRACY,586,24:25,M,15,30-39,4
+22,Jackson Tilley,2349,24:39,M,16,30-39,5
+23,Will Thodey,1782,25:23,M,17,30-39,6
+24,Sean Choi,1780,25:57,M,18,10-15,4
+25,Ella Apps,2980,26:11,F,7,20-29,1
+26,Jakobi Horsford,3784,26:18,M,19,10-15,5
+27,Ryan Fa'afiu,1778,26:37,M,20,10-15,6
+28,Shell Brandt,1110,26:40,F,8,30-39,3
+29,Matthew Cox,2316,26:40,M,21,10-15,7
+30,Navjot Singh,569,26:43,M,22,30-39,7
+31,Tyga Toheriri,2946,26:50,M,23,Under 10,2
+32,Catlyn Fortescue,3760,27:00,F,9,10-15,5
+33,Gaurav Mall,579,27:09,M,24,30-39,8
+34,heeseon han,567,27:11,F,10,30-39,4
+35,Reuben Fa'afiu,1777,27:15,M,25,10-15,8
+36,Vivian Zeng,2923,27:28,F,11,10-15,6
+37,Martha Crichton,584,27:34,F,12,16-19,1
+38,Hannah Audas,545,27:36,F,13,20-29,2
+39,Gareth Peters,2393,27:37,M,26,20-29,5
+40,Lucy Williams,1187,27:45,F,14,40-49,1
+41,Ben Riddington,1171,27:52,M,27,10-15,9
+42,Abby Lindsey,2315,27:52,F,15,16-19,2
+43,Jonty Riddington,1170,27:52,M,28,Under 10,3
+44,Chaad Lawrence,2311,28:08,M,29,30-39,9
+45,Isaiah Lawrence,2310,28:09,F,16,Under 10,1
+46,Priti Patel,1109,28:15,F,17,40-49,2
+47,Charlie Madden,1708,28:18,F,18,40-49,3
+48,Haylen Ratahi,2364,28:23,M,30,10-15,10
+49,Herbert Van veen,1707,28:25,M,31,20-29,6
+50,Oleksandra Markovska,2928,28:25,F,19,30-39,5
+51,Jared Magalong,2943,28:29,M,32,Under 10,4
+52,Natan Leon,2951,28:39,M,33,30-39,10
+53,Jodi Johnson,2909,28:49,F,20,30-39,6
+54,Ayden Porter,2309,28:51,M,34,20-29,7
+55,Nick Baker,3418,29:14,M,35,20-29,8
+56,Jaehyeok Choo,2321,29:18,M,36,Under 10,5
+57,Chantel Ann Farrugia,600,29:28,F,21,30-39,7
+58,Frances Ferguson-Smith,2395,29:45,F,22,20-29,3
+59,Seojun Mun,1182,29:48,M,37,Under 10,6
+60,Ben Smith,2917,29:49,M,38,50-59,3
+61,Sarah Gemmell,2387,30:16,F,23,40-49,4
+62,Zachary Blazkow,561,30:26,M,39,10-15,11
+63,Emma Blazkow,559,30:26,F,24,40-49,5
+64,Mat Still,564,30:33,M,40,40-49,1
+65,Dudley Taylor,2361,30:45,M,41,Under 10,7
+66,Hone Patrick,111,30:50,M,42,40-49,2
+67,kyal neeson,2907,30:50,M,43,30-39,11
+68,Raef Patrick,2359,30:51,M,44,Under 10,8
+69,Jinhoo Kim,1712,30:56,M,45,10-15,12
+70,Luke Collins,1753,31:00,M,46,50-59,4
+71,Alex Emrys,3021,31:01,M,47,20-29,9
+72,Owen Monaghan,2352,31:03,M,48,30-39,12
+73,Helena Gabruk,3777,31:06,F,25,16-19,3
+74,Ana Cordoba,1124,31:08,F,26,30-39,8
+75,Maggie Zhao,2924,31:08,F,27,30-39,9
+76,Simon Fortescue,3761,31:10,M,49,50-59,5
+77,Steven Curtis,3042,31:12,M,50,60-69,1
+78,Mark McTamney,575,31:16,M,51,50-59,6
+79,MINKYU PARK,1799,31:20,M,52,10-15,13
+80,Andrew Schaare,543,31:23,M,53,60-69,2
+81,Pamela Wallace,531,31:23,F,28,50-59,1
+82,Marius Havenga,596,31:48,M,54,40-49,3
+83,Doyoon Ryu,1167,31:59,M,55,10-15,14
+84,Annalese Hagan,542,32:06,F,29,20-29,4
+85,Louie King,1143,32:06,M,56,Under 10,9
+86,Cameron King,1141,32:07,M,57,40-49,4
+87,Sarah Rutledge,1757,32:07,F,30,20-29,5
+88,PA Versaud,1760,32:07,M,58,30-39,13
+89,Malena Diano,2365,32:08,F,31,30-39,10
+90,Arona Tuhoro,1738,32:12,M,59,Under 10,10
+91,Arami Tuhoro,1736,32:13,M,60,Under 10,11
+92,David Valencia,2328,32:19,M,61,30-39,14
+93,Julia Ribas,1200,32:20,F,32,16-19,4
+94,Graeme McLean,1774,32:27,M,62,40-49,5
+95,Sarah Thorne,1743,32:30,F,33,40-49,6
+96,Erica Tibbitts,2941,32:38,F,34,30-39,11
+97,Doyoon Kim,2961,32:39,M,63,Under 10,12
+98,Tanya Martusheff,2308,32:48,F,35,40-49,7
+99,Lee Boyd,2944,32:48,F,36,50-59,2
+100,JAEHYUN PARK,1798,32:55,M,64,40-49,6
+101,Mat Riddington,1172,32:57,M,65,10-15,15
+102,Noah Menary,1137,33:10,M,66,10-15,16
+103,Jody Riddington,1169,33:11,F,37,Under 10,2
+105,Anton McManus,3191,33:15,M,68,30-39,15
+106,Steve Johnston,2964,33:15,M,69,50-59,7
+107,Jacki Magalong,2942,33:17,F,38,30-39,12
+108,Oliver Taylor,1767,33:19,M,70,50-59,8
+109,Jo Bowen,2940,33:20,F,39,60-69,1
+110,Lucy Riddington,1168,33:21,F,40,Under 10,3
+111,Rylan George,1768,33:22,M,71,Under 10,13
+112,Scott Murray,574,33:24,M,72,20-29,10
+113,Sammy Greene,2906,33:28,F,41,30-39,13
+114,Azaria Mcmillan,534,33:33,F,42,20-29,6
+115,Kara Yardley,2388,33:41,F,43,30-39,14
+116,Andrea Berrington,2939,33:41,F,44,50-59,3
+117,Karen Taylor,2925,33:50,F,45,40-49,8
+118,Monique Rockliffe,1775,33:54,F,46,20-29,7
+119,Benji Gray,1121,33:55,M,73,10-15,17
+120,Derek Atkinson,3752,34:02,M,74,70+,1
+121,Cecilia Miranda,2306,34:12,F,47,30-39,15
+122,Jennifer Hall,590,34:22,F,48,40-49,9
+123,Isla Cappely,3767,34:29,F,49,10-15,7
+124,Brady Doyle,1115,34:42,M,75,30-39,16
+125,Renee Doyle,1116,34:45,F,50,10-15,8
+126,Grace Doyle,1117,34:46,F,51,Under 10,4
+127,Kelly Petersen,2985,34:47,F,52,30-39,16
+128,Amy Shannon,1125,34:48,F,53,40-49,10
+129,Keaton Stewart,3384,34:50,F,54,20-29,8
+130,Ross McLeod,2346,34:52,M,76,50-59,9
+131,Megha Sethi,2366,34:53,F,55,30-39,17
+132,Daniel Jackson,591,35:02,M,77,40-49,7
+133,Albertus Kotze,525,35:03,M,78,40-49,8
+134,Bronwyn Havenga,595,35:07,F,56,40-49,11
+135,Alice Shin,2966,35:09,F,57,20-29,9
+136,Juliana Park,2954,35:09,F,58,40-49,12
+137,Ana Van den Berg,3023,35:13,F,59,30-39,18
+138,Yujun Jung,2341,35:14,M,79,Under 10,14
+139,Carien Kotze,524,35:19,F,60,40-49,13
+140,Lihané Brink,1191,35:26,F,61,10-15,9
+141,Amorée Brink,1192,35:27,F,62,10-15,10
+142,DAYEON KU,1751,35:27,F,63,Under 10,5
+143,Florine McGregor,1195,35:30,F,64,10-15,11
+144,Marie Atkinson,557,35:39,F,65,70+,1
+145,Meagan Jordan,2400,35:41,F,66,30-39,19
+146,Gina Nichols,1725,35:46,F,67,30-39,20
+147,Airini Roberts,1724,35:48,F,68,30-39,21
+148,Luke Stephens,1162,35:57,M,80,16-19,2
+149,Prunelle Leclerc,1759,36:07,F,69,20-29,10
+150,Sebhin Choo,2320,36:22,F,70,10-15,12
+151,Satoka Imano,2319,36:27,F,71,20-29,11
+152,Elliot Tiffany,2379,36:38,M,81,40-49,9
+153,Vivienne McGregor,1196,36:39,F,72,Under 10,6
+154,Andrew McGregor,1194,36:40,M,82,40-49,10
+155,Lily Chizmar,3024,36:41,F,73,20-29,12
+156,Layne Asplin,3027,36:43,M,83,20-29,11
+157,Gaylene Bay,529,36:49,F,74,70+,2
+158,Sophie Johnston,592,36:51,F,75,30-39,22
+159,Antoinette Zuber,1144,36:53,F,76,40-49,14
+160,Jenna Stringer,593,36:53,F,77,40-49,15
+161,Benson Bi,548,37:01,M,84,10-15,18
+162,Ian Meek,2372,37:02,M,85,60-69,3
+163,Melaine Wartel,1761,37:05,F,78,20-29,13
+164,Hazel-Ray McLeod,1722,37:14,F,79,Under 10,7
+165,Eunyu Jung,2340,37:15,F,80,10-15,13
+166,Akaai Tuhoro,1737,37:24,M,86,Under 10,15
+167,Shinae Tuhoro,1735,37:24,F,81,30-39,23
+168,Rangi Iles,2947,37:41,F,82,30-39,24
+169,Hinerua Gear,2948,37:42,F,83,30-39,25
+170,Yousuf Haroon,1148,37:49,M,87,10-15,19
+171,Ibrahim Haroon,1147,37:50,M,88,10-15,20
+172,Jessica Ferreira,1711,37:56,F,84,20-29,14
+173,Tatum Havenga,597,38:00,F,85,16-19,5
+174,Rutledge Kerry,1756,38:05,F,86,50-59,4
+175,carolyn redshaw,1742,38:07,F,87,50-59,5
+176,Peppy Jenkins,1779,38:08,F,88,Under 10,8
+177,Terangi Gilbert,1790,38:11,M,89,10-15,21
+178,Angel Hawkes,1139,38:11,F,89,20-29,15
+179,Annie Jenkins,514,38:16,F,90,30-39,26
+180,Mark Kroon,1714,38:21,M,90,60-69,4
+181,Natsuki Yamada,2318,38:24,F,91,20-29,16
+182,Jemima Fourie,3787,38:33,F,92,Under 10,9
+183,Charlee Payne,1119,38:35,F,93,10-15,14
+184,Dani Sheridan,3026,38:40,F,94,30-39,27
+185,David Whitney,3022,38:40,M,91,40-49,11
+186,Ella Still,563,38:41,F,95,10-15,15
+187,Kiri Gilbert,1789,38:52,M,92,30-39,17
+188,Julie Edwards,1130,38:52,F,96,30-39,28
+189,Bryan Hastings,1132,38:53,M,93,50-59,10
+190,Ashlee Hastings,1131,38:53,F,97,20-29,17
+191,Debora Porto,535,38:55,F,98,30-39,29
+192,Lance Payne,1118,38:56,M,94,40-49,12
+193,Brett Parsons,2914,38:58,M,95,60-69,5
+194,Katherine Wardhaugh,1727,39:00,F,99,40-49,16
+195,Alyssa Robinson,2930,39:02,F,100,10-15,16
+196,Janelle Robinson,2929,39:06,F,101,40-49,17
+197,Tom Hughes,3189,39:08,M,96,30-39,18
+198,Joan Fourie,3785,39:09,F,102,30-39,30
+199,Rachael Bell-Fleming,565,39:13,F,103,30-39,31
+200,Andrew Wood,566,39:13,M,97,60-69,6
+201,John Sigurdsson,2334,39:27,M,98,40-49,13
+202,Gylfi Sigurdsson,2336,39:29,M,99,Under 10,16
+203,STACEY KIRKBRIDE,2933,39:31,F,104,30-39,32
+204,Carl Officer,538,39:34,F,105,40-49,18
+205,Mali Sin,1773,39:34,F,106,Under 10,10
+206,Kenneth Sin,1772,39:34,M,100,40-49,14
+207,Hendrika Forlong,523,39:34,F,107,70+,3
+208,Lohan Horn,2957,39:37,M,101,10-15,22
+209,Nafeesah Aumeerally,1166,39:38,F,108,40-49,19
+210,ANURA Puliyadda,522,39:44,M,102,70+,2
+211,Corey Hughes,551,39:45,M,103,40-49,15
+212,Melissa Hughes (5km),550,39:45,F,109,30-39,33
+213,Gaon Jeong,1721,39:47,M,104,Under 10,17
+214,Tessa Menary,1136,39:49,F,110,10-15,17
+215,Ethan Cameron,2368,40:00,M,105,20-29,12
+216,Eundo Seo,2962,40:03,M,106,10-15,23
+217,Zach Patterson,1749,40:03,M,107,10-15,24
+218,Beth Williams,2367,40:05,F,111,20-29,18
+219,Luke Patterson,1750,40:06,M,108,10-15,25
+220,Heath Pascoe,1726,40:06,M,109,10-15,26
+221,Stephen Patterson,1747,40:09,M,110,40-49,16
+222,Bruce Woods,1792,40:15,M,111,70+,3
+223,Florence Fourie,3786,40:27,F,112,Under 10,11
+224,Eunchan Joo,2926,40:28,M,112,Under 10,18
+225,Liam Horn,2956,40:28,M,113,Under 10,19
+226,Leandra Horn,2955,40:29,F,113,30-39,34
+227,Margo Gardner,2329,40:34,F,114,30-39,35
+228,Gabrielle Hyland,2345,40:38,F,115,30-39,36
+229,Callum Wood,2344,40:39,M,114,30-39,19
+230,Bettina Grachtrup,555,40:48,F,116,50-59,6
+231,Jahnaea Campbell,2371,41:02,F,117,30-39,37
+232,Mark Norman,2963,41:07,M,115,30-39,20
+233,Amber George,1739,41:10,F,118,30-39,38
+234,Emma Aldridge,2965,41:11,F,119,30-39,39
+235,Debbie Murray,536,41:12,F,120,60-69,2
+236,Joeleen Dinsdale,1781,41:21,F,121,40-49,20
+237,Tamahau Hicks,3179,41:26,M,116,10-15,27
+238,YEONJUN LEE,1176,41:26,F,122,40-49,21
+239,HYUNSEO LEE,1177,41:26,M,117,Under 10,20
+240,Leonard Finau,1745,41:28,M,118,30-39,21
+241,Anthony Finau,1744,41:29,M,119,Under 10,21
+242,Kylie Brodie,1129,41:31,F,123,40-49,22
+243,Natasha Sandford,1126,41:32,F,124,40-49,23
+244,Jo Shannon,1122,41:35,F,125,50-59,7
+245,Telelina Brighouse,1120,41:49,F,126,20-29,19
+246,Aurélie Cousty,2307,41:51,F,127,20-29,20
+247,MINJUNG KIM,1135,41:53,F,128,40-49,24
+248,Haleigh O'Brien,3190,41:58,F,129,30-39,40
+249,Janelle Wright,2938,42:02,F,130,40-49,25
+250,Enzo Coulter,1765,42:12,M,120,Under 10,22
+251,Steph Coulter,1764,42:14,F,131,30-39,41
+252,Daniel Corteza,1706,42:14,M,121,20-29,13
+253,Jazmin Hona,1719,42:18,F,132,20-29,21
+254,Irene Guest,1174,42:24,F,133,30-39,42
+255,Joel Ryder,1175,42:27,M,122,40-49,17
+256,Rangiaue Te Hiini,2325,42:32,F,134,20-29,22
+257,Chris Henry,1795,42:50,M,123,40-49,18
+258,Micah Matagi,1741,43:00,M,124,Under 10,23
+259,Winter Han,1769,43:11,M,125,10-15,28
+260,Joseph Simpson,1746,43:15,M,126,10-15,29
+261,Danwoo KIM,1134,43:24,M,127,10-15,30
+262,Larissa Nieuwkoop,528,43:29,F,135,30-39,43
+263,Nadesh Balakrisan,3242,43:30,M,128,40-49,19
+264,Sheryl Macdonald,2380,43:32,F,136,60-69,3
+265,Sharon Gordon,1794,43:34,F,137,60-69,4
+266,Kayla Matagi,2347,43:36,F,138,30-39,44
+267,Liam Matagi,1740,43:37,M,129,30-39,22
+268,Lucy Lowe,3768,43:47,F,139,16-19,6
+269,Lachie Mitchell,2915,44:04,M,130,Under 10,24
+270,Allaine Roces,2360,44:24,F,140,30-39,45
+271,Katherine Iguidez,2362,44:24,F,141,30-39,46
+272,Ross Dennison,578,44:26,M,131,60-69,7
+273,Shoshan Orr,587,44:30,F,142,20-29,23
+274,Shayla Davis,2363,44:42,F,143,30-39,47
+275,Caroline Gray,594,44:45,F,144,40-49,26
+276,Craig Featherstone,588,44:46,M,132,60-69,8
+277,Paige Hosking,1730,44:52,F,145,20-29,24
+278,Robin Andresen,1728,44:56,F,146,20-29,25
+279,Sue Amos,1114,44:58,F,147,50-59,8
+280,Tessa Parker,537,44:58,F,148,20-29,26
+281,Tiaki Rongonui,1717,45:06,M,133,Under 10,25
+282,Shannon Mabey,1107,45:07,F,149,30-39,48
+283,Naz Rongonui,1718,45:27,F,150,40-49,27
+284,Brooke Guptill,539,45:48,F,151,20-29,27
+285,Zoe Nicols,2960,45:53,F,152,10-15,18
+286,Mia Nicols,2959,45:54,F,153,10-15,19
+287,Jodi Nicols,2958,46:16,F,154,40-49,28
+288,Zara Rongonui,1716,46:24,F,155,Under 10,12
+289,Abby Smith,2313,46:27,F,156,Under 10,13
+290,Ihaka Rongonui,1715,46:28,M,134,40-49,20
+291,George Dillane,577,46:31,M,135,20-29,14
+292,Bettina Balboa,2353,46:41,F,157,30-39,49
+293,Anna-Marie Smith,2312,46:45,F,158,20-29,28
+294,Trudie Stephens,1161,46:52,F,159,50-59,9
+295,Barbara Ferregel,570,46:55,F,160,70+,4
+296,Jeanette Wiltshire,3187,46:58,F,161,50-59,10
+297,Ataahua Waitere,1793,47:01,F,162,10-15,20
+298,Nicky Sinclair,556,47:23,F,163,50-59,11
+299,Dion Waller,2333,47:28,M,136,50-59,11
+300,Alisha Waller,2332,47:28,F,164,40-49,29
+301,Cody Westworth,546,47:30,F,165,40-49,30
+302,Amy Grimmond,2317,47:30,F,166,20-29,29
+303,Lajayshea Hori,540,47:46,F,167,16-19,7
+304,Robyn Thompson,2934,48:10,F,168,40-49,31
+305,Stephanie Love,1199,48:12,F,169,30-39,50
+306,Ella Savage,1183,48:16,F,170,60-69,5
+307,Rongoteāio Kennedy,1788,48:23,F,171,Under 10,14
+308,Kamaia Takuira-Mita,1786,48:25,F,172,30-39,51
+309,Kemara Kennedy,1787,48:27,M,137,40-49,21
+310,lian kairua,1181,48:40,F,173,40-49,32
+311,Debbie Maihi,1180,48:42,F,174,40-49,33
+312,Jade Ngatai,571,48:45,F,175,30-39,52
+313,Sharon Kalsbeek,521,48:49,F,176,60-69,6
+314,Anthony Kalsbeek,520,48:50,M,138,50-59,12
+315,Harlem Gilbert,1791,48:55,F,177,10-15,21
+316,Te Urukeiha Kingi,2323,49:00,F,178,20-29,30
+317,Lisa Duan,547,49:16,F,179,30-39,53
+318,Scott Kirkman,1755,49:20,M,139,50-59,13
+319,Christopher Blazkow,560,49:26,M,140,40-49,22
+320,Shannell Matthews,598,49:26,F,180,30-39,54
+321,Glennis Beddis,1752,49:27,F,181,60-69,7
+322,Yoon Kim,2314,49:28,F,182,10-15,22
+323,Hilda Nelson,1179,49:29,F,183,60-69,8
+324,Jenny Tenana,1123,49:31,F,184,70+,5
+325,Michaela Murray,3036,49:58,F,185,50-59,12
+326,Nigel Cornford,3033,49:58,M,141,60-69,9
+327,Andrew Taylor,3037,49:59,M,142,50-59,14
+328,Leanne Reynolds,1111,50:17,F,186,50-59,13
+329,Wyatt Reyland,1113,50:17,M,143,Under 10,26
+330,Vik Reyland,1112,50:20,F,187,30-39,55
+331,Nick Murray,3035,50:20,M,144,60-69,10
+332,Bradley Wong,2937,50:23,M,145,20-29,15
+333,Grace Warner,2935,50:24,F,188,20-29,31
+334,Aiza Baxter,2936,50:25,F,189,30-39,56
+335,Barry Mehrtens,3032,50:33,M,146,60-69,11
+336,Elliott Butcher,2342,50:38,M,147,Under 10,27
+337,Coco Malcolm,2382,50:50,F,190,Under 10,15
+338,Debbie Hills,2343,50:53,F,191,60-69,9
+339,Marian Sandrey,2327,50:55,F,192,70+,6
+340,Gwyneth Johnsen,2968,50:56,F,193,60-69,10
+341,Linel Brink,1190,51:00,F,194,40-49,34
+342,Charlotte Dinsdale,2383,51:00,F,195,50-59,14
+343,Heidi Oosthuizen,2351,51:00,F,196,40-49,35
+344,Yuhwan Kim,1186,51:25,M,148,10-15,31
+345,Jo Davey,2994,51:25,F,197,50-59,15
+346,Bruce Davey,2995,51:27,M,149,60-69,12
+347,Trevor Matthews,1731,51:28,M,150,60-69,13
+348,Josh Klein,3025,51:33,M,151,40-49,23
+349,Susan Waterworth,515,51:39,F,198,60-69,11
+350,Jaehwan Kim,1185,51:43,M,152,10-15,32
+351,Lauren Neeson,2908,51:50,F,199,30-39,57
+352,Kelsey Bell,1165,51:55,F,200,30-39,58
+353,Natalie King-Hughes,3188,51:56,F,201,30-39,59
+354,Eden-Kalila McLeod,1723,51:58,F,202,Under 10,16
+355,John Mcleod,1720,52:00,M,153,30-39,23
+356,Lyn Morris,599,52:08,F,203,60-69,12
+357,Kaizeen Engineer,3192,52:30,F,204,30-39,60
+358,Emma Adams,3034,52:44,F,205,30-39,61
+359,Maree Nicole,3040,52:44,F,206,60-69,13
+360,Garry Nicol,3039,52:46,M,154,60-69,14
+361,Kyraux Tata,1127,52:50,F,207,16-19,8
+362,Vicki Murdoch,3,52:56,F,208,10-15,23
+363,Sue Holmberg,581,52:57,F,209,60-69,14
+364,Hyein Jang,1785,52:59,F,210,Under 10,17
+365,Suin Jang,1784,53:04,F,211,Under 10,18
+366,Katie Choi,1783,53:04,F,212,40-49,36
+367,Xin Wang,549,53:27,M,155,40-49,24
+368,Matapo Tauirarii,3019,53:34,M,156,20-29,16
+369,Hayley Mundy,3184,53:35,F,213,50-59,16
+370,Fazlin Osman,3029,53:35,F,214,40-49,37
+371,Zayd Osman,3028,53:37,M,157,40-49,25
+372,Sarah Martelli,3185,53:38,F,215,40-49,38
+373,Jenny Walsh,2381,53:44,F,216,50-59,17
+374,Annette Featherstone,589,53:48,F,217,70+,7
+375,Karen Montuya,1193,53:53,F,218,40-49,39
+376,Kate Finlayson,2338,53:55,F,219,30-39,62
+377,Billie Burton,2339,53:59,F,220,Under 10,19
+378,Lisiate Ketuu,1128,55:00,M,158,16-19,3
+379,Aj Ackerman,229,55:27,F,221,30-39,63
+380,Terri Allen,2330,55:43,F,222,30-39,64
+381,Guinevere Hugo,2322,56:33,F,223,20-29,32
+382,Elaine Parker,2931,56:35,F,224,50-59,18
+383,Jeff Parker,1758,56:37,M,159,60-69,15
+384,Taylor Thomson,2920,56:37,F,225,30-39,65
+385,Poppy Thomson,2921,56:42,F,226,Under 10,20
+386,Belinda Muller,2922,56:42,F,227,60-69,15
+387,Tracey Scott,2394,56:45,F,228,50-59,19
+388,Carter Maitland,2912,56:59,M,160,Under 10,28
+389,Crista Maitland,2910,56:59,F,229,40-49,40
+390,Sandra Kappely,1766,57:05,F,230,70+,8
+391,Jason Maitland,2911,57:05,M,161,40-49,26
+392,Joseph Fa'afiu,2384,57:22,M,162,40-49,27
+393,Errol Alcock,526,57:23,M,163,70+,4
+394,Maree Pouesi,544,57:25,F,231,60-69,16
+395,Gloria Bruner,583,57:31,F,232,70+,9
+396,Paul Warner Bird,3182,57:31,M,164,70+,5
+397,Eunjun Joo,2927,57:46,M,165,Under 10,29
+398,Gareth Millar,1709,57:47,M,166,40-49,28
+399,Wendy Millar,2350,57:50,F,233,70+,10
+400,Carter Millar,1710,57:51,M,167,Under 10,30
+401,Chinami Sutton,3031,58:32,F,234,50-59,20
+402,Donald Sutton,3030,58:33,M,168,60-69,16
+403,Lee-Ann Taylor,3038,58:39,F,235,50-59,21
+404,Donella Forsythe,3041,58:42,F,236,50-59,22
+405,Beryl Gamage,552,58:44,F,237,60-69,17
+406,Sue McIntyre,1713,58:56,F,238,50-59,23
+407,Emerson Rikiriki,2369,59:37,M,169,40-49,29
+408,Amo Kingi,2370,59:37,F,239,40-49,41
+409,Yvonne Prince,2971,1:00:01,F,240,70+,11
+410,Jake Hedgman,2390,1:00:11,M,170,10-15,33
+411,Benno Kohler,1770,1:00:16,M,171,60-69,17
+412,Milinda Kohler,1771,1:00:58,F,241,50-59,24
+413,Adele Golombick,1133,1:00:58,F,242,40-49,42
+414,Trish Clouston,2385,1:02:38,F,243,60-69,18
+415,Nicole Bignell,2386,1:02:38,F,244,30-39,66
+416,Jayne Vuglar,2967,1:02:51,F,245,30-39,67
+417,Katie Laussen,2970,1:02:54,F,246,40-49,43
+418,Russell Kappely,1797,1:03:20,M,172,70+,6
+419,Tristan Betham,1762,1:03:41,M,173,Under 10,31
+420,Wilf Betham,1763,1:03:42,M,174,40-49,30
+421,Cherie Taylor,1151,1:03:51,F,247,50-59,25
+422,Meirene Gillett,1160,1:03:51,F,248,70+,12
+423,Donna Smith,1155,1:03:52,F,249,60-69,19
+424,Tauirarii Tauirarii,3020,1:04:19,M,175,50-59,15
+425,Rhonda Williams,1154,1:05:09,F,250,60-69,20
+426,Sarndra Marshall,573,1:05:16,F,251,60-69,21
+427,Sarah-jane Marshall,572,1:05:16,F,252,40-49,44
+428,Grafton Mark,1733,1:06:04,M,176,40-49,31
+429,Pisila Mark,1732,1:06:07,F,253,30-39,68
+430,Rachel Haddrell,568,1:06:10,F,254,50-59,26
+431,Jade Griffin,533,1:06:10,F,255,40-49,45
+432,Lenley Alcock,527,1:06:58,F,256,70+,13
+433,Claire Clifford,2354,1:07:09,F,257,30-39,69
+434,Alison Clifford,2355,1:07:09,F,258,50-59,27
+435,Jason Irvine,585,1:07:46,M,177,50-59,16
+436,Emily Kay Livick,3178,1:07:48,F,259,40-49,46
+437,Matt Nairn,105,1:08:44,M,178,40-49,32
+438,Sheree Savage,2399,1:10:13,F,260,30-39,70
+439,Ruhi Barton,1158,1:11:06,F,261,60-69,22
+440,Ruby Peke,1152,1:13:35,F,262,70+,14
+441,Mary Strickland,1153,1:13:37,F,263,70+,15
+442,Hariata Adams,1149,1:13:38,F,264,60-69,23
+443,Pauline Perry,1159,1:13:45,F,265,50-59,28
+444,Val Yeates,1150,1:14:41,F,266,70+,16
+445,Bigg Mike Hodgson,2324,1:17:04,M,179,30-39,24
+446,Doug Tausinga,315,1:17:11,M,180,40-49,33
+447,Parakrama Gamage,553,1:23:23,M,181,60-69,18
+448,Cissy Leef,1157,1:34:36,F,267,70+,17
+449,Dianne Halliday,1156,1:34:38,F,268,70+,18
+450,Oli Sigurdsson,2337,1:44:19,M,182,Under 10,32
+451,Tracy Coker,2335,1:44:19,F,269,30-39,71
+452,Carolyn Telford,582,3:06:22,F,270,50-59,29

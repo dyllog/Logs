@@ -46,3 +46,19 @@ serviceAccount*.json
 .env.*
 *.pem
 dist/
+
+# generated athlete data (rebuilt by `npm run generate`; canon + overrides are the committed source of truth)
+/public/data/athletes/
+/public/data/athlete-index/
+/athlete-review-queue.csv
+/athlete-canon-report.json
+/athlete-split-review-queue.csv
+/athlete-split-review-queue.json
+/cluster-worksheets/
+*.tmp.json
+
+# local-only tooling / logs / artifacts
+/.claude/
+/.claire/
+/dev-server.log
+/cluster-worksheets.zip

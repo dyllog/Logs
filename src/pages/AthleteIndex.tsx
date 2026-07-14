@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { getAthleteSlug, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { getAthleteSlug, preloadAthleteIndex, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
 
 const PAGE_SIZE = 100;
 
@@ -94,7 +94,7 @@ export default function AthleteIndex() {
     setLoading(true);
     setPage(0);
     setExpanded(null);
-    loadShard(ltr).then(shard => {
+    Promise.all([loadShard(ltr), preloadAthleteIndex(ltr)]).then(([shard]) => {
       const built: Row[] = [];
       for (const [, entry] of Object.entries(shard)) {
         const slug = getAthleteSlug(entry.display);

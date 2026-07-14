@@ -16,7 +16,7 @@ import { orewaHalfStats, orewa10kStats, OREWA_HALF_YEARS, OREWA_10K_YEARS } from
 import { tamakiHalfStats, tamaki10kStats, TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats, MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from '@/data/mtmData';
 import FullResultsOverlay from './FullResultsOverlay';
-import { normalise, getAthleteSlug } from '@/data/athleteProfiles';
+import { normalise, getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
 
 interface RaceResultsBlockProps {
   dist: string;
@@ -206,6 +206,25 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
 
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const pageRows = filtered.slice((page - 1) * perPage, page * perPage);
+
+  // Resolve multi-race athlete profiles for the visible rows: preload the
+  // athlete-index shards for their letters, then re-render so getAthleteSlug hits.
+  const [, bumpIndex] = useState(0);
+  const idxLoaded = useRef(new Set<string>());
+  useEffect(() => {
+    const letters = new Set(pageRows.map(r => {
+      const c = normalise(r.name)[0];
+      return c >= 'a' && c <= 'z' ? c : '_';
+    }));
+    const missing = [...letters].filter(l => !idxLoaded.current.has(l));
+    if (!missing.length) return;
+    missing.forEach(l => idxLoaded.current.add(l));
+    let cancelled = false;
+    Promise.all(pageRows.map(r => preloadAthleteIndex(r.name)))
+      .then(() => { if (!cancelled) bumpIndex(v => v + 1); });
+    return () => { cancelled = true; };
+  }, [pageRows]);
+
   const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : isMaraetaiHalf ? maraetaiHalfStats : isMaraetai10k ? maraetai10kStats : isKerikeriHalf ? kerikeriStats : isWellingtonMar ? wellingtonMarStats : isWellingtonHalf ? wellingtonHalfStats : isOnehungaHalf ? onehungaHalfStats : isOnehunga10k ? onehunga10kStats : isOrewaHalf ? orewaHalfStats : isOrewa10k ? orewa10kStats : isTamakiHalf ? tamakiHalfStats : isTamaki10k ? tamaki10kStats : isMtmHalf ? mtmHalfStats : isMtm10k ? mtm10kStats : isMtm5k ? mtm5kStats : (dist === '21.1 km' ? halfStats : yearStats);
   const stat = activeStats.find(s => s.year === year)!;
 

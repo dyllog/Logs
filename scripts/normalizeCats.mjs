@@ -13,12 +13,20 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import catCodes from './lib/categoryCodes.cjs';
+
+const { decodePackedCat } = catCodes;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(__dirname, '..', 'public', 'data');
 
 export function normalizeCat(cat) {
   if (!cat || cat === '—') return cat;
+
+  // Archive-wide safety net: if a packed timing code (e.g. "M3039") ever leaks
+  // through a converter, decode it here rather than passing it through raw.
+  const packed = decodePackedCat(cat);
+  if (packed) return packed;
 
   const m = cat.match(/^([MW])\s+(.+)$/);
   if (!m) return cat;

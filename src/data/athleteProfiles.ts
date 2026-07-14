@@ -51,3 +51,45 @@ export function normalise(s: string): string {
 export function getAthleteSlug(name: string): string | null {
   return PROFILE_MAP[normalise(name)] ?? null;
 }
+
+/**
+ * Canon-backed slug resolution for the ~70k multi-race athletes.
+ *
+ * `getAthleteSlug` stays synchronous (its 5 consumers depend on that) and only
+ * knows the 25 hand-registered profiles. To make every multi-race athlete
+ * linkable, surfaces first `await preloadAthleteIndex(letter)` for the letters
+ * they're about to render; that fetches `/data/athlete-index/{letter}.json`
+ * (a normalised-name → slug map) once and folds it into PROFILE_MAP, so the
+ * subsequent synchronous `getAthleteSlug` calls resolve without changing their
+ * signature.
+ */
+const loadedLetters = new Map<string, Promise<void>>();
+
+function indexLetter(name: string): string {
+  const n = normalise(name);
+  const c = n[0];
+  return c && c >= 'a' && c <= 'z' ? c : '_';
+}
+
+export function preloadAthleteIndex(name: string): Promise<void> {
+  const letter = indexLetter(name);
+  let p = loadedLetters.get(letter);
+  if (!p) {
+    p = fetch(`/data/athlete-index/${letter}.json`)
+      .then(r => (r.ok ? r.json() : {}))
+      .then((map: Record<string, string>) => {
+        for (const [k, slug] of Object.entries(map)) {
+          if (!(k in PROFILE_MAP)) PROFILE_MAP[k] = slug;
+        }
+      })
+      .catch(() => { /* leave letter unresolved on failure */ });
+    loadedLetters.set(letter, p);
+  }
+  return p;
+}
+
+/** Await the index shard for `name`, then resolve synchronously. */
+export async function resolveAthleteSlug(name: string): Promise<string | null> {
+  await preloadAthleteIndex(name);
+  return getAthleteSlug(name);
+}

@@ -1,0 +1,116 @@
+{
+  "merge": [],
+  "split": [],
+  "knownMultiPerson": [
+    "andrew-smith-6",
+    "aaron-hill",
+    "nick-brown",
+    "james-watson"
+  ],
+  "splits": [
+    {
+      "sourceSlug": "bill-richardson",
+      "groups": [
+        {
+          "newSlug": "bill-richardson-2",
+          "recordIds": [
+            "christchurch-marathon:2009:mar:p470:16429"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "patricia-stichbury",
+      "groups": [
+        {
+          "newSlug": "patricia-stichbury-2",
+          "recordIds": [
+            "rotorua-marathon:2014:mar:p1909:16896"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "craig-james",
+      "groups": [
+        {
+          "newSlug": "craig-james-2",
+          "recordIds": [
+            "auckland-marathon:2020:half:p3940:10357",
+            "waterfront-half-marathon:2024:half:p391:6032"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "raewyn-taylor",
+      "groups": [
+        {
+          "newSlug": "raewyn-taylor-2",
+          "recordIds": [
+            "rotorua-marathon:2014:half:p404:6801",
+            "rotorua-marathon:2015:half:p422:7181",
+            "onehunga-half-marathon:2025:10k:p170:4542"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "david-green",
+      "groups": [
+        {
+          "newSlug": "david-green-2",
+          "recordIds": [
+            "wellington-marathon:2004:half:p328:6118",
+            "wellington-marathon:2022:half:p569:7357"
+          ]
+        },
+        {
+          "newSlug": "david-green-3",
+          "recordIds": [
+            "mount-maunganui-half-marathon:2023:half:p327:6647",
+            "queenstown-marathon:2023:mar:p1136:17783"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "lisa-harris",
+      "groups": [
+        {
+          "newSlug": "lisa-harris-2",
+          "recordIds": [
+            "kerikeri-half-marathon:2010:half:p494:7000",
+            "kerikeri-half-marathon:2011:half:p294:6482",
+            "kerikeri-half-marathon:2017:half:p449:7134"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "gabriela-diver",
+      "groups": [
+        {
+          "newSlug": "gabriela-diver-2",
+          "recordIds": [
+            "maraetai-half-marathon:2025:half:p24:5302"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceSlug": "paul-williams",
+      "groups": [
+        {
+          "newSlug": "paul-williams-2",
+          "recordIds": [
+            "kerikeri-half-marathon:2003:half:p22:4812",
+            "wellington-marathon:2002:half:p69:5333",
+            "kerikeri-half-marathon:2004:half:p34:5115",
+            "kerikeri-half-marathon:2006:half:p53:5155"
+          ]
+        }
+      ]
+    }
+  ]
+}
