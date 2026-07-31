@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "$comment": "SPA fallback for client-side routes. Deliberately EXCLUDES /data/ and /assets/: a catch-all makes every MISSING static file return 200 serving index.html, so a presence check (does this athlete have a report?) reads as true for everything. Rewrites run after the filesystem check, so real files are unaffected and missing ones now 404 honestly.",
+  "rewrites": [
+    { "source": "/((?!data/|assets/).*)", "destination": "/index.html" }
+  ]
 }

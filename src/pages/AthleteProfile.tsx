@@ -185,8 +185,16 @@ export default function AthleteProfile() {
     if (!slug) return;
     let cancelled = false;
     setHasReport(false);
+    // Must confirm the response is actually JSON, not just that it was a 200:
+    // an SPA host that rewrites unknown paths to index.html answers 200/text-html
+    // for a report that doesn't exist, which would show "View Report" on every
+    // profile. vercel.json also excludes /data/ from the rewrite; this keeps the
+    // check correct regardless of how the site is hosted.
     fetch(`/data/reports/${slug}.json`, { method: 'HEAD' })
-      .then(r => { if (!cancelled) setHasReport(r.ok); })
+      .then(r => {
+        const isJson = r.ok && (r.headers.get('content-type') ?? '').includes('application/json');
+        if (!cancelled) setHasReport(isJson);
+      })
       .catch(() => { if (!cancelled) setHasReport(false); });
     return () => { cancelled = true; };
   }, [slug]);
