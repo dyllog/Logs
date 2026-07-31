@@ -158,12 +158,18 @@ export function useInlineSearch(query: string) {
     const raceNameHits: YearRaceMatch[] = [];
     const seenLabels = new Set<string>();
     for (const race of RACE_DIRECTORY) {
-      if (normalise(race.label).includes(norm) && !seenLabels.has(race.label)) {
+      // Match the current label or any historic name, so a retired brand
+      // ("Tarawera 100K") still resolves to the lineage that carries it.
+      const alias = race.aliases?.find(a => normalise(a).includes(norm));
+      const hit = normalise(race.label).includes(norm) || !!alias;
+      if (hit && !seenLabels.has(race.label)) {
         seenLabels.add(race.label);
         const latestYear = Math.max(...(race.years as number[]));
         raceNameHits.push({
           kind:  'race',
-          label: race.label,
+          label: alias && !normalise(race.label).includes(norm)
+            ? `${race.label} · formerly ${alias}`
+            : race.label,
           dist:  race.dist,
           year:  latestYear,
           href:  race.route,

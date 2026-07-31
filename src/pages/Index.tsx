@@ -232,8 +232,8 @@ export default function Index() {
         </div>
         <div className="lp-scale-cell">
           <span className="label">Athlete profiles</span>
-          <div className="lp-scale-num">24</div>
-          <div className="lp-scale-note">Indexed and linked</div>
+          <div className="lp-scale-num">{SITE_STATS.athleteProfiles.toLocaleString()}</div>
+          <div className="lp-scale-note">Two or more races logged</div>
         </div>
         <div className="lp-scale-cell">
           <span className="label">Tracked events</span>
@@ -242,13 +242,13 @@ export default function Index() {
         </div>
         <div className="lp-scale-cell">
           <span className="label">Course records</span>
-          <div className="lp-scale-num">38</div>
+          <div className="lp-scale-num">{SITE_STATS.courseRecords}</div>
           <div className="lp-scale-note">Across all distances</div>
         </div>
         <div className="lp-scale-cell">
           <span className="label">Data from</span>
           <div className="lp-scale-num">{SITE_STATS.earliestEdition}</div>
-          <div className="lp-scale-note">Chr. Half · first on record</div>
+          <div className="lp-scale-note">Wellington Half · first on record</div>
         </div>
       </div>
 

@@ -137,6 +137,9 @@ function getRaceConfig(venue: Venue, distId: DistId) {
   };
 }
 
+// ROAD ONLY — standing decision: trail results never enter Compare's selectable
+// pool. Trail races (trailEventConfig.ts) render as results-in-context on race
+// and athlete pages; do not add trail families here when new data lands.
 const ALL_RACES = [
   { name: 'Auckland Marathon',            km: 42.195,  years: [...YEARS],                getYear: (y: number) => getCachedResults(y, '42.2 km') },
   { name: 'Auckland Half Marathon',       km: 21.0975, years: [...YEARS],                getYear: (y: number) => getCachedResults(y, '21.1 km') },

@@ -4,10 +4,22 @@ import CRWinnerChart from '@/components/CRWinnerChart';
 import ElevationChart from '@/components/ElevationChart';
 import AveragesChart from '@/components/AveragesChart';
 import RaceResultsBlock from '@/components/RaceResultsBlock';
+import TrailRaceProfile from './TrailRaceProfile';
 import { getRaceMeta } from '@/data/raceMeta';
+import { getTrailFamily } from '@/data/trailEventConfig';
 import NotFound from './NotFound';
 
+// Dispatcher: trail families (Event Family → Sub-Event → Edition → Course
+// Instance model) get their own layout; everything else is the road page.
+// Separate components keep hook order legal when the slug switches kinds.
 export default function RaceProfile() {
+  const { raceSlug } = useParams<{ raceSlug: string }>();
+  const trailFamily = getTrailFamily(raceSlug);
+  if (trailFamily) return <TrailRaceProfile key={trailFamily.familySlug} family={trailFamily} />;
+  return <RoadRaceProfile />;
+}
+
+function RoadRaceProfile() {
   const { raceSlug } = useParams<{ raceSlug: string }>();
   const meta = getRaceMeta(raceSlug);
 

@@ -22,6 +22,7 @@
 import fs   from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { trailFileMeta } from '../src/data/trailEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, '..');
@@ -58,6 +59,12 @@ const RACE_LABELS = {
   'mtm-10k':          'Mt Maunganui 10k',
   'mtm-5k':           'Mt Maunganui 5k',
 };
+
+// Trail file keys ({familySlug}-{subEventId}) and their era-stable labels come
+// from the trail config — one source of truth with the converter and canon.
+for (const [key, meta] of Object.entries(trailFileMeta())) {
+  RACE_LABELS[key] = meta.label;
+}
 
 function fileToMeta(filename) {
   const base  = path.basename(filename);

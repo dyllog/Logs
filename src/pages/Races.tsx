@@ -136,6 +136,14 @@ const RACES: Race[] = [
     cat: 'road', mx: 91, my: 64,
   },
   {
+    name: 'Tarawera Ultramarathon', slug: 'tarawera-ultra',
+    location: 'Rotorua', date: 'February 2027',
+    distances: ['161 km', '102 km', '50 km', '21 km', '16 km'],
+    surface: 'Trail', since: 2009, editions: 14,
+    tagline: "New Zealand's flagship trail ultra.",
+    cat: 'ultra', mx: 108, my: 96,
+  },
+  {
     name: 'Waterfront Half Marathon', slug: 'waterfront-half-marathon',
     location: 'Auckland', date: '2027',
     distances: ['21.1 km', '10 km'],

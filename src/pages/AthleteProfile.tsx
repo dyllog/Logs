@@ -8,13 +8,15 @@ interface Result {
   race: string;
   raceSlug: string;
   dist: string;
-  distId: DistId;
+  distId: DistId;   // road: 'mar' | 'half' | '10k' | '5k'; trail: the sub-event id ('t102', 'miler', …)
   time: string;
   sec: number;
   pos: number;
   total: number;
   cat: string;
   isPB?: boolean;
+  /** Trail results are results-in-context: never PBs, never in Compare. */
+  trail?: boolean;
 }
 
 interface PB { time: string; sec: number; race: string; year: number; }
@@ -30,6 +32,10 @@ interface Profile {
   pbRace: string;
   pbs: Record<DistId, PB>;
   results: Result[];
+  /** Derived each generate from unresolved hard identity conflicts (two finishes
+   *  in one edition, or two incompatible age bands in one year). Discloses that
+   *  same-name runners may be combined here. See flagInconsistentClusters.mjs. */
+  knownMultiPerson?: boolean;
 }
 
 const DIST_LABEL: Record<string, string> = { mar: '42.2 km', half: '21.1 km', '10k': '10 km', '5k': '5 km' };
@@ -259,6 +265,8 @@ export default function AthleteProfile() {
               </div>
             </div>
 
+            {/* Road PBs only — trail results are results-in-context and never produce PB tiles. */}
+            {distIds.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.max(distIds.length, 1)}, 1fr)`, gap: 0, background: 'var(--on-dark-rule)', border: '0.5px solid var(--on-dark-rule)' }} className="pb-grid">
               {distIds.map((d, i) => {
                 const pb = profile.pbs[d];
@@ -275,6 +283,7 @@ export default function AthleteProfile() {
                 );
               })}
             </div>
+            )}
           </div>
 
           <div style={{ marginTop: 32, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -294,6 +303,20 @@ export default function AthleteProfile() {
               </button>
             )}
           </div>
+
+          {/* Data-provenance disclosure, not an error state — deliberately no
+              icon, no colour treatment, no effect on the results below. Sits in
+              the actions area so the future "claim this profile" CTA can sit
+              beside it. Rendered on every profile whose records carry an
+              unresolved identity conflict (~1.6k of 74k). */}
+          {profile.knownMultiPerson && (
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: '0.5px solid var(--on-dark-rule)', maxWidth: 620, fontSize: 11.5, lineHeight: 1.6, color: 'var(--on-dark-meta)' }}>
+              Some results below may belong to another runner of the same name — name-based
+              matching can’t always tell them apart. Every finish shown is real and correctly
+              recorded; only the grouping is uncertain. Runners will be able to claim their own
+              records.
+            </div>
+          )}
         </div>
       </section>
 
@@ -301,32 +324,47 @@ export default function AthleteProfile() {
         <div className="page">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 260px', gap: 48, alignItems: 'start' }} className="overview-grid">
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
-                <div>
-                  <div className="eyebrow mb-8">Progression · {DIST_LABEL[activeDist] ?? activeDist}</div>
-                  <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>
-                    Tracked {DIST_LABEL[activeDist] ?? activeDist} times
-                  </h2>
-                </div>
-                {distIds.length > 1 && (
-                  <div className="flex gap-8">
-                    {distIds.map(d => (
-                      <button key={d} className={`pill ${activeDist === d ? 'active' : ''}`} onClick={() => setChartDist(d)}>{DIST_LABEL[d] ?? d}</button>
-                    ))}
+              {distIds.length > 0 ? (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
+                    <div>
+                      <div className="eyebrow mb-8">Progression · {DIST_LABEL[activeDist] ?? activeDist}</div>
+                      <h2 className="serif" style={{ fontSize: 28, margin: 0, letterSpacing: '-0.01em' }}>
+                        Tracked {DIST_LABEL[activeDist] ?? activeDist} times
+                      </h2>
+                    </div>
+                    {distIds.length > 1 && (
+                      <div className="flex gap-8">
+                        {distIds.map(d => (
+                          <button key={d} className={`pill ${activeDist === d ? 'active' : ''}`} onClick={() => setChartDist(d)}>{DIST_LABEL[d] ?? d}</button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px', position: 'relative' }}>
-                <ProgressionChart results={dated} distId={activeDist} />
-              </div>
-              <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
-                <span style={{ fontFamily: "'DM Mono', monospace" }}>
-                  PB: <span style={{ color: 'var(--ink)' }}>{profile.pbs[activeDist]?.time ?? '—'}</span>
-                </span>
-                <span style={{ fontFamily: "'DM Mono', monospace" }}>
-                  {distResults.length} finishes · {Math.min(...distResults.map(r => r.year))}–{Math.max(...distResults.map(r => r.year))}
-                </span>
-              </div>
+                  <div style={{ background: 'var(--surface-dark)', padding: '24px 20px 16px', position: 'relative' }}>
+                    <ProgressionChart results={dated} distId={activeDist} />
+                  </div>
+                  <div style={{ display: 'flex', gap: 20, marginTop: 16, fontSize: 11, color: 'var(--meta)' }}>
+                    <span style={{ fontFamily: "'DM Mono', monospace" }}>
+                      PB: <span style={{ color: 'var(--ink)' }}>{profile.pbs[activeDist]?.time ?? '—'}</span>
+                    </span>
+                    <span style={{ fontFamily: "'DM Mono', monospace" }}>
+                      {distResults.length} finishes · {Math.min(...distResults.map(r => r.year))}–{Math.max(...distResults.map(r => r.year))}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                // Trail-only athlete: no road progressions or PBs to chart —
+                // their finishes live in the race history table below.
+                <div>
+                  <div className="eyebrow mb-8">Progression</div>
+                  <div className="dimmed" style={{ fontSize: 13, lineHeight: 1.6, maxWidth: 420 }}>
+                    No tracked road distances yet. Trail finishes appear in the
+                    race history below as results in context — trail courses
+                    change year to year, so they don't produce PBs.
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
@@ -381,8 +419,12 @@ export default function AthleteProfile() {
               <tbody>
                 {sortedResults.map((r, i) => {
                   const d = r.distId === 'mar' ? '42' : r.distId === 'half' ? '21' : r.distId === '10k' ? '10' : '5';
+                  // Trail rows deep-link to the family page's sub-event + year.
+                  const href = r.trail
+                    ? `/races/${r.raceSlug}?sub=${r.distId}&year=${r.year}`
+                    : `/races/${r.raceSlug}?year=${r.year}&dist=${d}`;
                   return (
-                    <tr key={i} className="row" onClick={() => navigate(`/races/${r.raceSlug}?year=${r.year}&dist=${d}`)}>
+                    <tr key={i} className="row" onClick={() => navigate(href)}>
                       <td className="dimmed">{r.year}</td>
                       <td><span className="serif" style={{ fontSize: 15 }}>{r.race}</span></td>
                       <td className="dimmed">{r.dist}</td>

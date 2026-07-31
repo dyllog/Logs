@@ -25,6 +25,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizeName, nameKey } from './normalizeAthleteName.mjs';
+import { trailFileMeta } from '../src/data/trailEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, '..');
@@ -74,13 +75,30 @@ const FILE_META = {
   'mtm-5k':          { label: 'Mt Maunganui 5k',       raceSlug: 'mount-maunganui-half-marathon', dist: '5 km',    distId: '5k'   },
 };
 
+// Trail file keys ({familySlug}-{subEventId}) come from the trail config so the
+// canon can't drift from what the converter emitted. subEventId occupies the
+// distId slot — era-stable, so recordIds survive rebrands (TUM 102 → T102).
+// The dist string is the REAL measured distance for that year, per the config.
+const TRAIL_FILE_META = trailFileMeta();
+
 function fileMeta(filename) {
   const base = path.basename(filename);
   const key  = base.replace(/^results-/, '').replace(/-?\d{4}\.json$/, '');
   const yM   = base.match(/(\d{4})\.json$/);
   const year = yM ? parseInt(yM[1], 10) : 0;
   const meta = FILE_META[key];
-  return meta ? { ...meta, year, key } : null;
+  if (meta) return { ...meta, year, key };
+  const tm = TRAIL_FILE_META[key];
+  if (tm) {
+    const km = tm.distByYear[year];
+    return {
+      label: tm.label, raceSlug: tm.raceSlug, distId: tm.distId,
+      dist: km ? `${km} km` : 'trail',
+      trail: true, seasonMonth: tm.seasonMonth,
+      year, key,
+    };
+  }
+  return null;
 }
 
 function genderOf(cat) {
@@ -188,6 +206,9 @@ for (const file of files) {
       total,
       cat: r.cat ?? '',
       nat: r.nat && r.nat !== '—' ? r.nat : '',
+      // Trail rows are results-in-context: excluded from PBs, rendered with
+      // family + sub-event + real distance on profiles (road-only Compare).
+      ...(meta.trail ? { trail: true, seasonMonth: meta.seasonMonth ?? 6 } : {}),
     });
   }
 }
@@ -420,19 +441,21 @@ for (const c of list) {
 
 // ─── 5a. Build per-athlete profile objects ───────────────────────────────────
 const SEASON = { mar: 5, half: 5, '10k': 4, '5k': 4 }; // rough month for intra-year sort
+const seasonOf = (r) => SEASON[r.distId] ?? r.seasonMonth ?? 6; // trail rows carry their family's month
 function toProfile(c) {
   const results = c.results.slice().sort(
-    (a, b) => (a.year - b.year) || ((SEASON[a.distId] ?? 6) - (SEASON[b.distId] ?? 6)) || a.race.localeCompare(b.race)
+    (a, b) => (a.year - b.year) || (seasonOf(a) - seasonOf(b)) || a.race.localeCompare(b.race)
   );
-  // PBs per distId
+  // PBs per distId — road only. Trail results are results-in-context, never
+  // PBs (standing decision: no trail PBs anywhere, Compare stays road-only).
   const pbs = {};
   for (const r of results) {
-    if (!r.sec) continue;
+    if (!r.sec || r.trail) continue;
     if (!pbs[r.distId] || r.sec < pbs[r.distId].sec) {
       pbs[r.distId] = { time: r.time, sec: r.sec, race: r.race, year: r.year };
     }
   }
-  for (const r of results) r.isPB = !!(pbs[r.distId] && r.sec === pbs[r.distId].sec && r.time === pbs[r.distId].time);
+  for (const r of results) r.isPB = !r.trail && !!(pbs[r.distId] && r.sec === pbs[r.distId].sec && r.time === pbs[r.distId].time);
   // Headline PB: prefer marathon, then half, then whatever exists
   const headlineDist = pbs.mar ? 'mar' : pbs.half ? 'half' : Object.keys(pbs)[0];
   const headline = headlineDist ? pbs[headlineDist] : null;
@@ -445,7 +468,8 @@ function toProfile(c) {
     pbRace: headline ? `${headline.race} ${headline.year}` : '',
     pbs,
     ...(KNOWN_MULTI_PERSON.has(c.slug) ? { knownMultiPerson: true } : {}),
-    results: results.map(({ nat: _n, ...rest }) => rest),
+    // seasonMonth is a build-time sort key only — keep the shipped rows lean.
+    results: results.map(({ nat: _n, seasonMonth: _s, ...rest }) => rest),
   };
 }
 

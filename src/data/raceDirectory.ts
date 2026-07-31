@@ -19,12 +19,16 @@ import { ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS }    from './onehungaData';
 import { OREWA_HALF_YEARS, OREWA_10K_YEARS }          from './orewaData';
 import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
 import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
+import { TRAIL_FAMILIES, latestCourse, subEventCourseYears } from './trailEventConfig';
 
 export interface RaceEntry {
   label: string;   // Display name matching RACE_LABELS (e.g. "Christchurch Half")
   dist:  string;   // Distance label shown in search (e.g. "21.1 km")
   route: string;   // Route path (e.g. "/races/christchurch-marathon")
   years: readonly number[];
+  /** Historic names this event ran under, so searching a retired brand
+   *  ("Tarawera 100K") still finds the current lineage ("Tarawera T102"). */
+  aliases?: readonly string[];
 }
 
 export const RACE_DIRECTORY: RaceEntry[] = [
@@ -59,6 +63,22 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Mt Maunganui Half',     dist: '21.1 km', route: '/races/mount-maunganui-half-marathon',  years: MTM_HALF_YEARS        },
   { label: 'Mt Maunganui 10k',      dist: '10 km',   route: '/races/mount-maunganui-half-marathon',  years: MTM_10K_YEARS         },
   { label: 'Mt Maunganui 5k',       dist: '5 km',    route: '/races/mount-maunganui-half-marathon',  years: MTM_5K_YEARS          },
+  // Trail families: one entry per sub-event, labels matching the search index
+  // ({shortName} {displayName}); dist shown is the current-era course distance.
+  ...TRAIL_FAMILIES.flatMap(fam =>
+    fam.subEvents.map(sub => {
+      const cur = latestCourse(fam, sub.id);
+      return {
+        label: `${fam.shortName} ${sub.displayName}`,
+        dist:  cur ? `${cur.distanceKm} km` : '—',
+        route: `/races/${fam.familySlug}?sub=${sub.id}`,
+        years: subEventCourseYears(fam, sub.id),
+        // Era names, plus the full family name so "Tarawera Ultramarathon"
+        // matches every sub-event rather than none.
+        aliases: [...(sub.aliases ?? []), fam.name],
+      };
+    })
+  ),
 ];
 
 /** Returns all race editions for a given year, sorted by label. */
