@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAthleteSlug, preloadAthleteIndex, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { searchNames, loadHitResults, type NameHit, type SearchResult } from '@/lib/searchIndex';
 import { racesForYear } from '@/data/raceDirectory';
+import { SharedNameChip, useSharedNames } from '@/lib/sharedNames';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -76,7 +77,9 @@ interface FinisherMatch {
   name: string;
   meta: string;
   slug: string | null;
-  results: ResultEntry[];
+  count: number;
+  /** Identifies the person, so detail can be fetched when the row expands. */
+  hit: NameHit;
 }
 
 interface StaticMatch {
@@ -93,8 +96,11 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
   const [matches, setMatches]   = useState<Match[]>([]);
   const [loading, setLoading]   = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  // Shards carry pointers; a row's results are fetched the first time it opens.
+  const [detail, setDetail] = useState<Record<string, SearchResult[]>>({});
   const ref                     = useRef<HTMLInputElement>(null);
   const navigate                = useNavigate();
+  const sharedNames             = useSharedNames();
 
   // Focus / reset on open/close — pre-fill query if provided
   useEffect(() => {
@@ -140,41 +146,15 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
     }
 
     // ── Name query: search sharded index ─────────────────────────────────
-    const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
-    const shard  = await loadShard(letter);
-
-    // Preload athlete-index shards for every matched name so getAthleteSlug can
-    // resolve multi-race profiles (a substring hit may start with any letter).
-    const matched = Object.entries(shard).filter(([key]) => key.includes(norm));
-    await Promise.all(matched.map(([, entry]) => preloadAthleteIndex(entry.display)));
-
-    const hits: FinisherMatch[] = [];
-    for (const [key, entry] of matched) {
-      if (key.includes(norm)) {
-        const slug      = getAthleteSlug(entry.display);
-        const conflicts = NAME_DISAMBIGUATION[entry.display];
-
-        if (slug && conflicts?.length) {
-          type RE = typeof entry.results[number];
-          const isConflict = (r: RE) => conflicts.some(c => c.r === r.r && c.y === r.y);
-          const profileResults = entry.results.filter(r => !isConflict(r));
-          const otherResults   = entry.results.filter(r =>  isConflict(r));
-
-          hits.push({ kind: 'finisher', name: entry.display, meta: bestResult(profileResults), slug, results: profileResults });
-          if (otherResults.length) {
-            hits.push({ kind: 'finisher', name: entry.display, meta: bestResult(otherResults), slug: null, results: otherResults });
-          }
-        } else {
-          hits.push({
-            kind:    'finisher',
-            name:    entry.display,
-            meta:    bestResult(entry.results),
-            slug,
-            results: entry.results,
-          });
-        }
-      }
-    }
+    const found = await searchNames(query);
+    const hits: FinisherMatch[] = found.map(h => ({
+      kind: 'finisher' as const,
+      name: h.name,
+      meta: h.pointer.n === 1 ? '1 result on record' : `${h.pointer.n} results on record`,
+      slug: h.slug,
+      count: h.pointer.n,
+      hit: h,
+    }));
 
     // Sort: exact match first, profiled before unlinked when names equal, then most appearances, then alpha
     hits.sort((a, b) => {
@@ -183,7 +163,7 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
       if (aNorm === norm && bNorm !== norm) return -1;
       if (bNorm === norm && aNorm !== norm) return 1;
       if (a.name === b.name) return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
-      if (b.results.length !== a.results.length) return b.results.length - a.results.length;
+      if (b.count !== a.count) return b.count - a.count;
       return a.name.localeCompare(b.name);
     });
 
@@ -318,11 +298,18 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
                   style={{ borderBottom: 'none', cursor: 'pointer' }}
                   onClick={() => {
                     if (profileHref) pick(profileHref);
-                    else setExpanded(isExpanded ? null : m.name);
+                    else {
+                      if (isExpanded) { setExpanded(null); return; }
+                      setExpanded(m.name);
+                      const dk = `${m.hit.key}#${m.hit.idx}`;
+                      if (!detail[dk]) {
+                        loadHitResults(m.hit).then(res => setDetail(d => ({ ...d, [dk]: res })));
+                      }
+                    }
                   }}
                 >
                   <div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--meta)', minWidth: 52, paddingTop: 2 }}>
-                    {m.results.length > 1 ? `${m.results.length}×` : '1×'}
+                    {m.count > 1 ? `${m.count}×` : '1×'}
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: '"DM Serif Display", Georgia, serif', fontSize: 16, display: 'flex', alignItems: 'baseline', gap: 8 }}>
@@ -332,6 +319,7 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
                           profile
                         </span>
                       )}
+                      {m.slug && sharedNames.has(m.slug) && <SharedNameChip />}
                     </div>
                     <div className="dimmed" style={{ fontSize: 11, marginTop: 2 }}>{m.meta}</div>
                   </div>
@@ -346,7 +334,7 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
                 {/* Expanded result rows */}
                 {isExpanded && (
                   <div style={{ paddingBottom: 8 }}>
-                    {m.results.map((res, j) => {
+                    {(detail[`${m.hit.key}#${m.hit.idx}`] ?? []).map((res, j) => {
                       const href = raceHref(res);
                       return (
                         <div

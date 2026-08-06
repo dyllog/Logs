@@ -28,7 +28,7 @@ const CANON_PATH    = path.join(ROOT, 'src', 'data', 'athleteCanon.json');
 const REGISTRY_PATH = path.join(ROOT, 'src', 'data', 'athleteRegistry.ts');
 const ATHLETES_OUT  = path.join(DATA_DIR, 'athletes');
 
-// ─── Parse legacy registry (name, slug, pbTime, racesLogged) ─────────────────
+// ─── Parse legacy registry (name + slug — it holds nothing else) ─────────────
 function parseRegistry() {
   const src = fs.readFileSync(REGISTRY_PATH, 'utf8');
   const entries = [];
@@ -36,13 +36,8 @@ function parseRegistry() {
     const nm = line.match(/name:\s*'([^']+)'/);
     const sl = line.match(/slug:\s*'([^']+)'/);
     if (!nm || !sl) continue;
-    const pb = line.match(/pbTime:\s*'([^']+)'/);
-    const rl = line.match(/racesLogged:\s*(\d+)/);
-    entries.push({
-      name: nm[1], slug: sl[1],
-      pbTime: pb ? pb[1] : '',
-      racesLogged: rl ? parseInt(rl[1], 10) : null,
-    });
+    const pa = line.match(/pbAnchor:\s*(\d+)/);
+    entries.push({ name: nm[1], slug: sl[1], pbAnchor: pa ? parseInt(pa[1], 10) : null });
   }
   return entries;
 }
@@ -82,8 +77,8 @@ const canon = JSON.parse(fs.readFileSync(CANON_PATH, 'utf8'));
 const canonBySlug = new Map(canon.map(c => [c.slug, c]));
 
 console.log(`\nVerifying ${registry.length} legacy slugs against athleteCanon.json (${canon.length.toLocaleString()} athletes)\n`);
-console.log('  status  slug                       registry name        → canon name            found  reg-PB  (headline)  races');
-console.log('  ' + '─'.repeat(112));
+console.log('  status  slug                       registry name        → canon name             identity   races');
+console.log('  ' + '─'.repeat(84));
 
 let ok = 0, warn = 0, fail = 0;
 for (const e of registry) {
@@ -93,45 +88,43 @@ for (const e of registry) {
     console.log(`  ❌ 404  ${e.slug.padEnd(26)} ${e.name.padEnd(20)} → (slug not in canon)`);
     continue;
   }
-  const shard = loadShard(shardKey(e.slug));
-  const profile = shard ? shard[e.slug] : null;
-  const profilePb = profile ? profile.pbTime : '(single-race: no shard)';
+  const profile = loadShard(shardKey(e.slug))?.[e.slug] ?? null;
   const profileRaces = profile ? profile.racesLogged : c.races;
 
   const nameMatch = normName(c.name) === normName(e.name);
 
-  // Continuity signal: the registry's known PB performance should still be
-  // attributed to this slug. The old headline PB was often a HALF PB whereas the
-  // new profile headline prefers the MARATHON — so compare the registry PB (in
-  // seconds) against EVERY result row + every per-distance PB, not the headline.
-  const regSec = toSec(e.pbTime);
-  let pbFound = null; // null = can't tell (single-race / no data), true/false otherwise
-  if (profile && regSec != null) {
-    const allSecs = new Set();
-    for (const r of profile.results ?? []) if (r.sec) allSecs.add(r.sec);
-    for (const k of Object.keys(profile.pbs ?? {})) if (profile.pbs[k]?.sec) allSecs.add(profile.pbs[k].sec);
-    // exact match, or within 1s to tolerate rounding between H:MM:SS sources
-    pbFound = [...allSecs].some(s => Math.abs(s - regSec) <= 1);
+  // Identity, not just nomenclature. A name match cannot separate two people
+  // who share a name, and shared-name clusters are the most likely way one of
+  // these legacy slugs drifts onto a different runner. The anchor is a
+  // performance this athlete is known to have run: it must still appear
+  // somewhere in whoever now holds the slug. Compared against every result and
+  // every per-distance PB, with 1s tolerance for rounding between sources.
+  let anchorFound = null;                      // null = cannot tell
+  if (profile && e.pbAnchor != null) {
+    const secs = new Set();
+    for (const r of profile.results ?? []) if (r.sec) secs.add(r.sec);
+    for (const k of Object.keys(profile.pbs ?? {})) if (profile.pbs[k]?.sec) secs.add(profile.pbs[k].sec);
+    anchorFound = [...secs].some(x => Math.abs(x - e.pbAnchor) <= 1);
   }
 
   let flag = '✅ OK ';
   const problems = [];
   if (!nameMatch) {
     problems.push('NAME MISMATCH → different person?'); flag = '❌ BAD'; fail++;
-  } else if (pbFound === false) {
-    problems.push(`registry PB ${e.pbTime} NOT found in this athlete's result history → possible wrong resolution`);
+  } else if (anchorFound === false) {
+    problems.push(`anchor ${e.pbAnchor}s no longer in this athlete's history → slug may have drifted to a different runner`);
     flag = '⚠️  CHK'; warn++;
   } else {
     ok++;
   }
 
-  const pbCol = pbFound === true ? `PB✓` : pbFound === false ? `PB✗` : `PB?`;
+  const anchorCol = anchorFound === true ? 'anchor✓' : anchorFound === false ? 'anchor✗' : 'anchor?';
   console.log(
-    `  ${flag}  ${e.slug.padEnd(26)} ${e.name.padEnd(20)} → ${String(c.name).padEnd(22)} ${pbCol}  ${String(e.pbTime).padEnd(8)} (hl:${String(profilePb).padEnd(9)}) ${String(e.racesLogged)}→${profileRaces}`
+    `  ${flag}  ${e.slug.padEnd(26)} ${e.name.padEnd(20)} → ${String(c.name).padEnd(22)} ${anchorCol}  ${String(profileRaces).padStart(4)} races`
   );
   if (problems.length) console.log(`          ↳ ${problems.join('; ')}`);
 }
 
-console.log('  ' + '─'.repeat(112));
+console.log('  ' + '─'.repeat(84));
 console.log(`\n  ${ok} ok · ${warn} to check · ${fail} failing   (of ${registry.length} legacy slugs)\n`);
 if (fail > 0) process.exitCode = 1;

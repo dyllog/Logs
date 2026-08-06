@@ -86,7 +86,11 @@ function parseCSV(text) {
   const iPos  = col('position');
   const iName = col('name');
   const iBib  = col('bib');
+  // `indexOf` is an exact cell match, so 'time' cannot capture 'net time' —
+  // iTime is the gun column, which is what positions are scored on and what
+  // the archive displays. Net is captured separately and preserved.
   const iTime = col('time');
+  const iNet  = col('net time');
   const iCat  = col('category');
   const iGend = col('gender');
 
@@ -100,6 +104,9 @@ function parseCSV(text) {
     // Skip if category looks like a time (malformed row)
     if (/^\d{2}:\d{2}/.test(catRaw)) continue;
 
+    const netRaw = get(iNet);
+    const netSec = netRaw.includes(':') ? toSec(netRaw) : 0;
+
     rows.push({
       pos:  parseInt(get(iPos), 10) || i,
       bib:  parseInt(get(iBib), 10) || 0,
@@ -108,6 +115,7 @@ function parseCSV(text) {
       cat:  normalizeCat(catRaw),
       time,
       sec:  toSec(time),
+      ...(netSec > 0 ? { netTime: netRaw, netSec } : {}),
     });
   }
   return rows;

@@ -48,6 +48,8 @@ import { OREWA_HALF_YEARS, OREWA_10K_YEARS } from '@/data/orewaData';
 import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
 import { WELLINGTON_MAR_YEARS, WELLINGTON_HALF_YEARS } from '@/data/wellingtonData';
 import { AthleteNameDropdown } from '@/components/InlineSearch';
+import { useSharedNames } from '@/lib/sharedNames';
+import { getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -837,10 +839,14 @@ function MethodologySection({ raceName }: { raceName: string }) {
         </div>
         <div className="meth-col-r">
           <ol>
-            <li><span className="k">Cohort</span><span className="v">Only certified, in-LOGS finishes are counted. Provisional results and unverified profiles are excluded.</span></li>
+            {/* States what is actually enforced. The archive certifies and
+                verifies nothing — it records results as each event published
+                them — and the one real exclusion is the shared-name guard in
+                findAthlete, which every entry path passes through. */}
+            <li><span className="k">Cohort</span><span className="v">Individual road finishes recorded in the archive, as published by each event. Trail results are excluded, and so are profiles that may combine several runners of the same name.</span></li>
             <li><span className="k">Equivalency</span><span className="v">Cross-distance equivalency uses the Riegel formula t₂ = t₁ · (d₂/d₁)^1.06. Applied only where same-distance data is unavailable.</span></li>
             <li><span className="k">Normalization</span><span className="v">Default mode is race time, actual — no age or gender adjustment.</span></li>
-            <li><span className="k">Course parity</span><span className="v">Re-measured or re-routed courses are flagged in the race page; figures treat each certified edition as a distinct cohort.</span></li>
+            <li><span className="k">Course parity</span><span className="v">Re-measured or re-routed courses are flagged in the race page; figures treat each edition as a distinct cohort.</span></li>
             <li><span className="k">Identity</span><span className="v">Athlete profiles are matched by name. Where a name resolves to multiple records, the first match is used.</span></li>
             <li><span className="k">Confidence</span><span className="v">High when shared-race sample ≥ 5 meetings; otherwise reported as moderate or low.</span></li>
           </ol>
@@ -1060,6 +1066,18 @@ export default function Compare() {
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
 
+  // Shared-name clusters are not comparable — see findAthlete below. The index
+  // shard for each queried name is preloaded so getAthleteSlug can resolve it;
+  // without that an athlete arriving straight from a URL would slip the guard.
+  const sharedNames = useSharedNames();
+  const [, bumpSlugs] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([h2hA, h2hB].filter(Boolean).map(n => preloadAthleteIndex(n)))
+      .then(() => { if (!cancelled) bumpSlugs(v => v + 1); });
+    return () => { cancelled = true; };
+  }, [h2hA, h2hB]);
+
   const race = useMemo(() => getRaceConfig(venue, distId), [venue, distId]);
   const currentYear = race.years[race.years.length - 1];
   const currentKm = distId === '42' ? 42.195 : 21.0975;
@@ -1241,8 +1259,15 @@ export default function Compare() {
   }, [sec, currentKm, loadedKeys]);
 
   // Athletes mode — search all loaded races, most recent year first per race
+  // Excluding shared-name profiles only from the dropdown would leave the door
+  // open: Compare also seeds both athletes from URL params, so a flagged name
+  // pasted into ?a= would resolve anyway and the methodology copy would be
+  // claiming an exclusion it does not enforce. The guard therefore lives at
+  // resolution, which every entry path goes through.
   const findAthlete = useCallback((name: string): H2HRow | null => {
     if (!name.trim()) return null;
+    const slug = getAthleteSlug(name);
+    if (slug && sharedNames.has(slug)) return null;
     const lower = name.trim().toLowerCase();
     for (const rc of ALL_RACES) {
       const sortedYears = [...rc.years].sort((a, b) => b - a);
@@ -1259,7 +1284,7 @@ export default function Compare() {
     }
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedKeys, gender]);
+  }, [loadedKeys, gender, sharedNames]);
 
   const aRow = useMemo(() => findAthlete(h2hA), [h2hA, findAthlete]);
   const bRow = useMemo(() => findAthlete(h2hB), [h2hB, findAthlete]);
@@ -1399,7 +1424,7 @@ export default function Compare() {
               <h1 className="th-title">Compare</h1>
             </div>
             <p className="th-sub">
-              Place any finish time, or any two athletes with finisher data, into the field of certified New Zealand results — percentile, equivalent placement, historical context.
+              Place any finish time, or any two athletes with finisher data, into the field of recorded New Zealand results — percentile, equivalent placement, historical context.
             </p>
           </div>
         </div>

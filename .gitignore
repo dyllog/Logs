@@ -62,3 +62,7 @@ dist/
 /.claire/
 /dev-server.log
 /cluster-worksheets.zip
+
+# python bytecode
+__pycache__/
+*.pyc

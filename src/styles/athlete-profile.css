@@ -1,0 +1,151 @@
+/* ———————————————————————————————————————————————————————————————
+   ATHLETE PROFILE v2
+   Scoped under .athlete-profile so the shared editorial classes
+   (.prog-shell, .prog-foot, .tbl-foot) keep their existing values
+   on every other page. Tokens come from index.css.
+   ——————————————————————————————————————————————————————————————— */
+
+.athlete-profile .section-rule-bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; margin-bottom: 36px; }
+.athlete-profile .section-rule-bar .line { height: 1px; background: var(--ink); }
+.athlete-profile .section-rule-bar .title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+
+/* Identity header */
+.ap-ident { padding: 52px 0 40px; border-bottom: 0.5px solid var(--ink); }
+.ap-ident h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 86px; line-height: 0.94; letter-spacing: -0.03em; margin: 0; color: var(--ink); }
+.ap-ident .idmeta { margin-top: 26px; font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--meta); letter-spacing: 0.04em; display: flex; flex-wrap: wrap; gap: 0 10px; }
+.ap-ident .idmeta .v { color: var(--ink); }
+.ap-ident .idmeta .dot { color: var(--rule); }
+.ap-ident .chiprow { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+.ap-ident .actions { margin-top: 26px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Shared-name chip — mono, terracotta, no icon. Also used in index + search. */
+.shared-chip { display: inline-flex; align-items: center; padding: 3px 9px; border: 0.5px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+.shared-chip-sm { font-size: 8.5px; letter-spacing: 0.14em; padding: 2px 6px; margin-left: 8px; vertical-align: 1px; }
+
+/* Performance tiles */
+.ap-perf { border-top: 0.5px solid var(--ink); border-bottom: 0.5px solid var(--ink); display: grid; background: var(--bg); }
+.ap-perf.n1 { grid-template-columns: 1fr; }
+.ap-perf.n2 { grid-template-columns: repeat(2, 1fr); }
+.ap-perf.n3 { grid-template-columns: repeat(3, 1fr); }
+.ap-perf.n4 { grid-template-columns: repeat(4, 1fr); }
+.ap-perf .tile { padding: 30px 32px 28px; border-right: 0.5px solid var(--rule); }
+.ap-perf .tile:last-child { border-right: 0; }
+.ap-perf.n1 .tile { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: end; padding: 36px 40px 34px; }
+.ap-perf .tk { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); }
+.ap-perf .tt { font-family: 'DM Serif Display', Georgia, serif; font-size: 56px; line-height: 1; letter-spacing: -0.02em; margin-top: 14px; font-variant-numeric: tabular-nums; }
+.ap-perf.n1 .tt { font-size: 76px; }
+.ap-perf .tw { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--meta); margin-top: 12px; line-height: 1.55; }
+.ap-perf .diffs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 18px; border-top: 0.5px solid var(--rule-soft); }
+.ap-perf .diffs.one { grid-template-columns: 1fr; }
+.ap-perf .diffs > div { padding: 12px 12px 2px 0; }
+.ap-perf .diffs > div + div { padding-left: 14px; border-left: 0.5px solid var(--rule-soft); }
+.ap-perf .diffs .dk { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--meta); }
+.ap-perf .diffs .dv { font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; line-height: 1; margin-top: 7px; font-variant-numeric: tabular-nums; }
+.ap-perf .diffs .dn { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--meta); margin-top: 6px; line-height: 1.5; }
+.ap-perf .dk.has-def { border-bottom: 0.5px dotted var(--rule); cursor: help; display: inline-block; }
+
+.ag-note { font-family: 'DM Mono', monospace; font-size: 11px; line-height: 1.6; color: var(--meta); margin: 16px 0 0; max-width: 660px; padding-bottom: 4px; }
+.ag-note b { font-weight: 400; color: var(--ink); }
+.surface-note { font-family: 'DM Mono', monospace; font-size: 11px; line-height: 1.6; color: var(--meta); margin: 18px 0 0; max-width: 660px; }
+
+/* Disclosure (flagged) */
+.ap-disclosure { display: grid; grid-template-columns: 1fr 260px; gap: 0; border: 0.5px solid var(--accent); margin-bottom: 28px; }
+.ap-disclosure .body { padding: 20px 24px; }
+.ap-disclosure .dh { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.ap-disclosure p { font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.65; color: var(--ink-soft); margin: 0; max-width: 640px; }
+.ap-disclosure p + p { margin-top: 10px; }
+.ap-disclosure .slot { border-left: 0.5px solid var(--accent); padding: 20px 24px; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--meta); text-align: center; line-height: 1.6; }
+
+/* Trail block — context, never bests */
+.ap-trail { border-top: 0.5px solid var(--ink); border-bottom: 0.5px solid var(--ink); background: var(--bg); }
+.ap-trail .tb-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 40px; border-bottom: 0.5px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); }
+.ap-trail .tb-cum { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 0.5px solid var(--rule); }
+.ap-trail .tb-cum.c2 { grid-template-columns: repeat(2, 1fr); }
+.ap-trail .tb-cum > div { padding: 26px 32px 24px; border-right: 0.5px solid var(--rule-soft); }
+.ap-trail .tb-cum > div:last-child { border-right: 0; }
+.ap-trail .cum { font-family: 'DM Serif Display', Georgia, serif; font-size: 46px; line-height: 1; letter-spacing: -0.02em; margin-top: 12px; font-variant-numeric: tabular-nums; }
+.ap-trail .cum.dim { color: var(--rule); }
+.ap-trail .vert-slot { background: repeating-linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.022) 7px, rgba(0,0,0,0.022) 14px); }
+.ap-trail .tb-cells { display: grid; grid-template-columns: repeat(3, 1fr); }
+.ap-trail .tb-cells.c1 { grid-template-columns: 1fr; }
+.ap-trail .tb-cells.c2 { grid-template-columns: repeat(2, 1fr); }
+.ap-trail .tcell { padding: 24px 32px 26px; border-right: 0.5px solid var(--rule-soft); }
+.ap-trail .tcell:last-child { border-right: 0; }
+.ap-trail .tv { font-family: 'DM Serif Display', Georgia, serif; font-size: 30px; line-height: 1; margin-top: 11px; font-variant-numeric: tabular-nums; }
+.ap-trail .tk { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); }
+.ap-trail .tn { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--meta); margin-top: 10px; line-height: 1.55; max-width: 300px; }
+.ap-trail .tb-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 40px; border-top: 0.5px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--meta); }
+.ap-trail .tb-foot .v { color: var(--ink); letter-spacing: 0.06em; text-transform: none; }
+
+/* The transition — derived facts only */
+.ap-transition { border-top: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); }
+.ap-transition .row { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; padding: 16px 0; font-family: 'DM Mono', monospace; }
+.ap-transition .row + .row { border-top: 0.5px solid var(--rule-soft); }
+.ap-transition .tw-k { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); white-space: nowrap; min-width: 190px; }
+.ap-transition .tw-v { font-size: 12.5px; line-height: 1.6; color: var(--ink-soft); }
+
+/* Results table */
+.surf-tag { display: inline-flex; padding: 2px 8px; border: 0.5px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--meta); }
+.surf-tag.trail { border-color: var(--accent); color: var(--accent); }
+.res-tbl th:first-child, .res-tbl td:first-child { padding-left: 0; }
+.res-tbl th:last-child, .res-tbl td:last-child { padding-right: 0; text-align: right; }
+.res-tbl td.ev { font-family: 'DM Serif Display', Georgia, serif; font-size: 16.5px; letter-spacing: -0.005em; color: var(--ink); }
+.res-tbl td.ev .subev { color: var(--meta); font-family: 'DM Mono', monospace; font-size: 12px; }
+.res-tbl td.ev .sub { display: block; font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--meta); letter-spacing: 0.06em; margin-top: 4px; }
+.res-tbl td.ti { font-variant-numeric: tabular-nums; font-size: 14px; }
+.res-tbl td.pos { font-variant-numeric: tabular-nums; color: var(--meta); white-space: nowrap; }
+.res-tbl td.pos .x { color: var(--ink); font-size: 14px; }
+.res-tbl td.dt, .res-tbl td.ds, .res-tbl td.cat { font-variant-numeric: tabular-nums; color: var(--meta); }
+.res-tbl td.ds .real { display: block; font-size: 10px; color: var(--meta); margin-top: 3px; }
+.res-tbl td.pos .natp { display: block; font-size: 10px; color: var(--accent); margin-top: 3px; letter-spacing: 0.06em; }
+.athlete-profile .tbl-foot { margin-top: 20px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 0; font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--meta); }
+
+/* Chart shells */
+.athlete-profile .prog-shell { border: 0.5px solid var(--rule); background: var(--bg); padding: 32px 36px 26px; }
+.athlete-profile .prog-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+.athlete-profile .prog-head h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: 32px; line-height: 1; letter-spacing: -0.015em; margin: 6px 0 0; }
+.athlete-profile .prog-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 16px; padding-top: 0; font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--meta); letter-spacing: 0.06em; }
+
+/* Conditional modules */
+.ap-mods { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 0.5px solid var(--ink); border-left: 0.5px solid var(--rule); }
+.ap-mods.m1 { grid-template-columns: 1fr; }
+.ap-mods.m2 { grid-template-columns: repeat(2, 1fr); }
+.ap-mod { border-right: 0.5px solid var(--rule); border-bottom: 0.5px solid var(--rule); padding: 24px 26px 28px; background: var(--bg); }
+.ap-mod .num { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta); }
+.ap-mod h4 { font-family: 'DM Serif Display', Georgia, serif; font-size: 21px; line-height: 1.12; letter-spacing: -0.01em; margin: 10px 0 14px; }
+.ap-mod .desc { font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.55; color: var(--meta); margin-bottom: 16px; }
+.ap-mod ul { list-style: none; padding: 0; margin: 0; border-top: 0.5px solid var(--rule-soft); }
+.ap-mod li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 0.5px solid var(--rule-soft); font-family: 'DM Mono', monospace; font-size: 12px; font-variant-numeric: tabular-nums; }
+.ap-mod li:last-child { border-bottom: 0; }
+.ap-mod li .nm { font-family: 'DM Serif Display', Georgia, serif; font-size: 15px; letter-spacing: -0.005em; color: var(--ink); }
+.ap-mod li .vv { color: var(--meta); text-align: right; }
+
+@media (max-width: 1100px) {
+  /* The .c1/.c2 count modifiers out-specify a bare `.ap-trail .tb-cells`, so
+     the responsive rules have to match their specificity to win. */
+  .ap-trail .tb-cum, .ap-trail .tb-cells,
+  .ap-trail .tb-cum.c2, .ap-trail .tb-cells.c1, .ap-trail .tb-cells.c2 { grid-template-columns: 1fr 1fr; }
+  .ap-perf.n4, .ap-perf.n3 { grid-template-columns: repeat(2, 1fr); }
+  .ap-perf .tile { border-bottom: 0.5px solid var(--rule); }
+  .ap-mods { grid-template-columns: repeat(2, 1fr); }
+  .ap-ident h1 { font-size: 64px; }
+}
+
+@media (max-width: 760px) {
+  .ap-trail .tb-cum, .ap-trail .tb-cells,
+  .ap-trail .tb-cum.c2, .ap-trail .tb-cells.c1, .ap-trail .tb-cells.c2 { grid-template-columns: 1fr; }
+  .ap-trail .tb-cum > div, .ap-trail .tcell { border-right: 0; border-bottom: 0.5px solid var(--rule-soft); }
+  .ap-trail .tb-head, .ap-trail .tb-foot { padding-left: 20px; padding-right: 20px; }
+  .ap-ident { padding: 32px 0 28px; }
+  .ap-ident h1 { font-size: 40px; }
+  .ap-perf, .ap-perf.n1, .ap-perf.n2, .ap-perf.n3, .ap-perf.n4 { grid-template-columns: 1fr; }
+  .ap-perf.n1 .tile { grid-template-columns: 1fr; gap: 18px; }
+  .ap-perf.n1 .tt { font-size: 52px; }
+  .ap-mods { grid-template-columns: 1fr; }
+  .ap-disclosure { grid-template-columns: 1fr; }
+  .ap-disclosure .slot { border-left: 0; border-top: 0.5px solid var(--accent); padding: 16px; }
+  .res-tbl .col-cat, .res-tbl .col-dt { display: none; }
+  .ap-transition .tw-k { min-width: 0; }
+  .athlete-profile .prog-shell { padding: 24px 20px; }
+  .athlete-profile .section-rule-bar { gap: 12px; margin-bottom: 24px; }
+}

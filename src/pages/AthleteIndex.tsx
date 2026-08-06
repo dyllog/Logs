@@ -1,30 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { getAthleteSlug, preloadAthleteIndex, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
+import { loadSearchShard, displayFromKey, loadHitResults, type SearchResult, type NameHit } from '@/lib/searchIndex';
+import { SharedNameChip, useSharedNames } from '@/lib/sharedNames';
 
 const PAGE_SIZE = 100;
-
-interface ResultEntry {
-  r: string; y: number; t: string; p: number; tot: number;
-}
-interface IndexEntry {
-  display: string;
-  results: ResultEntry[];
-}
-type ShardData = Record<string, IndexEntry>;
-
-const shardCache = new Map<string, ShardData>();
-
-async function loadShard(letter: string): Promise<ShardData> {
-  if (shardCache.has(letter)) return shardCache.get(letter)!;
-  try {
-    const res = await fetch(`/data/search/${letter}.json`);
-    if (!res.ok) return {};
-    const data: ShardData = await res.json();
-    shardCache.set(letter, data);
-    return data;
-  } catch { return {}; }
-}
 
 const LABEL_TO_RACE_KEY: Record<string, string> = {
   'Auckland Marathon':     'auckland-full',
@@ -53,7 +33,7 @@ const LABEL_TO_RACE_KEY: Record<string, string> = {
   'Tamaki River 10k':      'tamaki-10k',
 };
 
-function raceHref(res: ResultEntry): string | null {
+function raceHref(res: SearchResult): string | null {
   const r = res.r.toLowerCase();
   let base: string | null = null;
   if (r.includes('auckland marathon') || r === 'auckland half') base = '/races/auckland-marathon';
@@ -76,7 +56,15 @@ function raceHref(res: ResultEntry): string | null {
   return `${base}?${params}`;
 }
 
-interface Row { name: string; slug: string | null; results: ResultEntry[]; }
+interface Row {
+  id: string;
+  name: string;
+  slug: string | null;
+  count: number;
+  hit: NameHit;
+  /** Loaded on expand — shards carry pointers, not result arrays. */
+  results?: SearchResult[];
+}
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -87,6 +75,7 @@ export default function AthleteIndex() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const sharedNames = useSharedNames();
 
   const ltr = (letter ?? 'a').toLowerCase();
 
@@ -94,24 +83,27 @@ export default function AthleteIndex() {
     setLoading(true);
     setPage(0);
     setExpanded(null);
-    Promise.all([loadShard(ltr), preloadAthleteIndex(ltr)]).then(([shard]) => {
+    Promise.all([loadSearchShard(ltr), preloadAthleteIndex(ltr)]).then(([shard]) => {
       const built: Row[] = [];
-      for (const [, entry] of Object.entries(shard)) {
-        const slug = getAthleteSlug(entry.display);
-        const conflicts = NAME_DISAMBIGUATION[entry.display];
-        if (slug && conflicts?.length) {
-          const isConflict = (r: ResultEntry) => conflicts.some(c => c.r === r.r && c.y === r.y);
-          built.push({ name: entry.display, slug, results: entry.results.filter(r => !isConflict(r)) });
-          const others = entry.results.filter(r => isConflict(r));
-          if (others.length) built.push({ name: entry.display, slug: null, results: others });
-        } else {
-          built.push({ name: entry.display, slug, results: entry.results });
-        }
+      for (const [key, pointers] of Object.entries(shard)) {
+        // Shards also carry entries keyed by SURNAME so surname search works.
+        // An A–Z browse is by name, so those copies are skipped here — without
+        // this, "A" would list every John Adams in the archive.
+        if ((key[0]?.match(/[a-z]/) ? key[0] : '_') !== ltr) continue;
+        const name = displayFromKey(key);
+        pointers.forEach((pointer, idx) => {
+          const slug = idx === 0 ? getAthleteSlug(name) : null;
+          built.push({
+            id: `${key}#${idx}`,
+            name, slug,
+            count: pointer.n,
+            hit: { key, name, idx, pointer, slug },
+          });
+        });
       }
       built.sort((a, b) => {
         const cmp = a.name.localeCompare(b.name);
         if (cmp !== 0) return cmp;
-        // Profiled entry sorts before unproﬁled when names match
         return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
       });
       setRows(built);
@@ -179,17 +171,25 @@ export default function AthleteIndex() {
                       className="lp-search-dropdown-row"
                       style={{ padding: '11px 0' }}
                       onClick={() => {
-                        if (row.slug) navigate(`/athletes/${row.slug}`);
-                        else setExpanded(isExpanded ? null : expandKey);
+                        if (row.slug) { navigate(`/athletes/${row.slug}`); return; }
+                        if (isExpanded) { setExpanded(null); return; }
+                        setExpanded(expandKey);
+                        // Shards hold pointers; the results arrive on expand.
+                        if (row.results === undefined) {
+                          loadHitResults(row.hit).then(res => {
+                            setRows(prev => prev.map(x => (x.id === row.id ? { ...x, results: res } : x)));
+                          });
+                        }
                       }}
                     >
-                      <span className="lp-search-dropdown-count">{row.results.length}×</span>
+                      <span className="lp-search-dropdown-count">{row.count}×</span>
                       <span className="lp-search-dropdown-name">
                         {row.name}
                         {row.slug && <span className="lp-search-dropdown-pill">profile</span>}
+                        {row.slug && sharedNames.has(row.slug) && <SharedNameChip />}
                       </span>
                       <span className="lp-search-dropdown-meta">
-                        {row.results.length === 1 ? '1 result' : `${row.results.length} results`}
+                        {row.count === 1 ? '1 result' : `${row.count} results`}
                       </span>
                       <span
                         className="lp-search-dropdown-chevron"
@@ -200,7 +200,12 @@ export default function AthleteIndex() {
                     </div>
                     {isExpanded && (
                       <div className="lp-search-dropdown-results">
-                        {row.results.map((res, j) => {
+                        {row.results === undefined && (
+                          <div className="lp-search-dropdown-result-row" style={{ paddingLeft: 36 }}>
+                            <span className="lp-search-dropdown-race">Loading results…</span>
+                          </div>
+                        )}
+                        {(row.results ?? []).map((res, j) => {
                           const href = raceHref(res);
                           return (
                             <div

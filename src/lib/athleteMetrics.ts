@@ -68,60 +68,106 @@ export interface EnrichedPayload extends AthletePayload {
   };
 }
 
-// ── WMA age grading factors (male, by age) ────────────────────────────────────
-// Factors from WMA 2015 tables for marathon and half marathon.
-// Represent the ratio open_standard / age_graded_standard.
+// ── WMA road age grading ─────────────────────────────────────────────────────
+// Standards are the published WMA/USATF 2025 road tables (Alan Jones, CC0),
+// parsed from the archived workbooks by scripts/buildWmaTables.mjs. Male and
+// female tables are independent: the female curve does not track the male one,
+// and approximating it with a constant multiplier reintroduces exactly the
+// error the 2010 female re-fit existed to correct.
+//
+//   age grade % = age standard seconds ÷ actual time × 100
+//
+// Road only. Trail is never age-graded: the tables model neither terrain nor
+// vertical gain, so a normalised trail time would flatter the easier course.
 
-const WMA_MAR_OPEN_STANDARD = 7377;   // 2:02:57 — WMA open standard for marathon
-const WMA_HALF_OPEN_STANDARD = 3411;  // 56:51   — WMA open standard for half marathon
+import WMA from '../data/wmaRoad2025.json';
 
-// Male age grading factors for marathon (ages 18–70)
-// Lower factor = more performance expected relative to open standard
-const WMA_FACTORS_MAR_M: Record<number, number> = {
-  18: 1.000, 19: 1.000, 20: 1.000, 21: 1.000, 22: 1.000, 23: 1.000,
-  24: 1.000, 25: 1.000, 26: 1.000, 27: 1.000, 28: 1.000, 29: 1.000,
-  30: 1.000, 31: 1.001, 32: 1.002, 33: 1.003, 34: 1.005, 35: 1.007,
-  36: 1.010, 37: 1.014, 38: 1.018, 39: 1.023, 40: 1.028, 41: 1.033,
-  42: 1.039, 43: 1.045, 44: 1.052, 45: 1.059, 46: 1.066, 47: 1.074,
-  48: 1.083, 49: 1.092, 50: 1.102, 51: 1.113, 52: 1.124, 53: 1.136,
-  54: 1.148, 55: 1.161, 56: 1.175, 57: 1.189, 58: 1.204, 59: 1.220,
-  60: 1.236, 61: 1.253, 62: 1.271, 63: 1.289, 64: 1.308, 65: 1.328,
-  66: 1.349, 67: 1.371, 68: 1.393, 69: 1.416, 70: 1.440,
-};
+/** Distances the published tables are natively developed for. */
+export type GradedDistId = 'mar' | 'half' | '10k' | '5k';
 
-// Male age grading factors for half marathon (ages 18–70)
-const WMA_FACTORS_HALF_M: Record<number, number> = {
-  18: 1.000, 19: 1.000, 20: 1.000, 21: 1.000, 22: 1.000, 23: 1.000,
-  24: 1.000, 25: 1.000, 26: 1.000, 27: 1.000, 28: 1.000, 29: 1.000,
-  30: 1.000, 31: 1.001, 32: 1.002, 33: 1.004, 34: 1.006, 35: 1.008,
-  36: 1.011, 37: 1.015, 38: 1.019, 39: 1.024, 40: 1.029, 41: 1.034,
-  42: 1.040, 43: 1.047, 44: 1.054, 45: 1.061, 46: 1.069, 47: 1.077,
-  48: 1.086, 49: 1.095, 50: 1.105, 51: 1.116, 52: 1.127, 53: 1.139,
-  54: 1.152, 55: 1.165, 56: 1.179, 57: 1.194, 58: 1.209, 59: 1.225,
-  60: 1.242, 61: 1.259, 62: 1.277, 63: 1.295, 64: 1.315, 65: 1.335,
-  66: 1.356, 67: 1.378, 68: 1.401, 69: 1.424, 70: 1.449,
-};
+const GRADED_DISTS: readonly string[] = ['mar', 'half', '10k', '5k'];
 
-function getWmaFactor(age: number, distId: 'mar' | 'half', gender: 'M' | 'F'): number {
-  // Female factors are approximately 10% higher than male (open standard adjustment)
-  // For simplicity, using male factors with a gender offset for female athletes
-  const table = distId === 'mar' ? WMA_FACTORS_MAR_M : WMA_FACTORS_HALF_M;
-  const clampedAge = Math.max(18, Math.min(70, age));
-  const factor = table[clampedAge] ?? table[70];
-  return gender === 'F' ? factor * 1.10 : factor;
+type WmaGender = 'M' | 'F';
+
+/** Age standard in seconds, or null when the table has no such cell. */
+function ageStandardSec(age: number, distId: string, gender: WmaGender): number | null {
+  if (!GRADED_DISTS.includes(distId)) return null;
+  const byAge = (WMA.standards as Record<string, Record<string, Record<string, number>>>)[gender];
+  if (!byAge) return null;
+  const row = byAge[String(age)];
+  if (!row) return null;
+  const sec = row[distId];
+  return typeof sec === 'number' && sec > 0 ? sec : null;
 }
 
-function computeAgeGradedScore(
+/**
+ * Age grade as a percentage, or null if it cannot be computed from the
+ * published tables.
+ *
+ * There is deliberately no fallback path. If the lookup fails — unsupported
+ * distance, unknown gender, age outside the table — the caller renders no
+ * grade. An approximated grade is worse than an absent one, because it is
+ * indistinguishable from a real one on the page.
+ */
+export function computeAgeGradedScore(
   finishTimeSec: number,
-  distId: 'mar' | 'half',
-  gender: 'M' | 'F',
+  distId: string,
+  gender: string,
   age: number,
-): number {
-  const openStd = distId === 'mar' ? WMA_MAR_OPEN_STANDARD : WMA_HALF_OPEN_STANDARD;
-  const factor = getWmaFactor(age, distId, gender);
-  // age_graded_score = (open_standard / finish_time) * factor * 100
-  return (openStd / finishTimeSec) * factor * 100;
+): number | null {
+  if (!(finishTimeSec > 0) || !Number.isFinite(age)) return null;
+  const g: WmaGender | null = gender === 'M' ? 'M' : gender === 'F' || gender === 'W' ? 'F' : null;
+  if (!g) return null;
+  const std = ageStandardSec(Math.round(age), distId, g);
+  if (std == null) return null;
+  return (std / finishTimeSec) * 100;
 }
+
+// ── Age from a recorded band ────────────────────────────────────────
+// Rules live in ageBand.mjs so the app and the verification script share one
+// definition rather than two that can drift apart.
+
+export { ageFromBand } from './ageBand.mjs';
+import { ageFromBand as resolveBandAge } from './ageBand.mjs';
+
+export interface AgeGradeResult {
+  /** Percentage. Round for display per `estimated`. */
+  percent: number;
+  ageUsed: number;
+  /** True where the age came from a band rather than a published age. */
+  estimated: boolean;
+}
+
+/**
+ * Age grade for a single road result.
+ *
+ * `exactAge` is used when the source published a real age (some results carry
+ * one); otherwise the band's midpoint is used and the result is marked
+ * estimated, so the caller can drop the decimal place. Quoting 61.4% from a
+ * ±2-year age estimate would overstate what the archive knows.
+ */
+export function ageGradeForResult(
+  finishTimeSec: number,
+  distId: string,
+  gender: string,
+  cat: string,
+  exactAge?: number | null,
+): AgeGradeResult | null {
+  const estimated = !(typeof exactAge === 'number' && Number.isFinite(exactAge));
+  const age = estimated ? resolveBandAge(cat) : (exactAge as number);
+  if (age == null) return null;
+
+  const percent = computeAgeGradedScore(finishTimeSec, distId, gender, age);
+  if (percent == null) return null;
+
+  return { percent, ageUsed: age, estimated };
+}
+
+/** Display string: whole numbers for estimated ages, one decimal for exact. */
+export function formatAgeGrade(r: AgeGradeResult): string {
+  return r.estimated ? `${Math.round(r.percent)}%` : `${r.percent.toFixed(1)}%`;
+}
+
 
 // ── Linear regression (simple 1D) ────────────────────────────────────────────
 
@@ -289,10 +335,15 @@ export function computeDerivedMetrics(payload: AthletePayload): EnrichedPayload 
     );
     if (pts.length === 0) return null;
 
-    const scores = pts.map(r => {
-      const age = r.year - athlete.birth_year;
-      return computeAgeGradedScore(r.finish_time_seconds, distId, athlete.gender, age);
-    });
+    // A result the tables can't grade contributes nothing rather than a
+    // substituted value — an average is only over what was actually graded.
+    const scores = pts
+      .map(r => computeAgeGradedScore(
+        r.finish_time_seconds, distId, athlete.gender, r.year - athlete.birth_year,
+      ))
+      .filter((s): s is number => s != null);
+    if (scores.length === 0) return null;
+
     return Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10;
   }
 

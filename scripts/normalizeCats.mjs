@@ -65,7 +65,22 @@ export function normalizeCat(cat) {
 }
 
 // ── Apply to every JSON file in public/data ───────────────────────────────────
+//
+// Guarded so that importing `normalizeCat` is side-effect free. Six converters
+// import this module for the function alone; without the guard, each of them
+// rewrote all ~390 result files as a side effect of the import. The pass is
+// idempotent, so it was silent rather than destructive — but a converter for
+// one race should not rewrite the whole archive. Running this file directly
+// still performs the pass exactly as before.
 
+const isDirectRun = process.argv[1]
+  && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
+
+if (isDirectRun) {
+  normalizeAllResultFiles();
+}
+
+function normalizeAllResultFiles() {
 let totalChanged = 0;
 const files = fs.readdirSync(dataDir).filter(f => f.startsWith('results-') && f.endsWith('.json'));
 
@@ -97,3 +112,4 @@ for (const file of files) {
 }
 console.log('\nUnique categories after normalisation:');
 [...allCats].sort().forEach(c => console.log(' ', c));
+}

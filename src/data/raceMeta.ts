@@ -476,7 +476,7 @@ export const RACE_META: RaceMeta[] = [
     surface: courseStats.surface,
     secondaryLabel: 'Certification',
     secondaryBody: courseStats.certified,
-    averagesNote: 'Computed from every certified finish on record. 2020·21 editions cancelled.',
+    averagesNote: 'Computed from every finish on record. 2020·21 editions cancelled.',
     distances: aucklandDistances,
   },
   {
@@ -492,7 +492,7 @@ export const RACE_META: RaceMeta[] = [
     surface: 'Sealed road · flat to gently rolling',
     secondaryLabel: 'Character',
     secondaryBody: "One of NZ's oldest road marathons. The lake loop is renowned for its consistently flat profile, geothermal scenery, and reliable fast times. Altitude ~280 m asl.",
-    averagesNote: 'Computed from every certified finish on record. 2014 includes walkers category.',
+    averagesNote: 'Computed from every finish on record. 2014 includes walkers category.',
     decorativePills: ['10 km'],
     distances: [
       {

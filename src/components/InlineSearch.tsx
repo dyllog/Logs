@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAthleteSlug, preloadAthleteIndex, NAME_DISAMBIGUATION } from '@/data/athleteProfiles';
+import { searchNames, loadHitResults, type NameHit, type SearchResult } from '@/lib/searchIndex';
 import { racesForYear, RACE_DIRECTORY } from '@/data/raceDirectory';
+import { useSharedNames } from '@/lib/sharedNames';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -41,6 +42,25 @@ async function loadShard(letter: string): Promise<ShardData> {
 
 function normalise(s: string): string {
   return s.toLowerCase().trim();
+}
+
+/**
+ * Name matching reduces BOTH the query and the index key the same way, so
+ * punctuation is never load-bearing: "Toomer-Reti" and "Toomer Reti" resolve to
+ * each other, as do "O'Brien" and "OBrien". Matching a raw lower-cased query
+ * against raw keys made the hyphen mandatory, which is a false negative aimed
+ * at exactly the runner looking themselves up.
+ */
+function reduceName(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    // eslint-disable-next-line no-misleading-character-class
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/['’‘`]/g, '')
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function bestResultMeta(results: ResultEntry[]): string {
@@ -114,7 +134,11 @@ interface FinisherMatch {
   name:    string;
   meta:    string;
   slug:    string | null;
-  results: ResultEntry[];
+  count:   number;
+  /** Identifies the person, so detail can be fetched when the row expands. */
+  hit:     NameHit;
+  /** Populated on expand — shards carry pointers, not result arrays. */
+  results?: SearchResult[];
 }
 
 interface YearRaceMatch {
@@ -177,42 +201,25 @@ export function useInlineSearch(query: string) {
       }
     }
 
-    // ── Name query: search sharded index ─────────────────────────────────
-    const letter = norm[0].match(/[a-z]/) ? norm[0] : '_';
-    const shard  = await loadShard(letter);
+    // ── Name query: pointer records from the shared canon index ──────────
+    const qName = reduceName(q);
+    const found = await searchNames(q);
 
-    // Preload athlete-index shards for matched names so multi-race profiles resolve.
-    const matched = Object.entries(shard).filter(([key]) => key.includes(norm));
-    await Promise.all(matched.map(([, entry]) => preloadAthleteIndex(entry.display)));
-
-    const hits: FinisherMatch[] = [];
-    for (const [key, entry] of matched) {
-      if (key.includes(norm)) {
-        const slug      = getAthleteSlug(entry.display);
-        const conflicts = NAME_DISAMBIGUATION[entry.display];
-
-        if (slug && conflicts?.length) {
-          const isConflict = (r: ResultEntry) =>
-            conflicts.some(c => c.r === r.r && c.y === r.y);
-          const profileResults = entry.results.filter(r => !isConflict(r));
-          const otherResults   = entry.results.filter(r =>  isConflict(r));
-
-          hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(profileResults), slug, results: profileResults });
-          if (otherResults.length) {
-            hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(otherResults), slug: null, results: otherResults });
-          }
-        } else {
-          hits.push({ kind: 'finisher', name: entry.display, meta: bestResultMeta(entry.results), slug, results: entry.results });
-        }
-      }
-    }
+    const hits: FinisherMatch[] = found.map(h => ({
+      kind: 'finisher' as const,
+      name: h.name,
+      meta: h.pointer.n === 1 ? '1 result on record' : `${h.pointer.n} results on record`,
+      slug: h.slug,
+      count: h.pointer.n,
+      hit: h,
+    }));
 
     hits.sort((a, b) => {
-      const an = normalise(a.name), bn = normalise(b.name);
-      if (an === norm && bn !== norm) return -1;
-      if (bn === norm && an !== norm) return  1;
+      const an = reduceName(a.name), bn = reduceName(b.name);
+      if (an === qName && bn !== qName) return -1;
+      if (bn === qName && an !== qName) return  1;
       if (a.name === b.name) return (b.slug ? 1 : 0) - (a.slug ? 1 : 0);
-      if (b.results.length !== a.results.length) return b.results.length - a.results.length;
+      if (b.count !== a.count) return b.count - a.count;
       return a.name.localeCompare(b.name);
     });
 
@@ -242,6 +249,8 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
   const { matches, loading } = useInlineSearch(query);
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<string | null>(null);
+  // Shards carry pointers; a row's results are fetched the first time it opens.
+  const [detail, setDetail] = useState<Record<string, SearchResult[]>>({});
 
   const pick = (href: string) => { onClose(); navigate(href); };
 
@@ -278,11 +287,18 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
               className="lp-search-dropdown-row"
               onClick={() => {
                 if (profileHref) pick(profileHref);
-                else setExpanded(isExpanded ? null : m.name);
+                else {
+                  if (isExpanded) { setExpanded(null); return; }
+                  setExpanded(m.name);
+                  const dk = `${m.hit.key}#${m.hit.idx}`;
+                  if (!detail[dk]) {
+                    loadHitResults(m.hit).then(res => setDetail(d => ({ ...d, [dk]: res })));
+                  }
+                }
               }}
             >
               <span className="lp-search-dropdown-count">
-                {m.results.length > 1 ? `${m.results.length}×` : '1×'}
+                {m.count > 1 ? `${m.count}×` : '1×'}
               </span>
               <span className="lp-search-dropdown-name">
                 {m.name}
@@ -301,7 +317,7 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
 
             {isExpanded && (
               <div className="lp-search-dropdown-results">
-                {m.results.map((res, j) => {
+                {(detail[`${m.hit.key}#${m.hit.idx}`] ?? []).map((res, j) => {
                   const href = raceHref(res);
                   return (
                     <div
@@ -344,10 +360,23 @@ interface AthleteNameDropdownProps {
   onClose:  () => void;
 }
 
+/**
+ * Compare's athlete selector.
+ *
+ * Shared-name (knownMultiPerson) profiles are withheld from the pool. Compare
+ * states career bests for whoever is selected, and on a cluster that may span
+ * several runners that would assert an unattributed time as one person's PB —
+ * the same reason the "Open in Compare" CTA was removed from flagged profiles.
+ * The exclusion is announced rather than silent: dropping matches without
+ * saying so is how a search comes to lie about what the archive holds.
+ */
 export function AthleteNameDropdown({ query, onSelect, onClose }: AthleteNameDropdownProps) {
   const { matches, loading } = useInlineSearch(query);
+  const sharedNames = useSharedNames();
 
-  const athletes = matches.filter((m): m is FinisherMatch => m.kind === 'finisher');
+  const all = matches.filter((m): m is FinisherMatch => m.kind === 'finisher');
+  const athletes = all.filter(m => !(m.slug && sharedNames.has(m.slug)));
+  const withheld = all.length - athletes.length;
 
   if (query.length < 2) return null;
 
@@ -363,7 +392,13 @@ export function AthleteNameDropdown({ query, onSelect, onClose }: AthleteNameDro
           </div>
         </div>
       ))}
-      {!loading && athletes.length === 0 && (
+      {!loading && withheld > 0 && (
+        <div className="lp-search-dropdown-status">
+          {withheld} shared-name {withheld === 1 ? 'profile' : 'profiles'} not comparable — records under
+          {withheld === 1 ? ' that name' : ' those names'} may span several runners.
+        </div>
+      )}
+      {!loading && athletes.length === 0 && withheld === 0 && (
         <div className="lp-search-dropdown-status">No results for "{query}"</div>
       )}
     </div>

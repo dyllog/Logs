@@ -1,0 +1,63 @@
+/* ———————————————————————————————————————————————————————————————
+   /methodology — long-form editorial page.
+   The one place on the site where sustained prose is appropriate,
+   so the measure is narrow and the rhythm is looser than elsewhere.
+   Tokens come from index.css.
+   ——————————————————————————————————————————————————————————————— */
+
+.methodology { padding-bottom: 96px; }
+
+.methodology .section-rule-bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; margin: 0 0 32px; }
+.methodology .section-rule-bar .line { height: 1px; background: var(--ink); }
+.methodology .section-rule-bar .title { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); white-space: nowrap; margin: 0; }
+
+/* Masthead */
+.meth-head { padding: 56px 0 40px; border-bottom: 0.5px solid var(--ink); }
+.meth-head h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 76px; line-height: 0.96; letter-spacing: -0.03em; margin: 0 0 28px; color: var(--ink); }
+.meth-head .lede { font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.75; color: var(--ink-soft); max-width: 60ch; margin: 0 0 16px; }
+.meth-head .lede:last-child { margin-bottom: 0; }
+
+/* Contents */
+.meth-toc { display: flex; flex-wrap: wrap; gap: 0 28px; padding: 20px 0; border-bottom: 0.5px solid var(--rule); }
+.meth-toc a { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--meta); text-decoration: none; padding: 4px 0; border-bottom: 1px solid transparent; }
+.meth-toc a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* Sections */
+.meth-section { padding: 56px 0 8px; scroll-margin-top: 24px; }
+.methodology p { font-family: 'DM Mono', monospace; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); max-width: 68ch; margin: 0 0 18px; }
+.methodology p strong { color: var(--ink); font-weight: 400; border-bottom: 0.5px solid var(--rule); }
+.methodology p em { font-style: italic; color: var(--ink); }
+.methodology code { font-family: 'DM Mono', monospace; font-size: 12.5px; background: var(--bg-alt); border: 0.5px solid var(--rule-soft); padding: 1px 5px; color: var(--ink); }
+.methodology a { color: var(--ink); text-decoration: none; border-bottom: 0.5px solid var(--rule); }
+.methodology a:hover { border-bottom-color: var(--ink); }
+
+.methodology h3 { font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; margin: 34px 0 16px; color: var(--ink); }
+
+/* Definition-style list — key on the left, prose on the right */
+.meth-list { list-style: none; padding: 0; margin: 24px 0 22px; border-top: 0.5px solid var(--ink); }
+.meth-list li { display: grid; grid-template-columns: 190px 1fr; gap: 28px; padding: 18px 0; border-bottom: 0.5px solid var(--rule-soft); align-items: baseline; }
+.meth-list .k { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--meta); }
+.meth-list li > span:last-child { font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.75; color: var(--ink-soft); }
+
+/* Callout — terracotta reserved for the two claims that most need to land */
+.meth-callout { border: 0.5px solid var(--rule); background: var(--bg-alt); padding: 22px 26px 8px; margin: 26px 0; max-width: 72ch; }
+.meth-callout .k { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); margin-bottom: 12px; }
+.meth-callout.accent { border-color: var(--accent); background: transparent; }
+.meth-callout.accent .k { color: var(--accent); }
+
+.meth-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 28px 0 32px; }
+.methodology .meth-actions .btn { border-bottom-width: 0.5px; }
+.methodology .meth-actions a { border-bottom: 0.5px solid var(--ink); }
+
+.meth-credit { font-size: 11.5px !important; color: var(--meta) !important; border-top: 0.5px solid var(--rule-soft); padding-top: 20px; max-width: 68ch; }
+
+@media (max-width: 860px) {
+  .meth-head { padding: 36px 0 28px; }
+  .meth-head h1 { font-size: 44px; }
+  .meth-head .lede { font-size: 13px; }
+  .meth-section { padding: 40px 0 8px; }
+  .meth-list li { grid-template-columns: 1fr; gap: 8px; }
+  .methodology .section-rule-bar { gap: 12px; margin-bottom: 24px; }
+  .meth-callout { padding: 18px 18px 6px; }
+  .meth-toc { gap: 0 18px; }
+}

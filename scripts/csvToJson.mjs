@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url';
 import { normalizeCat } from './normalizeCats.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const csvDir  = path.join(__dirname, '../Auckland Marathon');
+// Sources moved under "Race Files/" when the archive was reorganised; this path
+// had not followed, so the converter could not run at all.
+const csvDir  = path.join(__dirname, '../Race Files/Auckland Marathon');
 const outDir  = path.join(__dirname, '../public/data');
 
 function toSec(t) {
@@ -50,11 +52,29 @@ function parseCSV(text) {
   const hasNetTime    = header.includes('net time');
   const hasNationality = header.includes('nationality');
 
+  // Team/club affiliation, present only in the 2023–24 Auckland exports and
+  // located by name because its index moves between them (a `Run` column sits
+  // before it in 2024). Found by header rather than a fixed offset for the same
+  // reason net time is guarded above: a wrong index reads a different field.
+  const headerCols = lines[0].split(',').map(h => h.trim().toLowerCase());
+  const iTeam = headerCols.indexOf('team');
+
   // Column index map based on format
   // Old-with-nettime:  Pos,Name,Bib,Time,NetTime,Cat,CatPos,Gender,GenderPos,...
   // Old-no-nettime:    Pos,Name,Bib,Time,Cat,CatPos,Gender,GenderPos,...
   // New (2021+):       Pos,Name,Bib,Time,Nat,Cat,CatPos,Gender,GenderPos
-  const iTime   = 3;
+  // Gun time is the archive's displayed time: finishing positions derive from
+  // it, so showing net against gun-ordered positions would let a table
+  // contradict itself. Net is captured where the source publishes it — it is
+  // real source data, and a display decision should not destroy a field.
+  //
+  // Index 4 is net time in the old format and nationality in the 2021+ one;
+  // the two layouts are mutually exclusive. If a file ever carried both
+  // headers the mapping would be ambiguous, so net is skipped rather than
+  // guessed — reading the nationality column as a time is the failure mode
+  // this guard exists to prevent.
+  const iTime    = 3;
+  const iNetTime = hasNetTime && !hasNationality ? 4 : -1;
   const iNat    = hasNationality ? 4 : -1;
   const iCat    = hasNationality ? 5 : hasNetTime ? 5 : 4;
   const iGender = hasNationality ? 7 : hasNetTime ? 7 : 6;
@@ -96,7 +116,23 @@ function parseCSV(text) {
     }
 
     const cat = normalizeCat(`${genderPfx} ${ageCat}`);
-    rows.push({ pos, name, bib, nat, cat, club: '—', time, sec });
+
+    // Preserved, never displayed. Only stored where it is actually present and
+    // parses — an unparseable cell is dropped rather than recorded as zero.
+    const netRaw = iNetTime >= 0 ? (cols[iNetTime]?.trim() ?? '') : '';
+    const netSec = netRaw.includes(':') ? toSec(netRaw) : 0;
+
+    // A handful of rows carry a quoted field containing a comma, which this
+    // naive split shifts. Team is only read when the row's column count matches
+    // the header's — a shifted row yields no club rather than a wrong one.
+    const club = iTeam >= 0 && cols.length === headerCols.length
+      ? (cols[iTeam]?.trim() ?? '')
+      : '';
+
+    rows.push({
+      pos, name, bib, nat, cat, club: club || '—', time, sec,
+      ...(netSec > 0 ? { netTime: netRaw, netSec } : {}),
+    });
   }
   return rows;
 }

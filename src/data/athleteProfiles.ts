@@ -1,29 +1,15 @@
-import { buildSlugMap } from './athleteRegistry';
+
+// Re-exported from the shared module so the generate pipeline and the app
+// cannot disagree about who is disambiguated. The split itself is applied
+// when the search index is built — see build-search-index.mjs.
+export { NAME_DISAMBIGUATION } from './nameDisambiguation.mjs';
 
 /**
- * Results that appear in the search index under a profiled athlete's name but
- * belong to a *different* person who happens to share that name.
- *
- * When this map contains an entry for a display name, the search UI will show
- * two separate rows:
- *   1. The profiled athlete (with PROFILE pill) — all results EXCEPT these
- *   2. An expandable "other person" entry — just these results
- *
- * Add an entry here whenever you confirm a result doesn't belong to the
- * athlete whose profile owns that name.
- *
- * Keys must match the display name exactly as stored in the search index
- * (Title Case, as produced by build-search-index.mjs).
- * Values use the exact race label from RACE_LABELS in that same script.
+ * Curated aliases: nicknames and variant spellings the canon cannot hold,
+ * because it is keyed by the exact normalised name as each result recorded it.
+ * These are a deliberate human mapping, so they are the one thing the canon
+ * does NOT overwrite — see CURATED_KEYS below.
  */
-export const NAME_DISAMBIGUATION: Record<string, Array<{ r: string; y: number }>> = {
-  'Kylie Brown': [
-    { r: 'Queenstown Half',  y: 2016 },
-    { r: 'Christchurch Half', y: 2017 },
-    { r: 'Queenstown Half',  y: 2017 },
-  ],
-};
-
 const EXTRA_ALIASES: Record<string, string> = {
   'oska inkster baynes': 'oska-inkster-baynes',
   'oska baynes':         'oska-inkster-baynes',
@@ -32,9 +18,23 @@ const EXTRA_ALIASES: Record<string, string> = {
   'cam graves':          'cameron-graves',
 };
 
-const BASE_MAP = buildSlugMap();
+/**
+ * THE CANON IS AUTHORITATIVE for real names.
+ *
+ * This map used to be seeded from ATHLETE_REGISTRY — 25 Phase 0 entries — and
+ * `preloadAthleteIndex` then filled only keys that did not already exist, so
+ * the fossil silently won every collision. That was harmless only because
+ * buildAthleteCanon.mjs happens to pin the same slugs: incidental agreement
+ * between two sources, not an enforced invariant, and a bug waiting for the day
+ * they diverged. The registry seed is gone; every real name now resolves from
+ * the canon index, and only the curated aliases above survive it.
+ *
+ * Safe because all seven `getAthleteSlug` call sites `preloadAthleteIndex`
+ * first — the map is populated before any synchronous lookup depends on it.
+ */
+const CURATED_KEYS = new Set(Object.keys(EXTRA_ALIASES));
 
-const PROFILE_MAP: Record<string, string> = { ...BASE_MAP, ...EXTRA_ALIASES };
+const PROFILE_MAP: Record<string, string> = { ...EXTRA_ALIASES };
 
 export function normalise(s: string): string {
   return s
@@ -79,7 +79,8 @@ export function preloadAthleteIndex(name: string): Promise<void> {
       .then(r => (r.ok ? r.json() : {}))
       .then((map: Record<string, string>) => {
         for (const [k, slug] of Object.entries(map)) {
-          if (!(k in PROFILE_MAP)) PROFILE_MAP[k] = slug;
+          // Canon wins over anything already present, except a curated alias.
+          if (!CURATED_KEYS.has(k)) PROFILE_MAP[k] = slug;
         }
       })
       .catch(() => { /* leave letter unresolved on failure */ });

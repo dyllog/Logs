@@ -201,6 +201,9 @@ function checkCluster(p, natById) {
           tier1.push({
             kind: 'same-year-different-band',
             year,
+            // The bands themselves, not just prose: the profile page discloses
+            // every band in conflict, so the flag has to carry them out.
+            bands: [ranged[i].r.cat, ranged[j].r.cat],
             detail: `${year}: ${ranged[i].r.cat} (${ranged[i].r.race}) vs ${ranged[j].r.cat} (${ranged[j].r.race}) — ${gap}y gap`,
           });
         }
@@ -430,6 +433,16 @@ const derivedFlags = new Set(tier1All.map(f => f.p.slug));
 const flagSet = new Set([...derivedFlags, ...manualFlags]);
 const manualOnly = [...manualFlags].filter(s => !derivedFlags.has(s));
 
+// The age bands actually in conflict, per flagged slug. The profile page shows
+// these verbatim ("M 30–34 · M 45–49") instead of a single band it cannot
+// justify. Derived alongside the flag, so it clears with it.
+const conflictBandsBySlug = new Map();
+for (const f of tier1All) {
+  const bands = new Set();
+  for (const t of f.tier1) for (const b of t.bands ?? []) bands.add(b);
+  if (bands.size > 1) conflictBandsBySlug.set(f.p.slug, [...bands].sort());
+}
+
 let stampedAdded = 0, stampedRemoved = 0, shardsRewritten = 0;
 for (const file of fs.readdirSync(ATHLETES).filter(f => f.endsWith('.json'))) {
   const fp = path.join(ATHLETES, file);
@@ -439,9 +452,21 @@ for (const file of fs.readdirSync(ATHLETES).filter(f => f.endsWith('.json'))) {
     const want = flagSet.has(slug);
     if (want && prof.knownMultiPerson !== true) { prof.knownMultiPerson = true; stampedAdded++; dirty = true; }
     else if (!want && 'knownMultiPerson' in prof) { delete prof.knownMultiPerson; stampedRemoved++; dirty = true; }
+
+    const bands = want ? conflictBandsBySlug.get(slug) : undefined;
+    const prev = JSON.stringify(prof.conflictBands ?? null);
+    if (bands) { if (prev !== JSON.stringify(bands)) { prof.conflictBands = bands; dirty = true; } }
+    else if ('conflictBands' in prof) { delete prof.conflictBands; dirty = true; }
   }
   if (dirty) { fs.writeFileSync(fp, JSON.stringify(shard)); shardsRewritten++; }
 }
+
+// Flat slug list so the athlete index and search can render the shared-name chip
+// without loading a profile shard per row.
+fs.writeFileSync(
+  path.join(ROOT, 'public', 'data', 'flagged-slugs.json'),
+  JSON.stringify([...flagSet].sort()),
+);
 
 // ─── Delta vs a road-only baseline ───────────────────────────────────────────
 // Reconstructs what this pass would have flagged before trail ingestion:

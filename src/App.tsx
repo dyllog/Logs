@@ -28,6 +28,7 @@ import Athletes from "./pages/Athletes";
 import AthleteIndex from "./pages/AthleteIndex";
 import AthleteProfile from "./pages/AthleteProfile";
 import AthleteReport from "./pages/AthleteReport";
+import Methodology from "./pages/Methodology";
 import Calculator from "./pages/Calculator";
 import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
@@ -58,6 +59,7 @@ function Layout() {
         <Route path="/athletes/:slug" element={<AthleteProfile />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/compare" element={<Compare />} />
+        <Route path="/methodology" element={<Methodology />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <SiteFooter />

@@ -1,41 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getAthleteBySlug, type AthleteProfile } from '../data/allAthletes';
-import { ATHLETE_REGISTRY } from '../data/athleteRegistry';
 
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  return parts.length >= 2
-    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-    : name.slice(0, 2).toUpperCase();
-}
-
-function profileFromRegistry(slug: string): AthleteProfile | undefined {
-  const entry = ATHLETE_REGISTRY.find(a => a.slug === slug);
-  if (!entry) return undefined;
-  const pbRaceName = entry.pbRace.replace(/\s+\d{4}$/, '');
-  const pbYear = parseInt(entry.pbRace.match(/\d{4}/)?.[0] ?? '0');
-  const parts = entry.pbTime.split(':').map(Number);
-  const pbSec = parts.length === 3
-    ? parts[0] * 3600 + parts[1] * 60 + parts[2]
-    : parts[0] * 60 + parts[1];
-  const isHalf = pbRaceName.toLowerCase().includes('half') ||
-    (parts.length === 3 && parts[0] < 2 && !pbRaceName.toLowerCase().includes('marathon'));
-  const pbs: AthleteProfile['pbs'] = isHalf
-    ? { half: { time: entry.pbTime, sec: pbSec, race: pbRaceName, year: pbYear } }
-    : { mar: { time: entry.pbTime, sec: pbSec, race: pbRaceName, year: pbYear } };
-  return {
-    name: entry.name, slug: entry.slug,
-    initials: getInitials(entry.name),
-    gender: entry.gender, category: 'Open',
-    nationality: entry.nationality, birthYear: 0,
-    results: new Array(entry.racesLogged).fill(null) as never[],
-    pbs,
-  };
-}
-
+/**
+ * There used to be a `profileFromRegistry` fallback here that synthesised a
+ * profile out of ATHLETE_REGISTRY — reading pbTime/pbRace/racesLogged and
+ * fabricating a results array of that length. Those fields were stale (21 of 25
+ * race counts wrong) and are now gone: the registry is a slug pin list, not an
+ * athlete source. Rendering a report from invented figures was worse than
+ * declining to render one, so the fallback is removed rather than repointed.
+ *
+ * Reports are parked (REPORTS_ENABLED in AthleteProfile.tsx) and this whole
+ * page is slated to read the canon when they revive — see the note at the top
+ * of scripts/generateReport.ts.
+ */
 function resolveProfile(slug: string): AthleteProfile | undefined {
-  return getAthleteBySlug(slug) ?? profileFromRegistry(slug);
+  return getAthleteBySlug(slug);
 }
 
 // ── Types ──────────────────────────────────────────────────────────────────────

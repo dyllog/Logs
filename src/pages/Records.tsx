@@ -34,7 +34,7 @@ export default function Records() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 24, flexWrap: 'wrap' }}>
             <h1 className="serif" style={{ fontSize: 48, lineHeight: 1, margin: 0, letterSpacing: '-0.025em' }}>Course Records</h1>
             <div className="dimmed" style={{ fontSize: 13, fontStyle: 'italic', fontFamily: "'DM Serif Display', Georgia, serif" }}>
-              Current marks · all certified events
+              Current marks · all events on record
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default function Records() {
             </table>
           </div>
           <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.6 }}>
-            Records reflect certified timings from official race results. Click any race with a live page to view full history.
+            Records reflect times as published in official race results. Click any race with a live page to view full history.
           </div>
         </div>
       </section>

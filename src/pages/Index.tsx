@@ -18,7 +18,7 @@ const HOLES = [
   {
     num: 'No. 01 · All-time',
     title: 'Fastest marathon performances, NZ soil',
-    desc: 'Every sub-2:25 ever recorded on a certified New Zealand road course, men\'s field.',
+    desc: 'Every sub-2:25 on record from a New Zealand road course, men\'s field.',
     items: [
       { nm: 'Beyn, I.', vv: '2:19:32', faded: false },
       { nm: 'Balchin, D.', vv: '2:19:55', faded: false },
@@ -228,7 +228,7 @@ export default function Index() {
         <div className="lp-scale-cell">
           <span className="label">Finisher records</span>
           <div className="lp-scale-num">{SITE_STATS.finisherRecords.toLocaleString()}</div>
-          <div className="lp-scale-note">Certified field data</div>
+          <div className="lp-scale-note">Individual finishes on record</div>
         </div>
         <div className="lp-scale-cell">
           <span className="label">Athlete profiles</span>

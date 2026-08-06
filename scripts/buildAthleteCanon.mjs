@@ -167,6 +167,41 @@ const files = fs.readdirSync(DATA_DIR)
   .filter(f => f.startsWith('results-') && f.endsWith('.json'))
   .sort();
 
+// ─── Nationality ─────────────────────────────────────────────────────────────
+// Sources write '—' for "not recorded"; it is a placeholder, not a value.
+// Normalisation is mechanical only — trim and upper-case. Codes are NOT mapped
+// onto a canonical IOC list: a handful of low-frequency values are non-IOC
+// ('IRA', 'PRU', 'MLD'), and guessing what a provider meant would be curation
+// dressed up as cleaning. They are reported instead, for a curated decision.
+const normNat = (v) => {
+  const s = (v ?? '').toString().trim().toUpperCase();
+  return s && s !== '—' && s !== '-' ? s : '';
+};
+
+// ─── Club / team: deliberately NOT carried ───────────────────────────────────
+// The 2023–24 Auckland exports publish a "Team" column, and csvToJson.mjs now
+// captures it into the results JSON — it is real published source data and is
+// kept there. It stops at that boundary on purpose: the values are entry-form
+// text, not affiliation data. The year is baked into names ('KPMG2023',
+// 'Beca24'), one entity is spelled differently across years (Liberty → Liberty
+// Financial, DUAL New Zealand → DUAL NZ), and single-event corporate entries
+// sit alongside genuine clubs with nothing to separate them mechanically.
+// No aggregation the canon could offer would be honest, so none is offered.
+// Reviving this needs curated entity resolution, not raw entry text.
+
+// Cohort sizes are a property of a RACE-YEAR, not of a result. Repeating the
+// same number on all 115,547 rows that carried it cost 1.71 MB of profile
+// shards to say one thing 115,547 times. Emitted once here and looked up by
+// the profile page instead.
+//   { "raceSlug:year:distId": { NZL: 884, AUS: 61, ... } }
+const natCohorts = {};
+
+/** Minimum share of a field carrying a nationality before national placing is computed. */
+const NAT_COVERAGE_MIN = 0.90;
+
+/** file → { total, covered, coverage }, reported so the threshold stays evidence-led. */
+const natCoverageByFile = new Map();
+
 // clusterKey (nameKey|gender) → cluster { key, display, gender, results[], nameKeys:Set }
 const clusters = new Map();
 let rowCount = 0, skippedFiles = 0;
@@ -179,6 +214,36 @@ for (const file of files) {
   catch { console.warn(`⚠️  Bad JSON, skipping ${file}`); skippedFiles++; continue; }
   if (!Array.isArray(rows)) continue;
   const total = rows.length;
+
+  // ── National placing, computed within the field as recorded ──────────────
+  // Rank among finishers of the same nationality in this exact race-year. It
+  // is only meaningful if the field's nationality coverage is substantially
+  // complete: a "9th NZ" computed over half a field is simply wrong, and wrong
+  // in a way a reader cannot detect. Coverage across the archive is cleanly
+  // bimodal — files are either at zero or above 93% — so this threshold
+  // separates the two populations rather than splitting a continuum.
+  const natCovered = rows.filter(r => normNat(r.nat)).length;
+  const natCoverage = total ? natCovered / total : 0;
+  natCoverageByFile.set(file, { total, covered: natCovered, coverage: natCoverage });
+
+  const natRank = new Map();
+  if (natCoverage >= NAT_COVERAGE_MIN) {
+    const byNat = new Map();
+    for (const r of rows) {
+      const n = normNat(r.nat);
+      if (!n) continue;
+      if (!byNat.has(n)) byNat.set(n, []);
+      byNat.get(n).push(r);
+    }
+    for (const [natCode, rs] of byNat) {
+      // Order by the finishing position the race recorded — never by time,
+      // which would silently re-rank a field whose positions came from gun.
+      rs.sort((a, b) => (a.pos ?? Infinity) - (b.pos ?? Infinity));
+      rs.forEach((r, i) => natRank.set(r, { pos: i + 1 }));
+      const cohortKey = `${meta.raceSlug}:${meta.year}:${meta.distId}`;
+      (natCohorts[cohortKey] ??= {})[natCode] = rs.length;
+    }
+  }
 
   for (const r of rows) {
     const raw = (r.name ?? '').trim();
@@ -205,7 +270,16 @@ for (const file of files) {
       pos: r.pos ?? 0,
       total,
       cat: r.cat ?? '',
-      nat: r.nat && r.nat !== '—' ? r.nat : '',
+      // Omitted entirely when not recorded — 42% of rows have no nationality,
+      // and an empty key on each of them is pure payload.
+      ...(normNat(r.nat) ? { nat: normNat(r.nat) } : {}),
+      // Raw value kept only where normalisation actually changed something —
+      // the catRaw principle (never lose what the source said) without paying
+      // for a duplicate field on 296k rows that are already identical.
+      ...(r.nat != null && String(r.nat).trim() !== '' && String(r.nat).trim() !== normNat(r.nat)
+        ? { natRaw: String(r.nat).trim() }
+        : {}),
+      ...(natRank.has(r) ? { natPos: natRank.get(r).pos } : {}),
       // Trail rows are results-in-context: excluded from PBs, rendered with
       // family + sub-event + real distance on profiles (road-only Compare).
       ...(meta.trail ? { trail: true, seasonMonth: meta.seasonMonth ?? 6 } : {}),
@@ -469,7 +543,9 @@ function toProfile(c) {
     pbs,
     ...(KNOWN_MULTI_PERSON.has(c.slug) ? { knownMultiPerson: true } : {}),
     // seasonMonth is a build-time sort key only — keep the shipped rows lean.
-    results: results.map(({ nat: _n, seasonMonth: _s, ...rest }) => rest),
+    // `nat` and its placing DO ship: national placing is a genuine trail
+    // differentiator on the internationally-contested Tarawera fields.
+    results: results.map(({ seasonMonth: _s, ...rest }) => rest),
   };
 }
 
@@ -540,6 +616,7 @@ const canon = list.map(c => ({
 }));
 canon.sort((a, b) => a.id - b.id);
 fs.writeFileSync(CANON_PATH, JSON.stringify(canon));
+fs.writeFileSync(path.join(DATA_DIR, 'nat-cohorts.json'), JSON.stringify(natCohorts));
 if (!fs.existsSync(OVERRIDES_PATH)) {
   fs.writeFileSync(OVERRIDES_PATH, JSON.stringify({ merge: [], split: [], splits: [] }, null, 2));
 }
@@ -625,6 +702,40 @@ const singleResultAthletes = profiles.filter(p => p.racesLogged === 1).length;
 const totalResults = profiles.reduce((sum, p) => sum + p.racesLogged, 0);
 const overridesInFile = (overrides.merge?.length ?? 0) + (overrides.split?.length ?? 0);
 
+// ─── Nationality report ──────────────────────────────────────────────────────
+// The distinct value set is published so oddities stay visible rather than
+// being silently coerced, and coverage is published so NAT_COVERAGE_MIN can be
+// argued from evidence rather than taste.
+const natValueCounts = new Map();
+for (const c of clusters.values()) {
+  for (const r of c.results) if (r.nat) natValueCounts.set(r.nat, (natValueCounts.get(r.nat) ?? 0) + 1);
+}
+const natSorted = [...natValueCounts.entries()].sort((a, b) => b[1] - a[1]);
+const wellFormed = ([code]) => /^[A-Z]{3}$/.test(code);
+
+const covEntries = [...natCoverageByFile.entries()];
+const withNat = covEntries.filter(([, v]) => v.covered > 0);
+const gradedFiles = covEntries.filter(([, v]) => v.coverage >= NAT_COVERAGE_MIN);
+const partialFiles = covEntries.filter(([, v]) => v.covered > 0 && v.coverage < NAT_COVERAGE_MIN);
+
+const natReport = {
+  threshold: NAT_COVERAGE_MIN,
+  filesTotal: covEntries.length,
+  filesWithAnyNationality: withNat.length,
+  filesMeetingThreshold: gradedFiles.length,
+  filesBelowThresholdButNonZero: partialFiles.length,
+  belowThreshold: partialFiles
+    .sort((a, b) => a[1].coverage - b[1].coverage)
+    .map(([f, v]) => ({ file: f, covered: v.covered, total: v.total, coverage: +v.coverage.toFixed(4) })),
+  distinctValues: natSorted.length,
+  // Anything not three upper-case letters is a source defect, not a country.
+  malformedValues: natSorted.filter(e => !wellFormed(e)).map(([code, n]) => ({ code, records: n })),
+  // Reviewed by eye: a curated IOC mapping is a decision for the archivist,
+  // not something this script should guess at.
+  rareValues: natSorted.filter(wellFormed).filter(([, n]) => n <= 2).map(([code, n]) => ({ code, records: n })),
+  valueCounts: Object.fromEntries(natSorted),
+};
+
 const report = {
   totalRawRecords: rowCount,
   uniqueNameKeys,                                    // exact-normalized-name blocks
@@ -646,6 +757,7 @@ const report = {
     fuzzyAutoMerge: false,
     note: 'autoMerged reflects deterministic registry-alias + manual-override merges only; fuzzy candidates are review-queue-only and never auto-merged.',
   },
+  nationality: natReport,
 };
 fs.writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2));
 
@@ -658,6 +770,13 @@ console.log(`   Flagged for review     : ${report.flaggedForReview.toLocaleStrin
 console.log(`   Overrides applied      : ${report.overridesApplied.toLocaleString()}  (of ${overridesInFile} entries in overrides file)`);
 console.log(`   Avg results / athlete  : ${report.avgResultsPerAthlete}`);
 console.log(`   Single-result athletes : ${report.singleResultAthletes.toLocaleString()}  (${((singleResultAthletes / profiles.length) * 100).toFixed(1)}% — main over-split symptom)`);
+console.log(`   Nationality            : ${natReport.distinctValues} distinct codes · ${natReport.filesMeetingThreshold}/${natReport.filesTotal} race-years at >=${(NAT_COVERAGE_MIN * 100).toFixed(0)}% coverage (national placing computed there)`);
+if (natReport.filesBelowThresholdButNonZero) {
+  console.log(`     ⚠️  ${natReport.filesBelowThresholdButNonZero} race-year(s) carry partial nationality — no national placing computed for them`);
+}
+if (natReport.malformedValues.length) {
+  console.log(`     ⚠️  malformed codes (kept as recorded, not coerced): ${natReport.malformedValues.map(v => `${v.code}×${v.records}`).join(', ')}`);
+}
 console.log(`   → athlete-canon-report.json`);
 console.log('───────────────────────────────────────────────────────────────');
 console.log('');
