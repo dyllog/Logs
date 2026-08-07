@@ -63,6 +63,14 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Mt Maunganui Half',     dist: '21.1 km', route: '/races/mount-maunganui-half-marathon',  years: MTM_HALF_YEARS        },
   { label: 'Mt Maunganui 10k',      dist: '10 km',   route: '/races/mount-maunganui-half-marathon',  years: MTM_10K_YEARS         },
   { label: 'Mt Maunganui 5k',       dist: '5 km',    route: '/races/mount-maunganui-half-marathon',  years: MTM_5K_YEARS          },
+  // Whanganui Three Bridges is INGESTED but has no directory entry yet: every
+  // route here must resolve to a RACE_META slug, and Whanganui has no profile
+  // page. Building one needs facts this repo does not hold — entry URL, course
+  // description, and an indicative elevation profile. The results themselves
+  // are live (search, athlete profiles, PBs); only the race page is pending.
+  // Add the four entries below alongside the RACE_META entry, not before it:
+  //   Whanganui Marathon 42.2 km · Half 21.1 km · 10k 10 km · 5k 5 km
+  //   years: WHANGANUI_{MAR,HALF,10K,5K}_YEARS from ./whanganuiData
   // Trail families: one entry per sub-event, labels matching the search index
   // ({shortName} {displayName}); dist shown is the current-era course distance.
   ...TRAIL_FAMILIES.flatMap(fam =>

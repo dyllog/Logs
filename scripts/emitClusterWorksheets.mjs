@@ -86,6 +86,10 @@ const FILE_META = {
   'mtm-half':        { label: 'Mt Maunganui Half',     raceSlug: 'mount-maunganui-half-marathon', distId: 'half' },
   'mtm-10k':         { label: 'Mt Maunganui 10k',      raceSlug: 'mount-maunganui-half-marathon', distId: '10k'  },
   'mtm-5k':          { label: 'Mt Maunganui 5k',       raceSlug: 'mount-maunganui-half-marathon', distId: '5k'   },
+  'whanganui-mar':   { label: 'Whanganui Marathon',    raceSlug: 'whanganui-three-bridges-marathon', distId: 'mar'  },
+  'whanganui-half':  { label: 'Whanganui Half',        raceSlug: 'whanganui-three-bridges-marathon', distId: 'half' },
+  'whanganui-10k':   { label: 'Whanganui 10k',         raceSlug: 'whanganui-three-bridges-marathon', distId: '10k'  },
+  'whanganui-5k':    { label: 'Whanganui 5k',          raceSlug: 'whanganui-three-bridges-marathon', distId: '5k'   },
 };
 // Trail keys ({familySlug}-{subEventId}) come from the trail config, so the
 // join can't drift from what the converter emitted.

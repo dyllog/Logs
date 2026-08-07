@@ -77,6 +77,10 @@ const RACE_LABELS = {
   'mtm-half':         'Mt Maunganui Half',
   'mtm-10k':          'Mt Maunganui 10k',
   'mtm-5k':           'Mt Maunganui 5k',
+  'whanganui-mar':    'Whanganui Marathon',
+  'whanganui-half':   'Whanganui Half',
+  'whanganui-10k':    'Whanganui 10k',
+  'whanganui-5k':     'Whanganui 5k',
 };
 
 // Trail file keys ({familySlug}-{subEventId}) and their era-stable labels come

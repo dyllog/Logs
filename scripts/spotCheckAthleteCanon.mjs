@@ -62,6 +62,10 @@ const FILE_META = {
   'mtm-half':        { label: 'Mt Maunganui Half',     distId: 'half' },
   'mtm-10k':         { label: 'Mt Maunganui 10k',      distId: '10k'  },
   'mtm-5k':          { label: 'Mt Maunganui 5k',       distId: '5k'   },
+  'whanganui-mar':   { label: 'Whanganui Marathon',    distId: 'mar'  },
+  'whanganui-half':  { label: 'Whanganui Half',        distId: 'half' },
+  'whanganui-10k':   { label: 'Whanganui 10k',         distId: '10k'  },
+  'whanganui-5k':    { label: 'Whanganui 5k',          distId: '5k'   },
 };
 
 function fileMeta(filename) {

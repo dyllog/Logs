@@ -334,6 +334,8 @@ const ROAD_META = {
   'tamaki-half': 'tamaki-river-half-marathon:half', 'tamaki-10k': 'tamaki-river-half-marathon:10k',
   'mtm-half': 'mount-maunganui-half-marathon:half', 'mtm-10k': 'mount-maunganui-half-marathon:10k',
   'mtm-5k': 'mount-maunganui-half-marathon:5k',
+  'whanganui-mar': 'whanganui-three-bridges-marathon:mar', 'whanganui-half': 'whanganui-three-bridges-marathon:half',
+  'whanganui-10k': 'whanganui-three-bridges-marathon:10k', 'whanganui-5k': 'whanganui-three-bridges-marathon:5k',
 };
 const natById = new Map();
 for (const f of fs.readdirSync(DATA_DIR).filter(f => f.startsWith('results-') && f.endsWith('.json'))) {

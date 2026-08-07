@@ -73,6 +73,13 @@ const FILE_META = {
   'mtm-half':        { label: 'Mt Maunganui Half',     raceSlug: 'mount-maunganui-half-marathon', dist: '21.1 km', distId: 'half' },
   'mtm-10k':         { label: 'Mt Maunganui 10k',      raceSlug: 'mount-maunganui-half-marathon', dist: '10 km',   distId: '10k'  },
   'mtm-5k':          { label: 'Mt Maunganui 5k',       raceSlug: 'mount-maunganui-half-marathon', dist: '5 km',    distId: '5k'   },
+  // Whanganui's 10k was published as "10K" in 2017/19/22 and "105K" (10.5K) in
+  // 2018/20/23/24/25 — one event, two labels. Recorded as 10 km on evidence:
+  // see the note in ROAD_FAMILIES in scripts/roadToJson.mjs.
+  'whanganui-mar':   { label: 'Whanganui Marathon',    raceSlug: 'whanganui-three-bridges-marathon', dist: '42.2 km', distId: 'mar'  },
+  'whanganui-half':  { label: 'Whanganui Half',        raceSlug: 'whanganui-three-bridges-marathon', dist: '21.1 km', distId: 'half' },
+  'whanganui-10k':   { label: 'Whanganui 10k',         raceSlug: 'whanganui-three-bridges-marathon', dist: '10 km',   distId: '10k'  },
+  'whanganui-5k':    { label: 'Whanganui 5k',          raceSlug: 'whanganui-three-bridges-marathon', dist: '5 km',    distId: '5k'   },
 };
 
 // Trail file keys ({familySlug}-{subEventId}) come from the trail config so the
