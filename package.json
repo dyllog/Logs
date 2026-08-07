@@ -8,6 +8,7 @@
     "build": "npm run generate && vite build",
     "build:dev": "vite build --mode development",
     "generate": "node scripts/buildWmaTables.mjs && node scripts/checkCategoryDistributions.mjs && node scripts/buildAthleteCanon.mjs && node scripts/flagInconsistentClusters.mjs && node scripts/build-search-index.mjs && node scripts/computeSiteStats.mjs && node scripts/verifyAgeGrading.mjs",
+    "check:encoding": "node scripts/checkEncoding.mjs",
     "changelog": "node scripts/generateChangelog.mjs",
     "lint": "eslint .",
     "preview": "vite preview"

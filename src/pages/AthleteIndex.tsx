@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
-import { loadSearchShard, displayFromKey, loadHitResults, type SearchResult, type NameHit } from '@/lib/searchIndex';
+import { loadSearchShard, displayFromKey, loadHitResults, letterOf, type SearchResult, type NameHit } from '@/lib/searchIndex';
 import { SharedNameChip, useSharedNames } from '@/lib/sharedNames';
 
 const PAGE_SIZE = 100;
@@ -89,7 +89,9 @@ export default function AthleteIndex() {
         // Shards also carry entries keyed by SURNAME so surname search works.
         // An A–Z browse is by name, so those copies are skipped here — without
         // this, "A" would list every John Adams in the archive.
-        if ((key[0]?.match(/[a-z]/) ? key[0] : '_') !== ltr) continue;
+        // letterOf folds diacritics, so "Ānaru" files under A rather than into
+        // a bucket the A–Z strip does not link to.
+        if (letterOf(key) !== ltr) continue;
         const name = displayFromKey(key);
         pointers.forEach((pointer, idx) => {
           const slug = idx === 0 ? getAthleteSlug(name) : null;

@@ -85,6 +85,24 @@ for (const [key, meta] of Object.entries(trailFileMeta())) {
   RACE_LABELS[key] = meta.label;
 }
 
+/**
+ * Title-case a name without ASCII assumptions. Word starts are the string
+ * start and anything after whitespace, hyphen or apostrophe — so macrons and
+ * other non-ASCII letters never create a spurious word boundary.
+ * Must stay in step with displayFromKey() in src/lib/searchIndex.ts.
+ */
+function titleCaseName(s) {
+  return s.toLowerCase()
+    .replace(/(?:^|[\s\-'’])\S/gu, c => c.toUpperCase())
+    // Same Mc/O' convention the converters apply, so a name reads the same in
+    // search as it does in the results table: McGettigan, not Mcgettigan.
+    .replace(/\bMc(\S)/gu, (_, c) => 'Mc' + c.toUpperCase())
+    // Keep whichever apostrophe the source used. Normalising ’ to ' here would
+    // change the key derived from this display, and the name would then be
+    // unreachable from the results files that still hold the curly form.
+    .replace(/\bO(['’])(\S)/gu, (_, ap, c) => 'O' + ap + c.toUpperCase());
+}
+
 function fileToMeta(filename) {
   const base  = path.basename(filename);
   const key   = base.replace(/^results-/, '').replace(/-?\d{4}\.json$/, '');
@@ -119,8 +137,15 @@ for (const file of resultFiles) {
     const rawName = (r.name ?? '').trim();
     if (!rawName) continue;
 
-    // Normalise: Title Case, then lowercase key
-    const display = rawName.replace(/\b\w/g, c => c.toUpperCase()).replace(/\B\w/g, c => c.toLowerCase());
+    // Title Case, then lowercase for the key.
+    //
+    // Word starts are found by PUNCTUATION, not by \b\w. JavaScript's \w is
+    // ASCII-only, so a macron ends a "word" and the next letter gets capitalised
+    // mid-name: "Hākopa" became "HāKopa", "Rongoteāio" became "RongoteāIo".
+    // That mangles Māori names in a New Zealand running archive, which is worse
+    // than a data-hygiene problem. This matches titleCase() in the converters,
+    // so the index and the results files now agree.
+    const display = titleCaseName(rawName);
     const norm    = display.toLowerCase();
 
     if (!index.has(norm)) index.set(norm, { display, results: [] });
@@ -151,10 +176,31 @@ for (const entry of index.values()) {
 // still the full normalised name — so every consumer's `key.includes(query)`
 // keeps working untouched. Entries whose surname shares the first name's
 // initial are placed once, not twice.
-const letterOf = (s) => (s?.[0]?.match(/[a-z]/) ? s[0] : '_');
+/**
+ * Which shard a name belongs in — folding diacritics first.
+ *
+ * Without the fold, "Ānaru Williams" landed in the `_` shard, which no A–Z link
+ * points at, and a search for "Ānaru" (reduced to "anaru") looked in `a` and
+ * found nothing. Accent-initial names were reachable only by surname: filed
+ * where nobody looks. Māori first names beginning with a macron are precisely
+ * the case this archive cannot afford to strand.
+ *
+ * Must stay in step with letterOf() in src/lib/searchIndex.ts, which picks the
+ * shard a query loads.
+ */
+const letterOf = (s) => {
+  const c = (s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '')[0]?.toLowerCase();
+  return c && c >= 'a' && c <= 'z' ? c : '_';
+};
 
-/** Must match displayFromKey() in src/lib/searchIndex.ts exactly. */
-const recoverDisplay = (key) => key.replace(/\b\w/g, c => c.toUpperCase());
+/**
+ * Must match displayFromKey() in src/lib/searchIndex.ts EXACTLY — it decides
+ * whether a display name has to be stored, so any divergence either bloats the
+ * index with redundant `d` fields or, worse, ships a name rendered wrongly.
+ * Title-casing a key is the same operation as title-casing a raw name, so this
+ * simply reuses it.
+ */
+const recoverDisplay = (key) => titleCaseName(key);
 
 // Shared-name clusters, so a search row can carry the chip without a second
 // lookup. Derived by flagInconsistentClusters.mjs; absent on a first-ever run.

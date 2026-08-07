@@ -55,9 +55,22 @@ export interface NameHit {
   slug: string | null;
 }
 
-/** Recover the stored display name: the key is its lower-cased form. */
+/**
+ * Recover the stored display name: the key is its lower-cased form.
+ *
+ * Word starts are found by PUNCTUATION rather than \b\w, because \w is
+ * ASCII-only — a macron would otherwise end a "word" and capitalise the next
+ * letter, turning "Hākopa" into "HāKopa". Must stay in step with
+ * titleCaseName() in scripts/build-search-index.mjs.
+ */
 export function displayFromKey(key: string): string {
-  return key.replace(/\b\w/g, c => c.toUpperCase());
+  return key
+    .replace(/(?:^|[\s\-'’])\S/gu, c => c.toUpperCase())
+    // Same Mc/O' convention the converters apply: McGettigan, not Mcgettigan.
+    .replace(/\bMc(\S)/gu, (_, c: string) => 'Mc' + c.toUpperCase())
+    // Keep whichever apostrophe the key holds — rewriting ’ to ' would render a
+    // name that no longer matches its own key.
+    .replace(/\bO(['’])(\S)/gu, (_, ap: string, c: string) => 'O' + ap + c.toUpperCase());
 }
 
 /**
@@ -82,7 +95,16 @@ export function reduceName(s: string): string {
 const shardCache = new Map<string, SearchShard>();
 const reducedCache = new Map<string, { key: string; reduced: string }[]>();
 
-const letterOf = (s: string) => (s[0]?.match(/[a-z]/) ? s[0] : '_');
+/**
+ * Which shard to load — diacritics folded, matching letterOf() in
+ * scripts/build-search-index.mjs. A query for "Ānaru" reduces to "anaru" and
+ * must reach the same shard the entry was placed in, or accent-initial names
+ * are findable only by surname.
+ */
+export const letterOf = (s: string): string => {
+  const c = (s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '')[0]?.toLowerCase();
+  return c && c >= 'a' && c <= 'z' ? c : '_';
+};
 
 export async function loadSearchShard(letter: string): Promise<SearchShard> {
   if (shardCache.has(letter)) return shardCache.get(letter)!;

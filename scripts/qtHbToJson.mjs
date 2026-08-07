@@ -140,7 +140,9 @@ function computeStats(rows, year) {
 }
 
 function processFile(csvPath, prefix, year, isHalf) {
-  const text = fs.readFileSync(csvPath, 'utf8');
+  // Strip a UTF-8 BOM: Excel and several timing platforms emit one, and left
+  // in place it becomes part of the first header cell, so header lookups miss.
+  const text = fs.readFileSync(csvPath, 'utf8').replace(/^﻿/, '');
   const rows = parseCSV(text);
   const outFile = isHalf ? `results-${prefix}-half-${year}.json` : `results-${prefix}-${year}.json`;
   const outDir = path.join(root, 'public', 'data');

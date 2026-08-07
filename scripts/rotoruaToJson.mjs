@@ -90,7 +90,9 @@ const stats = [];
 
 for (const year of years) {
   const file = path.join(csvDir, `Rotorua Marathon - Marathon Results - ${year}.csv`);
-  const text = fs.readFileSync(file, 'utf8');
+  // Strip a UTF-8 BOM: Excel and several timing platforms emit one, and left
+  // in place it becomes part of the first header cell, so header lookups miss.
+  const text = fs.readFileSync(file, 'utf8').replace(/^﻿/, '');
   const rows = parseCsv(text);
   const header = rows[0].map(h => h.trim().toLowerCase());
 
@@ -174,7 +176,9 @@ const halfStats = [];
 
 for (const year of years) {
   const file = path.join(csvDir, `Rotorua Marathon - Half Results - ${year}.csv`);
-  const text = fs.readFileSync(file, 'utf8');
+  // Strip a UTF-8 BOM: Excel and several timing platforms emit one, and left
+  // in place it becomes part of the first header cell, so header lookups miss.
+  const text = fs.readFileSync(file, 'utf8').replace(/^﻿/, '');
   const rows = parseCsv(text);
   const header = rows[0].map(h => h.trim().toLowerCase());
 
