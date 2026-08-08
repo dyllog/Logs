@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { searchNames, loadHitResults, type NameHit, type SearchResult } from '@/lib/searchIndex';
 import { racesForYear } from '@/data/raceDirectory';
 import { SharedNameChip, useSharedNames } from '@/lib/sharedNames';
+import { raceHrefFor } from '@/lib/raceLinks';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -185,55 +186,6 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
 
   const pick = (href: string) => { onClose(); navigate(href); };
 
-  // Must stay in sync with RACE_LABELS in scripts/build-search-index.mjs
-  const LABEL_TO_RACE_KEY: Record<string, string> = {
-    'Auckland Marathon':     'auckland-full',
-    'Auckland Half':         'auckland-half',
-    'Christchurch Marathon': 'chc',
-    'Christchurch Half':     'chc-half',
-    'Rotorua Marathon':      'rotorua',
-    'Rotorua Half':          'rotorua-half',
-    'Queenstown Marathon':   'qt',
-    'Queenstown Half':       'qt-half',
-    "Hawke's Bay Marathon":  'hb',
-    "Hawke's Bay Half":      'hb-half',
-    'Waterfront Half':       'wf-half',
-    'Waterfront 10k':        'wf-10k',
-    'Devonport Half':        'dev-half',
-    'Devonport 10k':         'dev-10k',
-    'Coatesville Half':      'coast-half',
-    'Omaha Half':            'omaha-half',
-    'Omaha 10k':             'omaha-10k',
-    'Kerikeri Half':         'kerikeri-half',
-    'Maraetai Half':         'maraetai-half',
-    'Maraetai 10k':          'maraetai-10k',
-    'wellington-half':       'wellington-half',
-    'wellington-mar':        'wellington-mar',
-  };
-
-  const raceHref = (result: ResultEntry): string | null => {
-    const r = result.r.toLowerCase();
-    let base: string | null = null;
-    if (r.includes('auckland marathon') || r === 'auckland half')
-                                             base = '/races/auckland-marathon';
-    else if (r.includes('rotorua'))          base = '/races/rotorua-marathon';
-    else if (r.includes('christchurch'))     base = '/races/christchurch-marathon';
-    else if (r.includes('queenstown'))       base = '/races/queenstown-marathon';
-    else if (r.includes('hawke'))            base = '/races/hawkes-bay-marathon';
-    else if (r.includes('waterfront'))       base = '/races/waterfront-half-marathon';
-    else if (r.includes('devonport'))        base = '/races/devonport-half-marathon';
-    else if (r.includes('coatesville'))      base = '/races/coatesville-half-marathon';
-    else if (r.includes('omaha'))            base = '/races/omaha-half-marathon';
-    else if (r.includes('maraetai'))         base = '/races/maraetai-half-marathon';
-    else if (r.includes('kerikeri'))         base = '/races/kerikeri-half-marathon';
-    else if (r.includes('wellington'))       base = '/races/wellington-marathon';
-    if (!base) return null;
-    const key = LABEL_TO_RACE_KEY[result.r];
-    const params = new URLSearchParams({ year: String(result.y), pos: String(result.p) });
-    if (key) params.set('race', key);
-    return `${base}?${params}`;
-  };
-
   return (
     <div className="search-overlay" onClick={onClose}>
       <div className="search-box" onClick={e => e.stopPropagation()}>
@@ -335,7 +287,7 @@ export default function SearchOverlay({ open, onClose, initialQuery = '' }: Sear
                 {isExpanded && (
                   <div style={{ paddingBottom: 8 }}>
                     {(detail[`${m.hit.key}#${m.hit.idx}`] ?? []).map((res, j) => {
-                      const href = raceHref(res);
+                      const href = raceHrefFor(res.r, res.y, res.p);
                       return (
                         <div
                           key={j}

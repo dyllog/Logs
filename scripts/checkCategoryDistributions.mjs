@@ -40,6 +40,26 @@ function bandInfo(cat) {
 }
 const span = b => (b.open ? Infinity : b.hi - b.lo);
 
+/**
+ * Every category SHAPE the archive is allowed to store.
+ *
+ * Bands, open-ended bands, a single exact age (sources that publish gender+age
+ * rather than a band), the named non-age classes, a bare gender, and the
+ * explicit "not recorded" placeholder. Anything else is a format this pipeline
+ * does not understand.
+ */
+const KNOWN_CAT_SHAPES = [
+  /^[MW]\s+\d{1,3}\s*[–—-]\s*\d{1,3}$/,   // M 40–44
+  /^[MW]\s+\d{1,3}\s*\+$/,                 // W 75+
+  /^[MW]\s+\d{1,3}$/,                      // W 37   (exact age, band unpublished)
+  /^[MW]\s+(Open|Elite|Senior|Junior|Masters)$/i,
+  /^[MW]\s+Under\s*\d{1,3}$/i,             // M Under 10  (youth band, Mt Maunganui 5k)
+  /^[MW]$/,                                // gender only
+  /^(Open|Elite)$/i,                       // class known, gender not recorded
+  /^(—|-)?$/,                              // not recorded
+];
+const isKnownCatShape = (c) => KNOWN_CAT_SHAPES.some(re => re.test(String(c ?? '').trim()));
+
 const files = fs.readdirSync(dataDir)
   .filter(f => f.startsWith('results-') && f.endsWith('.json'))
   .sort();
@@ -50,6 +70,28 @@ for (const file of files) {
   try { rows = JSON.parse(fs.readFileSync(path.join(dataDir, file), 'utf8')); }
   catch { continue; }
   if (!Array.isArray(rows) || !rows.length) continue;
+
+  // Rule D — UNRECOGNISED CATEGORY FORMAT. Deliberately has no threshold.
+  //
+  // Rules A–C are all proportion- or size-gated (>60% of a gender, ≥200
+  // finishers, <4 distinct bands), which is the right instrument for "this
+  // distribution looks wrong" but the wrong one for "this string is not a
+  // category". Devonport carried 141 packed codes ("M 7099") for years, spread
+  // 2–8 per file across 20 files — never close to any threshold, and invisible
+  // until the age-grader listed them as ungradable. A category the pipeline
+  // cannot parse is a defect at one row, so this counts rather than weighs.
+  const unknown = new Map();
+  for (const r of rows) {
+    const c = String(r.cat ?? '').trim();
+    if (isKnownCatShape(c)) continue;
+    unknown.set(c, (unknown.get(c) ?? 0) + 1);
+  }
+  if (unknown.size) {
+    const detail = [...unknown].sort((a, b) => b[1] - a[1]).slice(0, 4)
+      .map(([c, n]) => `"${c}"×${n}`).join(', ');
+    const total = [...unknown.values()].reduce((a, b) => a + b, 0);
+    warnings.push(`${file}: ${total} row(s) in an unrecognised category format — ${detail}`);
+  }
 
   const banded = rows.map(r => bandInfo(r.cat)).filter(Boolean);
   if (!banded.length) continue; // Open-only / no age data — honest absence, skip

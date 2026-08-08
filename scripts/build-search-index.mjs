@@ -39,6 +39,7 @@
 import fs   from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { roadRaceLabels } from '../src/data/roadEvents.mjs';
 import { trailFileMeta } from '../src/data/trailEvents.mjs';
 import { NAME_DISAMBIGUATION } from '../src/data/nameDisambiguation.mjs';
 
@@ -49,39 +50,10 @@ const OUT_DIR   = path.join(DATA_DIR, 'search');
 const DETAIL_DIR = path.join(DATA_DIR, 'search-detail');
 
 // ─── Race label map ───────────────────────────────────────────────────────────
-const RACE_LABELS = {
-  '':              'Auckland Marathon',
-  'half':          'Auckland Half',
-  'chc':           'Christchurch Marathon',
-  'chc-half':      'Christchurch Half',
-  'rot':           'Rotorua Marathon',
-  'rot-half':      'Rotorua Half',
-  'qt':            'Queenstown Marathon',
-  'qt-half':       'Queenstown Half',
-  'hb':            "Hawke's Bay Marathon",
-  'hb-half':       "Hawke's Bay Half",
-  'wf-half':       'Waterfront Half',
-  'wf-10k':        'Waterfront 10k',
-  'dev-half':      'Devonport Half',
-  'dev-10k':       'Devonport 10k',
-  'coast-half':    'Coatesville Half',
-  'omaha-half':    'Omaha Half',
-  'omaha-10k':     'Omaha 10k',
-  'kerikeri-half': 'Kerikeri Half',
-  'maraetai-half':    'Maraetai Half',
-  'maraetai-10k':     'Maraetai 10k',
-  'wellington-half':  'Wellington Half',
-  'wellington-mar':   'Wellington Marathon',
-  'tamaki-half':      'Tamaki River Half',
-  'tamaki-10k':       'Tamaki River 10k',
-  'mtm-half':         'Mt Maunganui Half',
-  'mtm-10k':          'Mt Maunganui 10k',
-  'mtm-5k':           'Mt Maunganui 5k',
-  'whanganui-mar':    'Whanganui Marathon',
-  'whanganui-half':   'Whanganui Half',
-  'whanganui-10k':    'Whanganui 10k',
-  'whanganui-5k':     'Whanganui 5k',
-};
+// Labels come from the shared road registration. This map used to be a local
+// copy that had already drifted — Onehunga and Orewa were missing from it, so
+// those results rendered as their raw file key in search.
+const RACE_LABELS = roadRaceLabels();
 
 // Trail file keys ({familySlug}-{subEventId}) and their era-stable labels come
 // from the trail config — one source of truth with the converter and canon.

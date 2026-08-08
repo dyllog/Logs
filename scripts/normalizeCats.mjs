@@ -33,6 +33,17 @@ export function normalizeCat(cat) {
   const g = m[1];
   let rest = m[2].trim();
 
+  // A packed code that picked up a separating space — "M 7099" rather than
+  // "M7099". decodePackedCat above anchors on no space, so these slipped past
+  // the safety net and reached the age-grader as an unreadable band (141
+  // Devonport rows). Four bare digits after a gender letter is not a band in
+  // any convention the archive uses, so this is unambiguous rather than a
+  // guess; it decodes by exactly the same spec.
+  if (/^\d{4}$/.test(rest)) {
+    const repacked = decodePackedCat(`${g === 'W' ? 'F' : 'M'}${rest}`);
+    if (repacked) return repacked;
+  }
+
   if (/^elite$/i.test(rest)) return `${g} Elite`;
   if (/^open$/i.test(rest))  return `${g} Open`;
 

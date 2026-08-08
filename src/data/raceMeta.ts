@@ -57,12 +57,20 @@ export interface RaceDistance {
   stats: YearStat[];
   /** Averages + full record card only render when hasData !== false. */
   hasData?: boolean;
-  elevation: [number, number][];
-  annotations: { km: number; label: string }[];
-  climb: string;
-  descent: string;
-  net: string;
-  netSub: string;
+  /**
+   * Indicative elevation trace. OPTIONAL, and absent is a valid state rather
+   * than a gap to fill: these traces are hand-estimated from known route
+   * characteristics, not surveyed, so authoring one for a race nobody has
+   * ridden would be inventing data. RaceProfile omits the course-profile chart
+   * and the climb/descent/net figures when it is missing, and still renders
+   * surface and character. Existing estimated traces keep their caveat.
+   */
+  elevation?: [number, number][];
+  annotations?: { km: number; label: string }[];
+  climb?: string;
+  descent?: string;
+  net?: string;
+  netSub?: string;
   /** Overrides meta.overviewRight for this distance (Auckland). */
   overviewRight?: string;
   /** Overrides meta.courseField for this distance (Devonport, Mount Maunganui). */
@@ -84,14 +92,25 @@ export interface RaceMeta {
   location: string;
   /** Defaults to 'Course'. */
   courseFieldLabel?: string;
-  courseField: string;
-  nextEdition: string;
-  entryUrl: string;
-  entryText: string;
-  overviewRight: string;
-  surface: string;
-  /** 'Certification' (Auckland) or 'Character' (all others). */
-  secondaryLabel: string;
+  /**
+   * The following are all OPTIONAL, and each omits its own row when absent.
+   *
+   * They were required, which meant registering a new family demanded four
+   * separate pieces of course prose — courseField, overviewRight, surface and
+   * secondaryBody — before the page would typecheck. In practice a newly
+   * ingested race has one short factual description available, and requiring
+   * four invites three of them to be invented. Supply what is known; the page
+   * renders the rest away.
+   */
+  courseField?: string;
+  nextEdition?: string;
+  entryUrl?: string;
+  /** Defaults to the entry URL with its scheme stripped. */
+  entryText?: string;
+  overviewRight?: string;
+  surface?: string;
+  /** 'Certification' (Auckland) or 'Character' (all others, and the default). */
+  secondaryLabel?: string;
   secondaryBody: string;
   averagesNote?: string;
   decorativePills?: string[];

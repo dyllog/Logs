@@ -32,6 +32,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { roadWorksheetMeta } from '../src/data/roadEvents.mjs';
 import { trailFileMeta } from '../src/data/trailEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,43 +55,8 @@ const FALLBACK_NAMES = [
 // ─── File-key → race metadata (must mirror buildAthleteCanon.mjs FILE_META) ───
 // Needed to reconstruct each source row's recordId so we can join back the raw
 // category / club / nationality that the profile shards drop.
-const FILE_META = {
-  '':                { label: 'Auckland Marathon',     raceSlug: 'auckland-marathon',        distId: 'mar'  },
-  'half':            { label: 'Auckland Half',         raceSlug: 'auckland-marathon',        distId: 'half' },
-  'rot':             { label: 'Rotorua Marathon',      raceSlug: 'rotorua-marathon',         distId: 'mar'  },
-  'rot-half':        { label: 'Rotorua Half',          raceSlug: 'rotorua-marathon',         distId: 'half' },
-  'chc':             { label: 'Christchurch Marathon', raceSlug: 'christchurch-marathon',    distId: 'mar'  },
-  'chc-half':        { label: 'Christchurch Half',     raceSlug: 'christchurch-marathon',    distId: 'half' },
-  'qt':              { label: 'Queenstown Marathon',   raceSlug: 'queenstown-marathon',      distId: 'mar'  },
-  'qt-half':         { label: 'Queenstown Half',       raceSlug: 'queenstown-marathon',      distId: 'half' },
-  'hb':              { label: "Hawke's Bay Marathon",  raceSlug: 'hawkes-bay-marathon',      distId: 'mar'  },
-  'hb-half':         { label: "Hawke's Bay Half",      raceSlug: 'hawkes-bay-marathon',      distId: 'half' },
-  'wf-half':         { label: 'Waterfront Half',       raceSlug: 'waterfront-half-marathon', distId: 'half' },
-  'wf-10k':          { label: 'Waterfront 10k',        raceSlug: 'waterfront-half-marathon', distId: '10k'  },
-  'dev-half':        { label: 'Devonport Half',        raceSlug: 'devonport-half-marathon',  distId: 'half' },
-  'dev-10k':         { label: 'Devonport 10k',         raceSlug: 'devonport-half-marathon',  distId: '10k'  },
-  'coast-half':      { label: 'Coatesville Half',      raceSlug: 'coatesville-half-marathon',distId: 'half' },
-  'omaha-half':      { label: 'Omaha Half',            raceSlug: 'omaha-half-marathon',      distId: 'half' },
-  'omaha-10k':       { label: 'Omaha 10k',             raceSlug: 'omaha-half-marathon',      distId: '10k'  },
-  'maraetai-half':   { label: 'Maraetai Half',         raceSlug: 'maraetai-half-marathon',   distId: 'half' },
-  'maraetai-10k':    { label: 'Maraetai 10k',          raceSlug: 'maraetai-half-marathon',   distId: '10k'  },
-  'kerikeri-half':   { label: 'Kerikeri Half',         raceSlug: 'kerikeri-half-marathon',   distId: 'half' },
-  'wellington-mar':  { label: 'Wellington Marathon',   raceSlug: 'wellington-marathon',      distId: 'mar'  },
-  'wellington-half': { label: 'Wellington Half',       raceSlug: 'wellington-marathon',      distId: 'half' },
-  'onehunga-half':   { label: 'Onehunga Half',         raceSlug: 'onehunga-half-marathon',   distId: 'half' },
-  'onehunga-10k':    { label: 'Onehunga 10k',          raceSlug: 'onehunga-half-marathon',   distId: '10k'  },
-  'orewa-half':      { label: 'Orewa Half',            raceSlug: 'orewa-half-marathon',      distId: 'half' },
-  'orewa-10k':       { label: 'Orewa 10k',             raceSlug: 'orewa-half-marathon',      distId: '10k'  },
-  'tamaki-half':     { label: 'Tamaki River Half',     raceSlug: 'tamaki-river-half-marathon',distId: 'half' },
-  'tamaki-10k':      { label: 'Tamaki River 10k',      raceSlug: 'tamaki-river-half-marathon',distId: '10k'  },
-  'mtm-half':        { label: 'Mt Maunganui Half',     raceSlug: 'mount-maunganui-half-marathon', distId: 'half' },
-  'mtm-10k':         { label: 'Mt Maunganui 10k',      raceSlug: 'mount-maunganui-half-marathon', distId: '10k'  },
-  'mtm-5k':          { label: 'Mt Maunganui 5k',       raceSlug: 'mount-maunganui-half-marathon', distId: '5k'   },
-  'whanganui-mar':   { label: 'Whanganui Marathon',    raceSlug: 'whanganui-three-bridges-marathon', distId: 'mar'  },
-  'whanganui-half':  { label: 'Whanganui Half',        raceSlug: 'whanganui-three-bridges-marathon', distId: 'half' },
-  'whanganui-10k':   { label: 'Whanganui 10k',         raceSlug: 'whanganui-three-bridges-marathon', distId: '10k'  },
-  'whanganui-5k':    { label: 'Whanganui 5k',          raceSlug: 'whanganui-three-bridges-marathon', distId: '5k'   },
-};
+// Road event metadata, derived from the shared road registration.
+const FILE_META = roadWorksheetMeta();
 // Trail keys ({familySlug}-{subEventId}) come from the trail config, so the
 // join can't drift from what the converter emitted.
 const TRAIL_META = trailFileMeta();

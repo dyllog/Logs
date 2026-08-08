@@ -70,6 +70,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { roadSlugDist } from '../src/data/roadEvents.mjs';
 import { trailFileMeta } from '../src/data/trailEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -316,27 +317,8 @@ function suggestGroups(p) {
 
 // ─── Load nationality per record (profile shards drop it to stay lean) ───────
 const TRAIL_META = trailFileMeta();
-const ROAD_META = {
-  '': 'auckland-marathon:mar', 'half': 'auckland-marathon:half',
-  'rot': 'rotorua-marathon:mar', 'rot-half': 'rotorua-marathon:half',
-  'chc': 'christchurch-marathon:mar', 'chc-half': 'christchurch-marathon:half',
-  'qt': 'queenstown-marathon:mar', 'qt-half': 'queenstown-marathon:half',
-  'hb': 'hawkes-bay-marathon:mar', 'hb-half': 'hawkes-bay-marathon:half',
-  'wf-half': 'waterfront-half-marathon:half', 'wf-10k': 'waterfront-half-marathon:10k',
-  'dev-half': 'devonport-half-marathon:half', 'dev-10k': 'devonport-half-marathon:10k',
-  'coast-half': 'coatesville-half-marathon:half',
-  'omaha-half': 'omaha-half-marathon:half', 'omaha-10k': 'omaha-half-marathon:10k',
-  'maraetai-half': 'maraetai-half-marathon:half', 'maraetai-10k': 'maraetai-half-marathon:10k',
-  'kerikeri-half': 'kerikeri-half-marathon:half',
-  'wellington-mar': 'wellington-marathon:mar', 'wellington-half': 'wellington-marathon:half',
-  'onehunga-half': 'onehunga-half-marathon:half', 'onehunga-10k': 'onehunga-half-marathon:10k',
-  'orewa-half': 'orewa-half-marathon:half', 'orewa-10k': 'orewa-half-marathon:10k',
-  'tamaki-half': 'tamaki-river-half-marathon:half', 'tamaki-10k': 'tamaki-river-half-marathon:10k',
-  'mtm-half': 'mount-maunganui-half-marathon:half', 'mtm-10k': 'mount-maunganui-half-marathon:10k',
-  'mtm-5k': 'mount-maunganui-half-marathon:5k',
-  'whanganui-mar': 'whanganui-three-bridges-marathon:mar', 'whanganui-half': 'whanganui-three-bridges-marathon:half',
-  'whanganui-10k': 'whanganui-three-bridges-marathon:10k', 'whanganui-5k': 'whanganui-three-bridges-marathon:5k',
-};
+// key → "raceSlug:distId", derived from the shared road registration.
+const ROAD_META = roadSlugDist();
 const natById = new Map();
 for (const f of fs.readdirSync(DATA_DIR).filter(f => f.startsWith('results-') && f.endsWith('.json'))) {
   const key = f.replace(/^results-/, '').replace(/-?\d{4}\.json$/, '');

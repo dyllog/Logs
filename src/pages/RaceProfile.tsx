@@ -57,6 +57,10 @@ function RoadRaceProfile() {
   const active = meta.distances[distIdx] ?? meta.distances[0];
   const stats = active.stats;
   const hasData = active.hasData !== false;
+  // Elevation traces are authored estimates, not survey data, so a newly
+  // ingested race legitimately has none. Presence of the trace — not a separate
+  // flag — decides whether the course-profile chart and climb figures render.
+  const hasCourseProfile = (active.elevation?.length ?? 0) > 0;
 
   const seedCRM = stats.length === 0 ? 0 : Math.min(...stats.map(s => s.winnerM)) + 1;
   const seedCRW = stats.length === 0 ? 0 : Math.min(...stats.map(s => s.winnerW)) + 1;
@@ -68,6 +72,10 @@ function RoadRaceProfile() {
   const courseFieldLabel = meta.courseFieldLabel ?? 'Course';
   const courseFieldValue = active.courseField ?? meta.courseField;
   const overviewRight = active.overviewRight ?? meta.overviewRight;
+  // Link text defaults to the entry URL's host, so a new family supplies the
+  // URL alone rather than the URL and a hand-copied rendering of it.
+  const entryText = meta.entryText
+    ?? (meta.entryUrl ? meta.entryUrl.replace(/^https?:\/\//, '').replace(/\/+$/, '') : '');
   const secondaryBody = active.secondaryBody ?? meta.secondaryBody;
 
   return (
@@ -96,12 +104,18 @@ function RoadRaceProfile() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, fontSize: 12 }}>
               <div><div className="label mb-8">Location</div><div>{meta.location}</div></div>
-              <div><div className="label mb-8">{courseFieldLabel}</div><div>{courseFieldValue}</div></div>
-              <div><div className="label mb-8">Next edition</div><div>{meta.nextEdition}</div></div>
-              <div>
-                <div className="label mb-8">Entry</div>
-                <div><a href={meta.entryUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>{meta.entryText} ↗</a></div>
-              </div>
+              {courseFieldValue && (
+                <div><div className="label mb-8">{courseFieldLabel}</div><div>{courseFieldValue}</div></div>
+              )}
+              {meta.nextEdition && (
+                <div><div className="label mb-8">Next edition</div><div>{meta.nextEdition}</div></div>
+              )}
+              {meta.entryUrl && (
+                <div>
+                  <div className="label mb-8">Entry</div>
+                  <div><a href={meta.entryUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: 4 }}>{entryText} ↗</a></div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -127,21 +141,30 @@ function RoadRaceProfile() {
             <div>
               <div className="eyebrow mb-8">Race overview · {active.distLabel}</div>
               <h2 className="serif" style={{ fontSize: 32, margin: 0, letterSpacing: '-0.01em' }}>
-                {active.profileLong} course profile
+                {hasCourseProfile ? `${active.profileLong} course profile` : `${active.profileLong} overview`}
               </h2>
             </div>
             <div className="dimmed" style={{ fontSize: 12, maxWidth: 280, textAlign: 'right' }}>
               {overviewRight}
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 48, alignItems: 'start' }} className="overview-grid">
-            <div>
-              <ElevationChart key={active.key} data={active.elevation} annotations={active.annotations} />
-              <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.5, fontStyle: 'italic' }}>
-                Course profile shown is indicative, based on known route characteristics — not sourced from GPS/survey data.
+          {/* The elevation traces are hand-estimated, not surveyed (see the caveat
+              below), so a race without one shows no chart and no climb figures
+              rather than an invented profile. Surface and character still render. */}
+          <div
+            style={{ display: 'grid', gridTemplateColumns: hasCourseProfile ? '1.6fr 1fr' : '1fr', gap: 48, alignItems: 'start' }}
+            className="overview-grid"
+          >
+            {hasCourseProfile && (
+              <div>
+                <ElevationChart key={active.key} data={active.elevation!} annotations={active.annotations ?? []} />
+                <div className="dimmed mt-16" style={{ fontSize: 11, lineHeight: 1.5, fontStyle: 'italic' }}>
+                  Course profile shown is indicative, based on known route characteristics — not sourced from GPS/survey data.
+                </div>
               </div>
-            </div>
+            )}
             <div>
+              {hasCourseProfile && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)' }}>
                 {[
                   { label: 'Climb',   val: active.climb,   sub: '↑ cumulative' },
@@ -155,10 +178,10 @@ function RoadRaceProfile() {
                   </div>
                 ))}
               </div>
+              )}
               <div className="mt-24" style={{ fontSize: 12, lineHeight: 1.6 }}>
-                <div className="label mb-8">Surface</div>
-                <div>{meta.surface}</div>
-                <div className="label mt-16 mb-8">{meta.secondaryLabel}</div>
+                {meta.surface && <><div className="label mb-8">Surface</div><div>{meta.surface}</div></>}
+                <div className="label mt-16 mb-8">{meta.secondaryLabel ?? 'Character'}</div>
                 <div>{secondaryBody}</div>
               </div>
               {active.note && (

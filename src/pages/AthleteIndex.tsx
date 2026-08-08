@@ -3,58 +3,9 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
 import { loadSearchShard, displayFromKey, loadHitResults, letterOf, type SearchResult, type NameHit } from '@/lib/searchIndex';
 import { SharedNameChip, useSharedNames } from '@/lib/sharedNames';
+import { raceHrefFor } from '@/lib/raceLinks';
 
 const PAGE_SIZE = 100;
-
-const LABEL_TO_RACE_KEY: Record<string, string> = {
-  'Auckland Marathon':     'auckland-full',
-  'Auckland Half':         'auckland-half',
-  'Christchurch Marathon': 'chc',
-  'Christchurch Half':     'chc-half',
-  'Rotorua Marathon':      'rotorua',
-  'Rotorua Half':          'rotorua-half',
-  'Queenstown Marathon':   'qt',
-  'Queenstown Half':       'qt-half',
-  "Hawke's Bay Marathon":  'hb',
-  "Hawke's Bay Half":      'hb-half',
-  'Waterfront Half':       'wf-half',
-  'Waterfront 10k':        'wf-10k',
-  'Devonport Half':        'dev-half',
-  'Devonport 10k':         'dev-10k',
-  'Coatesville Half':      'coast-half',
-  'Omaha Half':            'omaha-half',
-  'Omaha 10k':             'omaha-10k',
-  'Kerikeri Half':         'kerikeri-half',
-  'Maraetai Half':         'maraetai-half',
-  'Maraetai 10k':          'maraetai-10k',
-  'Wellington Half':       'wellington-half',
-  'Wellington Marathon':   'wellington-mar',
-  'Tamaki River Half':     'tamaki-half',
-  'Tamaki River 10k':      'tamaki-10k',
-};
-
-function raceHref(res: SearchResult): string | null {
-  const r = res.r.toLowerCase();
-  let base: string | null = null;
-  if (r.includes('auckland marathon') || r === 'auckland half') base = '/races/auckland-marathon';
-  else if (r.includes('rotorua'))      base = '/races/rotorua-marathon';
-  else if (r.includes('christchurch')) base = '/races/christchurch-marathon';
-  else if (r.includes('queenstown'))   base = '/races/queenstown-marathon';
-  else if (r.includes('hawke'))        base = '/races/hawkes-bay-marathon';
-  else if (r.includes('waterfront'))   base = '/races/waterfront-half-marathon';
-  else if (r.includes('devonport'))    base = '/races/devonport-half-marathon';
-  else if (r.includes('coatesville')) base = '/races/coatesville-half-marathon';
-  else if (r.includes('omaha'))        base = '/races/omaha-half-marathon';
-  else if (r.includes('maraetai'))     base = '/races/maraetai-half-marathon';
-  else if (r.includes('kerikeri'))     base = '/races/kerikeri-half-marathon';
-  else if (r.includes('wellington'))   base = '/races/wellington-marathon';
-  else if (r.includes('tamaki'))       base = '/races/tamaki-river-half-marathon';
-  if (!base) return null;
-  const key = LABEL_TO_RACE_KEY[res.r];
-  const params = new URLSearchParams({ year: String(res.y), pos: String(res.p) });
-  if (key) params.set('race', key);
-  return `${base}?${params}`;
-}
 
 interface Row {
   id: string;
@@ -208,7 +159,7 @@ export default function AthleteIndex() {
                           </div>
                         )}
                         {(row.results ?? []).map((res, j) => {
-                          const href = raceHref(res);
+                          const href = raceHrefFor(res.r, res.y, res.p);
                           return (
                             <div
                               key={j}

@@ -23,6 +23,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { nameKey } from './normalizeAthleteName.mjs';
+import { roadWorksheetMeta } from '../src/data/roadEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT     = path.resolve(__dirname, '..');
@@ -30,43 +31,8 @@ const DATA_DIR = path.join(ROOT, 'public', 'data');
 const CANON_PATH = path.join(ROOT, 'src', 'data', 'athleteCanon.json');
 
 // ─── File-key → race metadata (mirrors buildAthleteCanon.mjs FILE_META) ───────
-const FILE_META = {
-  '':                { label: 'Auckland Marathon',     distId: 'mar'  },
-  'half':            { label: 'Auckland Half',         distId: 'half' },
-  'rot':             { label: 'Rotorua Marathon',      distId: 'mar'  },
-  'rot-half':        { label: 'Rotorua Half',          distId: 'half' },
-  'chc':             { label: 'Christchurch Marathon', distId: 'mar'  },
-  'chc-half':        { label: 'Christchurch Half',     distId: 'half' },
-  'qt':              { label: 'Queenstown Marathon',   distId: 'mar'  },
-  'qt-half':         { label: 'Queenstown Half',       distId: 'half' },
-  'hb':              { label: "Hawke's Bay Marathon",  distId: 'mar'  },
-  'hb-half':         { label: "Hawke's Bay Half",      distId: 'half' },
-  'wf-half':         { label: 'Waterfront Half',       distId: 'half' },
-  'wf-10k':          { label: 'Waterfront 10k',        distId: '10k'  },
-  'dev-half':        { label: 'Devonport Half',        distId: 'half' },
-  'dev-10k':         { label: 'Devonport 10k',         distId: '10k'  },
-  'coast-half':      { label: 'Coatesville Half',      distId: 'half' },
-  'omaha-half':      { label: 'Omaha Half',            distId: 'half' },
-  'omaha-10k':       { label: 'Omaha 10k',             distId: '10k'  },
-  'maraetai-half':   { label: 'Maraetai Half',         distId: 'half' },
-  'maraetai-10k':    { label: 'Maraetai 10k',          distId: '10k'  },
-  'kerikeri-half':   { label: 'Kerikeri Half',         distId: 'half' },
-  'wellington-mar':  { label: 'Wellington Marathon',   distId: 'mar'  },
-  'wellington-half': { label: 'Wellington Half',       distId: 'half' },
-  'onehunga-half':   { label: 'Onehunga Half',         distId: 'half' },
-  'onehunga-10k':    { label: 'Onehunga 10k',          distId: '10k'  },
-  'orewa-half':      { label: 'Orewa Half',            distId: 'half' },
-  'orewa-10k':       { label: 'Orewa 10k',             distId: '10k'  },
-  'tamaki-half':     { label: 'Tamaki River Half',     distId: 'half' },
-  'tamaki-10k':      { label: 'Tamaki River 10k',      distId: '10k'  },
-  'mtm-half':        { label: 'Mt Maunganui Half',     distId: 'half' },
-  'mtm-10k':         { label: 'Mt Maunganui 10k',      distId: '10k'  },
-  'mtm-5k':          { label: 'Mt Maunganui 5k',       distId: '5k'   },
-  'whanganui-mar':   { label: 'Whanganui Marathon',    distId: 'mar'  },
-  'whanganui-half':  { label: 'Whanganui Half',        distId: 'half' },
-  'whanganui-10k':   { label: 'Whanganui 10k',         distId: '10k'  },
-  'whanganui-5k':    { label: 'Whanganui 5k',          distId: '5k'   },
-};
+// Road event metadata, derived from the shared road registration.
+const FILE_META = roadWorksheetMeta();
 
 function fileMeta(filename) {
   const base = path.basename(filename);

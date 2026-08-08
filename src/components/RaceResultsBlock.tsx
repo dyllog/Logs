@@ -17,10 +17,11 @@ import { tamakiHalfStats, tamaki10kStats, TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } 
 import { mtmHalfStats, mtm10kStats, mtm5kStats, MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from '@/data/mtmData';
 import FullResultsOverlay from './FullResultsOverlay';
 import { normalise, getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
+import type { RaceResultsId } from '@/data/raceMeta';
 
 interface RaceResultsBlockProps {
   dist: string;
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half' | 'omaha-half' | 'omaha-10k' | 'maraetai-half' | 'maraetai-10k' | 'kerikeri-half' | 'wellington-mar' | 'wellington-half' | 'onehunga-half' | 'onehunga-10k' | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k' | 'mtm-half' | 'mtm-10k' | 'mtm-5k';
+  raceId?: RaceResultsId;
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }

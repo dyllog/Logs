@@ -69,64 +69,6 @@ function bestResultMeta(results: ResultEntry[]): string {
   return count === 1 ? '1 result on record' : `${count} results on record`;
 }
 
-// Maps the exact race labels stored in the search index to a page URL
-function raceBase(label: string): string | null {
-  const r = label.toLowerCase();
-  if (r.includes('auckland marathon') || r === 'auckland half')
-                                           return '/races/auckland-marathon';
-  if (r.includes('rotorua'))               return '/races/rotorua-marathon';
-  if (r.includes('christchurch'))          return '/races/christchurch-marathon';
-  if (r.includes('queenstown'))            return '/races/queenstown-marathon';
-  if (r.includes('hawke'))                 return '/races/hawkes-bay-marathon';
-  if (r.includes('waterfront'))            return '/races/waterfront-half-marathon';
-  if (r.includes('devonport'))             return '/races/devonport-half-marathon';
-  if (r.includes('coatesville'))           return '/races/coatesville-half-marathon';
-  if (r.includes('omaha'))                 return '/races/omaha-half-marathon';
-  if (r.includes('maraetai'))              return '/races/maraetai-half-marathon';
-  if (r.includes('kerikeri'))              return '/races/kerikeri-half-marathon';
-  if (r.includes('wellington'))            return '/races/wellington-marathon';
-  if (r.includes('tamaki'))               return '/races/tamaki-river-half-marathon';
-  return null;
-}
-
-// Maps the exact race label to the raceId used by RaceResultsBlock
-// (must stay in sync with RACE_LABELS in scripts/build-search-index.mjs)
-const LABEL_TO_RACE_KEY: Record<string, string> = {
-  'Auckland Marathon':     'auckland-full',
-  'Auckland Half':         'auckland-half',
-  'Christchurch Marathon': 'chc',
-  'Christchurch Half':     'chc-half',
-  'Rotorua Marathon':      'rotorua',
-  'Rotorua Half':          'rotorua-half',
-  'Queenstown Marathon':   'qt',
-  'Queenstown Half':       'qt-half',
-  "Hawke's Bay Marathon":  'hb',
-  "Hawke's Bay Half":      'hb-half',
-  'Waterfront Half':       'wf-half',
-  'Waterfront 10k':        'wf-10k',
-  'Devonport Half':        'dev-half',
-  'Devonport 10k':         'dev-10k',
-  'Coatesville Half':      'coast-half',
-  'Omaha Half':            'omaha-half',
-  'Omaha 10k':             'omaha-10k',
-  'Kerikeri Half':         'kerikeri-half',
-  'Maraetai Half':         'maraetai-half',
-  'Maraetai 10k':          'maraetai-10k',
-  'Wellington Half':       'wellington-half',
-  'Wellington Marathon':   'wellington-mar',
-  'Tamaki River Half':     'tamaki-half',
-  'Tamaki River 10k':      'tamaki-10k',
-};
-
-function raceHref(res: ResultEntry): string | null {
-  const base = raceBase(res.r);
-  if (!base) return null;
-  const key = LABEL_TO_RACE_KEY[res.r];
-  const params = new URLSearchParams({ year: String(res.y), pos: String(res.p) });
-  if (key) params.set('race', key);
-  return `${base}?${params}`;
-}
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FinisherMatch {
@@ -318,7 +260,7 @@ export default function InlineSearchDropdown({ query, onClose }: InlineSearchDro
             {isExpanded && (
               <div className="lp-search-dropdown-results">
                 {(detail[`${m.hit.key}#${m.hit.idx}`] ?? []).map((res, j) => {
-                  const href = raceHref(res);
+                  const href = raceHrefFor(res.r, res.y, res.p);
                   return (
                     <div
                       key={j}

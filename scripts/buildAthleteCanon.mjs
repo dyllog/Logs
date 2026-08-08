@@ -25,6 +25,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizeName, nameKey } from './normalizeAthleteName.mjs';
+import { roadFileMeta } from '../src/data/roadEvents.mjs';
 import { trailFileMeta } from '../src/data/trailEvents.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -41,46 +42,9 @@ const REPORT_PATH    = path.join(ROOT, 'athlete-canon-report.json');
 
 // ─── File-key → race metadata ────────────────────────────────────────────────
 // key = filename minus "results-" prefix and "-YYYY.json" suffix.
-const FILE_META = {
-  '':                { label: 'Auckland Marathon',     raceSlug: 'auckland-marathon',        dist: '42.2 km', distId: 'mar'  },
-  'half':            { label: 'Auckland Half',         raceSlug: 'auckland-marathon',        dist: '21.1 km', distId: 'half' },
-  'rot':             { label: 'Rotorua Marathon',      raceSlug: 'rotorua-marathon',         dist: '42.2 km', distId: 'mar'  },
-  'rot-half':        { label: 'Rotorua Half',          raceSlug: 'rotorua-marathon',         dist: '21.1 km', distId: 'half' },
-  'chc':             { label: 'Christchurch Marathon', raceSlug: 'christchurch-marathon',    dist: '42.2 km', distId: 'mar'  },
-  'chc-half':        { label: 'Christchurch Half',     raceSlug: 'christchurch-marathon',    dist: '21.1 km', distId: 'half' },
-  'qt':              { label: 'Queenstown Marathon',   raceSlug: 'queenstown-marathon',      dist: '42.2 km', distId: 'mar'  },
-  'qt-half':         { label: 'Queenstown Half',       raceSlug: 'queenstown-marathon',      dist: '21.1 km', distId: 'half' },
-  'hb':              { label: "Hawke's Bay Marathon",  raceSlug: 'hawkes-bay-marathon',      dist: '42.2 km', distId: 'mar'  },
-  'hb-half':         { label: "Hawke's Bay Half",      raceSlug: 'hawkes-bay-marathon',      dist: '21.1 km', distId: 'half' },
-  'wf-half':         { label: 'Waterfront Half',       raceSlug: 'waterfront-half-marathon', dist: '21.1 km', distId: 'half' },
-  'wf-10k':          { label: 'Waterfront 10k',        raceSlug: 'waterfront-half-marathon', dist: '10 km',   distId: '10k'  },
-  'dev-half':        { label: 'Devonport Half',        raceSlug: 'devonport-half-marathon',  dist: '21.1 km', distId: 'half' },
-  'dev-10k':         { label: 'Devonport 10k',         raceSlug: 'devonport-half-marathon',  dist: '10 km',   distId: '10k'  },
-  'coast-half':      { label: 'Coatesville Half',      raceSlug: 'coatesville-half-marathon',dist: '21.1 km', distId: 'half' },
-  'omaha-half':      { label: 'Omaha Half',            raceSlug: 'omaha-half-marathon',      dist: '21.1 km', distId: 'half' },
-  'omaha-10k':       { label: 'Omaha 10k',             raceSlug: 'omaha-half-marathon',      dist: '10 km',   distId: '10k'  },
-  'maraetai-half':   { label: 'Maraetai Half',         raceSlug: 'maraetai-half-marathon',   dist: '21.1 km', distId: 'half' },
-  'maraetai-10k':    { label: 'Maraetai 10k',          raceSlug: 'maraetai-half-marathon',   dist: '10 km',   distId: '10k'  },
-  'kerikeri-half':   { label: 'Kerikeri Half',         raceSlug: 'kerikeri-half-marathon',   dist: '21.1 km', distId: 'half' },
-  'wellington-mar':  { label: 'Wellington Marathon',   raceSlug: 'wellington-marathon',      dist: '42.2 km', distId: 'mar'  },
-  'wellington-half': { label: 'Wellington Half',       raceSlug: 'wellington-marathon',      dist: '21.1 km', distId: 'half' },
-  'onehunga-half':   { label: 'Onehunga Half',         raceSlug: 'onehunga-half-marathon',   dist: '21.1 km', distId: 'half' },
-  'onehunga-10k':    { label: 'Onehunga 10k',          raceSlug: 'onehunga-half-marathon',   dist: '10 km',   distId: '10k'  },
-  'orewa-half':      { label: 'Orewa Half',            raceSlug: 'orewa-half-marathon',      dist: '21.1 km', distId: 'half' },
-  'orewa-10k':       { label: 'Orewa 10k',             raceSlug: 'orewa-half-marathon',      dist: '10 km',   distId: '10k'  },
-  'tamaki-half':     { label: 'Tamaki River Half',     raceSlug: 'tamaki-river-half-marathon',dist: '21.1 km', distId: 'half' },
-  'tamaki-10k':      { label: 'Tamaki River 10k',      raceSlug: 'tamaki-river-half-marathon',dist: '10 km',   distId: '10k'  },
-  'mtm-half':        { label: 'Mt Maunganui Half',     raceSlug: 'mount-maunganui-half-marathon', dist: '21.1 km', distId: 'half' },
-  'mtm-10k':         { label: 'Mt Maunganui 10k',      raceSlug: 'mount-maunganui-half-marathon', dist: '10 km',   distId: '10k'  },
-  'mtm-5k':          { label: 'Mt Maunganui 5k',       raceSlug: 'mount-maunganui-half-marathon', dist: '5 km',    distId: '5k'   },
-  // Whanganui's 10k was published as "10K" in 2017/19/22 and "105K" (10.5K) in
-  // 2018/20/23/24/25 — one event, two labels. Recorded as 10 km on evidence:
-  // see the note in ROAD_FAMILIES in scripts/roadToJson.mjs.
-  'whanganui-mar':   { label: 'Whanganui Marathon',    raceSlug: 'whanganui-three-bridges-marathon', dist: '42.2 km', distId: 'mar'  },
-  'whanganui-half':  { label: 'Whanganui Half',        raceSlug: 'whanganui-three-bridges-marathon', dist: '21.1 km', distId: 'half' },
-  'whanganui-10k':   { label: 'Whanganui 10k',         raceSlug: 'whanganui-three-bridges-marathon', dist: '10 km',   distId: '10k'  },
-  'whanganui-5k':    { label: 'Whanganui 5k',          raceSlug: 'whanganui-three-bridges-marathon', dist: '5 km',    distId: '5k'   },
-};
+// Road events come from the shared registration module — see src/data/roadEvents.mjs.
+// Adding a family means editing that file and nothing here.
+const FILE_META = roadFileMeta();
 
 // Trail file keys ({familySlug}-{subEventId}) come from the trail config so the
 // canon can't drift from what the converter emitted. subEventId occupies the

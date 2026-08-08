@@ -16,12 +16,13 @@ import { orewaHalfStats, orewa10kStats, OREWA_HALF_YEARS, OREWA_10K_YEARS } from
 import { tamakiHalfStats, tamaki10kStats, TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS } from '@/data/tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats, MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from '@/data/mtmData';
 import { normalise, getAthleteSlug, preloadAthleteIndex } from '@/data/athleteProfiles';
+import type { RaceResultsId } from '@/data/raceMeta';
 
 interface FullResultsOverlayProps {
   open: boolean;
   year: number;
   dist?: '42.2 km' | '21.1 km';
-  raceId?: 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half' | 'qt' | 'qt-half' | 'wf-half' | 'wf-10k' | 'dev-half' | 'dev-10k' | 'coast-half' | 'omaha-half' | 'omaha-10k' | 'maraetai-half' | 'maraetai-10k' | 'kerikeri-half' | 'wellington-mar' | 'wellington-half' | 'onehunga-half' | 'onehunga-10k' | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k' | 'mtm-half' | 'mtm-10k' | 'mtm-5k';
+  raceId?: RaceResultsId;
   initialQ?: string;
   onClose: () => void;
   onOpenAthlete?: (name: string) => void;
