@@ -83,6 +83,45 @@ export const ROAD_FAMILIES = {
       { distKey: '5k',   distId: '5k',   dist: '5 km',    label: 'Whanganui 5k',       match: [/^5K Results - (\d{4})\.csv$/i] },
     ],
   },
+
+  saintclair: {
+    label:    'Saint Clair Vineyard Half',
+    dir:      'Saint Clair Vineyard Half',
+    key:      'saintclair',
+    raceSlug: 'saint-clair-vineyard-half-marathon',
+    tsFile:   'saintClairData.ts',
+    tsPrefix: 'SAINTCLAIR',
+    tsVar:    'saintClair',
+    // TIME CONVENTION, worth stating because it departs from the archive's.
+    // The 2022/2023 exports carry both a `Time` and a `Run` column, and `Run`
+    // runs 13-59s LONGER with a spread that grows with field size and distance
+    // — the signature of gun vs net, with `Run` as gun. But the published
+    // positions follow `Time` with ZERO inversions, against 28-135 for `Run`.
+    // `Time` is therefore the official ranking time, and it is the NET one.
+    // Recording gun here would put the archive's stored times at odds with
+    // every position the organiser published, so `Time` wins by header order.
+    // CURATION: Saint Clair times are net where other road families are gun,
+    // so they read very slightly fast in cross-race comparison (~1 min on the
+    // half). Flagged rather than silently normalised.
+    distances: [
+      { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Saint Clair Half', match: [/^Half Results - (\d{4})\.csv$/i] },
+      // 12 km, as the filename states. Checked rather than assumed, using the
+      // same same-runner method that reclassified Whanganui's quarter: solving
+      // against this family's known 21.1 km half gives an implied 12.35-12.84
+      // km (n=162), with 12.00 inside the IQR at the lower fatigue exponents
+      // and just outside at the highest.
+      //
+      // The lean is kept as a note, not acted on, because the two cases are not
+      // alike. Whanganui had a construction argument (one lap of a four-lap
+      // 42.2 km course) and a rival candidate the evidence excluded. Here there
+      // is neither, and there is a plausible confound: the 12k field is heavily
+      // recreational (371W/63M in 2021), so runners who enter both are likely
+      // treating the 12k as the easier option and running it relatively slower,
+      // which biases the implied distance long.
+      // CURATION: a course certificate would settle it; the filename stands.
+      { distKey: '12k',  distId: '12k',  dist: '12 km',   label: 'Saint Clair 12k',  match: [/^12K Results - (\d{4})\.csv$/i] },
+    ],
+  },
 };
 
 // ─── CSV parsing (quotes, embedded commas, embedded newlines) ────────────────
@@ -175,7 +214,11 @@ function parsePos(raw) {
 
 /** Header aliases, in preference order. Matching is case/space-insensitive. */
 const COLUMNS = {
-  pos:     ['position', 'place', 'pos', 'overall'],
+  // 'net pos' is last: where a file has both, the plain Position column is the
+  // published finish order. Saint Clair's 2022 exports drop Position entirely
+  // and carry only Net Pos, which without this alias would fail the required-
+  // column check and skip the file.
+  pos:     ['position', 'place', 'pos', 'overall', 'net pos'],
   name:    ['name', 'athlete', 'full name'],
   bib:     ['bib', 'race number', 'number', 'no'],
   time:    ['time', 'gun time', 'finish time', 'chip time', 'nett time', 'net time'],

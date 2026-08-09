@@ -85,6 +85,12 @@ export const ROAD_EVENTS = {
   // becomes a 10 km PB. Full reasoning in ROAD_FAMILIES, scripts/roadToJson.mjs.
   "whanganui-quarter":{ label: "Whanganui Quarter",      raceSlug: "whanganui-three-bridges-marathon",  dist: "10.5 km",  distId: "quarter" },
   "whanganui-5k":     { label: "Whanganui 5k",           raceSlug: "whanganui-three-bridges-marathon",  dist: "5 km",     distId: "5k" },
+
+  // Saint Clair ranks on NET time, unlike the rest of the road archive, which
+  // is on gun — the organiser's published positions follow the net column with
+  // zero inversions. See ROAD_FAMILIES in scripts/roadToJson.mjs.
+  "saintclair-half":  { label: "Saint Clair Half",       raceSlug: "saint-clair-vineyard-half-marathon", dist: "21.1 km", distId: "half" },
+  "saintclair-12k":   { label: "Saint Clair 12k",        raceSlug: "saint-clair-vineyard-half-marathon", dist: "12 km",   distId: "12k" },
 };
 
 /**
