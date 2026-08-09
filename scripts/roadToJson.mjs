@@ -54,23 +54,32 @@ export const ROAD_FAMILIES = {
     distances: [
       { distKey: 'mar',  distId: 'mar',  dist: '42.2 km', label: 'Whanganui Marathon', match: [/^Marathon Results - (\d{4})\.csv$/i] },
       { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Whanganui Half',     match: [/^Half Results - (\d{4})\.csv$/i] },
-      // "105K" is 10.5K, and it is the SAME event as the years published as
-      // "10K": the two filename styles cover 2018/20/23/24/25 and 2017/19/22,
-      // which together are exactly the year set of the 5K, half and marathon —
-      // one slot in the programme, labelled inconsistently.
+      // The QUARTER MARATHON — 10.55 km — published as "105K" in
+      // 2018/20/23/24/25 and, loosely, as "10K" in 2017/19/22. One event: those
+      // two year sets are together exactly the year set of the 5K, half and
+      // marathon, and 86 runners appear under both labels at a median time
+      // ratio of 0.984, so the labels are the same course as each other.
       //
-      // The distance is recorded as 10 km on evidence, not on the filename:
-      //   • 86 runners ran both a "10K" year and a "105K" year; median time
-      //     ratio 0.984, where a genuinely 5% longer course would give ~1.05.
-      //     So the two labels are the same course as each other.
-      //   • Against known 10 km races elsewhere in the archive that course
-      //     reads 1.077 — but Whanganui's half reads 1.068 and its marathon
-      //     1.057 at KNOWN 21.1/42.2 km. The inflation is a property of this
-      //     event and its field, not of the distance; a true 10.5 km would
-      //     read ~1.12.
-      // CURATION: if the organiser confirms a measured 10.5 km, split distKey
-      // and the PBs computed from it change. Nothing else does.
-      { distKey: '10k',  distId: '10k',  dist: '10 km',   label: 'Whanganui 10k',      match: [/^10K Results - (\d{4})\.csv$/i, /^105K Results - (\d{4})\.csv$/i] },
+      // It is 10.55 km by CONSTRUCTION, not by inference. The course is a
+      // single lap from Kowhai Park — four laps for the marathon, two for the
+      // half, one for the quarter — so the lap is 42.2/4 = 10.55 km, and the
+      // marathon and half are AIMS certified at 42.2/21.1. There is no 10 km
+      // event in the programme at all.
+      //
+      // An earlier pass here recorded it as 10 km, comparing these times
+      // against known 10 km races and correcting by an inflation factor taken
+      // from Whanganui's half and marathon. That was the wrong instrument
+      // twice over: it measured against a distance the programme never had,
+      // and it carried a factor derived from one field into another. Solving
+      // the distance from Whanganui's OWN results instead — calibrating the
+      // fatigue exponent on the half/marathon pairs, which are known 21.1/42.2
+      // — puts the quarter at 10.96 km (n=103, IQR 10.48–11.49). 10.55 falls
+      // inside that interval; 10.00 falls outside it.
+      //
+      // distId is 'quarter', NOT '10k': a 10.55 km time must never become a
+      // 10 km PB, and there is no WMA age-grading standard for the distance,
+      // so GRADED_DISTS correctly excludes it.
+      { distKey: 'quarter', distId: 'quarter', dist: '10.5 km', label: 'Whanganui Quarter', match: [/^10K Results - (\d{4})\.csv$/i, /^105K Results - (\d{4})\.csv$/i] },
       { distKey: '5k',   distId: '5k',   dist: '5 km',    label: 'Whanganui 5k',       match: [/^5K Results - (\d{4})\.csv$/i] },
     ],
   },

@@ -79,10 +79,11 @@ export const ROAD_EVENTS = {
 
   "whanganui-mar":    { label: "Whanganui Marathon",     raceSlug: "whanganui-three-bridges-marathon",  dist: "42.2 km",  distId: "mar" },
   "whanganui-half":   { label: "Whanganui Half",         raceSlug: "whanganui-three-bridges-marathon",  dist: "21.1 km",  distId: "half" },
-  // Published as "10K" in 2017/19/22 and "105K" (10.5K) in 2018/20/23-25.
-  // One event, recorded as 10 km on evidence — see the CURATION note in
-  // ROAD_FAMILIES in scripts/roadToJson.mjs.
-  "whanganui-10k":    { label: "Whanganui 10k",          raceSlug: "whanganui-three-bridges-marathon",  dist: "10 km",    distId: "10k" },
+  // The quarter marathon: one lap of the four-lap marathon course, so 10.55 km
+  // by construction. Published as "105K" in 2018/20/23-25 and loosely as "10K"
+  // in 2017/19/22 — one event, two labels. distId is 'quarter' so it never
+  // becomes a 10 km PB. Full reasoning in ROAD_FAMILIES, scripts/roadToJson.mjs.
+  "whanganui-quarter":{ label: "Whanganui Quarter",      raceSlug: "whanganui-three-bridges-marathon",  dist: "10.5 km",  distId: "quarter" },
   "whanganui-5k":     { label: "Whanganui 5k",           raceSlug: "whanganui-three-bridges-marathon",  dist: "5 km",     distId: "5k" },
 };
 

@@ -30,13 +30,12 @@ function parseBib(raw) {
 // Col 0: Position, Col 1: Name, Col 2: Bib, Col 3: Time,
 // Col 4: Gender (M/F), Col 5: Gender Position, Col 6: Age Group, Col 7: Age Group Position
 function parseCSV(text) {
-  const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = clean.split('\n').filter(l => l.trim());
+  const lines = parseCsvGrid(text);
   if (lines.length < 2) return [];
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = lines[i];
     const pos = parseInt(cols[0]?.trim() ?? '', 10);
     if (!pos || pos <= 0 || isNaN(pos)) continue;
 
@@ -174,4 +173,5 @@ for (const year of years) {
 
 // Rebuild search index
 import { execSync } from 'child_process';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 execSync('node scripts/build-search-index.mjs', { stdio: 'inherit' });

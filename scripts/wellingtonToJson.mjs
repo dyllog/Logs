@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 
 function normalizeCat(cat) {
   if (!cat || cat === '—') return cat;
@@ -95,11 +96,10 @@ function parseCatAndGender(catRaw, genderColRaw) {
 }
 
 function parseCSV(text) {
-  const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = clean.split('\n').filter(l => l.trim());
+  const lines = parseCsvGrid(text);
   if (lines.length < 2) return [];
 
-  const header = lines[0].toLowerCase();
+  const header = lines[0].join(',').toLowerCase();
   const hasNetTime  = header.includes('net time');
   const hasCategory = header.includes('category');
 
@@ -112,7 +112,7 @@ function parseCSV(text) {
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = lines[i];
     const pos = parseInt(cols[0]?.trim() ?? '', 10);
     if (!pos || pos <= 0 || isNaN(pos)) continue;
 

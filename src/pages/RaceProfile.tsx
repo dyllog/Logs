@@ -128,6 +128,11 @@ function RoadRaceProfile() {
             key={active.raceId}
             dist={active.distLabel}
             raceId={active.raceId}
+            // The years this distance actually has, straight from its own
+            // stats. Without it the block falls through a ternary chain whose
+            // last branch is Auckland's year list.
+            years={active.stats.map(s => s.year)}
+            stats={active.stats}
             initialYear={initYear}
             onOpenAthlete={() => navigate('/athletes')}
           />

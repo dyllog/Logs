@@ -29,9 +29,9 @@ export const whanganuiHalfStats: YearStat[] = [
   { year: 2025, finishers:  251, avg:  7559, avgMen:  7245, avgWomen:  8385, winnerM:  4196, winnerW:  4925, top10M:  5109, top10W:  5763 },
 ];
 
-export const WHANGANUI_10K_YEARS = [2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025] as const;
+export const WHANGANUI_QUARTER_YEARS = [2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025] as const;
 
-export const whanganui10kStats: YearStat[] = [
+export const whanganuiQuarterStats: YearStat[] = [
   { year: 2017, finishers:   80, avg:  3925, avgMen:  3567, avgWomen:  4406, winnerM:  2663, winnerW:  2726, top10M:  3017, top10W:  3204 },
   { year: 2018, finishers:  110, avg:  3965, avgMen:  3507, avgWomen:  4353, winnerM:  2435, winnerW:  2543, top10M:  2644, top10W:  3052 },
   { year: 2019, finishers:  101, avg:  3989, avgMen:  3713, avgWomen:  4365, winnerM:  2323, winnerW:  2854, top10M:  2855, top10W:  3375 },

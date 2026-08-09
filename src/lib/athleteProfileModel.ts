@@ -105,10 +105,16 @@ export type ProfileState = 'thin' | 'modal' | 'hybrid' | 'trailonly' | 'flagged'
 
 // ── Small helpers ────────────────────────────────────────────────────────────
 
-export const ROAD_DIST_ORDER = ['mar', 'half', '10k', '5k'];
+// Longest first. A distId absent from this list is skipped outright by the
+// progression chart below, so a newly ingested non-standard distance has to be
+// added here or it silently renders nowhere.
+export const ROAD_DIST_ORDER = ['mar', 'half', 'quarter', '10k', '5k'];
 export const ROAD_DIST_LABEL: Record<string, string> = {
   mar: '42.2 km · Marathon',
   half: '21.1 km · Half marathon',
+  // Its own bucket, deliberately: a quarter-marathon time is not a 10 km time,
+  // and there is no age-grading standard at this distance.
+  quarter: '10.5 km · Quarter marathon',
   '10k': '10 km',
   '5k': '5 km',
 };

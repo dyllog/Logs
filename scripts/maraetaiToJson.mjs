@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { normalizeCat } from './normalizeCats.mjs';
+import { normalizeCat } from './normalizeCats.mjs';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const csvDir = path.join('C:\\Users\\Dylan Logan\\logs-simple\\Race Files\\Auckland Half Marathon Series\\Maraetai Half Marathon');
@@ -42,13 +43,12 @@ function parseOldCat(code) {
 }
 
 function parseCSV(text) {
-  const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = clean.split('\n').filter(l => l.trim());
+  const lines = parseCsvGrid(text);
   if (lines.length < 2) return [];
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = lines[i];
     const pos = parseInt(cols[0]?.trim() ?? '', 10);
     if (!pos || pos <= 0 || isNaN(pos)) continue;
 

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizeCat } from './normalizeCats.mjs';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Sources moved under "Race Files/" when the archive was reorganised; this path
@@ -44,8 +45,7 @@ function parseOldCat(code) {
 }
 
 function parseCSV(text) {
-  const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = clean.split('\n').filter(l => l.trim());
+  const lines = parseCsvGrid(text);
   if (lines.length < 2) return [];
 
   const header = lines[0].toLowerCase();
@@ -56,7 +56,7 @@ function parseCSV(text) {
   // located by name because its index moves between them (a `Run` column sits
   // before it in 2024). Found by header rather than a fixed offset for the same
   // reason net time is guarded above: a wrong index reads a different field.
-  const headerCols = lines[0].split(',').map(h => h.trim().toLowerCase());
+  const headerCols = lines[0].map(h => h.trim().toLowerCase());
   const iTeam = headerCols.indexOf('team');
 
   // Column index map based on format
@@ -81,7 +81,7 @@ function parseCSV(text) {
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = lines[i];
     const posRaw = cols[0]?.trim() ?? '';
     const pos = parseInt(posRaw, 10);
 

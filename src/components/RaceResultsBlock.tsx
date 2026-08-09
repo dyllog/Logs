@@ -1,6 +1,9 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { loadResults, loadRotorua, loadRotoruaHalf, loadChc, loadChcHalf, loadHb, loadHbHalf, loadQt, loadQtHalf, loadWaterfrontHalf, loadWaterfront10k, loadDevHalf, loadDev10k, loadCoastHalf, loadOmahaHalf, loadOmaha10k, loadMaraetaiHalf, loadMaraetai10k, loadKerikeriHalf, loadWellingtonMar, loadWellingtonHalf, loadOnehungaHalf, loadOnehunga10k, loadOrewaHalf, loadOrewa10k, loadTamakiHalf, loadTamaki10k, loadMtmHalf, loadMtm10k, loadMtm5k, yearStats, halfStats, rotoruaStats, rotoruaHalfStats, YEARS, ROTORUA_YEARS, type ResultRow } from '@/data/logsDataExt';
+import { loadRoadResults } from '@/data/logsDataExt';
+import { ROAD_EVENTS } from '@/data/roadEvents.mjs';
+import type { YearStat } from '@/data/logsDataExt';
 import { chcStats, chcHalfStats, CHC_YEARS } from '@/data/chcData';
 import { hbStats, hbHalfStats, HB_YEARS } from '@/data/hbData';
 import { qtStats, qtHalfStats, QT_YEARS } from '@/data/qtData';
@@ -22,11 +25,15 @@ import type { RaceResultsId } from '@/data/raceMeta';
 interface RaceResultsBlockProps {
   dist: string;
   raceId?: RaceResultsId;
+  /** Years this race actually has, newest-first order applied internally. */
+  years?: readonly number[];
+  /** This distance's own per-year stats. */
+  stats?: YearStat[];
   initialYear?: number;
   onOpenAthlete?: (name: string) => void;
 }
 
-export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYear, onOpenAthlete }: RaceResultsBlockProps) {
+export default function RaceResultsBlock({ dist, raceId = 'auckland', years: yearsProp, stats: statsProp, initialYear, onOpenAthlete }: RaceResultsBlockProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const isRotorua = raceId === 'rotorua';
   const isRotoruaHalf = raceId === 'rotorua-half';
@@ -57,7 +64,11 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
   const isMtmHalf = raceId === 'mtm-half';
   const isMtm10k = raceId === 'mtm-10k';
   const isMtm5k = raceId === 'mtm-5k';
-  const availableYears = (isChc || isChcHalf)
+  // A race registered in ROAD_EVENTS carries its own year list (derived from
+  // its stats); only the legacy races fall through to the chain below, whose
+  // final fallback is Auckland's years and would otherwise be silently wrong.
+  const availableYears = yearsProp?.length ? [...yearsProp].sort((a, b) => b - a)
+    : (isChc || isChcHalf)
     ? [...CHC_YEARS].reverse()
     : (isRotorua || isRotoruaHalf) ? [...ROTORUA_YEARS].reverse()
     : (isHb || isHbHalf) ? [...HB_YEARS].reverse()
@@ -153,6 +164,7 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
       : isMtmHalf ? loadMtmHalf(year)
       : isMtm10k ? loadMtm10k(year)
       : isMtm5k ? loadMtm5k(year)
+      : (raceId && (raceId as string) in ROAD_EVENTS) ? loadRoadResults(raceId as string, year)
       : loadResults(year, dist as '42.2 km' | '21.1 km');
     loader.then(rows => { setAll(rows); setLoading(false); });
   }, [year, dist, hasData, isRotorua, isRotoruaHalf, isChc, isChcHalf, isHb, isHbHalf, isQt, isQtHalf, isWfHalf, isWf10k, isDevHalf, isDev10k, isCoastHalf, isOmahaHalf, isOmaha10k, isMaraetaiHalf, isMaraetai10k, isKerikeriHalf, isWellingtonMar, isWellingtonHalf, isOnehungaHalf, isOnehunga10k, isOrewaHalf, isOrewa10k, isTamakiHalf, isTamaki10k, isMtmHalf, isMtm10k, isMtm5k]);
@@ -226,7 +238,10 @@ export default function RaceResultsBlock({ dist, raceId = 'auckland', initialYea
     return () => { cancelled = true; };
   }, [pageRows]);
 
-  const activeStats = isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : isMaraetaiHalf ? maraetaiHalfStats : isMaraetai10k ? maraetai10kStats : isKerikeriHalf ? kerikeriStats : isWellingtonMar ? wellingtonMarStats : isWellingtonHalf ? wellingtonHalfStats : isOnehungaHalf ? onehungaHalfStats : isOnehunga10k ? onehunga10kStats : isOrewaHalf ? orewaHalfStats : isOrewa10k ? orewa10kStats : isTamakiHalf ? tamakiHalfStats : isTamaki10k ? tamaki10kStats : isMtmHalf ? mtmHalfStats : isMtm10k ? mtm10kStats : isMtm5k ? mtm5kStats : (dist === '21.1 km' ? halfStats : yearStats);
+  // Supplied by RaceProfile from the distance's own RACE_META entry. The chain
+  // below is legacy-only: its final fallback is Auckland's stats, so a race
+  // without a branch reported AUCKLAND's finisher count under its own name.
+  const activeStats = statsProp ?? (isChcHalf ? chcHalfStats : isChc ? chcStats : isRotoruaHalf ? rotoruaHalfStats : isRotorua ? rotoruaStats : isHbHalf ? hbHalfStats : isHb ? hbStats : isQtHalf ? qtHalfStats : isQt ? qtStats : isWf10k ? wf10kStats : isWfHalf ? wfHalfStats : isDevHalf ? devHalfStats : isDev10k ? dev10kStats : isCoastHalf ? coastStats : isOmahaHalf ? omahaHalfStats : isOmaha10k ? omaha10kStats : isMaraetaiHalf ? maraetaiHalfStats : isMaraetai10k ? maraetai10kStats : isKerikeriHalf ? kerikeriStats : isWellingtonMar ? wellingtonMarStats : isWellingtonHalf ? wellingtonHalfStats : isOnehungaHalf ? onehungaHalfStats : isOnehunga10k ? onehunga10kStats : isOrewaHalf ? orewaHalfStats : isOrewa10k ? orewa10kStats : isTamakiHalf ? tamakiHalfStats : isTamaki10k ? tamaki10kStats : isMtmHalf ? mtmHalfStats : isMtm10k ? mtm10kStats : isMtm5k ? mtm5kStats : (dist === '21.1 km' ? halfStats : yearStats));
   const stat = activeStats.find(s => s.year === year)!;
 
   return (

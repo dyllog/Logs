@@ -42,7 +42,13 @@ for (const f of resultFiles) {
   }
   try {
     const rows = JSON.parse(fs.readFileSync(path.join(DATA_DIR, f), 'utf8'));
-    if (Array.isArray(rows)) finisherRecords += rows.length;
+    // A row without a finish time is not a finisher. Four such rows survive in
+    // the Waterfront files — column-shifted by the old naive CSV split, with a
+    // bib where the time should be — and counting them inflated the headline
+    // figure with results nobody ran. The parser that created them is fixed;
+    // these particular rows predate it and have no converter left to
+    // regenerate them, so the count excludes them rather than asserting them.
+    if (Array.isArray(rows)) finisherRecords += rows.filter(r => (r?.sec ?? 0) > 0).length;
   } catch { /* skip unreadable file */ }
 }
 

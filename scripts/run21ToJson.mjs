@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import catCodes from './lib/categoryCodes.cjs';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 
 const { mapRaceCategory } = catCodes;
 
@@ -34,11 +35,10 @@ function parseBib(raw) {
 }
 
 function parseCSV(text) {
-  const clean = text.replace(/^﻿/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = clean.split('\n').filter(l => l.trim());
+  const lines = parseCsvGrid(text);
   if (lines.length < 2) return [];
 
-  const header = lines[0].split(',').map(h => h.toLowerCase().trim());
+  const header = lines[0].map(h => h.toLowerCase().trim());
   const posI  = header.indexOf('position');
   const nameI = header.indexOf('name');
   const bibI  = header.indexOf('bib');
@@ -49,7 +49,7 @@ function parseCSV(text) {
   const rows = [];
   let nextPos = 1;
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',');
+    const cols = lines[i];
     const time = cols[timeI]?.trim() ?? '';
     if (!time || !time.includes(':')) continue;
     const sec = toSec(time);

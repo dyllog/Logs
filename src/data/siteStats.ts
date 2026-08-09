@@ -3,11 +3,11 @@
 // drift from the archive again. Change the derivation, not these values.
 export const SITE_STATS = {
   /** Every row across public/data/results-*.json (423 files). */
-  finisherRecords: 425774,
+  finisherRecords: 425773,
   /** Race families with a race page: road (raceMeta) + trail (trailEvents). */
-  trackedEvents: 17,
+  trackedEvents: 18,
   /** Athletes with 2+ logged races — the cohort that gets a profile page. */
-  athleteProfiles: 74756,
+  athleteProfiles: 74757,
   /** Published course records: road distances + trail course eras. */
   courseRecords: 43,
   /** Oldest edition on file (wellington-half-1996). */

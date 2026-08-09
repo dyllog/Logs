@@ -2,9 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizeCat } from './normalizeCats.mjs';
+import { parseCsvGrid } from './lib/parseCsv.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const csvDir = path.join(__dirname, '..', 'Rotorua Marathon');
+// Sources moved under "Race Files/" when the archive was reorganised. This path
+// had not followed, so the converter could not run at all — the same defect
+// already fixed in csvToJson.mjs, surviving here because nothing re-runs these
+// converters routinely and a converter that cannot open its input is silent
+// until someone tries.
+const csvDir = path.join(__dirname, '..', 'Race Files', 'Rotorua Marathon');
 const outDir = path.join(__dirname, '..', 'public', 'data');
 
 function toTitle(s) {
@@ -74,16 +80,10 @@ function normCat(cat, genderCol) {
   return c;
 }
 
-function parseCsv(text) {
-  const lines = text.split(/\r?\n/);
-  const rows = [];
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    // Simple CSV split (no quoted fields in this data)
-    rows.push(line.split(','));
-  }
-  return rows;
-}
+// Delegates to the shared quote-aware parser. The comment this replaced read
+// "no quoted fields in this data" — an assumption about a source that is not
+// checked on re-ingest, and exactly how the shifted rows got in elsewhere.
+const parseCsv = parseCsvGrid;
 
 const years = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
 const stats = [];

@@ -19,6 +19,7 @@ import { ONEHUNGA_HALF_YEARS, ONEHUNGA_10K_YEARS }    from './onehungaData';
 import { OREWA_HALF_YEARS, OREWA_10K_YEARS }          from './orewaData';
 import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
 import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
+import { WHANGANUI_MAR_YEARS, WHANGANUI_HALF_YEARS, WHANGANUI_QUARTER_YEARS, WHANGANUI_5K_YEARS } from './whanganuiData';
 import { TRAIL_FAMILIES, latestCourse, subEventCourseYears } from './trailEventConfig';
 
 export interface RaceEntry {
@@ -63,14 +64,13 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Mt Maunganui Half',     dist: '21.1 km', route: '/races/mount-maunganui-half-marathon',  years: MTM_HALF_YEARS        },
   { label: 'Mt Maunganui 10k',      dist: '10 km',   route: '/races/mount-maunganui-half-marathon',  years: MTM_10K_YEARS         },
   { label: 'Mt Maunganui 5k',       dist: '5 km',    route: '/races/mount-maunganui-half-marathon',  years: MTM_5K_YEARS          },
-  // Whanganui Three Bridges is INGESTED but has no directory entry yet: every
-  // route here must resolve to a RACE_META slug, and Whanganui has no profile
-  // page. Building one needs facts this repo does not hold — entry URL, course
-  // description, and an indicative elevation profile. The results themselves
-  // are live (search, athlete profiles, PBs); only the race page is pending.
-  // Add the four entries below alongside the RACE_META entry, not before it:
-  //   Whanganui Marathon 42.2 km · Half 21.1 km · 10k 10 km · 5k 5 km
-  //   years: WHANGANUI_{MAR,HALF,10K,5K}_YEARS from ./whanganuiData
+  { label: 'Whanganui Marathon',    dist: '42.2 km', route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_MAR_YEARS     },
+  { label: 'Whanganui Half',        dist: '21.1 km', route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_HALF_YEARS    },
+  // One lap of the four-lap marathon course. Searching "Whanganui 10k" still
+  // finds it — that is the label several years were published under.
+  { label: 'Whanganui Quarter',     dist: '10.5 km', route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_QUARTER_YEARS,
+    aliases: ['Whanganui 10k', 'Whanganui 10.5k', 'Three Bridges Quarter'] },
+  { label: 'Whanganui 5k',          dist: '5 km',    route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_5K_YEARS      },
   // Trail families: one entry per sub-event, labels matching the search index
   // ({shortName} {displayName}); dist shown is the current-era course distance.
   ...TRAIL_FAMILIES.flatMap(fam =>

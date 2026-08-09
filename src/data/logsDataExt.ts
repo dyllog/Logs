@@ -480,3 +480,28 @@ export function formatTime(s: number): string {
 }
 
 export { toSec };
+
+// ─── Generic loader, keyed on the road registration ──────────────────────────
+//
+// Every loader above is a hand-written copy of the same six lines, and
+// RaceResultsBlock picks between them with a ternary chain that ends in
+// `loadResults(...)` — Auckland. A race with no branch of its own therefore did
+// not fail: it silently rendered AUCKLAND's results and Auckland's year list
+// under its own name. Whanganui was the first family to hit that.
+//
+// Anything whose raceId is a registered file key loads generically here, so a
+// newly registered family needs no loader and cannot fall through to Auckland.
+const roadCache: Record<string, ResultRow[]> = {};
+const roadInflight: Record<string, Promise<ResultRow[]>> = {};
+
+export async function loadRoadResults(fileKey: string, year: number): Promise<ResultRow[]> {
+  const k = `${fileKey}-${year}`;
+  if (roadCache[k]) return roadCache[k];
+  if (!roadInflight[k]) {
+    roadInflight[k] = fetch(`/data/results-${fileKey}-${year}.json`)
+      .then(r => (r.ok ? r.json() : []))
+      .then((rows: ResultRow[]) => { roadCache[k] = rows; return rows; })
+      .catch(() => []);
+  }
+  return roadInflight[k];
+}

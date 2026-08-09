@@ -25,6 +25,7 @@ import { onehungaHalfStats, onehunga10kStats } from './onehungaData';
 import { orewaHalfStats, orewa10kStats } from './orewaData';
 import { tamakiHalfStats, tamaki10kStats } from './tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats } from './mtmData';
+import { whanganuiMarStats, whanganuiHalfStats, whanganuiQuarterStats, whanganui5kStats } from './whanganuiData';
 
 export type RaceResultsId =
   | 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half'
@@ -32,7 +33,8 @@ export type RaceResultsId =
   | 'omaha-half' | 'omaha-10k' | 'maraetai-half' | 'maraetai-10k' | 'kerikeri-half'
   | 'wellington-mar' | 'wellington-half' | 'onehunga-half' | 'onehunga-10k'
   | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k'
-  | 'mtm-half' | 'mtm-10k' | 'mtm-5k';
+  | 'mtm-half' | 'mtm-10k' | 'mtm-5k'
+  | 'whanganui-mar' | 'whanganui-half' | 'whanganui-quarter' | 'whanganui-5k';
 
 export interface RaceRecord {
   time: string;
@@ -958,6 +960,48 @@ export const RACE_META: RaceMeta[] = [
         secondaryBody: 'A short, flat course along the waterfront, partly rounding the base of Mauao. Ideal for first-timers and families, the 5 km showcases the stunning coastal scenery of Mount Maunganui with a fast, runnable surface throughout.',
         recordM: { time: '17:33', holder: 'William Leroy', nationality: 'NZL', club: '—', year: 2025 },
         recordW: { time: '20:02', holder: 'Georgia Stanton', nationality: 'NZL', club: '—', year: 2025 },
+      },
+    ],
+  },
+  {
+    // No elevation trace anywhere below, deliberately: the existing ones are
+    // hand-estimated and carry that caveat, and inventing one for a course
+    // nobody here has measured would be fabrication. RaceProfile omits the
+    // course-profile chart and the climb/descent figures when it is absent.
+    slug: 'whanganui-three-bridges-marathon',
+    eyebrow: 'Road · Manawatū-Whanganui · Whanganui',
+    title: 'Whanganui Three Bridges Marathon',
+    titleClamp: 'clamp(28px,5vw,64px)',
+    location: 'Whanganui, Manawatū-Whanganui',
+    courseField: 'Riverbank loop · three bridges',
+    nextEdition: '2026',
+    entryUrl: 'https://whanganuithreebridges.co.nz/',
+    overviewRight: 'Road · Whanganui River banks · start and finish at Kowhai Park',
+    surface: 'Sealed road edge, footpaths, grass and walking track · generally flat',
+    secondaryLabel: 'Character',
+    secondaryBody: "Run along the banks of the Whanganui River and crossing three of the city's bridges, the course is a multi-lap loop starting and finishing at Kowhai Park — four laps for the marathon, two for the half, one for the quarter. Terrain varies from sealed road edge to footpaths, grass and walking tracks, and is generally flat. The marathon and half marathon courses are AIMS certified, and the marathon forms part of the AbbottWMM Wanda Age Group World Rankings qualifying series. The event is organised by the Wanganui Harrier Club, which celebrated its centenary in June 2025.",
+    distances: [
+      {
+        key: 'whanganui-mar', raceId: 'whanganui-mar', matchRace: 'whanganui-mar',
+        distLabel: '42.2 km', profileLong: 'Marathon', stats: whanganuiMarStats,
+        courseField: 'Four laps · riverbank loop',
+      },
+      {
+        key: 'whanganui-half', raceId: 'whanganui-half', matchRace: 'whanganui-half',
+        distLabel: '21.1 km', profileLong: 'Half marathon', stats: whanganuiHalfStats,
+        courseField: 'Two laps · riverbank loop',
+      },
+      {
+        // 10.55 km — one lap of the four-lap marathon course. Published as
+        // "10K" in some years and "105K" in others; see src/data/roadEvents.mjs.
+        key: 'whanganui-quarter', raceId: 'whanganui-quarter', matchRace: 'whanganui-quarter',
+        distLabel: '10.5 km', profileLong: 'Quarter marathon', stats: whanganuiQuarterStats,
+        courseField: 'One lap · riverbank loop',
+      },
+      {
+        key: 'whanganui-5k', raceId: 'whanganui-5k', matchRace: 'whanganui-5k',
+        distLabel: '5 km', profileLong: '5 km', stats: whanganui5kStats,
+        courseField: 'Riverbank · out and back',
       },
     ],
   },
