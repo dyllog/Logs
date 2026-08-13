@@ -73,3 +73,49 @@ as male × 1.10. The real female/male standard ratio varies between 1.073 and
 1.364 across the table, so a constant multiplier was the wrong shape, not just
 imprecise — worst at exactly the ages where age grading carries the most
 meaning. No fallback to the approximation remains in the codebase.
+
+---
+
+## Race result sources — recorded provenance changes
+
+Race results are archived as the organiser published them (`Race Files/`), and
+the converters read those files rather than a live URL. Where a source changes
+shape mid-history, the change is recorded here: a shift in what the source
+records is not a data error to repair, but it does change what the archive can
+honestly say about those years.
+
+### Saint Clair Vineyard Half — timing provider changed at the 2022 edition
+
+Three anomalies appear together in the 2022 exports, and they are one event
+rather than three:
+
+| | Before 2022 | 2022 onward |
+|---|---|---|
+| **Position column** | `Position` | dropped; only `Net Pos` |
+| **Ranking basis** | gun order | net order — published positions follow the net column with zero inversions, against 28–135 for the gun column |
+| **Category / gender** | `Category`, `Gender` | absent entirely |
+
+The 2022 half and 12 km files therefore carry **414 rows with no category or
+gender at all**. These are stored as `—`, and age grading declines to grade
+them; no band is inferred from a runner's other results, because that would
+assert a grouping the source never published.
+
+From 2023 the `Category` and `Gender` columns return, but the net-ranked
+positions do not revert. Saint Clair is consequently the one road family in
+the archive recorded on **net** time rather than gun — see the note in
+`ROAD_FAMILIES`, `scripts/roadToJson.mjs`. Its times read very slightly fast
+against gun-timed families, on the order of a minute over the half.
+
+### Saint Clair Vineyard Half — 2014 half is a partial publication
+
+The 2014 source contains 157 finishers, positions 1–157, between editions of
+roughly 1,100 and 1,200. It is internally complete — no gaps in the position
+sequence — so this is what the organiser published rather than a truncated
+file or a parse failure. Recorded as-is; re-sourcing would be the only fix.
+
+### Whanganui Three Bridges — distance label varies by year
+
+The quarter marathon is published as `105K` (10.5 km) in 2018, 2020 and
+2023–25, and as `10K` in 2017, 2019 and 2022. It is one event at 10.55 km —
+one lap of the four-lap marathon course — and is stored under a single
+`quarter` distance key. See `ROAD_FAMILIES` in `scripts/roadToJson.mjs`.

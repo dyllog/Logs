@@ -26,6 +26,7 @@ import { orewaHalfStats, orewa10kStats } from './orewaData';
 import { tamakiHalfStats, tamaki10kStats } from './tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats } from './mtmData';
 import { whanganuiMarStats, whanganuiHalfStats, whanganuiQuarterStats, whanganui5kStats } from './whanganuiData';
+import { saintClairHalfStats, saintClair12kStats } from './saintClairData';
 
 export type RaceResultsId =
   | 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half'
@@ -34,7 +35,8 @@ export type RaceResultsId =
   | 'wellington-mar' | 'wellington-half' | 'onehunga-half' | 'onehunga-10k'
   | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k'
   | 'mtm-half' | 'mtm-10k' | 'mtm-5k'
-  | 'whanganui-mar' | 'whanganui-half' | 'whanganui-quarter' | 'whanganui-5k';
+  | 'whanganui-mar' | 'whanganui-half' | 'whanganui-quarter' | 'whanganui-5k'
+  | 'saintclair-half' | 'saintclair-12k';
 
 export interface RaceRecord {
   time: string;
@@ -1002,6 +1004,41 @@ export const RACE_META: RaceMeta[] = [
         key: 'whanganui-5k', raceId: 'whanganui-5k', matchRace: 'whanganui-5k',
         distLabel: '5 km', profileLong: '5 km', stats: whanganui5kStats,
         courseField: 'Riverbank · out and back',
+      },
+    ],
+  },
+  {
+    // No elevation trace, for the same reason as Whanganui: the existing ones
+    // are hand-estimated and say so, and this course has not been measured
+    // here. RaceProfile renders the section without a chart.
+    slug: 'saint-clair-vineyard-half-marathon',
+    eyebrow: 'Road · Marlborough · Blenheim',
+    title: 'Saint Clair Vineyard Half Marathon',
+    titleClamp: 'clamp(28px,5vw,64px)',
+    location: 'Blenheim, Marlborough',
+    courseField: 'Wairau Valley · finish at Saint Clair Vineyard Kitchen',
+    // The 2026 edition is already in the archive; early May puts the next one
+    // in 2027.
+    nextEdition: '2027',
+    entryUrl: 'https://vineyardhalf.com/',
+    overviewRight: 'Vineyard rows, stop banks and river tracks · Wairau Valley · Blenheim',
+    surface: 'Vineyard rows, stop banks and river tracks · around 4 km sealed road · mostly flat',
+    secondaryLabel: 'Character',
+    secondaryBody: 'Set in the Wairau Valley, the course starts and finishes at the Saint Clair Vineyard Kitchen on Selmes Rd, just outside Blenheim. The 21.1 km course winds between rows of vineyards, up and over short stop banks and alongside the Wairau River, with the Wither Hills to the south and the Richmond Ranges to the north. The terrain is mostly flat, with around 4 km on sealed road. The 12 km course begins separately at The Vines Village on Rapaura Rd and finishes at the same place. The event is held in early May, with the vineyards in autumn colour.',
+    distances: [
+      {
+        key: 'saintclair-half', raceId: 'saintclair-half', matchRace: 'saintclair-half',
+        distLabel: '21.1 km', profileLong: 'Half marathon', stats: saintClairHalfStats,
+        courseField: 'Loop from the Vineyard Kitchen',
+      },
+      {
+        // A separate point-to-point route, not a subset of the half — which is
+        // why the same-runner distance check that reclassified Whanganui's
+        // quarter has no purchase here: it would be comparing two courses, not
+        // two labels for one.
+        key: 'saintclair-12k', raceId: 'saintclair-12k', matchRace: 'saintclair-12k',
+        distLabel: '12 km', profileLong: '12 km', stats: saintClair12kStats,
+        courseField: 'Point to point · The Vines Village to the Vineyard Kitchen',
       },
     ],
   },

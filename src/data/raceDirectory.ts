@@ -20,6 +20,7 @@ import { OREWA_HALF_YEARS, OREWA_10K_YEARS }          from './orewaData';
 import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
 import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
 import { WHANGANUI_MAR_YEARS, WHANGANUI_HALF_YEARS, WHANGANUI_QUARTER_YEARS, WHANGANUI_5K_YEARS } from './whanganuiData';
+import { SAINTCLAIR_HALF_YEARS, SAINTCLAIR_12K_YEARS } from './saintClairData';
 import { TRAIL_FAMILIES, latestCourse, subEventCourseYears } from './trailEventConfig';
 
 export interface RaceEntry {
@@ -71,6 +72,10 @@ export const RACE_DIRECTORY: RaceEntry[] = [
   { label: 'Whanganui Quarter',     dist: '10.5 km', route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_QUARTER_YEARS,
     aliases: ['Whanganui 10k', 'Whanganui 10.5k', 'Three Bridges Quarter'] },
   { label: 'Whanganui 5k',          dist: '5 km',    route: '/races/whanganui-three-bridges-marathon', years: WHANGANUI_5K_YEARS      },
+  { label: 'Saint Clair Half',      dist: '21.1 km', route: '/races/saint-clair-vineyard-half-marathon', years: SAINTCLAIR_HALF_YEARS,
+    aliases: ['Vineyard Half', 'Saint Clair Vineyard Half', 'Marlborough Half'] },
+  { label: 'Saint Clair 12k',       dist: '12 km',   route: '/races/saint-clair-vineyard-half-marathon', years: SAINTCLAIR_12K_YEARS,
+    aliases: ['Vineyard 12k'] },
   // Trail families: one entry per sub-event, labels matching the search index
   // ({shortName} {displayName}); dist shown is the current-era course distance.
   ...TRAIL_FAMILIES.flatMap(fam =>
