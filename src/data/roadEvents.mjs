@@ -91,6 +91,12 @@ export const ROAD_EVENTS = {
   // zero inversions. See ROAD_FAMILIES in scripts/roadToJson.mjs.
   "saintclair-half":  { label: "Saint Clair Half",       raceSlug: "saint-clair-vineyard-half-marathon", dist: "21.1 km", distId: "half" },
   "saintclair-12k":   { label: "Saint Clair 12k",        raceSlug: "saint-clair-vineyard-half-marathon", dist: "12 km",   distId: "12k" },
+
+  // The 2023 and 2025 halves are absent, not omitted: the organiser shipped
+  // those years' "Half Results" files byte-identical to the marathon ones.
+  "taupo-mar":        { label: "Taupō Marathon",         raceSlug: "taupo-marathon",                    dist: "42.2 km", distId: "mar" },
+  "taupo-half":       { label: "Taupō Half",             raceSlug: "taupo-marathon",                    dist: "21.1 km", distId: "half" },
+  "taupo-10k":        { label: "Taupō 10k",              raceSlug: "taupo-marathon",                    dist: "10 km",   distId: "10k" },
 };
 
 /**

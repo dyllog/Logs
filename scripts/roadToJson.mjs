@@ -25,6 +25,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { normalizeCat } from './normalizeCats.mjs';
 
@@ -120,6 +121,28 @@ export const ROAD_FAMILIES = {
       // which biases the implied distance long.
       // CURATION: a course certificate would settle it; the filename stands.
       { distKey: '12k',  distId: '12k',  dist: '12 km',   label: 'Saint Clair 12k',  match: [/^12K Results - (\d{4})\.csv$/i] },
+    ],
+  },
+
+  taupo: {
+    label:    'Taupō Marathon',
+    dir:      'Taupo Marathon',
+    key:      'taupo',
+    raceSlug: 'taupo-marathon',
+    tsFile:   'taupoData.ts',
+    tsPrefix: 'TAUPO',
+    tsVar:    'taupo',
+    // Five header shapes across seven years, differing only in where the split
+    // columns sit and whether the club column is "Club" or "Team/Club". Name
+    // resolution absorbs all five; the splits are simply not columns this
+    // archive stores.
+    //
+    // The seven "All Results" PDFs duplicate these CSVs year for year, so
+    // deferring them to Wave 3 loses nothing.
+    distances: [
+      { distKey: 'mar',  distId: 'mar',  dist: '42.2 km', label: 'Taupō Marathon', match: [/^Marathon Results - (\d{4})\.csv$/i] },
+      { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Taupō Half',     match: [/^Half Results - (\d{4})\.csv$/i] },
+      { distKey: '10k',  distId: '10k',  dist: '10 km',   label: 'Taupō 10k',      match: [/^10K Results - (\d{4})\.csv$/i] },
     ],
   },
 };
@@ -281,15 +304,50 @@ function buildCat(rawCat, rawGender, rawAge) {
   const cat = clean(rawCat);
   const g   = genderLetter(rawGender);
   if (cat) {
-    const m = cat.match(/^([MWF])\s*(.*)$/i);
-    if (m) {
-      const letter = m[1].toUpperCase() === 'F' ? 'W' : m[1].toUpperCase();
-      const rest = m[2].trim();
-      return normalizeCat(rest ? `${letter} ${rest}` : letter);
+    // Strip a leading gender, whether a single letter ("M 40-44") or a whole
+    // word ("Male Open (20-39 Years)"). The letter form MUST be followed by a
+    // boundary: an earlier version anchored on /^([MWF])\s*/, which matched the
+    // M of "Male" and left every Taupō category as "M ale Open (20-39 Years)".
+    let rest = cat, letter = '';
+    // A whole word, or a bare letter followed by anything that is NOT another
+    // letter. \b will not do for the bare form: there is no word boundary
+    // between the W and the 1 of "W18-39", so an earlier version failed to
+    // match it, fell through to a default, and recorded 114 women as men.
+    // The negative lookahead also stops "Mike" being read as an M category.
+    const gm = rest.match(/^(male|female|men|women)\b[\s.:-]*/i)
+            ?? rest.match(/^([mwf])(?![a-z])[\s.:-]*/i);
+    if (gm) {
+      const word = gm[1].toLowerCase();
+      letter = /^(f|w|female|women)$/.test(word) ? 'W' : 'M';
+      rest = rest.slice(gm[0].length).trim();
     }
-    // Category without a gender prefix ("40-44") — take gender from its column.
-    if (g) return normalizeCat(`${g} ${cat}`);
-    return normalizeCat(cat);
+    const gFinal = letter || g;
+
+    // Pull the age band out of whatever wrapping the source used:
+    //   "Open (20-39 Years)" · "45-49yrs" · "Unstoppables (70+ Years)" · "40-44"
+    // The organiser's name for the band ("Veteran", "Legend") is dropped — the
+    // archive stores age ranges, and the same band carries different names at
+    // different races.
+    // No gender fallback. Where the source does not say, the band is recorded
+    // without one and the canon treats the row as unknown-gender — asserting a
+    // gender to make the string well-formed is exactly the kind of tidy
+    // fabrication this pipeline is meant to avoid.
+    const band = rest.match(/(\d{1,3})\s*[-–—]\s*(\d{1,3})/);
+    if (band) return gFinal ? normalizeCat(`${gFinal} ${band[1]}-${band[2]}`) : `${band[1]}–${band[2]}`;
+    const open = rest.match(/(\d{1,3})\s*\+/);
+    if (open) return gFinal ? normalizeCat(`${gFinal} ${open[1]}+`) : `${open[1]}+`;
+    // "Junior (U13 Years)" / "U20" — an upper bound, recorded literally as
+    // 0-(n-1). Not narrowed to a competitive junior band: U13 at a community
+    // 10 km means anyone under 13, and inventing a floor would assert an age
+    // range the entrant never declared.
+    const under = rest.match(/\bU\s*(\d{1,3})\b/i);
+    if (under) {
+      const hi = Math.max(0, parseInt(under[1], 10) - 1);
+      return gFinal ? normalizeCat(`${gFinal} 0-${hi}`) : `0–${hi}`;
+    }
+
+    if (gFinal) return normalizeCat(rest ? `${gFinal} ${rest}` : gFinal);
+    return normalizeCat(rest || cat);
   }
   const age = clean(rawAge);
   if (g && age && /^\d{1,3}$/.test(age)) return `${g} ${age}`;
@@ -299,8 +357,21 @@ function buildCat(rawCat, rawGender, rawAge) {
 
 // ─── Conversion ──────────────────────────────────────────────────────────────
 
-function convertFile(family, dist, year, filePath, warn) {
+function convertFile(family, dist, year, filePath, warn, seenContent) {
   const raw = fs.readFileSync(filePath, 'utf8');
+  // ── Duplicate sources ───────────────────────────────────────────────────
+  // Taupō ships "Half Results - 2023.csv" byte-identical to that year's
+  // marathon file, and the same for 2025. Ingesting both would file one
+  // event's finishers under two distances, giving every one of them a
+  // fabricated result at a distance they did not run. Content is hashed
+  // across the family so the copy is caught wherever it appears.
+  const hash = crypto.createHash('sha1').update(raw).digest('hex');
+  const prior = seenContent.get(hash);
+  if (prior) {
+    warn(`${path.basename(filePath)}: byte-identical to ${prior} — SKIPPED (one event cannot be two distances; the source needs re-issuing)`);
+    return null;
+  }
+  seenContent.set(hash, path.basename(filePath));
   const grid = parseCsv(raw);
   const rel = path.basename(filePath);
   if (grid.length < 2) { warn(`${rel}: no data rows`); return null; }
@@ -355,6 +426,71 @@ function convertFile(family, dist, year, filePath, warn) {
   }
 
   if (!rows.length) { warn(`${rel}: parsed 0 finishers`); return null; }
+
+  // ── Appended tables ───────────────────────────────────────────────────────
+  // A results file is one event, so the position sequence should rise once. A
+  // RESET means a second table has been pasted onto the end. Taupō's 2025
+  // marathon export is 518 marathon finishers followed by seven ten-row
+  // top-10 leaderboards for the half, 10 km and 5 km — which, taken at face
+  // value, made a 17-minute run the marathon course record.
+  //
+  // Only the leading table is kept, and only when it clearly dominates. If the
+  // blocks are comparable in size this is not an appended extract but
+  // something the converter does not understand, and the file is skipped
+  // rather than half-ingested.
+  // ── "Surname, Firstname" exports ──────────────────────────────────────────
+  // Taupō's 2025 files publish every name reversed. Left alone, "Stansloski,
+  // Joel" never clusters with the "Joel Stansloski" the same runner appears as
+  // everywhere else, so one athlete silently becomes two.
+  //
+  // Inverted only when the WHOLE FILE agrees — a file-level convention, not a
+  // stray comma in one entry. A single "Smith, John" among 500 normal names is
+  // far more likely to be a name that genuinely contains a comma, and is left
+  // exactly as published.
+  {
+    const inverted = /^([^,]+),\s+([^,]+)$/;
+    const matching = rows.filter(r => inverted.test(r.name));
+    if (matching.length >= rows.length * 0.9 && matching.length > 5) {
+      for (const r of rows) {
+        const m = r.name.match(inverted);
+        if (m) r.name = `${m[2].trim()} ${m[1].trim()}`;
+      }
+      warn(`${rel}: names published "Surname, Firstname" (${matching.length}/${rows.length}) — inverted so they match the rest of the archive`);
+    }
+  }
+
+  // A new table starts only where the position sequence RESTARTS AT 1. An
+  // out-of-order row, or one whose position did not parse (pos 0), is a stray
+  // within the same table — Taupō's 2023 marathon has three such rows at
+  // plausible marathon times, and treating those as a new table would discard
+  // real finishers.
+  const blocks = [];
+  {
+    let cur = [];
+    for (const r of rows) {
+      if (r.pos === 1 && cur.length) { blocks.push(cur); cur = []; }
+      cur.push(r);
+    }
+    if (cur.length) blocks.push(cur);
+  }
+  if (blocks.length > 1) {
+    const lead = blocks[0];
+    const tail = blocks.slice(1);
+    const largestTail = Math.max(...tail.map(b => b.length));
+    const describe = tail.map(b => `${b.length} rows ${fmtSec(Math.min(...b.map(r => r.sec)))}–${fmtSec(Math.max(...b.map(r => r.sec)))}`).join('; ');
+    // Scale, not share: an appended extract is a top-10 leaderboard next to a
+    // full field, so the lead outweighs the largest tail by an order of
+    // magnitude. Blocks of comparable size are two real fields in one file,
+    // which this cannot attribute to distances and must not guess at.
+    if (lead.length >= 10 * largestTail) {
+      warn(`${rel}: ${blocks.length} tables in one file — kept the leading ${lead.length}, DROPPED ${rows.length - lead.length} row(s) in ${tail.length} appended table(s): ${describe}`);
+      rows.length = 0;
+      rows.push(...lead);
+    } else {
+      warn(`${rel}: ${blocks.length} tables in one file, largest ${lead.length} vs ${largestTail} — SKIPPED rather than guess which event is which`);
+      return null;
+    }
+  }
 
   // Positions come from the source. Where the source did not supply usable
   // ones, derive them from time order rather than leaving zeroes — recordId is
@@ -449,6 +585,8 @@ function convertFamily(famKey) {
 
   const warnings = [];
   const warn = (m) => warnings.push(m);
+  /** sha1 of source content -> first filename seen, for duplicate detection */
+  const seenContent = new Map();
 
   console.log(`\n══ ${family.label} ══`);
   let totalRows = 0, totalFiles = 0;
@@ -470,7 +608,7 @@ function convertFamily(famKey) {
     statsByDist[dist.distKey] = [];
     for (const { file, year } of matches) {
       claimed.add(file);
-      const stat = convertFile(family, dist, year, path.join(dir, file), warn);
+      const stat = convertFile(family, dist, year, path.join(dir, file), warn, seenContent);
       if (!stat) continue;
       statsByDist[dist.distKey].push(stat);
       totalRows += stat.n; totalFiles++;
