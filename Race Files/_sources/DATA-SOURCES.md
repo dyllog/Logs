@@ -113,6 +113,51 @@ roughly 1,100 and 1,200. It is internally complete — no gaps in the position
 sequence — so this is what the organiser published rather than a truncated
 file or a parse failure. Recorded as-is; re-sourcing would be the only fix.
 
+### Taupō Marathon — 2023 and 2025 halves recovered from PDF
+
+The organiser shipped `Half Results - 2023.csv` and `Half Results - 2025.csv`
+**byte-identical to that year's marathon file** — an export error, not a
+publication gap. Ingesting either as a half would have credited a marathon
+field with a half marathon they never ran.
+
+Those two editions are therefore read from the family's own all-distance PDFs
+(`All Results - 2023.pdf`, `All Results - 2025.pdf`), which are the sole
+surviving source for them. Every other Taupō edition comes from its CSV, which
+is the better source where both exist.
+
+| | |
+|---|---|
+| **Recovered** | Half marathon 2023 (925 finishers), 2025 (1,817 finishers) |
+| **From** | `All Results - {year}.pdf`, section "Half Marathon Run" |
+| **Read by** | `scripts/lib/taupoPdf.mjs`, split by `scripts/lib/splitMultiEvent.mjs` |
+| **Verified by** | `scripts/verifyTaupoPdf.mjs` |
+
+**How the reader is trusted.** Six Taupō marathons exist in BOTH formats, so
+the PDF reader is checked against the CSV-derived files already in the archive:
+it reproduces 1,408 finishers across 2019–2024 exactly on position and time.
+Without that gate the extraction mode would have shipped silently wrong —
+`pdftotext -layout` interleaves this layout's two column blocks and pairs each
+runner with a *different* runner's time, rendering the 2023 winner beside
+2:54:48 where he ran 2:36:04. `-raw` pairs correctly, and `-enc UTF-8` is
+required as well: the default drops diacritics, turning "Andris Pētersons"
+into "Andris Ptersons".
+
+**Known limits of the PDF text layer.** Three names in the 2023 half and nine
+in the 2025 half are published without a surname in the PDF itself (position
+286 of the 2024 marathon is simply "Sarah"). These are recorded as they appear;
+the CSV is more complete wherever it exists, which is why it takes precedence.
+
+**Walk sections are not ingested.** Each PDF holds eight tables — marathon,
+half, 10 km and 5 km, each as Run and Walk. LOGS is a running archive, and
+merging walkers into running fields would corrupt both the fields and the
+course records. The walk headings are listed explicitly in the reader so they
+are excluded by decision rather than by falling through.
+
+**Still only in the PDFs.** The 10 km and 5 km sections for 2020–2024 have no
+CSV counterpart and are not currently ingested — 2,542 further 10 km and 963
+further 5 km results, 3,505 in total. Available on the same path whenever they
+are wanted; left out here because this task was scoped to the missing halves.
+
 ### Whanganui Three Bridges — distance label varies by year
 
 The quarter marathon is published as `105K` (10.5 km) in 2018, 2020 and

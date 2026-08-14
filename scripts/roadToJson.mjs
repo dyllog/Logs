@@ -28,6 +28,8 @@ import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { normalizeCat } from './normalizeCats.mjs';
+import { splitByHeading, describeSplit } from './lib/splitMultiEvent.mjs';
+import { pdfLines, taupoHeadingOf, resolveTaupoHeading, parseTaupoRow } from './lib/taupoPdf.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT     = path.resolve(__dirname, '..');
@@ -137,8 +139,18 @@ export const ROAD_FAMILIES = {
     // resolution absorbs all five; the splits are simply not columns this
     // archive stores.
     //
-    // The seven "All Results" PDFs duplicate these CSVs year for year, so
-    // deferring them to Wave 3 loses nothing.
+    // The "All Results" PDFs mostly duplicate the CSVs — EXCEPT for the 2023
+    // and 2025 halves, where the organiser's CSV is a byte-identical copy of
+    // that year's marathon file. For those two editions the PDF is the only
+    // source there is, so they are read from it rather than deferred.
+    //
+    // The reader is verified against every marathon that exists in BOTH
+    // formats before it is trusted here: scripts/verifyTaupoPdf.mjs reproduces
+    // 1,408 finishers across six years exactly on position and time.
+    pdf: {
+      file: (year) => `All Results - ${year}.pdf`,
+      take: [{ distKey: 'half', years: [2023, 2025] }],
+    },
     distances: [
       { distKey: 'mar',  distId: 'mar',  dist: '42.2 km', label: 'Taupō Marathon', match: [/^Marathon Results - (\d{4})\.csv$/i] },
       { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Taupō Half',     match: [/^Half Results - (\d{4})\.csv$/i] },
@@ -227,11 +239,23 @@ function parseBib(raw) {
   return isNaN(n) ? 0 : n;
 }
 
-/** "1st", "23rd", "104" → 1, 23, 104. Non-numeric (DNF) → 0. */
+/** "1st", "23rd", "104" → 1, 23, 104. Anything without digits → 0. */
 function parsePos(raw) {
   const n = parseInt(String(raw).replace(/[^0-9]/g, ''), 10);
   return isNaN(n) ? 0 : n;
 }
+
+/**
+ * A position cell that declares the entrant did NOT finish.
+ *
+ * These carry a time, which is what makes them dangerous: Taupō marks four
+ * runners DNF while recording 3:58:41, 4:14:56, 4:31:40 and 2:45:19 against
+ * them, so a time-based filter passes them straight through and the archive
+ * counts them as finishers at position 0. Only the position cell says
+ * otherwise, and only the PDF made it legible — the CSV renders it as a bare
+ * unparseable value indistinguishable from a formatting quirk.
+ */
+const NON_FINISH_POS = /^\s*(dnf|dns|dq|dsq|dnq|withdrawn|scratch(ed)?)\s*$/i;
 
 // ─── Column resolution by header name ────────────────────────────────────────
 
@@ -394,6 +418,10 @@ function convertFile(family, dist, year, filePath, warn, seenContent) {
     const name = titleCase(clean(g[idx.name] ?? ''));
     if (!name) continue;
 
+    // Declared non-finishers are excluded even when a time is recorded — the
+    // organiser's own position cell is the authority on whether this counts.
+    if (NON_FINISH_POS.test(String(g[idx.pos] ?? ''))) { dnf++; continue; }
+
     const sec = toSec(g[idx.time]);
     if (sec <= 0) { dnf++; continue; }
     // A road time under 10 minutes or over 12 hours is not a finish time for
@@ -447,17 +475,7 @@ function convertFile(family, dist, year, filePath, warn, seenContent) {
   // stray comma in one entry. A single "Smith, John" among 500 normal names is
   // far more likely to be a name that genuinely contains a comma, and is left
   // exactly as published.
-  {
-    const inverted = /^([^,]+),\s+([^,]+)$/;
-    const matching = rows.filter(r => inverted.test(r.name));
-    if (matching.length >= rows.length * 0.9 && matching.length > 5) {
-      for (const r of rows) {
-        const m = r.name.match(inverted);
-        if (m) r.name = `${m[2].trim()} ${m[1].trim()}`;
-      }
-      warn(`${rel}: names published "Surname, Firstname" (${matching.length}/${rows.length}) — inverted so they match the rest of the archive`);
-    }
-  }
+  maybeInvertNames(rows, rel, warn);
 
   // A new table starts only where the position sequence RESTARTS AT 1. An
   // out-of-order row, or one whose position did not parse (pos 0), is a stray
@@ -491,6 +509,39 @@ function convertFile(family, dist, year, filePath, warn, seenContent) {
       return null;
     }
   }
+
+  return finaliseAndWrite(family, dist, year, rows, rel, warn, { dnf, badTime, noCat });
+}
+
+/**
+ * Sanity-check a finished set of rows, write it, and return its summary.
+ *
+ * Shared by the CSV and PDF paths so a PDF-sourced edition gets exactly the
+ * same scrutiny as a CSV-sourced one — the same position checks, the same
+ * duplicate and inversion reporting, the same output shape.
+ */
+/**
+ * Undo "Surname, Firstname" publishing, where the WHOLE source agrees.
+ *
+ * Taupō's 2025 exports — CSV and PDF alike — publish every name reversed.
+ * Left alone, "Stansloski, Joel" never clusters with the "Joel Stansloski"
+ * the same runner appears as everywhere else, so one athlete silently becomes
+ * two. A lone "Smith, John" among 500 normal names is far more likely to be a
+ * name that genuinely contains a comma, and is left exactly as published.
+ */
+function maybeInvertNames(rows, rel, warn) {
+  const inverted = /^([^,]+),\s+([^,]+)$/;
+  const matching = rows.filter(r => inverted.test(r.name));
+  if (matching.length < rows.length * 0.9 || matching.length <= 5) return;
+  for (const r of rows) {
+    const m = r.name.match(inverted);
+    if (m) r.name = `${m[2].trim()} ${m[1].trim()}`;
+  }
+  warn(`${rel}: names published "Surname, Firstname" (${matching.length}/${rows.length}) — inverted so they match the rest of the archive`);
+}
+
+function finaliseAndWrite(family, dist, year, rows, rel, warn, counts) {
+  const { dnf = 0, badTime = 0, noCat = 0 } = counts ?? {};
 
   // Positions come from the source. Where the source did not supply usable
   // ones, derive them from time order rather than leaving zeroes — recordId is
@@ -624,6 +675,63 @@ function convertFamily(famKey) {
   if (unclaimed.length) warn(`${unclaimed.length} CSV(s) matched no distance pattern: ${unclaimed.join(', ')}`);
   const nonCsv = files.filter(f => !/\.csv$/i.test(f));
   if (nonCsv.length) console.log(`\n  (${nonCsv.length} non-CSV source(s) not ingested: ${nonCsv.join(', ')})`);
+
+  // ── PDF sources ───────────────────────────────────────────────────────────
+  // Only for editions the CSVs cannot supply. A PDF is a worse source than a
+  // CSV — its text layer loses the odd surname — so it is used where there is
+  // no alternative, never in preference. Each table is attributed by its
+  // HEADING; an unrecognised heading halts the family rather than guessing,
+  // because filename-derived distances are exactly what made these files
+  // dangerous in the first place.
+  if (family.pdf) {
+    for (const take of family.pdf.take) {
+      const dist = family.distances.find(d => d.distKey === take.distKey);
+      if (!dist) throw new Error(`pdf.take names unknown distKey "${take.distKey}"`);
+      for (const year of take.years) {
+        const pdfPath = path.join(dir, family.pdf.file(year));
+        if (!fs.existsSync(pdfPath)) { warn(`${family.pdf.file(year)}: not found`); continue; }
+
+        const tables = splitByHeading(pdfLines(pdfPath), taupoHeadingOf, resolveTaupoHeading, parseTaupoRow);
+        const unknown = tables.filter(x => x.note === 'UNRECOGNISED');
+        if (unknown.length) {
+          throw new Error(`${family.pdf.file(year)}: ${unknown.length} table(s) with an unrecognised heading `
+            + `(${unknown.map(x => JSON.stringify(x.label)).join(', ')}) — refusing to attribute by guesswork`);
+        }
+        console.log('');
+        console.log(describeSplit(family.pdf.file(year), tables));
+
+        const table = tables.find(x => x.distKey === take.distKey);
+        if (!table) { warn(`${family.pdf.file(year)}: no "${take.distKey}" table`); continue; }
+
+        let truncated = 0;
+        const rows = table.rows.map(r => {
+          if (!/\s/.test(r.name)) truncated++;
+          return {
+            pos: r.pos,
+            name: titleCase(clean(r.name)),
+            bib: parseBib(r.bibRaw),
+            nat: '',
+            cat: buildCat(r.ageGroup, r.gender, ''),
+            club: r.club || '—',
+            time: fmtSec(toSec(r.time)),
+            sec: toSec(r.time),
+          };
+        }).filter(r => r.sec > 0 && r.name);
+        if (truncated) warn(`${family.pdf.file(year)} ${take.distKey}: ${truncated} name(s) have no surname in the PDF text layer`);
+
+        const rel = `${family.pdf.file(year)} [${take.distKey}]`;
+        maybeInvertNames(rows, rel, warn);
+        const stat = finaliseAndWrite(family, dist, year, rows, rel, warn, {});
+        if (!stat) continue;
+        (statsByDist[dist.distKey] ??= []).push(stat);
+        statsByDist[dist.distKey].sort((a, b) => a.year - b.year);
+        totalRows += stat.n; totalFiles++;
+        const wm = stat.winM ? `♂ ${fmtSec(stat.winM.sec)} ${stat.winM.name}` : '♂ —';
+        const ww = stat.winW ? `♀ ${fmtSec(stat.winW.sec)} ${stat.winW.name}` : '♀ —';
+        console.log(`  ${year}: ${String(stat.n).padStart(4)} finishers (${stat.men}M / ${stat.women}W) · median ${fmtSec(stat.median)} · ${wm} · ${ww}   [from PDF]`);
+      }
+    }
+  }
 
   if (family.tsFile) writeDataFile(family, statsByDist);
 

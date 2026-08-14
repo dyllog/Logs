@@ -10,19 +10,21 @@ export const taupoMarStats: YearStat[] = [
   { year: 2020, finishers:  164, avg: 15753, avgMen: 15255, avgWomen: 18686, winnerM:  9610, winnerW: 12046, top10M: 10673, top10W: 13914 },
   { year: 2021, finishers:  239, avg: 15674, avgMen: 15626, avgWomen: 17820, winnerM:  9570, winnerW: 11174, top10M: 10422, top10W: 12874 },
   { year: 2022, finishers:  175, avg: 15265, avgMen: 15314, avgWomen: 17876, winnerM:  9976, winnerW: 11815, top10M: 10359, top10W: 13009 },
-  { year: 2023, finishers:  277, avg: 15680, avgMen: 15560, avgWomen: 17868, winnerM:  9364, winnerW: 11000, top10M: 10335, top10W: 11714 },
-  { year: 2024, finishers:  384, avg: 15004, avgMen: 15166, avgWomen: 17562, winnerM:  9423, winnerW: 10972, top10M: 10106, top10W: 12431 },
+  { year: 2023, finishers:  274, avg: 15705, avgMen: 15569, avgWomen: 17883, winnerM:  9364, winnerW: 11000, top10M: 10335, top10W: 11714 },
+  { year: 2024, finishers:  383, avg: 15004, avgMen: 15187, avgWomen: 17562, winnerM:  9423, winnerW: 10972, top10M: 10182, top10W: 12431 },
   { year: 2025, finishers:  518, avg: 15043, avgMen: 14664, avgWomen: 17303, winnerM:  9241, winnerW: 10732, top10M:  9878, top10W: 12000 },
 ];
 
-export const TAUPO_HALF_YEARS = [2019, 2020, 2021, 2022, 2024] as const;
+export const TAUPO_HALF_YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
 
 export const taupoHalfStats: YearStat[] = [
   { year: 2019, finishers:  860, avg:  7375, avgMen:  7099, avgWomen:  8396, winnerM:  4243, winnerW:  4965, top10M:  4526, top10W:  5480 },
   { year: 2020, finishers:  476, avg:  7426, avgMen:  7169, avgWomen:  8435, winnerM:  4128, winnerW:  4921, top10M:  4532, top10W:  5512 },
   { year: 2021, finishers: 1010, avg:  7350, avgMen:  7130, avgWomen:  8387, winnerM:  3998, winnerW:  4597, top10M:  4527, top10W:  5184 },
   { year: 2022, finishers:  668, avg:  7241, avgMen:  7084, avgWomen:  8184, winnerM:  4219, winnerW:  5179, top10M:  4564, top10W:  5616 },
+  { year: 2023, finishers:  925, avg:  7262, avgMen:  7056, avgWomen:  8345, winnerM:  4487, winnerW:  4875, top10M:  4682, top10W:  5557 },
   { year: 2024, finishers: 1470, avg:  7558, avgMen:  7172, avgWomen:  8349, winnerM:  4003, winnerW:  4892, top10M:  4474, top10W:  5406 },
+  { year: 2025, finishers: 1817, avg:  7507, avgMen:  7177, avgWomen:  8317, winnerM:  4022, winnerW:  5274, top10M:  4334, top10W:  5507 },
 ];
 
 export const TAUPO_10K_YEARS = [2025] as const;
