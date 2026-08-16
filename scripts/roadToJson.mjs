@@ -36,6 +36,18 @@ const ROOT     = path.resolve(__dirname, '..');
 const RACE_DIR = path.join(ROOT, 'Race Files');
 const OUT_DIR  = path.join(ROOT, 'public', 'data');
 
+/**
+ * Results the archive holds but knows to be incomplete.
+ *
+ * A name the source published without a surname canonicalises as its own
+ * athlete and is effectively unmatchable — "Sarah" will never join the rest of
+ * Sarah's results. Recording them as published is right; leaving them looking
+ * like ordinary data is not. Written to public/data/incomplete-records.json so
+ * the fact travels with the archive rather than living in a converter warning,
+ * and so a contribute page can offer them for correction.
+ */
+const INCOMPLETE_RECORDS = [];
+
 // ─── Family configuration ────────────────────────────────────────────────────
 //
 // `key` is the results-file key prefix: results-{key}-{distKey}-{year}.json.
@@ -147,14 +159,28 @@ export const ROAD_FAMILIES = {
     // The reader is verified against every marathon that exists in BOTH
     // formats before it is trusted here: scripts/verifyTaupoPdf.mjs reproduces
     // 1,408 finishers across six years exactly on position and time.
+    // The PDFs also hold the ONLY copy of the 10 km and 5 km fields for most
+    // years — no CSV was ever shipped for them. Taken here because the reader
+    // is already proven against known-good data and the alternative is leaving
+    // real results unretrieved behind a mechanism that works.
+    //   10k: 2025 comes from its CSV, which is the better source; the PDF
+    //        supplies 2020-2024.
+    //   5k:  no CSV exists in any year, so every edition is PDF-sourced.
+    // 2019's PDF holds a marathon only.
     pdf: {
       file: (year) => `All Results - ${year}.pdf`,
-      take: [{ distKey: 'half', years: [2023, 2025] }],
+      take: [
+        { distKey: 'half', years: [2023, 2025] },
+        { distKey: '10k',  years: [2020, 2021, 2022, 2023, 2024] },
+        { distKey: '5k',   years: [2020, 2021, 2022, 2023, 2024, 2025] },
+      ],
     },
     distances: [
       { distKey: 'mar',  distId: 'mar',  dist: '42.2 km', label: 'Taupō Marathon', match: [/^Marathon Results - (\d{4})\.csv$/i] },
       { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Taupō Half',     match: [/^Half Results - (\d{4})\.csv$/i] },
       { distKey: '10k',  distId: '10k',  dist: '10 km',   label: 'Taupō 10k',      match: [/^10K Results - (\d{4})\.csv$/i] },
+      // No CSV in any year — PDF-sourced throughout.
+      { distKey: '5k',   distId: '5k',   dist: '5 km',    label: 'Taupō 5k',       match: [/^5K Results - (\d{4})\.csv$/i] },
     ],
   },
 };
@@ -370,8 +396,12 @@ function buildCat(rawCat, rawGender, rawAge) {
       return gFinal ? normalizeCat(`${gFinal} 0-${hi}`) : `0–${hi}`;
     }
 
-    if (gFinal) return normalizeCat(rest ? `${gFinal} ${rest}` : gFinal);
-    return normalizeCat(rest || cat);
+    // A remainder with no letters in it is not a category. Taupō's 2022 PDF
+    // publishes one row as "Grace Ryan Female (42) (1) 57:38" with no age group
+    // at all, which otherwise became the category "W (42)". Gender is known,
+    // the band was never published, and that is what gets recorded.
+    if (gFinal) return /[a-z]/i.test(rest) ? normalizeCat(`${gFinal} ${rest}`) : gFinal;
+    return /[a-z]/i.test(rest) ? normalizeCat(rest) : '—';
   }
   const age = clean(rawAge);
   if (g && age && /^\d{1,3}$/.test(age)) return `${g} ${age}`;
@@ -687,6 +717,8 @@ function convertFamily(famKey) {
     for (const take of family.pdf.take) {
       const dist = family.distances.find(d => d.distKey === take.distKey);
       if (!dist) throw new Error(`pdf.take names unknown distKey "${take.distKey}"`);
+      console.log(`
+── ${dist.label} (${dist.dist}) · from PDF ──`);
       for (const year of take.years) {
         const pdfPath = path.join(dir, family.pdf.file(year));
         if (!fs.existsSync(pdfPath)) { warn(`${family.pdf.file(year)}: not found`); continue; }
@@ -703,9 +735,9 @@ function convertFamily(famKey) {
         const table = tables.find(x => x.distKey === take.distKey);
         if (!table) { warn(`${family.pdf.file(year)}: no "${take.distKey}" table`); continue; }
 
-        let truncated = 0;
+        const incomplete = [];
         const rows = table.rows.map(r => {
-          if (!/\s/.test(r.name)) truncated++;
+          if (!/\s/.test(r.name)) incomplete.push(r);
           return {
             pos: r.pos,
             name: titleCase(clean(r.name)),
@@ -717,7 +749,18 @@ function convertFamily(famKey) {
             sec: toSec(r.time),
           };
         }).filter(r => r.sec > 0 && r.name);
-        if (truncated) warn(`${family.pdf.file(year)} ${take.distKey}: ${truncated} name(s) have no surname in the PDF text layer`);
+        if (incomplete.length) {
+          warn(`${family.pdf.file(year)} ${take.distKey}: ${incomplete.length} name(s) have no surname in the PDF text layer`);
+          for (const r of incomplete) {
+            INCOMPLETE_RECORDS.push({
+              recordId: `${family.raceSlug}:${year}:${dist.distId}:p${r.pos}:${toSec(r.time)}`,
+              race: dist.label, year, name: titleCase(clean(r.name)), bib: parseBib(r.bibRaw),
+              issue: 'name-incomplete',
+              detail: 'published without a surname in the PDF text layer',
+              source: family.pdf.file(year),
+            });
+          }
+        }
 
         const rel = `${family.pdf.file(year)} [${take.distKey}]`;
         maybeInvertNames(rows, rel, warn);
@@ -755,4 +798,27 @@ if (!args.length) {
 const targets = args[0] === '--all' ? Object.keys(ROAD_FAMILIES) : args;
 let warned = 0;
 for (const t of targets) warned += convertFamily(t).warnings;
-process.exit(warned ? 0 : 0);
+
+// Merge rather than overwrite: a single-family run must not drop the entries
+// other families contributed on their own runs.
+{
+  const out = path.join(OUT_DIR, 'incomplete-records.json');
+  const touchedRaces = new Set(targets.map(t => ROAD_FAMILIES[t]?.raceSlug).filter(Boolean));
+  let prior = [];
+  if (fs.existsSync(out)) {
+    try { prior = JSON.parse(fs.readFileSync(out, 'utf8')).records ?? []; } catch { prior = []; }
+  }
+  const kept = prior.filter(r => !touchedRaces.has(String(r.recordId).split(':')[0]));
+  const records = [...kept, ...INCOMPLETE_RECORDS]
+    .sort((a, b) => a.recordId.localeCompare(b.recordId));
+  fs.writeFileSync(out, JSON.stringify({
+    note: 'Results the archive holds but knows to be incomplete. Recorded as published; '
+        + 'flagged so they are not mistaken for ordinary data. A name without a surname '
+        + 'cannot be matched to the rest of that person\'s results.',
+    generatedBy: 'scripts/roadToJson.mjs',
+    count: records.length,
+    records,
+  }, null, 2));
+  console.log(`\n  → public/data/incomplete-records.json — ${records.length} known-incomplete record(s)`);
+}
+

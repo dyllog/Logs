@@ -97,6 +97,7 @@ export const ROAD_EVENTS = {
   "taupo-mar":        { label: "Taupō Marathon",         raceSlug: "taupo-marathon",                    dist: "42.2 km", distId: "mar" },
   "taupo-half":       { label: "Taupō Half",             raceSlug: "taupo-marathon",                    dist: "21.1 km", distId: "half" },
   "taupo-10k":        { label: "Taupō 10k",              raceSlug: "taupo-marathon",                    dist: "10 km",   distId: "10k" },
+  "taupo-5k":         { label: "Taupō 5k",               raceSlug: "taupo-marathon",                    dist: "5 km",    distId: "5k" },
 };
 
 /**

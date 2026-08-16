@@ -27,8 +27,24 @@ export const taupoHalfStats: YearStat[] = [
   { year: 2025, finishers: 1817, avg:  7507, avgMen:  7177, avgWomen:  8317, winnerM:  4022, winnerW:  5274, top10M:  4334, top10W:  5507 },
 ];
 
-export const TAUPO_10K_YEARS = [2025] as const;
+export const TAUPO_10K_YEARS = [2020, 2021, 2022, 2023, 2024, 2025] as const;
 
 export const taupo10kStats: YearStat[] = [
+  { year: 2020, finishers:  186, avg:  3790, avgMen:  3727, avgWomen:  4060, winnerM:  2284, winnerW:  2510, top10M:  2592, top10W:  2907 },
+  { year: 2021, finishers:  582, avg:  4049, avgMen:  3812, avgWomen:  4363, winnerM:  2059, winnerW:  2391, top10M:  2363, top10W:  2732 },
+  { year: 2022, finishers:  401, avg:  3826, avgMen:  3587, avgWomen:  4175, winnerM:  2163, winnerW:  2482, top10M:  2265, top10W:  2794 },
+  { year: 2023, finishers:  438, avg:  3824, avgMen:  3728, avgWomen:  4157, winnerM:  1889, winnerW:  2245, top10M:  2181, top10W:  2490 },
+  { year: 2024, finishers:  935, avg:  4005, avgMen:  3829, avgWomen:  4318, winnerM:  2054, winnerW:  2378, top10M:  2298, top10W:  2635 },
   { year: 2025, finishers: 1177, avg:  4141, avgMen:  3877, avgWomen:  4461, winnerM:  2084, winnerW:  2398, top10M:  2186, top10W:  2733 },
+];
+
+export const TAUPO_5K_YEARS = [2020, 2021, 2022, 2023, 2024, 2025] as const;
+
+export const taupo5kStats: YearStat[] = [
+  { year: 2020, finishers:   58, avg:  1861, avgMen:  1855, avgWomen:  1970, winnerM:  1027, winnerW:  1579, top10M:  1465, top10W:  1686 },
+  { year: 2021, finishers:  166, avg:  2010, avgMen:  2013, avgWomen:  2225, winnerM:  1210, winnerW:  1249, top10M:  1356, top10W:  1505 },
+  { year: 2022, finishers:  160, avg:  2062, avgMen:  1964, avgWomen:  2207, winnerM:  1178, winnerW:  1168, top10M:  1318, top10W:  1391 },
+  { year: 2023, finishers:  202, avg:  2086, avgMen:  2032, avgWomen:  2156, winnerM:   977, winnerW:  1309, top10M:  1198, top10W:  1446 },
+  { year: 2024, finishers:  377, avg:  2059, avgMen:  2119, avgWomen:  2331, winnerM:  1028, winnerW:  1191, top10M:  1110, top10W:  1275 },
+  { year: 2025, finishers:  422, avg:  1961, avgMen:  1997, avgWomen:  2123, winnerM:  1026, winnerW:  1036, top10M:  1175, top10W:  1247 },
 ];

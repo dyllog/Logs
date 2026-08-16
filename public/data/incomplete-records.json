@@ -1,0 +1,457 @@
+{
+  "note": "Results the archive holds but knows to be incomplete. Recorded as published; flagged so they are not mistaken for ordinary data. A name without a surname cannot be matched to the rest of that person's results.",
+  "generatedBy": "scripts/roadToJson.mjs",
+  "count": 45,
+  "records": [
+    {
+      "recordId": "taupo-marathon:2021:10k:p178:3644",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Rahiethan",
+      "bib": 2546,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p243:3857",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Emma",
+      "bib": 2738,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p281:4012",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Mr.valentine",
+      "bib": 2879,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p320:4129",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Karaiteana",
+      "bib": 2550,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p357:4275",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Brooke",
+      "bib": 2374,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p37:2998",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Rhett",
+      "bib": 2934,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p430:4682",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Kimberley",
+      "bib": 2456,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p534:5623",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Mackenzie",
+      "bib": 2392,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p555:5879",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Caroline",
+      "bib": 2156,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:10k:p86:3258",
+      "race": "Taupō 10k",
+      "year": 2021,
+      "name": "Shannon",
+      "bib": 2520,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p113:2432",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "Atawai",
+      "bib": 4267,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p122:2468",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "David",
+      "bib": 4264,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p129:2607",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "Kaeda-Shay",
+      "bib": 4259,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p144:2815",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "Zahr",
+      "bib": 4235,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p30:1603",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "Rifqi",
+      "bib": 4296,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2021:5k:p89:2065",
+      "race": "Taupō 5k",
+      "year": 2021,
+      "name": "Natalia",
+      "bib": 4049,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2021.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2022:10k:p116:3438",
+      "race": "Taupō 10k",
+      "year": 2022,
+      "name": "Helen",
+      "bib": 2545,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2022.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2022:10k:p369:5241",
+      "race": "Taupō 10k",
+      "year": 2022,
+      "name": "Taiheke",
+      "bib": 2599,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2022.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2022:10k:p372:5277",
+      "race": "Taupō 10k",
+      "year": 2022,
+      "name": "Corbin",
+      "bib": 2660,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2022.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p113:3395",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Lachlan",
+      "bib": 2651,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p126:3425",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Bossman",
+      "bib": 2263,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p233:3904",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Dheeraj",
+      "bib": 2163,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p248:3984",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Rebecca",
+      "bib": 2181,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p343:4670",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Siddharth",
+      "bib": 2567,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p372:4946",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "Wiremu",
+      "bib": 2350,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:10k:p387:5198",
+      "race": "Taupō 10k",
+      "year": 2023,
+      "name": "David",
+      "bib": 2301,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:5k:p123:2210",
+      "race": "Taupō 5k",
+      "year": 2023,
+      "name": "Summer",
+      "bib": 3303,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:half:p227:6468",
+      "race": "Taupō Half",
+      "year": 2023,
+      "name": "Joey",
+      "bib": 1299,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:half:p54:5517",
+      "race": "Taupō Half",
+      "year": 2023,
+      "name": "Jonathan",
+      "bib": 906,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2023:half:p880:11020",
+      "race": "Taupō Half",
+      "year": 2023,
+      "name": "Emmalee",
+      "bib": 971,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2023.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2024:10k:p697:4674",
+      "race": "Taupō 10k",
+      "year": 2024,
+      "name": "Bernadette",
+      "bib": 3634,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2024.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2024:10k:p725:4786",
+      "race": "Taupō 10k",
+      "year": 2024,
+      "name": "Lorette",
+      "bib": 3025,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2024.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2024:5k:p185:2056",
+      "race": "Taupō 5k",
+      "year": 2024,
+      "name": "Georgia-May",
+      "bib": 5455,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2024.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:5k:p356:2619",
+      "race": "Taupō 5k",
+      "year": 2025,
+      "name": "Donald-Bussey,",
+      "bib": 8172,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:5k:p41:1398",
+      "race": "Taupō 5k",
+      "year": 2025,
+      "name": "Sunthereswaren,",
+      "bib": 8462,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:5k:p7:1168",
+      "race": "Taupō 5k",
+      "year": 2025,
+      "name": "Challies-Symmes,",
+      "bib": 8092,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p126:8384",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Weston-Sanders,",
+      "bib": 1651,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p137:8681",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Stewart-Hicks,",
+      "bib": 2870,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p147:9073",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Poupard-Rupapera,",
+      "bib": 2743,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p152:9278",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Johnston-Keys,",
+      "bib": 1448,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p173:10591",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Hemopo-Shortland,",
+      "bib": 1362,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p194:5943",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "McMenamin-Pervan,",
+      "bib": 2776,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p659:7013",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Ngamotu-Rakei,",
+      "bib": 2935,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p807:7270",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "McMenamin-Pervan,",
+      "bib": 2777,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    },
+    {
+      "recordId": "taupo-marathon:2025:half:p816:7294",
+      "race": "Taupō Half",
+      "year": 2025,
+      "name": "Sherry-Middlemiss,",
+      "bib": 1610,
+      "issue": "name-incomplete",
+      "detail": "published without a surname in the PDF text layer",
+      "source": "All Results - 2025.pdf"
+    }
+  ]
+}

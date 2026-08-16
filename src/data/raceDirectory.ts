@@ -21,6 +21,7 @@ import { TAMAKI_HALF_YEARS, TAMAKI_10K_YEARS }        from './tamakiData';
 import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
 import { WHANGANUI_MAR_YEARS, WHANGANUI_HALF_YEARS, WHANGANUI_QUARTER_YEARS, WHANGANUI_5K_YEARS } from './whanganuiData';
 import { SAINTCLAIR_HALF_YEARS, SAINTCLAIR_12K_YEARS } from './saintClairData';
+import { TAUPO_MAR_YEARS, TAUPO_HALF_YEARS, TAUPO_10K_YEARS, TAUPO_5K_YEARS } from './taupoData';
 import { TRAIL_FAMILIES, latestCourse, subEventCourseYears } from './trailEventConfig';
 
 export interface RaceEntry {
@@ -76,6 +77,14 @@ export const RACE_DIRECTORY: RaceEntry[] = [
     aliases: ['Vineyard Half', 'Saint Clair Vineyard Half', 'Marlborough Half'] },
   { label: 'Saint Clair 12k',       dist: '12 km',   route: '/races/saint-clair-vineyard-half-marathon', years: SAINTCLAIR_12K_YEARS,
     aliases: ['Vineyard 12k'] },
+  { label: 'Taupō Marathon',        dist: '42.2 km', route: '/races/taupo-marathon', years: TAUPO_MAR_YEARS,
+    aliases: ['Taupo Marathon', 'Great Lake Taupō'] },
+  { label: 'Taupō Half',            dist: '21.1 km', route: '/races/taupo-marathon', years: TAUPO_HALF_YEARS,
+    aliases: ['Taupo Half'] },
+  { label: 'Taupō 10k',             dist: '10 km',   route: '/races/taupo-marathon', years: TAUPO_10K_YEARS,
+    aliases: ['Taupo 10k'] },
+  { label: 'Taupō 5k',              dist: '5 km',    route: '/races/taupo-marathon', years: TAUPO_5K_YEARS,
+    aliases: ['Taupo 5k'] },
   // Trail families: one entry per sub-event, labels matching the search index
   // ({shortName} {displayName}); dist shown is the current-era course distance.
   ...TRAIL_FAMILIES.flatMap(fam =>

@@ -153,10 +153,28 @@ merging walkers into running fields would corrupt both the fields and the
 course records. The walk headings are listed explicitly in the reader so they
 are excluded by decision rather than by falling through.
 
-**Still only in the PDFs.** The 10 km and 5 km sections for 2020–2024 have no
-CSV counterpart and are not currently ingested — 2,542 further 10 km and 963
-further 5 km results, 3,505 in total. Available on the same path whenever they
-are wanted; left out here because this task was scoped to the missing halves.
+**PDF-sourced distances, distinct from the CSV years.** The 10 km and 5 km
+fields were never shipped as CSV in most years, so they are read from these
+same PDFs by the same verified path:
+
+| Distance | PDF-sourced years | From CSV |
+|---|---|---|
+| Half marathon | 2023, 2025 | 2019–2022, 2024 |
+| 10 km | 2020–2024 | 2025 |
+| 5 km | 2020–2025 | none — no CSV exists in any year |
+| Marathon | none | 2019–2025 |
+
+All of it passes `scripts/verifyMultiEventSplit.mjs`: no bib appears in two
+distances of one edition, every winning time is plausible for its distance,
+and no field size departs from its series.
+
+**Known-incomplete records.** 45 results are published without a surname in
+the PDF text layer — position 286 of the 2024 marathon is simply "Sarah". They
+are stored as published, but a name without a surname canonicalises as its own
+athlete and can never be matched to the rest of that person's results, so they
+are listed in `public/data/incomplete-records.json` with their recordId rather
+than left to look like ordinary data. That file is written by the converter,
+not maintained by hand, and is the natural feed for a contribute page.
 
 ### Whanganui Three Bridges — distance label varies by year
 

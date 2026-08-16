@@ -112,7 +112,15 @@ for (const file of files) {
     // or a masters band (floor ≥ 60) holding a large share can't be the modal
     // group of a real road-race field. The share gate keeps legitimately youth-
     // heavy community events (e.g. a 5k with kids at ~20%) from tripping it.
-    if (info && (info.hi <= 19 || info.lo >= 60) && share >= IMPLAUSIBLE_DOMINANCE) {
+    //
+    // The YOUTH half of the rule does not apply to a 5 km, where a junior
+    // majority is the normal shape rather than a symptom. Taupō's 5 km is 52
+    // male juniors out of 79 in 2021, and the organiser's own category names
+    // say so ("Male Junior (U20 Years)") — flagging that as mis-decoded would
+    // train the eye to ignore the rule. A 5 km dominated by 60+ still trips it.
+    const is5k = /-5k-\d{4}\.json$/.test(file);
+    const implausible = (info?.lo >= 60) || (info?.hi <= 19 && !is5k);
+    if (info && implausible && share >= IMPLAUSIBLE_DOMINANCE) {
       warnings.push(`${file}: ${g} modal band "${g} ${modBand}" is implausible as the largest cohort (${modN}/${gb.length}, ${(share*100).toFixed(0)}%) — suspected mis-decoded categories`);
       continue;
     }

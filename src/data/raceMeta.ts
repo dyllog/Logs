@@ -27,6 +27,7 @@ import { tamakiHalfStats, tamaki10kStats } from './tamakiData';
 import { mtmHalfStats, mtm10kStats, mtm5kStats } from './mtmData';
 import { whanganuiMarStats, whanganuiHalfStats, whanganuiQuarterStats, whanganui5kStats } from './whanganuiData';
 import { saintClairHalfStats, saintClair12kStats } from './saintClairData';
+import { taupoMarStats, taupoHalfStats, taupo10kStats, taupo5kStats } from './taupoData';
 
 export type RaceResultsId =
   | 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half'
@@ -36,7 +37,8 @@ export type RaceResultsId =
   | 'orewa-half' | 'orewa-10k' | 'tamaki-half' | 'tamaki-10k'
   | 'mtm-half' | 'mtm-10k' | 'mtm-5k'
   | 'whanganui-mar' | 'whanganui-half' | 'whanganui-quarter' | 'whanganui-5k'
-  | 'saintclair-half' | 'saintclair-12k';
+  | 'saintclair-half' | 'saintclair-12k'
+  | 'taupo-mar' | 'taupo-half' | 'taupo-10k' | 'taupo-5k';
 
 export interface RaceRecord {
   time: string;
@@ -1039,6 +1041,46 @@ export const RACE_META: RaceMeta[] = [
         key: 'saintclair-12k', raceId: 'saintclair-12k', matchRace: 'saintclair-12k',
         distLabel: '12 km', profileLong: '12 km', stats: saintClair12kStats,
         courseField: 'Point to point · The Vines Village to the Vineyard Kitchen',
+      },
+    ],
+  },
+  {
+    // No elevation trace: the existing ones are hand-estimated and say so, and
+    // this course has not been measured here.
+    slug: 'taupo-marathon',
+    eyebrow: 'Road · Waikato · Taupō',
+    title: 'Taupō Marathon',
+    location: 'Taupō, Waikato',
+    courseField: 'Lakefront · Great Lake Pathway',
+    nextEdition: '2026',
+    entryUrl: 'https://www.taupomarathon.co.nz/',
+    overviewRight: 'Road and pathway · Lake Taupō shoreline · start and finish at Tongariro Domain',
+    surface: 'Sealed road and shared pathway · roughly 10 km of each lap on the Great Lake Pathway',
+    secondaryLabel: 'Character',
+    secondaryBody: 'The marathon starts on Tongariro Street and finishes at the Tongariro Domain, home of the Great Lake Centre. From the start it runs down Tongariro Street and Roberts Street before beginning the first of two laps of the half marathon course, which has run for 33 years, with the addition of a loop through the Ngāroto Estate subdivision. Each lap heads out to the airport roundabout, turns right onto SH1 and continues to 5 Mile Bay, returning along roughly 10 km of the Great Lake Pathway with views across the lake to the mountains beyond. Runners turn at Te Ātea – Tapuaeharuru to begin the second lap, returning to the Tongariro Domain to finish.',
+    distances: [
+      {
+        // Two laps of the half course, plus a loop through Ngāroto Estate.
+        key: 'taupo-mar', raceId: 'taupo-mar', matchRace: 'taupo-mar',
+        distLabel: '42.2 km', profileLong: 'Marathon', stats: taupoMarStats,
+        courseField: 'Two laps · Tongariro Domain finish',
+      },
+      {
+        // 2023 and 2025 are recovered from the organiser's all-distance PDFs;
+        // the CSVs shipped for those years are copies of the marathon file.
+        key: 'taupo-half', raceId: 'taupo-half', matchRace: 'taupo-half',
+        distLabel: '21.1 km', profileLong: 'Half marathon', stats: taupoHalfStats,
+        courseField: 'One lap · airport roundabout to 5 Mile Bay',
+      },
+      {
+        key: 'taupo-10k', raceId: 'taupo-10k', matchRace: 'taupo-10k',
+        distLabel: '10 km', profileLong: '10 km', stats: taupo10kStats,
+        courseField: 'Lakefront · Great Lake Pathway',
+      },
+      {
+        key: 'taupo-5k', raceId: 'taupo-5k', matchRace: 'taupo-5k',
+        distLabel: '5 km', profileLong: '5 km', stats: taupo5kStats,
+        courseField: 'Lakefront · Great Lake Pathway',
       },
     ],
   },
