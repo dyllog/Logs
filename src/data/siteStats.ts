@@ -2,12 +2,12 @@
 // Regenerated on every `npm run generate` so the homepage scale strip can never
 // drift from the archive again. Change the derivation, not these values.
 export const SITE_STATS = {
-  /** Every row across public/data/results-*.json (472 files). */
-  finisherRecords: 453955,
+  /** Every row across public/data/results-*.json (478 files). */
+  finisherRecords: 456033,
   /** Race families with a race page: road (raceMeta) + trail (trailEvents). */
   trackedEvents: 20,
   /** Athletes with 2+ logged races — the cohort that gets a profile page. */
-  athleteProfiles: 79801,
+  athleteProfiles: 80068,
   /** Published course records: road distances + trail course eras. */
   courseRecords: 43,
   /** Oldest edition on file (wellington-half-1996). */

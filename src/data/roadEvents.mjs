@@ -98,6 +98,11 @@ export const ROAD_EVENTS = {
   "taupo-half":       { label: "Taupō Half",             raceSlug: "taupo-marathon",                    dist: "21.1 km", distId: "half" },
   "taupo-10k":        { label: "Taupō 10k",              raceSlug: "taupo-marathon",                    dist: "10 km",   distId: "10k" },
   "taupo-5k":         { label: "Taupō 5k",               raceSlug: "taupo-marathon",                    dist: "5 km",    distId: "5k" },
+
+  // Half only. Every "10K Results" file Huntly ships is byte-identical to that
+  // year's half file and its own Course column says "Half marathon" — there is
+  // no 10 km event to register.
+  "huntly-half":      { label: "Huntly Half",            raceSlug: "huntly-half-marathon",              dist: "21.1 km", distId: "half" },
 };
 
 /**

@@ -1,0 +1,411 @@
+Position,Name,Bib,Time,Gender,Age,City,Course,Pace
+1,Rasmus Bengtsson,1941,01:14:29,Male,29,Auckland,Running | Half marathon,03:31 /km
+2,Matthew Parsonage,1813,01:16:08,Male,44,Rotorua,Running | Half marathon,03:36 /km
+3,Casey Thorby,1027,01:16:30,Male,20,Taupo,Running | Half marathon,03:37 /km
+4,ANDREJ FUSCIC,1426,01:17:24,Male,24,Auckland,Running | Half marathon,03:40 /km
+5,Lisa Cross,1679,01:18:10,Female,42,Ramarama,Running | Half marathon,03:42 /km
+6,James SPENCE,1298,01:19:14,Male,41,coatesville,Running | Half marathon,03:45 /km
+7,James Upton,1985,01:21:00,Male,39,Auckland,Running | Half marathon,03:50 /km
+8,Matt Kerr,1735,01:22:33,Male,33,,Running | Half marathon,03:54 /km
+9,Reece Billington,1428,01:29:02,Male,38,Tauranga,Running | Half marathon,04:13 /km
+10,Cameron Potts,1473,01:30:02,Male,21,Hastings,Running | Half marathon,04:16 /km
+11,Luca Ahumada-Percoco,1922,01:30:25,Male,31,Tauranga,Running | Half marathon,04:17 /km
+12,Jeremy Simons,1335,01:30:47,Male,19,Auckland,Running | Half marathon,04:18 /km
+13,Tim Buckley,1312,01:30:49,Male,45,Auckland,Running | Half marathon,04:18 /km
+14,Kevin Bell,1109,01:31:36,Male,47,Hamilton,Running | Half marathon,04:20 /km
+15,Tomàs Solar Fuchslocher,1250,01:31:54,Male,43,Auckland,Running | Half marathon,04:21 /km
+16,Hugo King,1417,01:32:36,Male,29,Tauranga,Running | Half marathon,04:23 /km
+17,Darryll Cullen,1351,01:32:58,Male,27,Auckland,Running | Half marathon,04:24 /km
+18,Rachel O'Brien,1673,01:33:12,Female,44,Pukekohe,Running | Half marathon,04:25 /km
+19,John Bowe,1557,01:34:42,Male,53,Hamilton,Running | Half marathon,04:29 /km
+20,Ryan Beale,1088,01:34:48,Male,39,Auckland,Running | Half marathon,04:29 /km
+21,Daniel Stone,1169,01:35:03,Male,35,Hamilton,Running | Half marathon,04:30 /km
+22,Dan Brown,1980,01:36:30,Male,44,Northcote Point,Running | Half marathon,04:34 /km
+23,Harrison Coles,1642,01:36:42,Male,35,Hamilton,Running | Half marathon,04:34 /km
+24,Troy Florence,1772,01:36:48,Male,46,Auckland,Running | Half marathon,04:35 /km
+25,Kovo MacDonald,1725,01:37:06,Female,40,Taupiri,Running | Half marathon,04:36 /km
+26,Mat Langlands,1251,01:37:17,Male,33,Cambridge,Running | Half marathon,04:36 /km
+27,Antonio de Souza,1934,01:37:59,Male,28,Ellerslie,Running | Half marathon,04:38 /km
+28,Chris Bothma,1868,01:38:02,Male,56,Auckland,Running | Half marathon,04:39 /km
+29,David Prince,1455,01:38:07,Male,23,Hamilton,Running | Half marathon,04:39 /km
+30,Anthony Mudford,1702,01:38:15,Male,34,Cambridge,Running | Half marathon,04:39 /km
+31,Paul Collins,1979,01:38:21,Male,45,Auckland,Running | Half marathon,04:39 /km
+32,Sean Kelly,1071,01:38:26,Male,51,Auckland,Running | Half marathon,04:40 /km
+33,Drew Christensen,1926,01:38:34,Male,23,Hamilton,Running | Half marathon,04:40 /km
+34,Herman Bolk,1756,01:38:44,Male,32,Manukau,Running | Half marathon,04:40 /km
+35,Connor Burriss,1332,01:38:59,Male,23,Auckland,Running | Half marathon,04:41 /km
+36,David McCoy,1575,01:39:08,Male,47,Hamilton,Running | Half marathon,04:42 /km
+37,Jie Huang,1580,01:39:55,Male,48,南京市,Running | Half marathon,04:44 /km
+38,Reuben Tomlinson,1856,01:40:56,Male,45,Matamata piako,Running | Half marathon,04:46 /km
+39,Dan Gardner,2007,01:41:00,Male,29,,Running | Half marathon,04:47 /km
+40,Scott Billington,1958,01:41:06,Male,28,Tauranga,Running | Half marathon,04:47 /km
+41,Jeff VandersandeLacoste,1945,01:41:50,Male,38,Tauranga,Running | Half marathon,04:49 /km
+42,Ivan Robertson,1240,01:42:25,Male,32,Hamilton,Running | Half marathon,04:51 /km
+43,Liam Young,1509,01:42:46,Male,16,,Running | Half marathon,04:52 /km
+44,Peter Caudwell,1713,01:42:53,Male,59,Pokeno,Running | Half marathon,04:52 /km
+45,Joanne Wainwright,1438,01:43:00,Female,48,Auckland,Running | Half marathon,04:52 /km
+46,Mike Erceg,1629,01:44:01,Male,35,Auckland,Running | Half marathon,04:55 /km
+47,russell smith,1733,01:44:07,Male,57,Hamilton,Running | Half marathon,04:56 /km
+48,Dijana Corban,1491,01:44:09,Female,22,Hamilton,Running | Half marathon,04:56 /km
+49,Nic Ross,1738,01:44:12,Male,25,Auckland,Running | Half marathon,04:56 /km
+50,Grant McLaren,1356,01:44:53,Male,41,Tauranga,Running | Half marathon,04:58 /km
+51,Megan Bramley,1155,01:45:37,Female,27,Hamilton,Running | Half marathon,05:00 /km
+52,YoungJong Jung,1707,01:45:48,Male,31,Tauranga,Running | Half marathon,05:00 /km
+53,Karl Kalders,1918,01:45:51,Male,45,Auckland,Running | Half marathon,05:01 /km
+54,Tim Gibbs,1674,01:45:58,Male,27,Auckland,Running | Half marathon,05:01 /km
+55,KERRYN VAN RIJ,1986,01:46:18,Female,44,Auckland,Running | Half marathon,05:02 /km
+56,Matthew Hall,1036,01:46:31,Male,55,Cambridge,Running | Half marathon,05:03 /km
+57,allan barrington,1471,01:46:39,Male,59,Hamilton,Running | Half marathon,05:03 /km
+58,Brendon Hogan,1125,01:46:58,Male,42,Matata,Running | Half marathon,05:04 /km
+59,Sushant Prasad,1262,01:47:20,Male,18,Buckands beach,Running | Half marathon,05:05 /km
+60,Chris Keith,1891,01:47:33,Male,65,Hamilton,Running | Half marathon,05:06 /km
+61,Tim Mahoney,1144,01:47:37,Male,38,Auckland,Running | Half marathon,05:06 /km
+62,Charlie Dyer,1310,01:47:48,Male,23,Cowes,Running | Half marathon,05:06 /km
+63,Samuel Lindsay,1295,01:48:04,Male,26,Auckland,Running | Half marathon,05:07 /km
+64,Miriam Hayward,1560,01:48:40,Female,37,Auckland,Running | Half marathon,05:09 /km
+65,Hamish McWilliam,1278,01:48:46,Male,25,Hamilton,Running | Half marathon,05:09 /km
+66,Paul Ewart,1677,01:49:02,Male,60,Hamilton,Running | Half marathon,05:10 /km
+67,Jordan Metcalfe,1568,01:49:07,Male,38,Hamilton,Running | Half marathon,05:10 /km
+68,Andrew De Groot,1882,01:49:21,Male,32,Morrinsville,Running | Half marathon,05:10 /km
+69,Rob Townsend,1706,01:49:47,Male,34,Hamilton,Running | Half marathon,05:12 /km
+70,Dane Cox,1943,01:50:31,Male,32,Auckland,Running | Half marathon,05:14 /km
+71,Jarred Kinnes,1942,01:50:35,Male,34,Auckland,Running | Half marathon,05:14 /km
+72,Levi Dyer,1321,01:50:35,Male,23,Auckland,Running | Half marathon,05:14 /km
+73,Dan Emery,1466,01:50:50,Male,38,Hamilton,Running | Half marathon,05:15 /km
+74,Calum Brash,1129,01:50:56,Male,28,Tauranga,Running | Half marathon,05:15 /km
+75,Nick Palfrey,1100,01:51:05,Male,37,Auckland,Running | Half marathon,05:15 /km
+76,Sam Crosby,1834,01:51:15,Male,27,Auckland,Running | Half marathon,05:16 /km
+77,GUOJUN ZHANG,1651,01:51:16,Male,40,Hamilton,Running | Half marathon,05:16 /km
+78,Grant Budd,1464,01:51:52,Male,58,Ngaruawahia,Running | Half marathon,05:18 /km
+79,Adam Graca,1084,01:52:02,Male,34,Tauranga,Running | Half marathon,05:18 /km
+80,Blake Buxton,1252,01:52:28,Male,29,Hamilton,Running | Half marathon,05:19 /km
+81,QINGBO ZHAO,1082,01:53:26,Male,43,Hamilton,Running | Half marathon,05:22 /km
+82,Ryan McGowan,1247,01:53:32,Male,46,Ohaupo,Running | Half marathon,05:22 /km
+83,Caleb Wilson,1337,01:54:02,Male,41,Hamilton,Running | Half marathon,05:24 /km
+84,Kevin Ross,1610,01:54:19,Male,48,Auckland,Running | Half marathon,05:25 /km
+85,James Gilbert,1223,01:54:23,Male,41,Auckland,Running | Half marathon,05:25 /km
+86,Rod Orr,1913,01:54:39,Male,67,Matamata,Running | Half marathon,05:25 /km
+87,Mark Liu,1095,01:54:47,Male,47,Hamilton,Running | Half marathon,05:26 /km
+88,Matthew Willcox,1170,01:54:50,Male,39,Auckland,Running | Half marathon,05:26 /km
+89,Michael Crawford,1498,01:54:57,Male,56,Birkenhead,Running | Half marathon,05:27 /km
+90,Tom Whale,1191,01:55:03,Male,26,Auckland,Running | Half marathon,05:27 /km
+91,James Forbes,1303,01:55:49,Male,37,Hamilton,Running | Half marathon,05:29 /km
+92,Kate Paulsen,1230,01:56:05,Female,27,Cambridge,Running | Half marathon,05:30 /km
+93,Finn Andrew,1833,01:56:19,Male,21,Auckland,Running | Half marathon,05:30 /km
+94,Simon Dixon,1889,01:56:36,Male,64,Cambridge,Running | Half marathon,05:31 /km
+95,Bradley Pennington,1841,01:57:11,Male,44,Hamilton,Running | Half marathon,05:33 /km
+96,Dave Gunn,1699,01:57:17,Male,57,Hamilton,Running | Half marathon,05:33 /km
+97,Jack Coe,1905,01:57:48,Male,34,Te awamutu,Running | Half marathon,05:34 /km
+98,John Evans,1516,01:58:09,Male,56,Auckland,Running | Half marathon,05:36 /km
+99,Brian Loveday,1765,01:58:22,Male,26,Taupo,Running | Half marathon,05:36 /km
+100,Tawakepito Ronaki,1646,01:58:33,Male,24,Ngaruawahia,Running | Half marathon,05:37 /km
+101,Amanda Cathro,1720,01:58:53,Female,37,Hamilton Central,Running | Half marathon,05:37 /km
+102,Rico Scott,1728,01:59:01,Male,19,Hamilton,Running | Half marathon,05:38 /km
+103,Marion McKoy,1410,01:59:11,Female,49,Hamilton,Running | Half marathon,05:39 /km
+104,Jack Kearns,1698,01:59:46,Male,24,Auckland,Running | Half marathon,05:40 /km
+105,Nicole Grayling,1987,01:59:48,Female,29,Matamata,Running | Half marathon,05:40 /km
+106,Amie Limbrick,1501,02:00:03,Female,30,Auckland,Running | Half marathon,05:41 /km
+107,Mandy Roberts,1166,02:00:05,Female,41,Auckland,Running | Half marathon,05:41 /km
+108,Chao Liao,1388,02:00:14,Male,33,Auckland,Running | Half marathon,05:42 /km
+109,Rico Hirzel,1363,02:00:35,Male,12,,Running | Half marathon,05:43 /km
+110,Steven Smith,1015,02:00:35,Male,61,Cambridge,Running | Half marathon,05:43 /km
+111,Gabriel Baijings,1408,02:00:36,Male,27,Auckland,Running | Half marathon,05:43 /km
+112,Logan Fisher-Murray,1594,02:01:10,Male,35,Onhinewai,Running | Half marathon,05:44 /km
+113,Hannah Fielding,1276,02:01:21,Female,29,Christchurch,Running | Half marathon,05:45 /km
+114,James-Hardy Rorimpandey,1379,02:01:37,Male,22,,Running | Half marathon,05:45 /km
+115,Thomas Cousins,1997,02:01:50,Male,29,Rotorua,Running | Half marathon,05:46 /km
+116,megan siluch,1063,02:01:55,Female,31,Tauranga,Running | Half marathon,05:46 /km
+117,Mark Darlow,1368,02:02:52,Male,46,Auckland,Running | Half marathon,05:49 /km
+118,Missy Mooney,1008,02:02:53,Female,29,Hamilton,Running | Half marathon,05:49 /km
+119,Ian Brits,1615,02:02:54,Male,22,Hamilton,Running | Half marathon,05:49 /km
+120,Ashleigh Humphries,1149,02:03:05,Male,33,Morrinsville,Running | Half marathon,05:49 /km
+121,Fletcher Jamieson,1653,02:03:12,Male,16,,Running | Half marathon,05:50 /km
+122,Justine Maddern,1092,02:03:13,Female,37,Auckland,Running | Half marathon,05:50 /km
+123,Ben Coley,1258,02:03:58,Male,40,Auckland,Running | Half marathon,05:52 /km
+124,Peter Conder,1931,02:04:15,Male,49,Hamilton,Running | Half marathon,05:53 /km
+125,Regan Edwards,1782,02:04:22,Male,37,Pokeno,Running | Half marathon,05:53 /km
+126,Robbie Pepene-Golf,1528,02:04:25,Male,27,Hamiltpn,Running | Half marathon,05:54 /km
+127,Stephen Adams,1858,02:04:37,Male,46,Hamilton,Running | Half marathon,05:54 /km
+128,Manpreet Brar,1793,02:04:47,Male,46,Auckland,Running | Half marathon,05:54 /km
+129,Cooper Hanna,1228,02:04:50,Male,12,,Running | Half marathon,05:55 /km
+130,Ella Pracy,1933,02:04:50,Female,18,,Running | Half marathon,05:55 /km
+131,Garth Forsythe,1261,02:04:54,Male,28,Cambridge,Running | Half marathon,05:55 /km
+132,Jennie Aldwinckle,1671,02:05:14,Female,52,Auckland,Running | Half marathon,05:56 /km
+133,Brian McVicker,1102,02:05:48,Male,50,Waitakere,Running | Half marathon,05:57 /km
+134,Kirsty Mills,1032,02:06:13,Female,36,Hamilton,Running | Half marathon,05:58 /km
+135,Ben Connolly,1451,02:06:35,Male,39,Otorohanga,Running | Half marathon,06:00 /km
+136,Hannah Mooney,1005,02:06:38,Female,29,HAMILTON,Running | Half marathon,06:00 /km
+137,Hannah Cuthill,1182,02:06:53,Female,41,Waiterimu,Running | Half marathon,06:00 /km
+138,Todd Woodmass,1239,02:07:13,Male,40,Ohaupo,Running | Half marathon,06:01 /km
+139,Jose Gonzalez,1798,02:07:20,Male,31,Hamilton,Running | Half marathon,06:02 /km
+140,Amanda Carleton,1616,02:07:34,Female,38,Otorohanga,Running | Half marathon,06:03 /km
+141,Jennie Lavis,1204,02:07:35,Female,44,Hamilton,Running | Half marathon,06:03 /km
+142,Thomas Gregory,1128,02:07:43,Male,39,,Running | Half marathon,06:03 /km
+143,Helen Bell,1098,02:07:51,Female,43,Hamilton,Running | Half marathon,06:03 /km
+144,Connor Buckley,1081,02:08:03,Male,25,Hamilton,Running | Half marathon,06:04 /km
+145,Kylie Cassells,1599,02:08:09,Female,47,Hamilton,Running | Half marathon,06:04 /km
+146,Josh Drysdale,1069,02:08:28,Male,24,Tokoroa,Running | Half marathon,06:05 /km
+147,Anneke Henderson,1246,02:08:30,Female,39,Hamiltom,Running | Half marathon,06:05 /km
+148,Cameron Nicholls,1440,02:09:12,Male,47,Matamata,Running | Half marathon,06:07 /km
+149,Anan Pavan,1256,02:09:28,Male,60,Napier,Running | Half marathon,06:08 /km
+150,Jason Hartley,1641,02:09:37,Male,36,,Running | Half marathon,06:08 /km
+151,Daniel Lee,1112,02:09:43,Male,45,Auckland,Running | Half marathon,06:09 /km
+152,Peter Li,1360,02:09:52,Male,48,Wellington,Running | Half marathon,06:09 /km
+153,Steven Truscott,1212,02:10:06,Male,52,,Running | Half marathon,06:10 /km
+154,Ye Liu,1572,02:10:19,Male,41,Auckland,Running | Half marathon,06:10 /km
+155,Emily Mooney,1969,02:10:29,Female,23,Kerikeri,Running | Half marathon,06:10 /km
+156,Qingrong Zeng,1218,02:10:43,Male,41,Auckland,Running | Half marathon,06:12 /km
+157,Dylan Thomas,1367,02:10:51,Male,19,Hamilton,Running | Half marathon,06:12 /km
+158,Richard Ashman,1955,02:11:03,Male,33,Hamilton,Running | Half marathon,06:12 /km
+159,Amy Orwin,1953,02:11:12,Female,39,Auckland,Running | Half marathon,06:13 /km
+160,Sebastien Barbier,1219,02:11:38,Male,40,Auckland,Running | Half marathon,06:14 /km
+161,Joe Ardagh,1984,02:11:46,Male,31,Waikato,Running | Half marathon,06:15 /km
+162,Christopher Zaayman,1226,02:11:46,Male,32,Hamilton,Running | Half marathon,06:15 /km
+163,Braedan Onehi,1970,02:11:46,Male,27,Hamilton,Running | Half marathon,06:15 /km
+164,Jeremy Suisted,1141,02:11:50,Male,38,Karapiro,Running | Half marathon,06:15 /km
+165,Aleisha Goldsmith,1663,02:12:01,Female,31,Pokeno,Running | Half marathon,06:15 /km
+166,Amy Morgan,1407,02:12:21,Female,28,Auckland,Running | Half marathon,06:16 /km
+167,Ben Crawford,1146,02:12:28,Male,44,Auckland,Running | Half marathon,06:16 /km
+168,Gareth Read,1090,02:12:46,Male,41,Hamilton,Running | Half marathon,06:17 /km
+169,Justin Wittstock,1851,02:12:48,Male,43,Cambridge,Running | Half marathon,06:17 /km
+170,Chris Vernon,1046,02:12:49,Male,66,Auckland,Running | Half marathon,06:18 /km
+171,Connor The Kearns,1736,02:12:52,Male,26,Auckland,Running | Half marathon,06:18 /km
+172,Ryan Parry,1645,02:12:53,Male,40,Cambridge,Running | Half marathon,06:18 /km
+173,david middlemiss,1676,02:13:11,Male,34,hamilton,Running | Half marathon,06:18 /km
+174,Caitlin Kastner,1249,02:13:34,Female,34,Auckland,Running | Half marathon,06:19 /km
+175,Michelle Laughton-Hill,1553,02:13:34,Female,54,Auckland,Running | Half marathon,06:19 /km
+176,Dean Pawley,1104,02:13:38,Male,41,Auckland,Running | Half marathon,06:19 /km
+177,Steve hunter,1664,02:13:38,Male,51,hamilton,Running | Half marathon,06:19 /km
+178,Beth Hughes,1010,02:13:57,Female,31,Tauranga,Running | Half marathon,06:21 /km
+179,Edwin Lau,1968,02:13:59,Male,29,Auckland,Running | Half marathon,06:21 /km
+180,Sarah Sinclair,1769,02:14:25,Female,50,Hamilton,Running | Half marathon,06:22 /km
+181,Sarah Pickering,1538,02:14:31,Female,51,Papakura,Running | Half marathon,06:22 /km
+182,Eden Dowling-Mitchell,1558,02:14:32,Male,34,Hamilton,Running | Half marathon,06:22 /km
+183,James Hunt,1145,02:15:59,Male,67,Hamilton,Running | Half marathon,06:26 /km
+184,Rowena Macqueen,1571,02:16:01,Female,30,Auckland,Running | Half marathon,06:27 /km
+185,Ethan Clemas,1655,02:16:57,Male,25,Sandringham,Running | Half marathon,06:29 /km
+186,Charlotte Nijssen,1932,02:17:22,Female,42,Hamilton,Running | Half marathon,06:30 /km
+187,Jong Su Bae,1307,02:17:49,Male,40,Auckland,Running | Half marathon,06:31 /km
+188,Gerard Pauley,1358,02:17:49,Male,51,Hamilton,Running | Half marathon,06:31 /km
+189,Patricia De’ Ath,1838,02:18:10,Female,39,Hamilton,Running | Half marathon,06:33 /km
+190,Jacob Kelly,1009,02:18:18,Male,42,Waiuku,Running | Half marathon,06:33 /km
+191,Brier Pearson,1203,02:18:22,Female,21,Hamilton,Running | Half marathon,06:33 /km
+192,Kay Kang,1524,02:18:37,Female,42,Auckland,Running | Half marathon,06:34 /km
+193,Ketina Chivasa,1124,02:18:43,Female,43,Auckland,Running | Half marathon,06:34 /km
+194,Wol Bol,1878,02:18:44,Male,38,Auckland City,Running | Half marathon,06:34 /km
+195,Jeremy Patterson,2001,02:19:07,Male,29,,Running | Half marathon,06:35 /km
+196,Courtney Maddern,1172,02:19:10,Male,36,Pukekohe,Running | Half marathon,06:36 /km
+197,Vidya Mathavan,1248,02:19:11,Female,42,hamilton,Running | Half marathon,06:36 /km
+198,Graham Poppelwell,1260,02:19:25,Male,61,Hamilton,Running | Half marathon,06:36 /km
+199,Duncan McAdam,1175,02:19:39,Male,56,Hamilton,Running | Half marathon,06:37 /km
+200,Jaydan Pollock,1564,02:19:51,Male,25,Hamilton,Running | Half marathon,06:37 /km
+201,Aadam Bennett K,1687,02:19:53,Male,34,Northland,Running | Half marathon,06:37 /km
+202,Liliana Prado,1545,02:19:58,Female,44,Auckland,Running | Half marathon,06:37 /km
+203,Liz Milne,1533,02:20:01,Female,64,Cambridge,Running | Half marathon,06:38 /km
+204,Woo Suk Choi,1001,02:20:11,Male,53,Auckland,Running | Half marathon,06:38 /km
+205,Jack King,1052,02:20:20,Male,24,Tokoroa,Running | Half marathon,06:39 /km
+206,Charlie Evans,1475,02:20:20,Male,61,Hamilton,Running | Half marathon,06:39 /km
+207,Amy De Jong,1631,02:20:29,Female,23,Matamata,Running | Half marathon,06:39 /km
+208,Melissa Rogers,1513,02:20:51,Female,34,Te Awamutu,Running | Half marathon,06:40 /km
+209,Ash Thakur,1600,02:21:07,Male,32,,Running | Half marathon,06:41 /km
+210,Marike Skinner,1900,02:21:16,Female,40,Auckland,Running | Half marathon,06:42 /km
+211,Kate Zame,1961,02:21:29,Female,33,Cambridge ,Running | Half marathon,06:42 /km
+212,Jamie Nicholls,1114,02:21:41,Male,51,Matamata,Running | Half marathon,06:43 /km
+213,Daniel Yin,1103,02:21:50,Male,35,Hamilton,Running | Half marathon,06:43 /km
+214,Corey van der Meer,1622,02:21:59,Male,28,Rotorua,Running | Half marathon,06:43 /km
+215,Kylie Bannister,1457,02:22:03,Female,38,,Running | Half marathon,06:43 /km
+216,David Alderman,1496,02:22:17,Male,53,Auckland,Running | Half marathon,06:44 /km
+217,allan crouch,1835,02:22:20,Male,58,RD2 Taupiri,Running | Half marathon,06:45 /km
+218,Jordyn Crouch,1320,02:22:20,Female,29,Whakatane,Running | Half marathon,06:45 /km
+219,Jenny Mann,1709,02:22:21,Female,33,Hamilton,Running | Half marathon,06:45 /km
+220,Leanne Gale,1449,02:22:43,Female,41,,Running | Half marathon,06:45 /km
+221,Sivi Rabukatoka,1484,02:22:44,Male,32,Hamilton,Running | Half marathon,06:45 /km
+222,Ashlee Paulsen,1972,02:22:56,Female,34,Waipukurau,Running | Half marathon,06:46 /km
+223,Dave Bilderbeck,1495,02:23:03,Male,59,New Plymouth,Running | Half marathon,06:46 /km
+224,Gareth Cottrell,1037,02:23:18,Male,63,Taupo,Running | Half marathon,06:47 /km
+225,Paul Moore,1334,02:23:21,Male,51,Hamilton,Running | Half marathon,06:47 /km
+226,Don Morris,1062,02:23:21,Male,69,Omokoroa,Running | Half marathon,06:47 /km
+227,Lauryn Neal,1570,02:23:34,Female,26,Te Kauwhata,Running | Half marathon,06:48 /km
+228,Eloise Labuschagne,1014,02:23:40,Female,52,Auckland,Running | Half marathon,06:48 /km
+229,Emma Simons,1420,02:24:03,Female,23,Auckland,Running | Half marathon,06:49 /km
+230,Caleb Walker,1316,02:24:24,Male,40,Hamilton,Running | Half marathon,06:50 /km
+231,Annette Rodgers,1521,02:24:52,Female,54,Taupiri,Running | Half marathon,06:52 /km
+232,Rachael Forrest,1165,02:24:58,Female,46,Putaruru,Running | Half marathon,06:52 /km
+233,Sarah Cammick,1479,02:25:00,Female,53,Auckland,Running | Half marathon,06:52 /km
+234,Charlotte Sarsfield,1693,02:25:09,Female,31,Hamilton,Running | Half marathon,06:52 /km
+235,Ash Pennington,1231,02:25:15,Male,52,Te Awamutu,Running | Half marathon,06:52 /km
+236,Michael Simons,1285,02:25:21,Male,67,Auckland,Running | Half marathon,06:53 /km
+237,Jeff Eves,1013,02:25:21,Male,52,Hamilton,Running | Half marathon,06:53 /km
+238,Janice Truscott,1167,02:25:22,Female,53,Hamilton,Running | Half marathon,06:53 /km
+239,Zuzana Norris,1960,02:25:23,Female,35,Red Beach,Running | Half marathon,06:53 /km
+240,Richard Lawrence,1237,02:25:26,Male,72,Hamilton,Running | Half marathon,06:53 /km
+241,Nico Haggai,1550,02:25:29,Male,52,Pukemiro,Running | Half marathon,06:54 /km
+242,Rachel Lala,1806,02:25:40,Female,38,Hamilton,Running | Half marathon,06:54 /km
+243,emma walton,1386,02:25:57,Female,25,Hamilton,Running | Half marathon,06:55 /km
+244,Francis Reid,1179,02:26:19,Male,44,Auckland,Running | Half marathon,06:55 /km
+245,Robert Vowles,1764,02:27:33,Male,67,Manukau,Running | Half marathon,06:59 /km
+246,David Parker,1809,02:27:58,Male,56,MATAMATA,Running | Half marathon,07:00 /km
+247,Taips Olliver-Samuels,1654,02:28:14,Male,26,Hamilton,Running | Half marathon,07:01 /km
+248,Tim Kirk,1472,02:29:04,Male,57,Hamilton,Running | Half marathon,07:03 /km
+249,Aziah Ikitule,1898,02:29:21,Male,26,Manukau,Running | Half marathon,07:04 /km
+250,Charlotte Gamble,1478,02:29:33,Female,23,Auckland,Running | Half marathon,07:05 /km
+251,Jason Boyce,1964,02:29:40,Male,32,Cambridge,Running | Half marathon,07:05 /km
+252,Timothy Cahill,1284,02:30:23,Male,21,Hamilton,Running | Half marathon,07:07 /km
+253,James Sainsbury,1279,02:30:42,Male,46,Matamata,Running | Half marathon,07:08 /km
+254,Toby Hills,1366,02:30:55,Male,33,Hamilton,Running | Half marathon,07:09 /km
+255,Michelle Parker,1802,02:31:07,Female,50,Matamata,Running | Half marathon,07:09 /km
+256,Corom Grey,1966,02:31:11,Male,29,Hamilton,Running | Half marathon,07:10 /km
+257,Vanessa Leishman,1441,02:31:17,Female,48,Auckland,Running | Half marathon,07:10 /km
+258,Rachel Mason-Thomas,1424,02:31:56,Female,50,Auckland,Running | Half marathon,07:12 /km
+259,August Gregor Rojas III,1611,02:32:42,Male,40,Auckland,Running | Half marathon,07:14 /km
+260,Shane T,1853,02:33:42,Male,33,Hamilton,Running | Half marathon,07:16 /km
+261,Alan Bedwin,1531,02:33:42,Male,36,Auckland,Running | Half marathon,07:16 /km
+262,carol petrie,1755,02:34:28,Female,47,waitakere,Running | Half marathon,07:19 /km
+263,Amie Baker,1106,02:34:53,Female,39,Auckland,Running | Half marathon,07:20 /km
+264,Kayne Thompson,1975,02:35:02,Male,38,Te Kauwhata,Running | Half marathon,07:21 /km
+265,Jevy Basical,1562,02:35:02,Female,34,Rotorua,Running | Half marathon,07:21 /km
+266,Andre Morris-Eyton,1066,02:35:03,Male,29,Te kauwhata,Running | Half marathon,07:21 /km
+267,Sandhya Fernandez,1138,02:35:16,Female,40,HAMILTON,Running | Half marathon,07:21 /km
+268,Todd Schofield,1220,02:35:17,Male,60,Pukekohe,Running | Half marathon,07:21 /km
+269,LUIS DAZA,1595,02:35:38,Male,47,Auckland,Running | Half marathon,07:22 /km
+270,Penny Timmer-Arends,1347,02:35:54,Female,37,Te Awamutu,Running | Half marathon,07:23 /km
+271,Mark Boyd,1876,02:36:12,Male,66,Auckland,Running | Half marathon,07:24 /km
+272,Jerick Colendres,1200,02:37:21,Male,46,Hamilton,Running | Half marathon,07:27 /km
+273,Ruth Murphy,1371,02:37:53,Female,51,Titirangi,Running | Half marathon,07:28 /km
+274,Kyra Piccione,1723,02:38:09,Female,35,Hamilton,Running | Half marathon,07:30 /km
+275,Simon Davies,1909,02:38:26,Male,39,Hamilton,Running | Half marathon,07:30 /km
+276,Daniel Fergusson,1577,02:38:31,Male,34,Rotorua,Running | Half marathon,07:30 /km
+277,Sacha Semenov,1326,02:38:41,Male,29,Hamilton,Running | Half marathon,07:31 /km
+278,Luke Taylor,1724,02:38:47,Male,45,Raglan,Running | Half marathon,07:31 /km
+279,Aimee Wedgwood,1214,02:38:51,Female,44,Auckland,Running | Half marathon,07:31 /km
+280,Kelly West,1511,02:38:55,Female,46,Hamilton,Running | Half marathon,07:31 /km
+281,Russ Oberio,1205,02:39:36,Male,50,Auckland,Running | Half marathon,07:33 /km
+282,James Pennington,1336,02:39:45,Male,42,,Running | Half marathon,07:34 /km
+283,Grant Trethewey,1815,02:39:55,Male,62,Auckland,Running | Half marathon,07:34 /km
+284,Aleo Barrameda,1573,02:41:03,Male,34,New Plymouth,Running | Half marathon,07:37 /km
+285,Stacey Kobus,1110,02:41:34,Female,35,Cambridge,Running | Half marathon,07:39 /km
+286,Ryan Sharp,1187,02:41:59,Male,49,North Shore,Running | Half marathon,07:40 /km
+287,Maya Sharp,1192,02:42:00,Female,19,North Shore,Running | Half marathon,07:40 /km
+288,Florence Murphy,1300,02:42:03,Female,14,Titirangi,Running | Half marathon,07:40 /km
+289,Maureen Glassey,1929,02:42:06,Female,56,Auckkland,Running | Half marathon,07:40 /km
+290,Riley Harris,1399,02:42:13,Male,33,Huntly,Running | Half marathon,07:41 /km
+291,Nik Freeman,1971,02:42:19,Male,31,Te kauwhata,Running | Half marathon,07:41 /km
+292,Rachel McCulloch,1692,02:42:22,Female,51,Warkworth,Running | Half marathon,07:42 /km
+293,Nitish Bezzala,1506,02:42:56,Male,46,Hamilton,Running | Half marathon,07:43 /km
+294,Helen Emery,1433,02:43:02,Female,42,Ngaruawahia,Running | Half marathon,07:43 /km
+295,Raphael Lee,1044,02:43:05,Male,37,Auckland,Running | Half marathon,07:43 /km
+296,Karen Mason,1462,02:43:14,Female,73,Auckland,Running | Half marathon,07:44 /km
+297,Dale Cuenca,1227,02:43:24,Male,40,Te Kauwhata,Running | Half marathon,07:44 /km
+298,Andrew McCulloch,1691,02:43:24,Male,66,Warkworth,Running | Half marathon,07:44 /km
+299,Alex Kenny,1944,02:43:31,Female,28,Auckland,Running | Half marathon,07:45 /km
+300,Kirstin Blackburn,1529,02:44:15,Female,52,Mercer,Running | Half marathon,07:46 /km
+301,Sonya Macmillan,1277,02:44:26,Female,53,Auckland,Running | Half marathon,07:47 /km
+302,Saiyan Nelson,1714,02:44:26,Male,22,Huntly,Running | Half marathon,07:47 /km
+303,Godwishes Chitauro,1788,02:44:31,Male,45,,Running | Half marathon,07:48 /km
+304,Paige Ruri,1445,02:44:38,Female,26,Hamilton,Running | Half marathon,07:48 /km
+305,Aliesha Carver,1056,02:45:03,Female,38,Hamilton,Running | Half marathon,07:49 /km
+306,Luke Carver,1670,02:45:04,Male,39,,Running | Half marathon,07:49 /km
+307,Hannah Connolly,1253,02:45:15,Female,39,,Running | Half marathon,07:49 /km
+308,Anthony Chaney,1243,02:45:39,Male,45,Auckland,Running | Half marathon,07:51 /km
+309,Aaron James,1436,02:45:48,Male,31,Hamilton,Running | Half marathon,07:51 /km
+310,Jian Liu,1017,02:46:08,Male,56,Auckland,Running | Half marathon,07:52 /km
+311,Peta Berry,1514,02:46:14,Female,59,Auckland,Running | Half marathon,07:52 /km
+312,Jan Philip Militante,1507,02:46:25,Male,28,Hamilton,Running | Half marathon,07:53 /km
+313,Lyndsey Anselmi,1286,02:47:11,Female,58,Te Kuiti,Running | Half marathon,07:55 /km
+314,Ellen Wang,1043,02:47:37,Female,42,Hamilton,Running | Half marathon,07:56 /km
+315,Christine Davey,1131,02:47:47,Female,55,Hamilton,Running | Half marathon,07:57 /km
+316,Dan Franklin,1031,02:48:26,Male,75,Tokoroa,Running | Half marathon,07:58 /km
+317,Rosie Rear,1682,02:49:55,Female,53,Auckland,Running | Half marathon,08:03 /km
+318,Brooke Norton,1419,02:50:41,Female,23,Hamilton,Running | Half marathon,08:05 /km
+319,Caroline Dee,1067,02:50:53,Female,48,Ohaupo,Running | Half marathon,08:06 /km
+320,Steve Lovegrove,1619,02:51:41,Male,55,Rotorua,Running | Half marathon,08:08 /km
+321,Courtney McAllister,1565,02:51:42,Female,28,Rotorua,Running | Half marathon,08:08 /km
+322,doug macredie,1186,02:51:54,Male,78,Waiuku,Running | Half marathon,08:09 /km
+323,Deepak Bhakoo,1722,02:52:15,Male,57,Auckland,Running | Half marathon,08:09 /km
+324,Cherie Garland,2003,02:52:17,Female,52,,Running | Half marathon,08:10 /km
+325,Rochelle Swetman,1503,02:52:32,Female,50,Morrinsville,Running | Half marathon,08:10 /km
+326,Itabera Otumuli,1423,02:52:43,Female,41,Auckland,Running | Half marathon,08:11 /km
+327,Ben Orton,1467,02:53:01,Male,16,,Running | Half marathon,08:12 /km
+328,Jeanne van der Merwe,1029,02:55:35,Female,62,Hamilton,Running | Half marathon,08:19 /km
+329,Sam Day,1667,02:56:19,Female,47,Hamilton,Running | Half marathon,08:21 /km
+330,Tishy Parsons,1074,02:56:24,Female,37,Morrinsville,Running | Half marathon,08:21 /km
+331,Sarah Cody'Mandell,1393,02:56:45,Female,23,Auckland,Running | Half marathon,08:22 /km
+332,Angela Cody,1505,02:56:47,Female,56,Christchurch,Running | Half marathon,08:22 /km
+333,Chirag Bhakoo,1721,02:56:57,Male,24,,Running | Half marathon,08:23 /km
+334,Michelle Wallis,1060,02:57:00,Female,54,Franklin,Running | Half marathon,08:23 /km
+335,Jeyden King,1430,02:57:19,Male,19,Huntly,Running | Half marathon,08:24 /km
+336,Gill Hampton,1350,02:58:05,Female,66,Matamata,Running | Half marathon,08:26 /km
+337,Barbara Adams,1136,02:58:49,Female,45,Pukeatua,Running | Half marathon,08:28 /km
+338,Anna Meikle,1416,02:59:01,Female,22,,Running | Half marathon,08:28 /km
+339,Robyn Meikle,1392,02:59:02,Female,54,Tauranga,Running | Half marathon,08:29 /km
+340,Denise Hamilton,1085,02:59:39,Female,62,Cambridge,Running | Half marathon,08:30 /km
+341,Peter Hikaka,1174,02:59:50,Male,70,Waihi Beach,Running | Half marathon,08:31 /km
+342,Susan Fairgray,1946,02:59:58,Female,42,Auckland,Running | Half marathon,08:31 /km
+343,Laurie Wilson,2009,03:00:10,Female,61,"RD4, Pukekohe",Running | Half marathon,08:32 /km
+344,PRASHANTHA PADYAR,1161,03:00:24,Male,59,Auckland,Running | Half marathon,08:33 /km
+345,Christian Crossman,1620,03:00:40,Male,18,Te Awamutu,Running | Half marathon,08:33 /km
+346,Bonnie Hunter,1209,03:00:47,Female,31,AUCKLAND,Running | Half marathon,08:34 /km
+347,Iudina Gibbons,1740,03:01:12,Female,50,Hamilton,Running | Half marathon,08:35 /km
+348,Carys Chacko,1345,03:01:58,Female,18,Auckland,Running | Half marathon,08:37 /km
+349,Courtney Dickson,1173,03:02:49,Female,35,Hamilton,Running | Half marathon,08:40 /km
+350,Ian Lange,1115,03:03:11,Male,55,Hamilton,Running | Half marathon,08:40 /km
+351,Gayle Goudswaard,1305,03:04:54,Female,58,Hamilton,Running | Half marathon,08:45 /km
+352,Jeff Going,1304,03:05:19,Male,40,Taupiri,Running | Half marathon,08:46 /km
+353,Luke Westoby,1362,03:05:45,Male,42,Mount Roskill,Running | Half marathon,08:48 /km
+354,Jeanette McGlone,1006,03:06:06,Female,65,Auckland,Running | Half marathon,08:49 /km
+355,Tania Kingi,1011,03:08:19,Female,54,Manukau,Running | Half marathon,08:55 /km
+356,Rod Gill,1342,03:08:30,Male,78,Hamilton,Running | Half marathon,08:55 /km
+357,Marlin Fisher,1935,03:08:46,Male,55,Hamilton,Running | Half marathon,08:57 /km
+358,Jo Buchanan,1152,03:09:52,Female,56,Tauranga,Running | Half marathon,09:00 /km
+359,Margaret Hutson,1482,03:09:52,Female,47,auckland,Running | Half marathon,09:00 /km
+360,Michael Decena,1520,03:11:49,Male,34,,Running | Half marathon,09:05 /km
+361,Brian Rear,1683,03:12:02,Male,56,,Running | Half marathon,09:06 /km
+362,Matthew Wali,1582,03:12:08,Male,26,,Running | Half marathon,09:06 /km
+363,Ian Craig,1596,03:12:14,Male,59,Auckland,Running | Half marathon,09:06 /km
+364,Angela Boaler,1789,03:12:23,Female,56,,Running | Half marathon,09:07 /km
+365,Beverley Mascelle,1452,03:12:46,Female,52,"Pukekohe, Auckland",Running | Half marathon,09:08 /km
+366,Steve French,2004,03:14:03,Male,61,,Running | Half marathon,09:12 /km
+367,Ben Porter,1034,03:15:35,Male,58,Ohaupo,Running | Half marathon,09:16 /km
+368,Janie Smith,1290,03:15:41,Female,40,Kaiaua,Running | Half marathon,09:16 /km
+369,Megan Way,1530,03:16:49,Female,61,Thames,Running | Half marathon,09:19 /km
+370,Rosemond Rose,1122,03:16:52,Female,69,Wellsford,Running | Half marathon,09:19 /km
+371,Mark Hannett,1096,03:17:09,Male,66,Papakura,Running | Half marathon,09:20 /km
+372,Hurray Mills,1488,03:18:31,Male,68,Christchurch,Running | Half marathon,09:24 /km
+373,Linda Neething,1525,03:20:00,Female,62,,Running | Half marathon,09:28 /km
+374,Shane Morgan,1797,03:20:16,Male,57,Auckland,Running | Half marathon,09:29 /km
+375,Marie Whitworth,1077,03:21:21,Female,52,Tuakau,Running | Half marathon,09:32 /km
+376,Christine Clark,1751,03:22:20,Female,66,Manukau,Running | Half marathon,09:35 /km
+377,Jo Durkin,1758,03:22:20,Female,64,Auckland,Running | Half marathon,09:35 /km
+378,Alan Tao,1270,03:22:29,Male,69,Auckland,Running | Half marathon,09:36 /km
+379,Megs Kennedy,1216,03:22:34,Female,39,Rotorua,Running | Half marathon,09:36 /km
+380,Jessie McGowan,1142,03:22:38,Female,41,Ngaruawahia,Running | Half marathon,09:36 /km
+381,Tash Wasley,1325,03:23:00,Female,45,Hamilton,Running | Half marathon,09:37 /km
+382,Patricia Cunliffe,1244,03:26:04,Female,61,Waikato,Running | Half marathon,09:46 /km
+383,Claire Hendy,1042,03:26:30,Female,58,Auckland,Running | Half marathon,09:47 /km
+384,MARYANN PENNINGTON,1705,03:28:09,Female,67,AUCKLAND,Running | Half marathon,09:51 /km
+385,Anna Hetmanski,1355,03:28:12,Female,31,Napier,Running | Half marathon,09:52 /km
+386,Isaac Roche,1602,03:28:12,Male,30,Hamilton,Running | Half marathon,09:52 /km
+387,Mike Streeter,1378,03:29:52,Male,46,,Running | Half marathon,09:57 /km
+388,Amanda Streeter,1456,03:29:53,Female,38,Taupo,Running | Half marathon,09:57 /km
+389,Dorothy Schimanski-Grey,1283,03:33:45,Female,71,Te Awamutu,Running | Half marathon,10:07 /km
+390,Wilma Schimanski,1157,03:33:45,Female,70,Otorohanga,Running | Half marathon,10:07 /km
+391,Brad Mascelle,1476,03:33:56,Male,54,Pukekohe,Running | Half marathon,10:08 /km
+392,Glyn Rushby,1448,03:34:46,Male,65,Taupo,Running | Half marathon,10:10 /km
+393,Carolyn Rushby,1293,03:34:47,Female,64,Taupo,Running | Half marathon,10:10 /km
+394,Madison Goulden,1099,03:35:26,Female,40,Hamilton,Running | Half marathon,10:12 /km
+395,Cholif Decena,1518,03:35:50,Female,33,,Running | Half marathon,10:13 /km
+396,Jael Mazey,1583,03:35:50,Female,36,,Running | Half marathon,10:13 /km
+397,Charlie Pawa,1647,03:36:27,Male,59,Auckland,Running | Half marathon,10:15 /km
+398,Brett Johnson,1184,03:36:31,Male,48,Huntly,Running | Half marathon,10:15 /km
+399,Kirsty Petersen,1313,03:36:33,Female,47,Ngatea,Running | Half marathon,10:15 /km
+400,Danica Morgan,1370,03:36:36,Female,34,Hamilton,Running | Half marathon,10:16 /km
+401,Heather Flay,1812,03:37:49,Female,65,Pirongia,Running | Half marathon,10:19 /km
+402,Dennis Jordan,1888,03:38:50,Male,69,Waikato - Hamilton,Running | Half marathon,10:22 /km
+403,Teri Griffin,1040,03:39:30,Female,46,,Running | Half marathon,10:24 /km
+404,Wendy Pool,1041,03:39:57,Female,61,,Running | Half marathon,10:25 /km
+405,Kathy Gibbons,1400,03:40:25,Female,73,,Running | Half marathon,10:27 /km
+406,Max Morgan,1967,03:40:29,Male,28,Hamilton,Running | Half marathon,10:27 /km
+407,Zac morgan,1126,03:40:29,Male,34,Hamilton,Running | Half marathon,10:27 /km
+408,Jenni Calver,1050,03:46:28,Female,46,Putaruru,Running | Half marathon,10:43 /km
+409,Heather Withers,1704,03:51:16,Female,49,Pukekohe,Running | Half marathon,10:57 /km
+410,Nikki Hamilton,1897,03:52:05,Female,55,Pukekohe,Running | Half marathon,11:00 /km

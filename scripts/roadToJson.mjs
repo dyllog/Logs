@@ -183,6 +183,36 @@ export const ROAD_FAMILIES = {
       { distKey: '5k',   distId: '5k',   dist: '5 km',    label: 'Taupō 5k',       match: [/^5K Results - (\d{4})\.csv$/i] },
     ],
   },
+
+  huntly: {
+    label:    'Huntly Half Marathon',
+    dir:      'Huntly Half Marathon',
+    key:      'huntly',
+    raceSlug: 'huntly-half-marathon',
+    tsFile:   'huntlyData.ts',
+    tsPrefix: 'HUNTLY',
+    tsVar:    'huntly',
+    // ONLY the half is declared, because only the half exists. Every
+    // "10K Results - YYYY.csv" is byte-identical to that year's "Half Results"
+    // file AND its own Course column reads "Running | Half marathon" — two
+    // independent proofs of the same export error. Declaring a 10 km here
+    // would manufacture a distance the race does not run, out of half marathon
+    // times. The unclaimed files are reported on every run.
+    //
+    // The Course column is the authority over the filename wherever it exists;
+    // 2019 predates it and is attributed by filename, which is safe because
+    // that year's file holds a single distance.
+    courseMap: (value) => {
+      const v = value.toLowerCase();
+      if (/21\s*km|half\s*marathon/.test(v)) return 'half';
+      if (/\b10\s*km\b/.test(v)) return '10k';
+      if (/\b5\s*km\b/.test(v)) return '5k';
+      return null; // unrecognised → the file is skipped rather than guessed at
+    },
+    distances: [
+      { distKey: 'half', distId: 'half', dist: '21.1 km', label: 'Huntly Half', match: [/^Half Results - (\d{4})\.csv$/i] },
+    ],
+  },
 };
 
 // ─── CSV parsing (quotes, embedded commas, embedded newlines) ────────────────
@@ -390,18 +420,31 @@ function buildCat(rawCat, rawGender, rawAge) {
     // 0-(n-1). Not narrowed to a competitive junior band: U13 at a community
     // 10 km means anyone under 13, and inventing a floor would assert an age
     // range the entrant never declared.
-    const under = rest.match(/\bU\s*(\d{1,3})\b/i);
+    // Both spellings: "U13" and "Under 20". Huntly's 2019 file writes the
+    // latter with the gender AFTER the band ("Under 20 Male"), which the
+    // leading-gender strip cannot see and the hyphen-band match does not fit —
+    // it became the category "M Under 20 Male".
+    const under = rest.match(/\b(?:U|under)\s*(\d{1,3})\b/i);
     if (under) {
       const hi = Math.max(0, parseInt(under[1], 10) - 1);
       return gFinal ? normalizeCat(`${gFinal} 0-${hi}`) : `0–${hi}`;
     }
 
-    // A remainder with no letters in it is not a category. Taupō's 2022 PDF
-    // publishes one row as "Grace Ryan Female (42) (1) 57:38" with no age group
-    // at all, which otherwise became the category "W (42)". Gender is known,
-    // the band was never published, and that is what gets recorded.
-    if (gFinal) return /[a-z]/i.test(rest) ? normalizeCat(`${gFinal} ${rest}`) : gFinal;
-    return /[a-z]/i.test(rest) ? normalizeCat(rest) : '—';
+    // What is left is either an age the source published bare, or noise.
+    //
+    // A BARE NUMBER is an age: Saint Clair writes its top band as "M60"
+    // alongside "M16-39" and "M40-59", and dropping the 60 would throw away
+    // the only age information those rows carry.
+    //
+    // A PARENTHESISED number is not. Taupō's 2022 PDF publishes one row as
+    // "Grace Ryan Female (42) (1) 57:38" with no age group at all, and the
+    // stray gender place became the category "W (42)".
+    const bare = rest.match(/^\(?\s*(\d{1,3})\s*\)?$/);
+    const meaningful = bare && !/[()]/.test(rest) ? bare[1]
+                     : /[a-z]/i.test(rest) ? rest
+                     : '';
+    if (gFinal) return meaningful ? normalizeCat(`${gFinal} ${meaningful}`) : gFinal;
+    return meaningful ? normalizeCat(meaningful) : '—';
   }
   const age = clean(rawAge);
   if (g && age && /^\d{1,3}$/.test(age)) return `${g} ${age}`;
@@ -496,6 +539,34 @@ function convertFile(family, dist, year, filePath, warn, seenContent) {
   // blocks are comparable in size this is not an appended extract but
   // something the converter does not understand, and the file is skipped
   // rather than half-ingested.
+  // ── Course column: the source stating the distance per row ────────────────
+  // The strongest evidence there is, and it OVERRULES the filename. Huntly's
+  // "10K Results" files contain nothing but half marathon rows — every one of
+  // them says "Running | Half marathon" — and a filename-driven importer would
+  // have created a 10 km series out of half marathon times.
+  //
+  // This verifies rather than reattributes: a file whose rows belong to a
+  // different distance is skipped with its evidence, because moving them
+  // silently would be the same guessing this exists to prevent.
+  if (idx.course !== undefined && family.courseMap) {
+    const byCourse = new Map();
+    for (const g of grid.slice(1)) {
+      const v = clean(g[idx.course]);
+      if (!v) continue;
+      byCourse.set(v, (byCourse.get(v) ?? 0) + 1);
+    }
+    const wrong = [];
+    for (const [value, n] of byCourse) {
+      const mapped = family.courseMap(value);
+      if (mapped === null) { warn(`${rel}: unrecognised Course value ${JSON.stringify(value)} (${n} rows) — cannot attribute`); return null; }
+      if (mapped !== dist.distKey) wrong.push(`${JSON.stringify(value)} → ${mapped} (${n} rows)`);
+    }
+    if (wrong.length) {
+      warn(`${rel}: filed as "${dist.distKey}" but its Course column says otherwise — ${wrong.join('; ')} — SKIPPED, the column is the authority`);
+      return null;
+    }
+  }
+
   // ── "Surname, Firstname" exports ──────────────────────────────────────────
   // Taupō's 2025 files publish every name reversed. Left alone, "Stansloski,
   // Joel" never clusters with the "Joel Stansloski" the same runner appears as
