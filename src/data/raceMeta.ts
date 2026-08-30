@@ -28,6 +28,7 @@ import { mtmHalfStats, mtm10kStats, mtm5kStats } from './mtmData';
 import { whanganuiMarStats, whanganuiHalfStats, whanganuiQuarterStats, whanganui5kStats } from './whanganuiData';
 import { saintClairHalfStats, saintClair12kStats } from './saintClairData';
 import { taupoMarStats, taupoHalfStats, taupo10kStats, taupo5kStats } from './taupoData';
+import { huntlyHalfStats } from './huntlyData';
 
 export type RaceResultsId =
   | 'auckland' | 'rotorua' | 'rotorua-half' | 'chc' | 'chc-half' | 'hb' | 'hb-half'
@@ -38,7 +39,8 @@ export type RaceResultsId =
   | 'mtm-half' | 'mtm-10k' | 'mtm-5k'
   | 'whanganui-mar' | 'whanganui-half' | 'whanganui-quarter' | 'whanganui-5k'
   | 'saintclair-half' | 'saintclair-12k'
-  | 'taupo-mar' | 'taupo-half' | 'taupo-10k' | 'taupo-5k';
+  | 'taupo-mar' | 'taupo-half' | 'taupo-10k' | 'taupo-5k'
+  | 'huntly-half';
 
 export interface RaceRecord {
   time: string;
@@ -1081,6 +1083,29 @@ export const RACE_META: RaceMeta[] = [
         key: 'taupo-5k', raceId: 'taupo-5k', matchRace: 'taupo-5k',
         distLabel: '5 km', profileLong: '5 km', stats: taupo5kStats,
         courseField: 'Lakefront · Great Lake Pathway',
+      },
+    ],
+  },
+  {
+    // No elevation trace, and here the reason is stronger than usual: the
+    // course has changed repeatedly across four decades, so a single profile
+    // would misdescribe most of the editions the archive holds.
+    slug: 'huntly-half-marathon',
+    eyebrow: 'Road · Waikato · Huntly',
+    title: 'Huntly Half Marathon',
+    location: 'Huntly, Waikato',
+    courseField: 'Varies by year · Huntly and Lake Hakanoa',
+    nextEdition: '2027',
+    entryUrl: 'https://huntlyhalf.co.nz/',
+    overviewRight: 'Road, with trail sections in recent years · Huntly, Waikato',
+    surface: 'Sealed road, with trail sections on the recent hybrid courses',
+    secondaryLabel: 'Character',
+    secondaryBody: "New Zealand's longest-running standalone half marathon, first held on 22 February 1981 when 150 runners started outside the Huntly Police Station. John Graham won that race in 66:38, with Alison Roe 15th in 75:20; John Walker won the following year in 64:45 from a field of 540. The Hamilton Harrier Club has handled timing and results since the first running, and a 10 km was added in 1996. The route has changed repeatedly over four decades — the 2026 edition starts and finishes at the Huntly Speedway, taking in Lake Kimihia and Lake Hakanoa before returning through the streets of Huntly, and the organisers note it runs in that form only once, as rising water levels in the former East Mine move the turnaround.",
+    distances: [
+      {
+        // The archive holds 2019 and 2022-2026. The event has run since 1981.
+        key: 'huntly-half', raceId: 'huntly-half', matchRace: 'huntly-half',
+        distLabel: '21.1 km', profileLong: 'Half marathon', stats: huntlyHalfStats,
       },
     ],
   },

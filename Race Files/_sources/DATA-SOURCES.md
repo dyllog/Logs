@@ -182,3 +182,26 @@ The quarter marathon is published as `105K` (10.5 km) in 2018, 2020 and
 2023–25, and as `10K` in 2017, 2019 and 2022. It is one event at 10.55 km —
 one lap of the four-lap marathon course — and is stored under a single
 `quarter` distance key. See `ROAD_FAMILIES` in `scripts/roadToJson.mjs`.
+
+### Huntly Half Marathon — the archive holds 6 of ~45 editions
+
+Huntly has run since 22 February 1981 and bills itself as New Zealand's
+longest-running standalone half marathon; 2026 was the 46th. The archive holds
+2019 and 2022–2026.
+
+The organiser publishes a year-by-year history with winners and race stories
+back to the first running — 150 starters outside the Huntly Police Station, won
+by John Graham in 66:38 with Alison Roe 15th, and John Walker winning in 64:45
+the following year from 540 runners. That is roughly 39 editions of a
+nationally significant event, with the record in the organiser's own hands.
+
+Its **10 km is missing entirely**, and this one is an export error rather than
+an absence: the 10 km has run since 1996, but every `10K Results - YYYY.csv`
+supplied is byte-identical to that year's half marathon file and its own
+`Course` column reads "Half marathon". Re-requesting those exports would close
+the gap.
+
+Both are recorded in `public/data/coverage-gaps.json`, alongside the other
+editions known to exist but not held — see `scripts/buildCoverageGaps.mjs`.
+That register is authored rather than derived, because a gap cannot be computed
+from the data that is missing.

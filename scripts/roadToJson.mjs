@@ -192,12 +192,14 @@ export const ROAD_FAMILIES = {
     tsFile:   'huntlyData.ts',
     tsPrefix: 'HUNTLY',
     tsVar:    'huntly',
-    // ONLY the half is declared, because only the half exists. Every
-    // "10K Results - YYYY.csv" is byte-identical to that year's "Half Results"
-    // file AND its own Course column reads "Running | Half marathon" — two
-    // independent proofs of the same export error. Declaring a 10 km here
-    // would manufacture a distance the race does not run, out of half marathon
-    // times. The unclaimed files are reported on every run.
+    // ONLY the half is declared, because only the half has DATA. Huntly has
+    // run a 10 km since 1996 (the organiser's history dates it to the year the
+    // Hamilton club took over), but every "10K Results - YYYY.csv" it ships is
+    // byte-identical to that year's "Half Results" file AND its own Course
+    // column reads "Running | Half marathon" — two independent proofs of the
+    // same export error. Declaring a 10 km here would manufacture five years
+    // of it out of half marathon times. The 10 km is a known coverage gap,
+    // recorded as such; the unclaimed files are reported on every run.
     //
     // The Course column is the authority over the filename wherever it exists;
     // 2019 predates it and is attributed by filename, which is safe because

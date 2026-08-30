@@ -22,6 +22,7 @@ import { MTM_HALF_YEARS, MTM_10K_YEARS, MTM_5K_YEARS } from './mtmData';
 import { WHANGANUI_MAR_YEARS, WHANGANUI_HALF_YEARS, WHANGANUI_QUARTER_YEARS, WHANGANUI_5K_YEARS } from './whanganuiData';
 import { SAINTCLAIR_HALF_YEARS, SAINTCLAIR_12K_YEARS } from './saintClairData';
 import { TAUPO_MAR_YEARS, TAUPO_HALF_YEARS, TAUPO_10K_YEARS, TAUPO_5K_YEARS } from './taupoData';
+import { HUNTLY_HALF_YEARS } from './huntlyData';
 import { TRAIL_FAMILIES, latestCourse, subEventCourseYears } from './trailEventConfig';
 
 export interface RaceEntry {

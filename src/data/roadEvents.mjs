@@ -99,9 +99,11 @@ export const ROAD_EVENTS = {
   "taupo-10k":        { label: "Taupō 10k",              raceSlug: "taupo-marathon",                    dist: "10 km",   distId: "10k" },
   "taupo-5k":         { label: "Taupō 5k",               raceSlug: "taupo-marathon",                    dist: "5 km",    distId: "5k" },
 
-  // Half only. Every "10K Results" file Huntly ships is byte-identical to that
-  // year's half file and its own Course column says "Half marathon" — there is
-  // no 10 km event to register.
+  // Half only — but NOT because the race lacks a 10 km. Huntly has run one
+  // since 1996, by the organiser's own history. Every "10K Results" file it
+  // ships is byte-identical to that year's half file and its own Course column
+  // reads "Half marathon", so the 10 km RESULTS have never been supplied. The
+  // distance is a known gap in the archive, not an absence in the event.
   "huntly-half":      { label: "Huntly Half",            raceSlug: "huntly-half-marathon",              dist: "21.1 km", distId: "half" },
 };
 

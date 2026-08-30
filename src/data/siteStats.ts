@@ -5,7 +5,7 @@ export const SITE_STATS = {
   /** Every row across public/data/results-*.json (478 files). */
   finisherRecords: 456033,
   /** Race families with a race page: road (raceMeta) + trail (trailEvents). */
-  trackedEvents: 20,
+  trackedEvents: 21,
   /** Athletes with 2+ logged races — the cohort that gets a profile page. */
   athleteProfiles: 80068,
   /** Published course records: road distances + trail course eras. */
